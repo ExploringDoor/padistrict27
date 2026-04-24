@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Tournament Rules &amp; Guidelines · PA District 27 Little League</title>
+<meta name="description" content="District 27 tournament rules, age eligibility, pitch count limits, mercy rule, waiver forms, and residency guidelines — all in one place." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<script src="config.js"></script>
+<link rel="stylesheet" href="css/styles.css" />
+
+<style>
+  /* Hub hero */
+  .rules-hero {
+    background:
+      linear-gradient(135deg, rgba(0,27,71,.94) 0%, rgba(0,45,114,.9) 100%),
+      var(--d27-navy);
+    color: var(--d27-white);
+    padding: var(--space-7) 0 var(--space-6);
+    position: relative;
+    overflow: hidden;
+  }
+  .rules-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 75% 20%, rgba(201,162,39,.16), transparent 55%);
+    pointer-events: none;
+  }
+  .rules-hero .crumb {
+    font-family: 'Oswald', sans-serif; font-size: var(--text-xs);
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--gold); margin-bottom: var(--space-3);
+  }
+  .rules-hero .crumb a { color: rgba(255,255,255,.6); text-decoration: none; }
+  .rules-hero h1 { color: var(--d27-white); font-size: clamp(2.25rem, 4vw, var(--text-4xl)); margin-bottom: var(--space-3); }
+  .rules-hero p { color: rgba(255,255,255,.82); font-size: var(--text-lg); max-width: 64ch; margin-bottom: var(--space-4); }
+  .rules-hero .updated {
+    display: inline-block;
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    background: rgba(201,162,39,.22);
+    color: var(--gold);
+    padding: 5px 12px;
+    border-radius: 4px;
+    border: 1px solid rgba(201,162,39,.4);
+  }
+
+  /* Quick-nav (sticky) */
+  .rules-nav {
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 64px;
+    z-index: 40;
+  }
+  .rules-nav-inner {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .rules-nav-inner::-webkit-scrollbar { display: none; }
+  .rules-nav-inner a {
+    flex: 0 0 auto;
+    padding: var(--space-3) var(--space-4);
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    font-weight: 600;
+  }
+  .rules-nav-inner a:hover { color: var(--d27-navy); border-bottom-color: var(--d27-red); }
+
+  /* Section */
+  .r-section { padding: var(--space-7) 0 var(--space-5); }
+  .r-section:nth-of-type(even) { background: var(--paper); }
+  .r-section h2 {
+    font-family: 'Oswald', sans-serif;
+    color: var(--d27-navy);
+    font-size: var(--text-2xl);
+    margin: 0 0 var(--space-2);
+  }
+  .r-section .sub {
+    color: var(--muted);
+    font-size: var(--text-base);
+    max-width: 64ch;
+    margin: 0 0 var(--space-5);
+  }
+
+  /* Table */
+  .rules-table-wrap { overflow-x: auto; margin-bottom: var(--space-4); }
+  table.rules-tbl {
+    width: 100%; min-width: 600px;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    font-size: var(--text-sm);
+  }
+  table.rules-tbl thead { background: var(--d27-navy); color: #fff; }
+  table.rules-tbl th {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px; letter-spacing: .08em;
+    padding: 12px 10px; font-weight: 600; text-align: left;
+  }
+  table.rules-tbl td {
+    padding: 12px 10px;
+    border-top: 1px solid var(--line);
+    font-family: 'Manrope', sans-serif;
+  }
+  table.rules-tbl td:first-child { font-weight: 600; color: var(--d27-navy); }
+  table.rules-tbl td.num {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    color: var(--d27-red);
+    text-align: center;
+  }
+
+  /* Key rule cards */
+  .key-rules {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+  @media (max-width: 900px) { .key-rules { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .key-rules { grid-template-columns: 1fr; } }
+  .key-rule {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--d27-gold);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+  }
+  .key-rule .kicker {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--d27-red);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .key-rule h3 {
+    font-family: 'Oswald', sans-serif;
+    color: var(--d27-navy);
+    font-size: var(--text-lg);
+    margin: 0 0 6px;
+  }
+  .key-rule p {
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--fg);
+    margin: 0;
+  }
+
+  /* Document library */
+  .docs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+  @media (max-width: 720px) { .docs-grid { grid-template-columns: 1fr; } }
+  .doc-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+    text-decoration: none;
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    transition: border-color .15s, transform .15s;
+  }
+  .doc-card:hover { border-color: var(--d27-navy); transform: translateY(-1px); }
+  .doc-card .icon {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: .06em;
+    font-weight: 700;
+    background: var(--d27-navy);
+    color: #fff;
+    padding: 6px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .doc-card .icon.wvr { background: var(--d27-gold); color: var(--d27-navy); }
+  .doc-card .icon.frm { background: #15803d; }
+  .doc-card .meta {
+    flex: 1;
+    min-width: 0;
+  }
+  .doc-card .title {
+    font-family: 'Oswald', sans-serif;
+    color: var(--d27-navy);
+    font-weight: 600;
+    font-size: var(--text-base);
+    line-height: 1.2;
+  }
+  .doc-card .desc {
+    font-size: var(--text-xs);
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .doc-card .arr {
+    color: var(--d27-red);
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: var(--text-lg);
+  }
+
+  /* FAQ */
+  details.faq {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 0;
+    margin-bottom: var(--space-2);
+    overflow: hidden;
+  }
+  details.faq[open] { border-color: var(--d27-navy); }
+  details.faq summary {
+    cursor: pointer;
+    padding: var(--space-3) var(--space-4);
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    color: var(--d27-navy);
+    font-size: var(--text-base);
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  details.faq summary::-webkit-details-marker { display: none; }
+  details.faq summary::after {
+    content: "+";
+    font-family: 'Oswald', sans-serif;
+    font-weight: 400;
+    color: var(--d27-red);
+    font-size: 20px;
+    transition: transform .2s;
+  }
+  details.faq[open] summary::after { content: "−"; }
+  details.faq .ans {
+    padding: 0 var(--space-4) var(--space-4);
+    font-size: var(--text-sm);
+    line-height: 1.55;
+    color: var(--fg);
+  }
+
+  /* Callout */
+  .callout {
+    background: linear-gradient(135deg, rgba(0,45,114,.04) 0%, rgba(201,162,39,.06) 100%);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--d27-navy);
+    border-radius: var(--radius-md);
+    padding: var(--space-4) var(--space-5);
+    margin-bottom: var(--space-4);
+  }
+  .callout strong { color: var(--d27-navy); font-family: 'Oswald', sans-serif; letter-spacing: .02em; }
+  .callout p { margin: 6px 0 0; line-height: 1.55; color: var(--fg); font-size: var(--text-sm); }
+
+  /* Contact block */
+  .rules-contact {
+    background: var(--d27-navy);
+    color: #fff;
+    padding: var(--space-6) 0;
+    text-align: center;
+  }
+  .rules-contact h3 {
+    font-family: 'Oswald', sans-serif;
+    color: var(--gold);
+    font-size: var(--text-xl);
+    margin: 0 0 var(--space-2);
+  }
+  .rules-contact p { color: rgba(255,255,255,.82); margin: 0 0 var(--space-3); }
+  .rules-contact a {
+    color: #fff;
+    text-decoration: none;
+    border-bottom: 2px solid var(--gold);
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<!-- Nav ------------------------------------------------------------- -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html">
+      <span class="mark">D27</span>
+      <span class="name-block">
+        PA District 27
+        <span class="sub">Little League · Baseball &amp; Softball</span>
+      </span>
+    </a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html" aria-current="page">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero ----------------------------------------------------------- -->
+<header class="rules-hero">
+  <div class="container">
+    <div class="crumb"><a href="index.html">Home</a> / Tournament Rules &amp; Guidelines</div>
+    <h1>Tournament Rules &amp; Guidelines</h1>
+    <p>
+      Everything managers, umpires, and parents need for the International Tournament
+      season — age eligibility, pitch counts, mercy rule, waivers, and residency
+      verification. Consolidated from Little League International regulations and
+      D27-specific procedures.
+    </p>
+    <span class="updated">Last updated · Apr 2026 · 2026 season</span>
+  </div>
+</header>
+
+<!-- Sticky quick-nav ---------------------------------------------- -->
+<div class="rules-nav">
+  <div class="container">
+    <div class="rules-nav-inner">
+      <a href="#key">Key Rules</a>
+      <a href="#age">Age Charts</a>
+      <a href="#pitch">Pitch Counts</a>
+      <a href="#mercy">Mercy &amp; Time</a>
+      <a href="#eligibility">Eligibility</a>
+      <a href="#waivers">Waivers</a>
+      <a href="#docs">Documents</a>
+      <a href="#faq">FAQ</a>
+    </div>
+  </div>
+</div>
+
+<!-- Section: Key Rules at a glance -------------------------------- -->
+<section class="r-section" id="key">
+  <div class="container">
+    <h2>At a Glance</h2>
+    <p class="sub">The five rules that most often decide close games. Full Little League rulebook governs everything not listed here.</p>
+
+    <div class="key-rules">
+      <div class="key-rule">
+        <div class="kicker">★ Most Missed</div>
+        <h3>Batting Order</h3>
+        <p>Tournament teams bat their entire lineup (continuous order). A player who leaves the game may re-enter. Mandatory Play rules apply — every rostered player must get at least one at-bat and six defensive outs.</p>
+      </div>
+      <div class="key-rule">
+        <div class="kicker">Pitching</div>
+        <h3>One-Day Rest Rule</h3>
+        <p>A 11–12U pitcher who throws 41+ pitches in a day requires 1 calendar day of rest. 66+ pitches requires 3 days. No pitcher may catch in the same game after being removed.</p>
+      </div>
+      <div class="key-rule">
+        <div class="kicker">End of Game</div>
+        <h3>Mercy Rule</h3>
+        <p>Majors &amp; Juniors: game ends if a team leads by 10 after 4 complete innings (or 3½ if home). 15-run rule after 3 innings. Intermediate: 10 after 4; 15 after 3.</p>
+      </div>
+      <div class="key-rule">
+        <div class="kicker">Lineup</div>
+        <h3>Mandatory Play</h3>
+        <p>Every rostered player present must receive a minimum of one at-bat and play six consecutive defensive outs. Penalty for violation: protest may be upheld and game forfeited.</p>
+      </div>
+      <div class="key-rule">
+        <div class="kicker">Eligibility</div>
+        <h3>Residency &amp; School</h3>
+        <p>Players must live within league boundaries OR attend school within boundaries. Proof required via 3-document residency test OR school enrollment form. Exceptions require waiver.</p>
+      </div>
+      <div class="key-rule">
+        <div class="kicker">Uniform</div>
+        <h3>Jewelry &amp; Equipment</h3>
+        <p>No jewelry (medical alert excepted). Catchers must wear full gear including dangling throat guard on mask. Pitchers may not wear white/gray sleeves. USA-marked bats required for Majors and below.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section: Age Charts ------------------------------------------- -->
+<section class="r-section" id="age">
+  <div class="container">
+    <h2>2026 Age Charts</h2>
+    <p class="sub">A player's "League Age" is the age they will turn during the season, per Little League's calendar cutoff. Determines division eligibility.</p>
+
+    <div class="rules-table-wrap">
+      <table class="rules-tbl">
+        <thead>
+          <tr>
+            <th>Division</th>
+            <th>Age Range</th>
+            <th>Field Size</th>
+            <th>Game Length</th>
+            <th>Pitch Distance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Tee Ball</td><td>4–6</td><td>46/60</td><td>6 innings / 1h15</td><td>—</td></tr>
+          <tr><td>Minors Coach-Pitch</td><td>6–8</td><td>46/60</td><td>6 innings / 1h30</td><td>40 ft (coach)</td></tr>
+          <tr><td>Minors Machine-Pitch</td><td>7–9</td><td>46/60</td><td>6 innings / 1h45</td><td>40 ft</td></tr>
+          <tr><td>Minors (Player-Pitch)</td><td>9–11</td><td>46/60</td><td>6 innings</td><td>46 ft</td></tr>
+          <tr><td>Majors (9-11 Tournament)</td><td>9–11</td><td>46/60</td><td>6 innings</td><td>46 ft</td></tr>
+          <tr><td>Majors (11-12 Tournament)</td><td>11–12</td><td>46/60</td><td>6 innings</td><td>46 ft</td></tr>
+          <tr><td>Intermediate (50/70)</td><td>11–13</td><td>50/70</td><td>7 innings</td><td>50 ft</td></tr>
+          <tr><td>Junior League</td><td>12–14</td><td>60/90</td><td>7 innings</td><td>60.5 ft</td></tr>
+          <tr><td>Senior League</td><td>13–16</td><td>60/90</td><td>7 innings</td><td>60.5 ft</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <strong>Cutoff Date Reminder</strong>
+      <p>League Age is determined by the player's age as of <strong>August 31, 2026</strong> for baseball and December 31, 2025 for softball. A player born Sept 1 would play "up" a year vs. a player born Aug 31.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Section: Pitch Counts ----------------------------------------- -->
+<section class="r-section" id="pitch">
+  <div class="container">
+    <h2>Pitch Count Limits &amp; Rest</h2>
+    <p class="sub">Per Little League Regulation VI. These are maximums; managers must remove pitchers at the limit even mid-batter (the batter is completed first).</p>
+
+    <div class="rules-table-wrap">
+      <table class="rules-tbl">
+        <thead>
+          <tr>
+            <th>League Age</th>
+            <th class="num">Daily Max</th>
+            <th class="num">1-Day Rest</th>
+            <th class="num">2-Day Rest</th>
+            <th class="num">3-Day Rest</th>
+            <th class="num">4-Day Rest</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>7–8</td><td class="num">50</td><td class="num">1–20</td><td class="num">21–35</td><td class="num">36–50</td><td class="num">—</td></tr>
+          <tr><td>9–10</td><td class="num">75</td><td class="num">1–20</td><td class="num">21–35</td><td class="num">36–50</td><td class="num">51–75</td></tr>
+          <tr><td>11–12</td><td class="num">85</td><td class="num">1–20</td><td class="num">21–35</td><td class="num">36–50</td><td class="num">51–65+</td></tr>
+          <tr><td>13–14</td><td class="num">95</td><td class="num">1–20</td><td class="num">21–35</td><td class="num">36–50</td><td class="num">51–65+</td></tr>
+          <tr><td>15–16</td><td class="num">95</td><td class="num">1–30</td><td class="num">31–45</td><td class="num">46–60</td><td class="num">61–75+</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <strong>Same-Day Exception</strong>
+      <p>If a pitcher reaches their daily limit <em>while a batter is in the box</em>, the pitcher may continue facing that batter only. Any pitch over the daily maximum otherwise forfeits pitching eligibility for the rest of the game AND subjects the team to potential protest.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Section: Mercy & Time ----------------------------------------- -->
+<section class="r-section" id="mercy">
+  <div class="container">
+    <h2>Mercy Rule &amp; Time Limits</h2>
+    <p class="sub">D27 applies Little League Regulation for all tournament play. No new inning after time limit in pool/seeding games; elimination-round games play to completion.</p>
+
+    <div class="rules-table-wrap">
+      <table class="rules-tbl">
+        <thead>
+          <tr>
+            <th>Division</th>
+            <th>15-Run Rule</th>
+            <th>10-Run Rule</th>
+            <th>Pool-Play Time Limit</th>
+            <th>Elimination</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Majors (11-12)</td><td>After 3 innings</td><td>After 4 innings</td><td>1h45 no new inning</td><td>No time limit</td></tr>
+          <tr><td>Minors (9-11)</td><td>After 3 innings</td><td>After 4 innings</td><td>1h30 no new inning</td><td>No time limit</td></tr>
+          <tr><td>Intermediate (50/70)</td><td>After 3 innings</td><td>After 4 innings</td><td>1h45 no new inning</td><td>No time limit</td></tr>
+          <tr><td>Junior / Senior</td><td>After 4 innings</td><td>After 5 innings</td><td>2h00 no new inning</td><td>No time limit</td></tr>
+          <tr><td>Softball (all)</td><td>After 3 innings</td><td>After 4 innings</td><td>1h30 no new inning</td><td>No time limit</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Section: Eligibility ------------------------------------------ -->
+<section class="r-section" id="eligibility">
+  <div class="container">
+    <h2>Residency &amp; School Attendance</h2>
+    <p class="sub">A player is eligible for a chartered league if they live OR attend school within that league's boundary. Both are established through documentation on file before tournament rosters are submitted.</p>
+
+    <div class="key-rules" style="grid-template-columns: 1fr 1fr;">
+      <div class="key-rule" style="border-top-color: var(--d27-navy);">
+        <div class="kicker">Residency</div>
+        <h3>3-Document Proof</h3>
+        <p>Parent/guardian must submit three documents from three separate groups (driver's license, utility bill, tax form, lease, etc.) all dated within Feb 1 – Feb 1 prior and after, showing same address inside league boundary.</p>
+      </div>
+      <div class="key-rule" style="border-top-color: var(--d27-navy);">
+        <div class="kicker">School</div>
+        <h3>Enrollment Form</h3>
+        <p>Alternatively, a School Enrollment Form signed by the school (principal or registrar) covering the full school year just completed, showing the school is inside league boundary.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Pre-Season Deadline</strong>
+      <p>All residency documentation must be on file with the league and audited by the District Administrator <strong>before the International Tournament roster is submitted</strong> (approximately June 1). Late submissions invalidate tournament eligibility.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Section: Waivers ---------------------------------------------- -->
+<section class="r-section" id="waivers">
+  <div class="container">
+    <h2>Waivers &amp; Claim Forms</h2>
+    <p class="sub">Waivers are rare but available for well-documented cases. All waivers route through DA Jeff Bennett before forwarding to Little League International.</p>
+
+    <div class="docs-grid">
+      <a class="doc-card" href="#">
+        <div class="icon wvr">WVR</div>
+        <div class="meta">
+          <div class="title">Regulation II(d) Claim</div>
+          <div class="desc">Player moved between leagues mid-season or has split residency</div>
+        </div>
+        <div class="arr">→</div>
+      </a>
+      <a class="doc-card" href="#">
+        <div class="icon wvr">WVR</div>
+        <div class="meta">
+          <div class="title">Regulation IV(h) Waiver</div>
+          <div class="desc">Player with extreme hardship requesting placement outside normal league</div>
+        </div>
+        <div class="arr">→</div>
+      </a>
+    </div>
+
+    <div class="callout">
+      <strong>Processing Time</strong>
+      <p>Waivers must be submitted at least <strong>10 business days</strong> before the tournament roster deadline. Incomplete submissions are returned — budget an extra week for back-and-forth.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Section: Documents ------------------------------------------- -->
+<section class="r-section" id="docs">
+  <div class="container">
+    <h2>Document Library</h2>
+    <p class="sub">Downloadable forms and reference documents. Updated annually for each tournament season.</p>
+
+    <div class="docs-grid">
+      <a class="doc-card" href="#">
+        <div class="icon">PDF</div>
+        <div class="meta">
+          <div class="title">2026 Baseball Tournament Rules</div>
+          <div class="desc">Full Little League tournament rulebook — baseball</div>
+        </div>
+        <div class="arr">→</div>
+      </a>
+      <a class="doc-card" href="#">
+        <div class="icon">PDF</div>
+        <div class="meta">
+          <div class="title">2026 Softball Tournament Rules</div>
+          <div class="desc">Full Little League tournament rulebook — softball</div>
+        </div>
+        <div class="arr">→</div>
+      </a>
+      <a class="doc-card" href="#">
+        <div class="icon">PDF</div>
+        <div class="meta">
+          <div class="title">Most Misunderstood Rules</div>
+          <div class="desc">Annual summary of top-10 rules umpires and coaches misapply</div>
+        </div>
+        <div class="arr">→</div>
+      </a>
+      <a class="doc-card" href="#">
+        <div class="icon">PDF</div>
+        <div class="meta">
+          <div class="title">9-Year-Old Division Rules</div>
+          <div class="desc">Special rules for the 9YO Baseball Tournament</div>
+        </div>
+        <div class="arr">→</div>
+      </a>
+      <a class="doc-card" href="#">
+        <div class="icon frm">FRM</div>
+        <div class="meta">
+          <div class="title">Player Verification Form</div>
+          <div class="desc">Birth certificate &amp; residency audit worksheet</div>
+        </div>
+        <div class="arr">→</div>
+      </a>
+      <a class="doc-card" href="#">
+        <div class="icon frm">FRM</div>
+        <div class="meta">
+          <div class="title">School Enrollment Form</div>
+          <div class="desc">Principal-signed eligibility alternative to residency</div>
+        </div>
+        <div class="arr">→</div>
+      </a>
+      <a class="doc-card" href="#">
+        <div class="icon frm">FRM</div>
+        <div class="meta">
+          <div class="title">Medical Release Form</div>
+          <div class="desc">Required before tournament play — valid full season</div>
+        </div>
+        <div class="arr">→</div>
+      </a>
+      <a class="doc-card" href="#">
+        <div class="icon">FAQ</div>
+        <div class="meta">
+          <div class="title">Tournament FAQs</div>
+          <div class="desc">Common manager/parent questions for tournament week</div>
+        </div>
+        <div class="arr">→</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Section: FAQ -------------------------------------------------- -->
+<section class="r-section" id="faq">
+  <div class="container">
+    <h2>Frequently Asked Questions</h2>
+    <p class="sub">Answers for the calls Jeff and Jason get most every tournament week.</p>
+
+    <details class="faq">
+      <summary>Can a player be added to the tournament roster mid-tournament?</summary>
+      <div class="ans">No. Tournament rosters are locked when submitted to Williamsport (typically June 1). The only exception is a <em>pre-submitted</em> player returning from an excused absence (documented illness, injury, family emergency). New additions are not permitted.</div>
+    </details>
+    <details class="faq">
+      <summary>What happens if a pitcher hits their pitch limit mid-batter?</summary>
+      <div class="ans">The pitcher may continue facing the current batter to completion. Once the plate appearance ends, they must be removed. They may return to the game at another position but may not pitch again that day.</div>
+    </details>
+    <details class="faq">
+      <summary>Can a player pitch and catch in the same game?</summary>
+      <div class="ans">Yes, but with restrictions. A player who caught 4+ innings may not pitch the same day. A pitcher who threw 41+ pitches may not catch the remainder of the day. This is tracked automatically on the D27 live scorer.</div>
+    </details>
+    <details class="faq">
+      <summary>Our league had a rainout — how do we reschedule?</summary>
+      <div class="ans">Contact the Tournament Director (listed on the bracket page) within 24 hours. Rain make-ups follow the published alternate-date schedule. Field availability is coordinated through the D27 field scheduler.</div>
+    </details>
+    <details class="faq">
+      <summary>Where does the umpire come from for tournament games?</summary>
+      <div class="ans">All D27 tournament umpires are certified through the District 27 Umpire-in-Chief program (UIC: Frank Nikischer). Crews are assigned by UIC no later than 48 hours before first pitch.</div>
+    </details>
+    <details class="faq">
+      <summary>What's the protest procedure?</summary>
+      <div class="ans">Protests of rule interpretations must be lodged at the time of the incident, before the next pitch. Judgment calls are not protestable. The Tournament Director rules on the spot. Formal written protest goes to the DA within 24 hours.</div>
+    </details>
+    <details class="faq">
+      <summary>Does District 27 follow Little League International rules exactly?</summary>
+      <div class="ans">Yes — D27 does not modify tournament playing rules. Local procedures (scheduling, make-up dates, umpire assignment) are D27-specific but baseline rules defer to the current-year Little League rulebook.</div>
+    </details>
+  </div>
+</section>
+
+<!-- Contact -------------------------------------------------------- -->
+<section class="rules-contact">
+  <div class="container">
+    <h3>Rule Question Not Answered Here?</h3>
+    <p>Reach out to the District Administrator directly — rule interpretations are part of the job.</p>
+    <p>
+      <a href="mailto:jeffbennett.d27@gmail.com">jeffbennett.d27@gmail.com</a>
+    </p>
+  </div>
+</section>
+
+<!-- Footer -------------------------------------------------------- -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="foot-row">
+      <div class="foot-block">
+        <strong>Rule Source</strong>
+        <p>All rules derive from the <em>Official Little League Regulations, Playing Rules, and Policies</em> — 2026 edition. District-specific procedures noted where applicable.</p>
+      </div>
+      <div class="foot-block">
+        <strong>Umpire-in-Chief</strong>
+        <p>Frank Nikischer, D27 UIC · Rule interpretation clinics held pre-season each March</p>
+      </div>
+      <div class="foot-block">
+        <strong>District</strong>
+        <p>Jeff Bennett, DA · <a href="mailto:jeffbennett.d27@gmail.com">jeffbennett.d27@gmail.com</a></p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      &copy; 2026 PA District 27 Little League · Demo site by Mainline Web Design
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
