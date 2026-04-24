@@ -334,18 +334,9 @@
         <div class="sub">Coach Tom needs your answer before the semifinal lineup</div>
       </div>
 
-      <div class="cal-subscribe" onclick="alert('Demo only — in production this copies an ICS feed URL that auto-syncs game times, rainouts, and reschedules into your calendar app.')" style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 14px 18px; margin-bottom: 18px; background: linear-gradient(90deg, rgba(0,45,114,.04), rgba(201,162,39,.06)); border: 1px solid rgba(0,45,114,.12); border-left: 4px solid var(--d27-gold); border-radius: 6px; cursor: pointer;">
-        <div style="font-size: 28px;">📅</div>
-        <div style="flex: 1;">
-          <div style="font-family: var(--font-display); font-weight: 700; color: var(--d27-navy); font-size: 15px; letter-spacing: .02em;">SUBSCRIBE TO MY TEAM CALENDAR</div>
-          <div style="color: var(--muted); font-size: 13px; margin-top: 2px;">One-click add to Google, Apple, or Outlook — games, practices, and rainout updates sync automatically.</div>
-        </div>
-        <div style="display: flex; gap: 8px;">
-          <span style="background: var(--d27-white); border: 1px solid rgba(0,45,114,.18); padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; color: var(--d27-navy);">Google</span>
-          <span style="background: var(--d27-white); border: 1px solid rgba(0,45,114,.18); padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; color: var(--d27-navy);">Apple</span>
-          <span style="background: var(--d27-white); border: 1px solid rgba(0,45,114,.18); padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; color: var(--d27-navy);">Outlook</span>
-        </div>
-      </div>
+      <a href="#" onclick="event.preventDefault(); alert('Demo only — in production this link subscribes you to the team calendar. Games, practices, and rainout updates sync automatically.')" style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; color: var(--d27-navy); font-weight: 600; font-size: 14px; text-decoration: none; border-bottom: 1px dashed var(--d27-gold); padding-bottom: 2px;">
+        📅 Subscribe to my team calendar
+      </a>
 
       <!-- Next game · not yet responded -->
       <div class="rsvp-game" data-game="sf">
