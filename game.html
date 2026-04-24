@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Berwyn-Paoli vs Devon-Strafford · Bob Jones Semifinal · D27</title>
+<meta name="description" content="Live box score, play-by-play, batters, pitchers — 2026 Bob Jones Tournament Semifinal 1: Berwyn-Paoli vs Devon-Strafford at Chester Valley's Monument Avenue Field." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<script src="config.js"></script>
+<link rel="stylesheet" href="css/styles.css" />
+
+<style>
+  /* ── Breadcrumb ─────────────────────────────────────────────── */
+  .gm-crumb {
+    font-size: var(--text-xs);
+    color: var(--muted);
+    padding: var(--space-3) 0 0;
+  }
+  .gm-crumb a { color: var(--muted); text-decoration: none; }
+  .gm-crumb a:hover { color: var(--d27-navy); }
+  .gm-crumb .sep { opacity: .4; margin: 0 6px; }
+
+  /* ── Live hero ──────────────────────────────────────────────── */
+  .gm-hero {
+    background: linear-gradient(135deg, var(--d27-navy) 0%, color-mix(in srgb, var(--d27-navy) 75%, black) 100%);
+    color: #fff;
+    padding: var(--space-6) 0 var(--space-5);
+    position: relative;
+    overflow: hidden;
+  }
+  .gm-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 80% 30%, rgba(218,41,28,.18), transparent 55%);
+    pointer-events: none;
+  }
+  .gm-tourney-line {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--d27-gold);
+    margin-bottom: var(--space-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+  .live-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--d27-red);
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .live-pill::before {
+    content: "";
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #fff;
+    animation: pulse 1.6s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .35; transform: scale(.85); }
+  }
+
+  .scoreboard {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--space-3);
+    align-items: center;
+    position: relative;
+  }
+  @media (max-width: 720px) { .scoreboard { grid-template-columns: 1fr; gap: var(--space-4); } }
+
+  .team-block {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .team-block.away { justify-content: flex-end; text-align: right; flex-direction: row-reverse; }
+  @media (max-width: 720px) {
+    .team-block.away { justify-content: flex-start; text-align: left; flex-direction: row; }
+  }
+  .team-logo-lg {
+    width: 72px; height: 72px;
+    border-radius: 12px;
+    display: grid; place-items: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: .03em;
+    color: #fff;
+    border: 2px solid rgba(255,255,255,.15);
+    flex-shrink: 0;
+  }
+  .team-block .team-info .seed {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--d27-gold);
+    margin-bottom: 2px;
+  }
+  .team-block .team-info .tname {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(22px, 4vw, 30px);
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .team-block .team-info .rec {
+    font-size: var(--text-xs);
+    opacity: .7;
+  }
+  .team-block .score {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(54px, 9vw, 78px);
+    line-height: 1;
+    font-weight: 700;
+    color: #fff;
+  }
+  .team-block .score.losing { opacity: .55; }
+
+  .game-state {
+    text-align: center;
+    padding: 0 var(--space-2);
+  }
+  .game-state .vs-tag {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    opacity: .45;
+    margin-bottom: var(--space-2);
+  }
+  .game-state .inning {
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .game-state .situation {
+    font-size: 11px;
+    letter-spacing: .06em;
+    opacity: .75;
+  }
+  .diamond {
+    width: 64px; height: 64px;
+    margin: 8px auto 0;
+    position: relative;
+  }
+  .diamond svg { width: 100%; height: 100%; }
+
+  /* ── Info strip ─────────────────────────────────────────────── */
+  .gm-info-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+  }
+  @media (max-width: 760px) { .gm-info-strip { grid-template-columns: repeat(2, 1fr); } }
+  .gm-info {
+    padding: var(--space-3);
+    text-align: center;
+    border-right: 1px solid var(--line);
+  }
+  .gm-info:last-child { border-right: 0; }
+  @media (max-width: 760px) {
+    .gm-info { border-bottom: 1px solid var(--line); }
+    .gm-info:nth-child(odd) { border-right: 1px solid var(--line); }
+    .gm-info:nth-child(even) { border-right: 0; }
+  }
+  .gm-info .k { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+  .gm-info .v { font-family: 'Oswald', sans-serif; font-weight: 600; color: var(--d27-navy); font-size: var(--text-sm); }
+
+  /* ── Tabs ───────────────────────────────────────────────────── */
+  .gm-tabs-wrap {
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 64px;
+    z-index: 40;
+  }
+  .gm-tabs {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .gm-tabs::-webkit-scrollbar { display: none; }
+  .gm-tab {
+    flex: 0 0 auto;
+    padding: var(--space-3) var(--space-4);
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: transparent;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    font-weight: 600;
+  }
+  .gm-tab.active { color: var(--d27-navy); border-bottom-color: var(--d27-red); }
+  .gm-panel { display: none; padding: var(--space-6) 0 var(--space-8); }
+  .gm-panel.active { display: block; }
+
+  /* ── Linescore ──────────────────────────────────────────────── */
+  .linescore-wrap { overflow-x: auto; margin-bottom: var(--space-5); }
+  table.linescore {
+    width: 100%;
+    min-width: 520px;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    font-size: var(--text-sm);
+  }
+  table.linescore thead {
+    background: var(--d27-navy);
+    color: #fff;
+  }
+  table.linescore th {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: .08em;
+    padding: 10px 6px;
+    font-weight: 600;
+    text-align: center;
+  }
+  table.linescore th:first-child { text-align: left; padding-left: var(--space-3); }
+  table.linescore td {
+    padding: 10px 6px;
+    text-align: center;
+    border-top: 1px solid var(--line);
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    color: var(--fg);
+  }
+  table.linescore td.team-name {
+    text-align: left;
+    padding-left: var(--space-3);
+    font-family: 'Manrope', sans-serif;
+  }
+  table.linescore td.team-name strong { color: var(--d27-navy); }
+  table.linescore td.rhe {
+    background: color-mix(in srgb, var(--d27-navy) 6%, transparent);
+    color: var(--d27-navy);
+    font-size: var(--text-base);
+    border-left: 2px solid var(--d27-navy);
+  }
+  table.linescore td.now {
+    background: color-mix(in srgb, var(--d27-red) 12%, transparent);
+    color: var(--d27-red);
+    font-weight: 700;
+  }
+  table.linescore td.empty { color: var(--muted); opacity: .4; }
+
+  /* ── Stat tables ────────────────────────────────────────────── */
+  .team-stats-block {
+    margin-bottom: var(--space-6);
+  }
+  .team-stats-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+  .team-stats-head .team-badge {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    display: grid; place-items: center;
+    color: #fff;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+  }
+  .team-stats-head h3 {
+    margin: 0;
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-base);
+    color: var(--d27-navy);
+  }
+
+  .stat-table-wrap { overflow-x: auto; margin-bottom: var(--space-3); }
+  table.stats {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    font-size: var(--text-sm);
+  }
+  table.stats thead {
+    background: var(--paper);
+    border-bottom: 2px solid var(--d27-navy);
+  }
+  table.stats th {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: .06em;
+    padding: 8px 6px;
+    font-weight: 700;
+    color: var(--d27-navy);
+    text-align: right;
+  }
+  table.stats th:first-child { text-align: left; padding-left: var(--space-3); }
+  table.stats td {
+    padding: 8px 6px;
+    border-top: 1px solid var(--line);
+    text-align: right;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+  }
+  table.stats td:first-child { text-align: left; padding-left: var(--space-3); font-family: 'Manrope', sans-serif; font-weight: 500; }
+  table.stats td .ord {
+    color: var(--muted);
+    font-size: 10px;
+    margin-right: 6px;
+    font-weight: 700;
+  }
+  table.stats td .pos {
+    font-size: 10px;
+    color: var(--muted);
+    margin-left: 6px;
+    letter-spacing: .06em;
+  }
+  table.stats tfoot tr {
+    background: var(--paper);
+    border-top: 2px solid var(--d27-navy);
+    font-weight: 700;
+  }
+  table.stats tfoot td {
+    font-weight: 700;
+    color: var(--d27-navy);
+  }
+
+  /* ── Scoring plays ──────────────────────────────────────────── */
+  .scoring-list { display: flex; flex-direction: column; gap: var(--space-2); }
+  .scoring-play {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--d27-red);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    gap: var(--space-3);
+    align-items: center;
+  }
+  .scoring-play .inn {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    color: var(--d27-navy);
+    font-size: var(--text-sm);
+  }
+  .scoring-play .desc {
+    font-size: var(--text-sm);
+    line-height: 1.4;
+    color: var(--fg);
+  }
+  .scoring-play .desc strong { color: var(--d27-navy); }
+  .scoring-play .scoreline {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    color: var(--fg);
+    font-size: var(--text-sm);
+    white-space: nowrap;
+  }
+
+  /* ── Play by play ───────────────────────────────────────────── */
+  .pbp-inning {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-bottom: var(--space-3);
+  }
+  .pbp-inning-head {
+    background: var(--d27-navy);
+    color: #fff;
+    padding: var(--space-2) var(--space-4);
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .pbp-inning-head .rhe { font-size: 11px; opacity: .85; }
+  .pbp-inning-head.live { background: var(--d27-red); }
+  .pbp-play {
+    padding: 10px var(--space-4);
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    gap: var(--space-2);
+    align-items: center;
+    font-size: var(--text-sm);
+  }
+  .pbp-play:first-of-type { border-top: 0; }
+  .pbp-play .res {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    width: 28px;
+    text-align: center;
+    color: #fff;
+    border-radius: 3px;
+    padding: 2px 0;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .pbp-play .res.hit  { background: #16A34A; }
+  .pbp-play .res.out  { background: #64748B; }
+  .pbp-play .res.walk { background: #2563EB; }
+  .pbp-play .res.k    { background: #DC2626; }
+  .pbp-play .res.run  { background: var(--d27-gold); color: var(--d27-navy); }
+  .pbp-play .desc { line-height: 1.4; color: var(--fg); }
+  .pbp-play .desc strong { color: var(--d27-navy); font-weight: 600; }
+  .pbp-play .count { font-size: 11px; color: var(--muted); font-family: 'Oswald', sans-serif; }
+
+  /* ── Related strip ──────────────────────────────────────────── */
+  .related {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+  @media (max-width: 720px) { .related { grid-template-columns: 1fr; } }
+  .rel-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+    text-decoration: none;
+    color: var(--fg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: border-color .15s, transform .15s;
+  }
+  .rel-card:hover { border-color: var(--d27-navy); transform: translateY(-1px); }
+  .rel-card .rk {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: .08em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .rel-card strong {
+    font-family: 'Oswald', sans-serif;
+    color: var(--d27-navy);
+    font-size: var(--text-base);
+    display: block;
+    margin-top: 2px;
+  }
+  .rel-card .arr { color: var(--d27-red); font-family: 'Oswald', sans-serif; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<!-- Nav ------------------------------------------------------------- -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html">
+      <span class="mark">D27</span>
+      <span class="name-block">
+        PA District 27
+        <span class="sub">Little League · Baseball &amp; Softball</span>
+      </span>
+    </a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html" aria-current="page">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="champions.html">Champions</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Breadcrumb ----------------------------------------------------- -->
+<div class="container gm-crumb">
+  <a href="schedule.html">Schedule</a><span class="sep">·</span>
+  <a href="tournament.html">Bob Jones 2026</a><span class="sep">·</span>
+  Semifinal 1
+</div>
+
+<!-- Hero ----------------------------------------------------------- -->
+<header class="gm-hero">
+  <div class="container">
+    <div class="gm-tourney-line">
+      <span class="live-pill">Live</span>
+      <span>Bob Jones Tournament · 11-12 Majors · Semifinal 1</span>
+    </div>
+
+    <div class="scoreboard">
+      <!-- Away -->
+      <div class="team-block away">
+        <div class="team-info">
+          <div class="seed">#1 Seed · 10–0</div>
+          <div class="tname">Berwyn-Paoli</div>
+          <div class="rec">Winner · R2M1 (d. Pottstown 12–2)</div>
+        </div>
+        <div class="team-logo-lg" style="background:#0C2340;">BP</div>
+        <div class="score">4</div>
+      </div>
+
+      <!-- Game state -->
+      <div class="game-state">
+        <div class="vs-tag">vs</div>
+        <div class="inning">Top 5th</div>
+        <div class="situation">1 Out · Runner on 1st</div>
+        <div class="diamond">
+          <svg viewBox="0 0 64 64">
+            <!-- Diamond base -->
+            <polygon points="32,12 52,32 32,52 12,32" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1.5" />
+            <!-- Home -->
+            <rect x="28.5" y="48.5" width="7" height="7" fill="rgba(255,255,255,.3)" />
+            <!-- 1st (occupied) -->
+            <rect x="48.5" y="28.5" width="7" height="7" fill="#C9A227" transform="rotate(45 52 32)" />
+            <!-- 2nd (empty) -->
+            <rect x="28.5" y="8.5" width="7" height="7" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.5" transform="rotate(45 32 12)" />
+            <!-- 3rd (empty) -->
+            <rect x="8.5" y="28.5" width="7" height="7" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.5" transform="rotate(45 12 32)" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Home -->
+      <div class="team-block home">
+        <div class="team-logo-lg" style="background:#002F6C;">DS</div>
+        <div class="team-info">
+          <div class="seed">#4 Seed · 8–2</div>
+          <div class="tname">Devon-Strafford</div>
+          <div class="rec">Winner · R2M2 (d. Great Valley 5–3)</div>
+        </div>
+        <div class="score losing">3</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Info strip ---------------------------------------------------- -->
+<div class="container">
+  <div class="gm-info-strip">
+    <div class="gm-info"><div class="k">Date</div><div class="v">Jun 25, 2026</div></div>
+    <div class="gm-info"><div class="k">First Pitch</div><div class="v">6:30 PM</div></div>
+    <div class="gm-info"><div class="k">Field</div><div class="v">Monument Ave · CV</div></div>
+    <div class="gm-info"><div class="k">Plate</div><div class="v">F. Nikischer</div></div>
+    <div class="gm-info"><div class="k">Weather</div><div class="v">74° · Clear</div></div>
+  </div>
+</div>
+
+<!-- Tabs ----------------------------------------------------------- -->
+<div class="gm-tabs-wrap">
+  <div class="container">
+    <div class="gm-tabs" role="tablist">
+      <button class="gm-tab active" data-panel="box" role="tab">Box Score</button>
+      <button class="gm-tab" data-panel="batting" role="tab">Batting</button>
+      <button class="gm-tab" data-panel="pitching" role="tab">Pitching</button>
+      <button class="gm-tab" data-panel="pbp" role="tab">Play-by-Play</button>
+    </div>
+  </div>
+</div>
+
+<!-- Panel: Box Score ---------------------------------------------- -->
+<section id="panel-box" class="gm-panel active">
+  <div class="container">
+
+    <div class="linescore-wrap">
+      <table class="linescore">
+        <thead>
+          <tr>
+            <th>Team</th>
+            <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th>
+            <th>R</th><th>H</th><th>E</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="team-name"><strong>Berwyn-Paoli</strong></td>
+            <td>0</td><td>2</td><td>0</td><td>2</td><td class="now">—</td><td class="empty">—</td>
+            <td class="rhe">4</td><td class="rhe">7</td><td class="rhe">1</td>
+          </tr>
+          <tr>
+            <td class="team-name"><strong>Devon-Strafford</strong></td>
+            <td>0</td><td>1</td><td>2</td><td>0</td><td class="empty">—</td><td class="empty">—</td>
+            <td class="rhe">3</td><td class="rhe">5</td><td class="rhe">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="font-family:'Oswald',sans-serif; color: var(--d27-navy); margin: var(--space-5) 0 var(--space-3); font-size: var(--text-lg);">Scoring Summary</h3>
+
+    <div class="scoring-list">
+      <div class="scoring-play">
+        <div class="inn">B2</div>
+        <div class="desc"><strong>Ava Okoro</strong> RBI single to left — Mateo Cruz scores from 2nd.</div>
+        <div class="scoreline">DS 1 · BP 0</div>
+      </div>
+      <div class="scoring-play">
+        <div class="inn">T2</div>
+        <div class="desc"><strong>Luke DiSanto</strong> 2-run home run to left-center — Coleman scored. 2nd HR of the tournament for DiSanto.</div>
+        <div class="scoreline">BP 2 · DS 1</div>
+      </div>
+      <div class="scoring-play">
+        <div class="inn">B3</div>
+        <div class="desc"><strong>Ryan Marcantonio</strong> RBI double down RF line — Quinn scored. <strong>Marcantonio</strong> scored next batter on wild pitch.</div>
+        <div class="scoreline">DS 3 · BP 2</div>
+      </div>
+      <div class="scoring-play">
+        <div class="inn">T4</div>
+        <div class="desc"><strong>Ethan Pierce</strong> 2-run double to CF gap — DiSanto and Coleman scored. Pierce 2-for-2 on the night.</div>
+        <div class="scoreline">BP 4 · DS 3</div>
+      </div>
+    </div>
+
+    <!-- Related -->
+    <div class="related">
+      <a class="rel-card" href="tournament.html"><div><div class="rk">Tournament</div><strong>Bob Jones 2026</strong></div><span class="arr">→</span></a>
+      <a class="rel-card" href="league-detail.html"><div><div class="rk">Home League</div><strong>Berwyn-Paoli LL</strong></div><span class="arr">→</span></a>
+      <a class="rel-card" href="schedule.html"><div><div class="rk">Back to</div><strong>Master Schedule</strong></div><span class="arr">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- Panel: Batting ------------------------------------------------ -->
+<section id="panel-batting" class="gm-panel">
+  <div class="container">
+
+    <!-- BP batting -->
+    <div class="team-stats-block">
+      <div class="team-stats-head">
+        <div class="team-badge" style="background: #0C2340;">BP</div>
+        <h3>Berwyn-Paoli Batting</h3>
+      </div>
+      <div class="stat-table-wrap">
+        <table class="stats">
+          <thead>
+            <tr>
+              <th>Batter</th>
+              <th>AB</th><th>R</th><th>H</th><th>RBI</th><th>BB</th><th>K</th><th>AVG</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="ord">1</span>Jack Coleman<span class="pos">SS</span></td><td>2</td><td>2</td><td>1</td><td>0</td><td>1</td><td>0</td><td>.421</td></tr>
+            <tr><td><span class="ord">2</span>Ethan Pierce<span class="pos">C</span></td><td>2</td><td>0</td><td>2</td><td>2</td><td>0</td><td>0</td><td>.545</td></tr>
+            <tr><td><span class="ord">3</span>Luke DiSanto<span class="pos">1B</span></td><td>2</td><td>1</td><td>1</td><td>2</td><td>1</td><td>0</td><td>.367</td></tr>
+            <tr><td><span class="ord">4</span>Caleb Wu<span class="pos">P/3B</span></td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>.286</td></tr>
+            <tr><td><span class="ord">5</span>Owen Kenney<span class="pos">CF</span></td><td>2</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>.310</td></tr>
+            <tr><td><span class="ord">6</span>Nate Brennan<span class="pos">2B</span></td><td>2</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>.267</td></tr>
+            <tr><td><span class="ord">7</span>Sam Alvarez<span class="pos">LF</span></td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>.208</td></tr>
+            <tr><td><span class="ord">8</span>Henry Okafor<span class="pos">RF</span></td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>.250</td></tr>
+            <tr><td><span class="ord">9</span>Jude Ramsey<span class="pos">DH</span></td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>.182</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td>Totals</td><td>16</td><td>4</td><td>7</td><td>4</td><td>2</td><td>3</td><td>—</td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- DS batting -->
+    <div class="team-stats-block">
+      <div class="team-stats-head">
+        <div class="team-badge" style="background: #002F6C;">DS</div>
+        <h3>Devon-Strafford Batting</h3>
+      </div>
+      <div class="stat-table-wrap">
+        <table class="stats">
+          <thead>
+            <tr>
+              <th>Batter</th>
+              <th>AB</th><th>R</th><th>H</th><th>RBI</th><th>BB</th><th>K</th><th>AVG</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="ord">1</span>Mateo Cruz<span class="pos">SS</span></td><td>2</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>.350</td></tr>
+            <tr><td><span class="ord">2</span>Ava Okoro<span class="pos">2B</span></td><td>2</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>.400</td></tr>
+            <tr><td><span class="ord">3</span>Quinn Harrington<span class="pos">CF</span></td><td>2</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>.333</td></tr>
+            <tr><td><span class="ord">4</span>Ryan Marcantonio<span class="pos">1B</span></td><td>2</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>.455</td></tr>
+            <tr><td><span class="ord">5</span>Finn Lawrence<span class="pos">C</span></td><td>2</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>.258</td></tr>
+            <tr><td><span class="ord">6</span>Chase Bellini<span class="pos">3B</span></td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>.200</td></tr>
+            <tr><td><span class="ord">7</span>Maddox Greer<span class="pos">LF</span></td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>.241</td></tr>
+            <tr><td><span class="ord">8</span>Felix Carlisle<span class="pos">RF</span></td><td>2</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>.273</td></tr>
+            <tr><td><span class="ord">9</span>Isaac Whitman<span class="pos">P</span></td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>.167</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td>Totals</td><td>17</td><td>3</td><td>5</td><td>2</td><td>1</td><td>3</td><td>—</td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Panel: Pitching ---------------------------------------------- -->
+<section id="panel-pitching" class="gm-panel">
+  <div class="container">
+
+    <div class="team-stats-block">
+      <div class="team-stats-head">
+        <div class="team-badge" style="background: #0C2340;">BP</div>
+        <h3>Berwyn-Paoli Pitching</h3>
+      </div>
+      <div class="stat-table-wrap">
+        <table class="stats">
+          <thead>
+            <tr>
+              <th>Pitcher</th>
+              <th>IP</th><th>H</th><th>R</th><th>ER</th><th>BB</th><th>K</th><th>PC</th><th>ERA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Caleb Wu<span class="pos">W (1-0)</span></td><td>4.0</td><td>5</td><td>3</td><td>3</td><td>1</td><td>3</td><td>68</td><td>2.25</td></tr>
+            <tr><td>Will Fitzgerald<span class="pos">0.1 · active</span></td><td>0.1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>4</td><td>1.80</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td>Totals</td><td>4.1</td><td>5</td><td>3</td><td>3</td><td>1</td><td>4</td><td>72</td><td>—</td></tr>
+          </tfoot>
+        </table>
+      </div>
+      <p style="font-size: var(--text-xs); color: var(--muted); margin-top: 6px;">PC = pitch count · LL Majors eligibility limits tracked automatically.</p>
+    </div>
+
+    <div class="team-stats-block">
+      <div class="team-stats-head">
+        <div class="team-badge" style="background: #002F6C;">DS</div>
+        <h3>Devon-Strafford Pitching</h3>
+      </div>
+      <div class="stat-table-wrap">
+        <table class="stats">
+          <thead>
+            <tr>
+              <th>Pitcher</th>
+              <th>IP</th><th>H</th><th>R</th><th>ER</th><th>BB</th><th>K</th><th>PC</th><th>ERA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Isaac Whitman<span class="pos">—</span></td><td>4.0</td><td>7</td><td>4</td><td>4</td><td>2</td><td>3</td><td>75</td><td>3.05</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td>Totals</td><td>4.0</td><td>7</td><td>4</td><td>4</td><td>2</td><td>3</td><td>75</td><td>—</td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Panel: Play-by-Play ------------------------------------------ -->
+<section id="panel-pbp" class="gm-panel">
+  <div class="container">
+
+    <div class="pbp-inning">
+      <div class="pbp-inning-head live">Top 5th — Live <span class="rhe">BP 4 · DS 3</span></div>
+      <div class="pbp-play"><span class="res walk">BB</span><span class="desc"><strong>J. Coleman</strong> walked on 4 pitches.</span><span class="count">4 pit</span></div>
+      <div class="pbp-play"><span class="res out">F8</span><span class="desc"><strong>E. Pierce</strong> flied out to center.</span><span class="count">3 pit</span></div>
+      <div class="pbp-play"><span class="res">—</span><span class="desc"><strong>L. DiSanto</strong> at bat — 1-1 count.</span><span class="count">Live</span></div>
+    </div>
+
+    <div class="pbp-inning">
+      <div class="pbp-inning-head">Bottom 4th — Final <span class="rhe">0 R · 0 H · 0 E</span></div>
+      <div class="pbp-play"><span class="res k">K</span><span class="desc"><strong>C. Bellini</strong> struck out swinging.</span><span class="count">5 pit</span></div>
+      <div class="pbp-play"><span class="res out">G3</span><span class="desc"><strong>M. Greer</strong> grounded out to first.</span><span class="count">2 pit</span></div>
+      <div class="pbp-play"><span class="res out">L7</span><span class="desc"><strong>F. Carlisle</strong> lined out to left.</span><span class="count">1 pit</span></div>
+    </div>
+
+    <div class="pbp-inning">
+      <div class="pbp-inning-head">Top 4th — Final <span class="rhe">2 R · 2 H · 0 E</span></div>
+      <div class="pbp-play"><span class="res hit">1B</span><span class="desc"><strong>J. Coleman</strong> singled on a line drive to right.</span><span class="count">3 pit</span></div>
+      <div class="pbp-play"><span class="res out">G4</span><span class="desc"><strong>E. Pierce</strong> fielder's choice — Coleman to 2nd.</span><span class="count">2 pit</span></div>
+      <div class="pbp-play"><span class="res run">2B</span><span class="desc"><strong>L. DiSanto</strong> doubled — Pierce scored, Coleman scored.</span><span class="count">4 pit</span></div>
+      <div class="pbp-play"><span class="res k">K</span><span class="desc"><strong>C. Wu</strong> struck out looking.</span><span class="count">4 pit</span></div>
+      <div class="pbp-play"><span class="res out">G6</span><span class="desc"><strong>O. Kenney</strong> grounded out, shortstop to first.</span><span class="count">1 pit</span></div>
+    </div>
+
+    <div class="pbp-inning">
+      <div class="pbp-inning-head">Bottom 3rd — Final <span class="rhe">2 R · 2 H · 1 E</span></div>
+      <div class="pbp-play"><span class="res hit">1B</span><span class="desc"><strong>Q. Harrington</strong> infield single — Wu error at 3rd allowed Harrington to reach 2nd.</span><span class="count">2 pit</span></div>
+      <div class="pbp-play"><span class="res run">2B</span><span class="desc"><strong>R. Marcantonio</strong> doubled down the RF line — Harrington scored.</span><span class="count">3 pit</span></div>
+      <div class="pbp-play"><span class="res run">WP</span><span class="desc">Wild pitch — <strong>Marcantonio</strong> scored from 3rd.</span><span class="count">—</span></div>
+      <div class="pbp-play"><span class="res k">K</span><span class="desc"><strong>F. Lawrence</strong> struck out swinging.</span><span class="count">5 pit</span></div>
+      <div class="pbp-play"><span class="res out">F9</span><span class="desc"><strong>C. Bellini</strong> flied out to right.</span><span class="count">2 pit</span></div>
+      <div class="pbp-play"><span class="res k">K</span><span class="desc"><strong>M. Greer</strong> struck out looking.</span><span class="count">4 pit</span></div>
+    </div>
+
+    <p style="text-align:center; color: var(--muted); font-size: var(--text-sm); margin-top: var(--space-4);">
+      Innings 1-2 collapsed for brevity in demo · Full play-by-play recorded in production.
+    </p>
+  </div>
+</section>
+
+<!-- Footer -------------------------------------------------------- -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="foot-row">
+      <div class="foot-block">
+        <strong>Live Coverage</strong>
+        <p>D27 tournament games tracked in real time by trained scorekeepers · Updates every half-inning</p>
+      </div>
+      <div class="foot-block">
+        <strong>Tournament</strong>
+        <p><a href="tournament.html">Bob Jones 2026 bracket</a> · 11-12 Majors · Single-elimination</p>
+      </div>
+      <div class="foot-block">
+        <strong>District</strong>
+        <p>Jeff Bennett, DA · <a href="mailto:jeffbennett.d27@gmail.com">jeffbennett.d27@gmail.com</a></p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      &copy; 2026 PA District 27 Little League · Demo site by Mainline Web Design
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function() {
+    var tabs = document.querySelectorAll('.gm-tab');
+    var panels = document.querySelectorAll('.gm-panel');
+    function activate(id) {
+      tabs.forEach(function(t) { t.classList.toggle('active', t.dataset.panel === id); });
+      panels.forEach(function(p) { p.classList.toggle('active', p.id === 'panel-' + id); });
+      if (history.replaceState) history.replaceState(null, '', '#panel-' + id);
+    }
+    tabs.forEach(function(t) { t.addEventListener('click', function() { activate(t.dataset.panel); }); });
+    var hash = window.location.hash.replace('#panel-', '');
+    if (hash && document.getElementById('panel-' + hash)) activate(hash);
+  })();
+</script>
+
+</body>
+</html>

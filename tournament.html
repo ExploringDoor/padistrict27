@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Bob Jones Tournament 2026 · PA District 27 Little League</title>
+<meta name="description" content="Bob Jones Tournament 2026 — live bracket, schedule, teams, and champion history. 16-team single-elimination Regular Season Majors tournament hosted by PA D27." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<script src="config.js"></script>
+<link rel="stylesheet" href="css/styles.css" />
+
+<style>
+  /* Tournament detail hero */
+  .t-hero {
+    background:
+      linear-gradient(135deg, rgba(0,27,71,.94) 0%, rgba(218,41,28,.86) 100%),
+      var(--d27-navy);
+    color: var(--d27-white);
+    padding: var(--space-7) 0 var(--space-6);
+    position: relative;
+    overflow: hidden;
+  }
+  .t-hero::after {
+    content: '';
+    position: absolute;
+    right: -80px; bottom: -80px;
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(201,162,39,.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .t-hero .crumb {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--gold);
+    margin-bottom: var(--space-3);
+  }
+  .t-hero .crumb a { color: rgba(255,255,255,.6); text-decoration: none; }
+  .t-hero .crumb a:hover { color: var(--d27-white); }
+  .t-hero .eyebrow-line {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .t-hero .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.14);
+    border: 1px solid rgba(255,255,255,.22);
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .t-hero .pill.live { background: var(--accent); border-color: var(--accent); }
+  .t-hero .pill.live .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--d27-white);
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse { 50% { opacity: .4; } }
+
+  .t-hero h1 {
+    color: var(--d27-white);
+    font-size: clamp(2.5rem, 5vw, var(--text-5xl));
+    margin: 0 0 var(--space-2);
+    letter-spacing: 0.01em;
+  }
+  .t-hero .t-sub {
+    color: rgba(255,255,255,.85);
+    font-size: var(--text-lg);
+    max-width: 60ch;
+    margin-bottom: var(--space-5);
+  }
+  .t-hero .memoriam {
+    font-size: var(--text-sm);
+    color: rgba(255,255,255,.7);
+    font-style: italic;
+    border-left: 2px solid var(--gold);
+    padding-left: var(--space-3);
+    max-width: 56ch;
+  }
+  .t-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+    max-width: 800px;
+  }
+  .t-stat {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-4);
+  }
+  .t-stat .n {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+  }
+  .t-stat .l {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,.7);
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* Tab nav */
+  .t-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+    position: sticky;
+    top: 64px;
+    z-index: 20;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .t-tabs::-webkit-scrollbar { display: none; }
+  .t-tab {
+    padding: var(--space-4) var(--space-5);
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: transparent;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color .12s ease, border-color .12s ease;
+  }
+  .t-tab:hover { color: var(--fg); }
+  .t-tab.active {
+    color: var(--d27-navy);
+    border-bottom-color: var(--accent);
+  }
+  .t-tab .c { color: var(--muted); margin-left: 6px; font-size: 11px; }
+  .t-tab.active .c { color: var(--accent); }
+
+  .t-panel { display: none; }
+  .t-panel.active { display: block; }
+
+  /* Current-state summary strip */
+  .state-strip {
+    background: linear-gradient(90deg, rgba(0,45,114,.05) 0%, rgba(218,41,28,.04) 100%);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius-sm);
+    padding: var(--space-4);
+    margin-bottom: var(--space-5);
+    display: flex;
+    gap: var(--space-5);
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .state-strip .label {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .state-strip .msg {
+    font-family: 'Manrope', sans-serif;
+    font-size: var(--text-base);
+    color: var(--fg);
+    flex: 1;
+    min-width: 220px;
+  }
+  .state-strip .msg strong { color: var(--d27-navy); }
+  .state-strip .cta {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--d27-navy);
+    text-decoration: none;
+    border: 1.5px solid var(--d27-navy);
+    padding: 8px 14px;
+    border-radius: 999px;
+    transition: background .12s ease, color .12s ease;
+  }
+  .state-strip .cta:hover { background: var(--d27-navy); color: var(--d27-white); }
+
+  /* Schedule table */
+  .sched-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .sched-table th {
+    background: var(--d27-navy);
+    color: var(--d27-white);
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    text-align: left;
+    padding: var(--space-3) var(--space-4);
+    font-weight: 500;
+  }
+  .sched-table td {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--line);
+    font-size: var(--text-sm);
+    vertical-align: middle;
+  }
+  .sched-table tr:last-child td { border-bottom: 0; }
+  .sched-table tr:hover td { background: var(--d27-sub); }
+  .sched-table .g-time { font-family: 'Oswald', sans-serif; font-weight: 500; white-space: nowrap; }
+  .sched-table .g-match { font-weight: 600; color: var(--d27-navy); }
+  .sched-table .g-score { font-family: 'Oswald', sans-serif; font-weight: 700; white-space: nowrap; }
+  .sched-table .g-status {
+    display: inline-block;
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 3px 8px;
+    border-radius: 3px;
+  }
+  .sched-table .g-status.final { background: rgba(0,105,56,.12); color: #006938; }
+  .sched-table .g-status.scheduled { background: var(--d27-sub); color: var(--muted); }
+  .sched-table .g-status.live { background: var(--accent); color: var(--d27-white); }
+
+  /* Teams grid */
+  .teams-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--space-3);
+  }
+  .team-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-4);
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: var(--space-3);
+    align-items: center;
+    transition: border-color .12s ease, transform .12s ease;
+  }
+  .team-card:hover { border-color: var(--d27-navy); transform: translateY(-2px); }
+  .team-card.eliminated { opacity: .55; }
+  .team-card.eliminated .team-name { text-decoration: line-through; }
+  .team-card .seed {
+    width: 36px; height: 36px;
+    background: var(--d27-navy);
+    color: var(--d27-white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-base);
+    font-weight: 600;
+  }
+  .team-card .team-name {
+    font-family: 'Manrope', sans-serif;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--fg);
+  }
+  .team-card .team-meta {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+  }
+
+  /* History list */
+  .history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+  .history-row {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+  .history-row .year {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-xl);
+    color: var(--d27-navy);
+    font-weight: 600;
+  }
+  .history-row .champ {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 600;
+    color: var(--fg);
+  }
+  .history-row .champ .league {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+    font-weight: 500;
+  }
+  .history-row .final {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-sm);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* Section heads */
+  .t-section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--space-4);
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .t-section-head h2 {
+    font-size: var(--text-2xl);
+    margin: 0;
+  }
+  .t-section-head .sub {
+    color: var(--muted);
+    font-size: var(--text-sm);
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<!-- Nav ------------------------------------------------------------- -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html">
+      <span class="mark">D27</span>
+      <span class="name-block">
+        PA District 27
+        <span class="sub">Little League · Baseball &amp; Softball</span>
+      </span>
+    </a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html" aria-current="page">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Tournament hero -------------------------------------------------- -->
+<header class="t-hero">
+  <div class="container">
+    <div class="crumb">
+      <a href="index.html">Home</a> &nbsp;/&nbsp;
+      <a href="baseball.html">Baseball</a> &nbsp;/&nbsp;
+      Bob Jones Tournament
+    </div>
+    <div class="eyebrow-line">
+      <span class="pill live"><span class="dot"></span> Live · Round 2</span>
+      <span class="pill">11–12 YO</span>
+      <span class="pill">Single Elimination</span>
+      <span class="pill">16 Teams</span>
+    </div>
+    <h1>Bob Jones Tournament · 2026</h1>
+    <p class="t-sub">
+      The crown jewel of District 27's regular season — a 16-team single-elim
+      tournament that pulls the top Majors team from each of our 12 leagues
+      plus wild cards. First pitch June 16.
+    </p>
+    <div class="memoriam">
+      Established in memory of <strong>Bob Jones</strong>, longtime President
+      of Bridgeport Little League and a champion of baseball in Chester County.
+    </div>
+    <div class="t-stats">
+      <div class="t-stat"><span class="n">16</span><span class="l">Teams</span></div>
+      <div class="t-stat"><span class="n">15</span><span class="l">Games</span></div>
+      <div class="t-stat"><span class="n">11</span><span class="l">Played</span></div>
+      <div class="t-stat"><span class="n">Jun 28</span><span class="l">Championship</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- Tab nav ---------------------------------------------------------- -->
+<div class="t-tabs">
+  <div class="container" style="display: flex;">
+    <button class="t-tab active" data-panel="bracket">Bracket <span class="c">15</span></button>
+    <button class="t-tab" data-panel="schedule">Schedule <span class="c">15</span></button>
+    <button class="t-tab" data-panel="teams">Teams <span class="c">16</span></button>
+    <button class="t-tab" data-panel="history">History <span class="c">25+</span></button>
+  </div>
+</div>
+
+<main class="container section-tight">
+
+  <!-- BRACKET ------------------------------------------------------- -->
+  <section class="t-panel active" id="panel-bracket">
+
+    <div class="state-strip">
+      <span class="label">Where we are</span>
+      <span class="msg">
+        <strong>Quarterfinals in progress.</strong> Round 1 complete (8/8 games).
+        QF: 3/4 games played. Semifinals start Thursday Jun 25 · 6:30 PM.
+      </span>
+      <a href="#panel-schedule" class="cta" onclick="document.querySelector('[data-panel=schedule]').click(); return false;">Full schedule →</a>
+    </div>
+
+    <div class="state-strip" style="background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 75%, black)); color: #fff; border-left: 3px solid var(--d27-gold);">
+      <span class="label" style="color: var(--d27-gold);">⚡ Live now</span>
+      <span class="msg" style="color: #fff;">
+        <strong>SF-1 · Berwyn-Paoli 4, Devon-Strafford 3</strong> — Top 5th · 1 Out · Runner on 1st.
+      </span>
+      <a href="game.html" class="cta" style="background: var(--d27-gold); color: var(--d27-navy); border-color: var(--d27-gold);">Box score →</a>
+    </div>
+
+    <div class="t-section-head">
+      <div>
+        <h2>Bracket</h2>
+        <div class="sub">Tap any matchup for box score. Scroll horizontally on mobile.</div>
+      </div>
+      <div class="sub">Updated <strong>Jun 22, 2026 · 9:14 PM</strong></div>
+    </div>
+
+    <div id="bracket-container"></div>
+
+    <p class="text-muted" style="font-size: var(--text-xs); text-align: center; margin-top: var(--space-5);">
+      Seeds based on regular-season league standings. Higher seed is home team.
+    </p>
+
+  </section>
+
+
+  <!-- SCHEDULE ------------------------------------------------------ -->
+  <section class="t-panel" id="panel-schedule">
+
+    <div class="t-section-head">
+      <div>
+        <h2>Full Schedule</h2>
+        <div class="sub">15 games · Jun 16 – Jun 28, 2026</div>
+      </div>
+    </div>
+
+    <table class="sched-table">
+      <thead>
+        <tr>
+          <th>Date / Time</th>
+          <th>Matchup</th>
+          <th>Field</th>
+          <th>Score</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="g-time">Jun 16 · 6:00p</td>
+          <td class="g-match">(1) Chester Valley vs (16) Phoenixville</td>
+          <td>Chester Valley · Field 1</td>
+          <td class="g-score">12 – 2</td>
+          <td><span class="g-status final">Final</span></td>
+        </tr>
+        <tr>
+          <td class="g-time">Jun 16 · 6:00p</td>
+          <td class="g-match">(8) Exton vs (9) Coventry</td>
+          <td>Exton · Field A</td>
+          <td class="g-score">7 – 5</td>
+          <td><span class="g-status final">Final</span></td>
+        </tr>
+        <tr>
+          <td class="g-time">Jun 17 · 6:00p</td>
+          <td class="g-match">(5) Upper Providence vs (12) Spring-Ford</td>
+          <td>Upper Providence · Main</td>
+          <td class="g-score">9 – 3</td>
+          <td><span class="g-status final">Final</span></td>
+        </tr>
+        <tr>
+          <td class="g-time">Jun 17 · 6:00p</td>
+          <td class="g-match">(4) Lower Perk Cubs vs (13) Bridgeport</td>
+          <td>Lower Perk · Majors</td>
+          <td class="g-score">10 – 4</td>
+          <td><span class="g-status final">Final</span></td>
+        </tr>
+        <tr>
+          <td class="g-time">Jun 18 · 6:00p</td>
+          <td class="g-match">(6) Great Valley vs (11) Devon-Strafford</td>
+          <td>Great Valley · Main</td>
+          <td class="g-score">5 – 4</td>
+          <td><span class="g-status final">Final</span></td>
+        </tr>
+        <tr>
+          <td class="g-time">Jun 18 · 6:00p</td>
+          <td class="g-match">(3) Radnor-Wayne vs (14) Berwyn-Paoli</td>
+          <td>Radnor-Wayne · Field 1</td>
+          <td class="g-score">8 – 1</td>
+          <td><span class="g-status final">Final</span></td>
+        </tr>
+        <tr>
+          <td class="g-time">Jun 19 · 6:00p</td>
+          <td class="g-match">(7) Lower Providence vs (10) Owen J. Roberts</td>
+          <td>Lower Providence · Main</td>
+          <td class="g-score">6 – 5</td>
+          <td><span class="g-status final">Final</span></td>
+        </tr>
+        <tr>
+          <td class="g-time">Jun 19 · 6:00p</td>
+          <td class="g-match">(2) Lower Merion vs (15) Norristown</td>
+          <td>Lower Merion · Field 3</td>
+          <td class="g-score">11 – 1</td>
+          <td><span class="g-status final">Final</span></td>
+        </tr>
+        <tr>
+          <td class="g-time">Jun 20 · 2:00p</td>
+          <td class="g-match">(1) Chester Valley vs (8) Exton</td>
+          <td>Chester Valley · Field 1</td>
+          <td class="g-score">6 – 3</td>
+          <td><span class="g-status final">Final</span></td>
+        </tr>
+        <tr>
+          <td class="g-time">Jun 21 · 2:00p</td>
+          <td class="g-match">(4) Lower Perk Cubs vs (5) Upper Providence</td>
+          <td>Lower Perk · Majors</td>
+          <td class="g-score">8 – 7</td>
+          <td><span class="g-status final">Final</span></td>
+        </tr>
+        <tr>
+          <td class="g-time">Jun 22 · 2:00p</td>
+          <td class="g-match">(3) Radnor-Wayne vs (6) Great Valley</td>
+          <td>Radnor-Wayne · Field 1</td>
+          <td class="g-score">4 – 3</td>
+          <td><span class="g-status final">Final</span></td>
+        </tr>
+        <tr>
+          <td class="g-time">Jun 23 · 6:00p</td>
+          <td class="g-match">(2) Lower Merion vs (7) Lower Providence</td>
+          <td>Lower Merion · Field 3</td>
+          <td class="g-score">—</td>
+          <td><span class="g-status scheduled">Scheduled</span></td>
+        </tr>
+        <tr>
+          <td class="g-time">Jun 25 · 6:30p</td>
+          <td class="g-match">(1) Chester Valley vs (4) Lower Perk Cubs</td>
+          <td>TBD · Host school</td>
+          <td class="g-score">—</td>
+          <td><span class="g-status scheduled">SF · Scheduled</span></td>
+        </tr>
+        <tr>
+          <td class="g-time">Jun 25 · 6:30p</td>
+          <td class="g-match">(3) Radnor-Wayne vs QF4 winner</td>
+          <td>TBD · Host school</td>
+          <td class="g-score">—</td>
+          <td><span class="g-status scheduled">SF · Scheduled</span></td>
+        </tr>
+        <tr>
+          <td class="g-time">Jun 28 · 2:00p</td>
+          <td class="g-match">SF1 winner vs SF2 winner</td>
+          <td>Championship site TBD</td>
+          <td class="g-score">—</td>
+          <td><span class="g-status scheduled">Final · Scheduled</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+
+  <!-- TEAMS --------------------------------------------------------- -->
+  <section class="t-panel" id="panel-teams">
+    <div class="t-section-head">
+      <div>
+        <h2>Tournament Field</h2>
+        <div class="sub">16 teams seeded by regular-season record. Crossed-out teams are eliminated.</div>
+      </div>
+    </div>
+
+    <div class="teams-grid">
+      <div class="team-card"><div class="seed">1</div><div><div class="team-name">Chester Valley</div><div class="team-meta">Chester Valley LL · 18-2</div></div></div>
+      <div class="team-card"><div class="seed">2</div><div><div class="team-name">Lower Merion</div><div class="team-meta">Lower Merion LL · 17-3</div></div></div>
+      <div class="team-card"><div class="seed">3</div><div><div class="team-name">Radnor-Wayne</div><div class="team-meta">Radnor-Wayne LL · 16-4</div></div></div>
+      <div class="team-card"><div class="seed">4</div><div><div class="team-name">Lower Perk Cubs</div><div class="team-meta">Lower Perkiomen LL · 16-4</div></div></div>
+      <div class="team-card eliminated"><div class="seed">5</div><div><div class="team-name">Upper Providence</div><div class="team-meta">Upper Providence LL · 15-5</div></div></div>
+      <div class="team-card eliminated"><div class="seed">6</div><div><div class="team-name">Great Valley</div><div class="team-meta">Great Valley LL · 14-6</div></div></div>
+      <div class="team-card"><div class="seed">7</div><div><div class="team-name">Lower Providence</div><div class="team-meta">Lower Providence LL · 14-6</div></div></div>
+      <div class="team-card eliminated"><div class="seed">8</div><div><div class="team-name">Exton</div><div class="team-meta">Exton LL · 13-7</div></div></div>
+      <div class="team-card eliminated"><div class="seed">9</div><div><div class="team-name">Coventry</div><div class="team-meta">Coventry LL · 12-8</div></div></div>
+      <div class="team-card eliminated"><div class="seed">10</div><div><div class="team-name">Owen J. Roberts</div><div class="team-meta">OJR LL · 11-9</div></div></div>
+      <div class="team-card eliminated"><div class="seed">11</div><div><div class="team-name">Devon-Strafford</div><div class="team-meta">Devon-Strafford LL · 10-10</div></div></div>
+      <div class="team-card eliminated"><div class="seed">12</div><div><div class="team-name">Spring-Ford</div><div class="team-meta">Spring-Ford LL · 10-10</div></div></div>
+      <div class="team-card eliminated"><div class="seed">13</div><div><div class="team-name">Bridgeport</div><div class="team-meta">Bridgeport LL · 9-11</div></div></div>
+      <div class="team-card eliminated"><div class="seed">14</div><div><div class="team-name">Berwyn-Paoli</div><div class="team-meta">Berwyn-Paoli LL · 8-12</div></div></div>
+      <div class="team-card eliminated"><div class="seed">15</div><div><div class="team-name">Norristown</div><div class="team-meta">Norristown LL · 7-13</div></div></div>
+      <div class="team-card eliminated"><div class="seed">16</div><div><div class="team-name">Phoenixville</div><div class="team-meta">Phoenixville LL · 6-14</div></div></div>
+    </div>
+  </section>
+
+
+  <!-- HISTORY ------------------------------------------------------- -->
+  <section class="t-panel" id="panel-history">
+    <div class="t-section-head">
+      <div>
+        <h2>Champions · 2000–2025</h2>
+        <div class="sub">The Bob Jones trophy has been raised 25+ times across D27's member leagues.</div>
+      </div>
+    </div>
+
+    <ul class="history-list">
+      <li class="history-row">
+        <span class="year">2025</span>
+        <div class="champ">Tournament pending<div class="league">Check back summer 2026</div></div>
+        <span class="final">—</span>
+      </li>
+      <li class="history-row">
+        <span class="year">2024</span>
+        <div class="champ">Chester Valley<div class="league">Chester Valley LL</div></div>
+        <span class="final">Final: 17-15</span>
+      </li>
+      <li class="history-row">
+        <span class="year">2023</span>
+        <div class="champ">Lower Perk Cubs<div class="league">Lower Perkiomen LL</div></div>
+        <span class="final">Final score N/A</span>
+      </li>
+      <li class="history-row">
+        <span class="year">2022</span>
+        <div class="champ">Great Valley<div class="league">Great Valley LL</div></div>
+        <span class="final">—</span>
+      </li>
+      <li class="history-row">
+        <span class="year">2021</span>
+        <div class="champ">Radnor-Wayne<div class="league">Radnor-Wayne LL</div></div>
+        <span class="final">—</span>
+      </li>
+      <li class="history-row">
+        <span class="year">2019</span>
+        <div class="champ">Lower Merion<div class="league">Lower Merion LL</div></div>
+        <span class="final">—</span>
+      </li>
+    </ul>
+
+    <div style="margin-top: var(--space-5); padding: var(--space-5); background: var(--d27-sub); border-radius: var(--radius); text-align: center;">
+      <div style="font-family: 'Oswald', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin-bottom: var(--space-2);">About the Tournament</div>
+      <p style="max-width: 62ch; margin: 0 auto; color: var(--fg); font-size: var(--text-base);">
+        The Bob Jones Tournament has been the signature regular-season event
+        of District 27 for over two decades. Named for the longtime Bridgeport
+        Little League President, it pulls the top Majors-division team from
+        each member league into a single-elimination bracket — the only
+        district-wide baseball showcase that happens <em>before</em> the
+        all-star season begins.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+
+<!-- Footer ----------------------------------------------------------- -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h5>PA District 27 Little League</h5>
+        <p style="color: rgba(255,255,255,.7); max-width: 48ch;">
+          Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties. One team. One Little League.
+        </p>
+        <p style="color: rgba(255,255,255,.55); font-size: var(--text-xs); margin-top: 12px;">
+          Jeff Bennett — District Administrator<br>
+          <a href="mailto:jeffbennett.d27@gmail.com">jeffbennett.d27@gmail.com</a>
+        </p>
+      </div>
+      <div>
+        <h5>Tournaments</h5>
+        <ul>
+          <li><a href="baseball.html">Baseball (11)</a></li>
+          <li><a href="softball.html">Softball (6)</a></li>
+          <li><a href="champions.html">Champions Archive</a></li>
+          <li><a href="schedule.html">Master Schedule</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Resources</h5>
+        <ul>
+          <li><a href="rules.html">Rules &amp; Guidelines</a></li>
+          <li><a href="scholarships.html">Scott Scholarship</a></li>
+          <li><a href="history.html">History</a></li>
+          <li><a href="fields.html">Field Directory</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Connect</h5>
+        <ul>
+          <li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li>
+          <li><a href="contact.html">Contact D27</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="admin.html">Admin</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 PA District 27 Little League. All rights reserved.</div>
+      <div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/bracket.js"></script>
+<script>
+  // Tab switching
+  document.querySelectorAll('.t-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const id = tab.dataset.panel;
+      document.querySelectorAll('.t-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.t-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + id).classList.add('active');
+      // Scroll tabs into view
+      window.scrollTo({ top: document.querySelector('.t-tabs').offsetTop - 64, behavior: 'smooth' });
+    });
+  });
+
+  // Bob Jones 2026 bracket data --------------------------------------
+  const bobJones2026 = {
+    name: "Bob Jones Tournament 2026",
+    size: 16,
+    currentRound: 3,
+    seeds: [
+      { seed: 1,  team: "Chester Valley",   league: "Chester Valley LL",    record: "18-2" },
+      { seed: 2,  team: "Lower Merion",     league: "Lower Merion LL",      record: "17-3" },
+      { seed: 3,  team: "Radnor-Wayne",     league: "Radnor-Wayne LL",      record: "16-4" },
+      { seed: 4,  team: "Lower Perk Cubs",  league: "Lower Perkiomen LL",   record: "16-4" },
+      { seed: 5,  team: "Upper Providence", league: "Upper Providence LL",  record: "15-5" },
+      { seed: 6,  team: "Great Valley",     league: "Great Valley LL",      record: "14-6" },
+      { seed: 7,  team: "Lower Providence", league: "Lower Providence LL",  record: "14-6" },
+      { seed: 8,  team: "Exton",            league: "Exton LL",             record: "13-7" },
+      { seed: 9,  team: "Coventry",         league: "Coventry LL",          record: "12-8" },
+      { seed: 10, team: "Owen J. Roberts",  league: "OJR LL",               record: "11-9" },
+      { seed: 11, team: "Devon-Strafford",  league: "Devon-Strafford LL",   record: "10-10" },
+      { seed: 12, team: "Spring-Ford",      league: "Spring-Ford LL",       record: "10-10" },
+      { seed: 13, team: "Bridgeport",       league: "Bridgeport LL",        record: "9-11" },
+      { seed: 14, team: "Berwyn-Paoli",     league: "Berwyn-Paoli LL",      record: "8-12" },
+      { seed: 15, team: "Norristown",       league: "Norristown LL",        record: "7-13" },
+      { seed: 16, team: "Phoenixville",     league: "Phoenixville LL",      record: "6-14" }
+    ],
+    games: {
+      // Round 1 — all 8 games complete
+      "r1m1": { top: 1,  bot: 16, topScore: 12, botScore: 2, winner: 'top', date: 'Jun 16', field: 'Chester Valley F1' },
+      "r1m2": { top: 8,  bot: 9,  topScore: 7,  botScore: 5, winner: 'top', date: 'Jun 16', field: 'Exton Field A' },
+      "r1m3": { top: 5,  bot: 12, topScore: 9,  botScore: 3, winner: 'top', date: 'Jun 17', field: 'Upper Providence' },
+      "r1m4": { top: 4,  bot: 13, topScore: 10, botScore: 4, winner: 'top', date: 'Jun 17', field: 'Lower Perk Majors' },
+      "r1m5": { top: 6,  bot: 11, topScore: 5,  botScore: 4, winner: 'top', date: 'Jun 18', field: 'Great Valley' },
+      "r1m6": { top: 3,  bot: 14, topScore: 8,  botScore: 1, winner: 'top', date: 'Jun 18', field: 'Radnor-Wayne F1' },
+      "r1m7": { top: 7,  bot: 10, topScore: 6,  botScore: 5, winner: 'top', date: 'Jun 19', field: 'Lower Providence' },
+      "r1m8": { top: 2,  bot: 15, topScore: 11, botScore: 1, winner: 'top', date: 'Jun 19', field: 'Lower Merion F3' },
+
+      // Round 2 — Quarterfinals — 3 of 4 complete, last is scheduled
+      "r2m1": { top: 1, bot: 8, topScore: 6, botScore: 3, winner: 'top', date: 'Jun 20', field: 'Chester Valley F1' },
+      "r2m2": { top: 4, bot: 5, topScore: 8, botScore: 7, winner: 'top', date: 'Jun 21', field: 'Lower Perk Majors' },
+      "r2m3": { top: 3, bot: 6, topScore: 4, botScore: 3, winner: 'top', date: 'Jun 22', field: 'Radnor-Wayne F1' },
+      "r2m4": { top: 2, bot: 7, time: 'Jun 23 · 6:00p', field: 'Lower Merion F3' },
+
+      // Round 3 — Semifinals — awaiting R2M4
+      "r3m1": { top: 1, bot: 4, time: 'Jun 25 · 6:30p', field: 'TBD' },
+      "r3m2": { top: 3,          time: 'Jun 25 · 6:30p', field: 'TBD' },
+
+      // Round 4 — Final
+      "r4m1": { time: 'Jun 28 · 2:00p', field: 'Championship site TBD' }
+    }
+  };
+
+  D27Bracket.render(document.getElementById('bracket-container'), bobJones2026);
+
+  // Deep-link to a tab via URL hash (e.g., #panel-schedule)
+  if (location.hash.startsWith('#panel-')) {
+    const which = location.hash.replace('#panel-', '');
+    const tab = document.querySelector('.t-tab[data-panel="' + which + '"]');
+    if (tab) tab.click();
+  }
+</script>
+
+</body>
+</html>

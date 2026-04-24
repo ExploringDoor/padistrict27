@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en" data-league="berwyn-paoli">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0C2340" />
+<title>Berwyn-Paoli LL · PA District 27 Little League</title>
+<meta name="description" content="Berwyn-Paoli Little League — a PA District 27 member league serving Berwyn, PA. Teams, schedules, standings, fields, and news." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<script src="config.js"></script>
+<link rel="stylesheet" href="css/styles.css" />
+
+<style>
+  /* ── League hero (uses --league-primary / --league-accent) ───────── */
+  .lg-hero {
+    background: linear-gradient(135deg, var(--league-primary) 0%, color-mix(in srgb, var(--league-primary) 80%, black) 100%);
+    color: #fff;
+    padding: var(--space-10) 0 var(--space-8);
+    position: relative;
+    overflow: hidden;
+  }
+  .lg-hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 85% 30%, color-mix(in srgb, var(--league-accent) 30%, transparent), transparent 60%);
+    pointer-events: none;
+  }
+  .lg-hero-inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-4) var(--space-5);
+    align-items: center;
+  }
+  .lg-crest {
+    width: 96px; height: 96px;
+    border-radius: 16px;
+    background: rgba(255,255,255,.12);
+    border: 2px solid var(--league-accent);
+    display: grid; place-items: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: .03em;
+    color: #fff;
+    backdrop-filter: blur(6px);
+  }
+  .lg-hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(28px, 5vw, 44px);
+    line-height: 1.05;
+    margin: 0 0 6px;
+    font-weight: 700;
+  }
+  .lg-hero .lg-sub {
+    font-size: var(--text-sm);
+    opacity: .88;
+    margin: 0;
+    display: flex; flex-wrap: wrap; gap: 12px;
+  }
+  .lg-hero .lg-sub > span { display: inline-flex; gap: 6px; align-items: center; }
+  .lg-hero .lg-sub .dot { opacity: .5; }
+  .lg-accent-bar {
+    height: 6px;
+    background: var(--league-accent);
+  }
+
+  .lg-breadcrumb {
+    font-size: var(--text-xs);
+    color: var(--muted);
+    padding: var(--space-3) 0 0;
+  }
+  .lg-breadcrumb a { color: var(--muted); text-decoration: none; }
+  .lg-breadcrumb a:hover { color: var(--league-primary); }
+
+  /* ── Stat strip ─────────────────────────────────────────────────── */
+  .lg-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+  }
+  .lg-stat {
+    padding: var(--space-4) var(--space-3);
+    text-align: center;
+    border-right: 1px solid var(--line);
+  }
+  .lg-stat:last-child { border-right: 0; }
+  .lg-stat .n {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(24px, 4vw, 34px);
+    color: var(--league-primary);
+    font-weight: 700;
+    line-height: 1;
+  }
+  .lg-stat .l {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-top: 4px;
+  }
+  @media (max-width: 640px) {
+    .lg-stats { grid-template-columns: repeat(2, 1fr); }
+    .lg-stat { border-bottom: 1px solid var(--line); }
+    .lg-stat:nth-child(odd) { border-right: 1px solid var(--line); }
+    .lg-stat:nth-child(even) { border-right: 0; }
+    .lg-stat:nth-last-child(-n+2) { border-bottom: 0; }
+  }
+
+  /* ── Tabs ───────────────────────────────────────────────────────── */
+  .lg-tabs-wrap {
+    position: sticky; top: 64px;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    z-index: 40;
+  }
+  .lg-tabs {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    gap: 0;
+  }
+  .lg-tabs::-webkit-scrollbar { display: none; }
+  .lg-tab {
+    flex: 0 0 auto;
+    padding: var(--space-3) var(--space-4);
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: transparent;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    font-weight: 600;
+    transition: color .15s, border-color .15s;
+  }
+  .lg-tab:hover { color: var(--league-primary); }
+  .lg-tab.active {
+    color: var(--league-primary);
+    border-bottom-color: var(--league-accent);
+  }
+
+  .lg-panel { display: none; padding: var(--space-6) 0 var(--space-8); }
+  .lg-panel.active { display: block; }
+
+  /* ── Section heads ──────────────────────────────────────────────── */
+  .lg-section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin: 0 0 var(--space-4);
+    padding-bottom: var(--space-2);
+    border-bottom: 2px solid var(--league-primary);
+  }
+  .lg-section-head h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-xl);
+    margin: 0;
+    color: var(--league-primary);
+    letter-spacing: .02em;
+  }
+  .lg-section-head .count {
+    font-size: var(--text-xs);
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* ── Overview ───────────────────────────────────────────────────── */
+  .lg-overview-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--space-5);
+  }
+  @media (max-width: 900px) { .lg-overview-grid { grid-template-columns: 1fr; } }
+
+  .welcome-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    border-left: 4px solid var(--league-primary);
+  }
+  .welcome-card h3 {
+    margin: 0 0 var(--space-2);
+    font-family: 'Oswald', sans-serif;
+    color: var(--league-primary);
+    font-size: var(--text-lg);
+  }
+  .welcome-card p { margin: 0 0 var(--space-3); color: var(--fg); line-height: 1.6; }
+  .welcome-card .sig {
+    font-size: var(--text-sm);
+    color: var(--muted);
+    padding-top: var(--space-2);
+    border-top: 1px dashed var(--line);
+  }
+  .welcome-card .sig strong { color: var(--fg); }
+
+  .info-rail { display: flex; flex-direction: column; gap: var(--space-3); }
+  .info-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+  }
+  .info-card h4 {
+    margin: 0 0 var(--space-2);
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-sm);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--league-primary);
+  }
+  .info-card dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 12px;
+    font-size: var(--text-sm);
+  }
+  .info-card dt { color: var(--muted); font-weight: 500; }
+  .info-card dd { margin: 0; color: var(--fg); font-weight: 500; }
+
+  .divisions-strip {
+    margin-top: var(--space-6);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--space-3);
+  }
+  .div-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform .15s, border-color .15s;
+  }
+  .div-card:hover {
+    border-color: var(--league-primary);
+    transform: translateY(-2px);
+  }
+  .div-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--league-accent);
+  }
+  .div-card .n {
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--league-primary);
+    margin-top: 4px;
+  }
+  .div-card .l { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .div-card .teams { font-size: var(--text-xs); color: var(--fg); margin-top: 4px; }
+
+  /* ── Teams + Rosters ────────────────────────────────────────────── */
+  .division-block { margin-bottom: var(--space-6); }
+  .division-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+  .division-head .tag {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    background: var(--league-primary);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .division-head h3 {
+    margin: 0;
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-lg);
+    color: var(--fg);
+  }
+  .division-head .meta { font-size: var(--text-xs); color: var(--muted); margin-left: auto; }
+
+  .teams-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--space-3);
+  }
+  .team-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .team-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.08); }
+  .team-card summary {
+    list-style: none;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: var(--space-2);
+    align-items: center;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid transparent;
+  }
+  .team-card summary::-webkit-details-marker { display: none; }
+  .team-card[open] summary { border-bottom-color: var(--line); }
+  .team-card .team-logo {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: grid; place-items: center;
+    color: #fff;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .team-card .team-name { font-weight: 600; color: var(--fg); font-size: var(--text-sm); }
+  .team-card .team-rec { font-size: var(--text-xs); color: var(--muted); }
+  .team-card .chev {
+    color: var(--muted);
+    font-size: 12px;
+    transition: transform .2s;
+  }
+  .team-card[open] .chev { transform: rotate(180deg); }
+
+  .roster {
+    padding: var(--space-2) 0;
+  }
+  .roster-row {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: var(--space-2);
+    padding: 8px var(--space-4);
+    align-items: center;
+    font-size: var(--text-sm);
+    border-top: 1px solid var(--line);
+  }
+  .roster-row:first-child { border-top: 0; }
+  .roster-row .num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    color: var(--league-primary);
+    background: color-mix(in srgb, var(--league-primary) 8%, transparent);
+    text-align: center;
+    padding: 3px 0;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+  .roster-row .player-name { color: var(--fg); font-weight: 500; }
+  .roster-row .pos { font-size: 10px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+
+  .staff-bar {
+    padding: var(--space-2) var(--space-4);
+    background: color-mix(in srgb, var(--league-primary) 5%, transparent);
+    font-size: var(--text-xs);
+    color: var(--muted);
+    border-top: 1px solid var(--line);
+  }
+  .staff-bar strong { color: var(--fg); font-weight: 600; }
+
+  /* ── Schedule ───────────────────────────────────────────────────── */
+  .sched-table {
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .sched-row {
+    display: grid;
+    grid-template-columns: 90px 1fr auto;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    align-items: center;
+    border-top: 1px solid var(--line);
+    font-size: var(--text-sm);
+  }
+  .sched-row:first-child { border-top: 0; }
+  .sched-row .when {
+    font-family: 'Oswald', sans-serif;
+    color: var(--league-primary);
+    font-weight: 600;
+  }
+  .sched-row .when .d { font-size: 14px; display: block; }
+  .sched-row .when .t { font-size: 11px; color: var(--muted); font-weight: 500; }
+  .sched-row .matchup .opp { font-weight: 600; color: var(--fg); }
+  .sched-row .matchup .meta { font-size: var(--text-xs); color: var(--muted); }
+  .sched-row .st-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .sched-row .st-badge.win  { background: #DCFCE7; color: #166534; }
+  .sched-row .st-badge.loss { background: #FEE2E2; color: #991B1B; }
+  .sched-row .st-badge.up   { background: #F1F5F9; color: #475569; }
+
+  /* ── Standings ──────────────────────────────────────────────────── */
+  .stand-table {
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border-collapse: collapse;
+  }
+  .stand-table thead {
+    background: var(--league-primary);
+    color: #fff;
+  }
+  .stand-table th {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: .08em;
+    font-weight: 600;
+    text-align: left;
+    padding: 10px var(--space-3);
+    text-transform: uppercase;
+  }
+  .stand-table th.num, .stand-table td.num { text-align: right; }
+  .stand-table td {
+    padding: 10px var(--space-3);
+    border-top: 1px solid var(--line);
+    font-size: var(--text-sm);
+  }
+  .stand-table tbody tr:first-child td {
+    background: color-mix(in srgb, var(--league-accent) 12%, transparent);
+    font-weight: 600;
+  }
+  .stand-table .rk {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    color: var(--league-primary);
+    width: 40px;
+  }
+  .stand-table .team-cell { font-weight: 600; color: var(--fg); }
+  .stand-table .pct { color: var(--muted); font-family: 'Oswald', sans-serif; }
+
+  /* ── Fields ─────────────────────────────────────────────────────── */
+  .fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-3);
+  }
+  .field-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--league-accent);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+  }
+  .field-card h4 {
+    margin: 0 0 6px;
+    font-family: 'Oswald', sans-serif;
+    color: var(--league-primary);
+    font-size: var(--text-base);
+  }
+  .field-card .addr {
+    font-size: var(--text-sm);
+    color: var(--fg);
+    line-height: 1.5;
+    margin: 0 0 var(--space-2);
+  }
+  .field-card .usage { font-size: var(--text-xs); color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px; }
+  .field-card .usage .chip {
+    background: color-mix(in srgb, var(--league-primary) 6%, transparent);
+    color: var(--league-primary);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+
+  /* ── News ───────────────────────────────────────────────────────── */
+  .news-list { display: flex; flex-direction: column; gap: var(--space-3); }
+  .news-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: var(--space-4);
+  }
+  @media (max-width: 600px) { .news-card { grid-template-columns: 1fr; } }
+  .news-date {
+    font-family: 'Oswald', sans-serif;
+    text-align: center;
+    background: var(--league-primary);
+    color: #fff;
+    border-radius: 8px;
+    padding: 8px 4px;
+    height: fit-content;
+  }
+  .news-date .mo { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+  .news-date .dy { font-size: 24px; font-weight: 700; line-height: 1; }
+  .news-body h3 {
+    margin: 0 0 6px;
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-base);
+    color: var(--fg);
+  }
+  .news-body p { margin: 0; font-size: var(--text-sm); color: var(--muted); line-height: 1.5; }
+
+  /* ── CTA (District context) ─────────────────────────────────────── */
+  .district-strip {
+    margin-top: var(--space-8);
+    padding: var(--space-5);
+    background: var(--d27-navy);
+    color: #fff;
+    border-radius: var(--radius-md);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-4);
+    align-items: center;
+  }
+  @media (max-width: 640px) { .district-strip { grid-template-columns: 1fr; } }
+  .district-strip h3 {
+    margin: 0 0 6px;
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-lg);
+  }
+  .district-strip p { margin: 0; font-size: var(--text-sm); opacity: .85; }
+  .district-strip a.btn {
+    background: var(--d27-gold);
+    color: var(--d27-navy);
+    padding: 10px var(--space-4);
+    border-radius: 6px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<!-- Nav ------------------------------------------------------------- -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html">
+      <span class="mark">D27</span>
+      <span class="name-block">
+        PA District 27
+        <span class="sub">Little League · Baseball &amp; Softball</span>
+      </span>
+    </a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html" aria-current="page">Leagues</a></li>
+      <li><a href="champions.html">Champions</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Breadcrumb ------------------------------------------------------ -->
+<div class="container lg-breadcrumb">
+  <a href="leagues.html">← All Leagues</a>  <span>·</span>  Berwyn-Paoli LL
+</div>
+
+<!-- League Hero ---------------------------------------------------- -->
+<header class="lg-hero">
+  <div class="container lg-hero-inner">
+    <div class="lg-crest">BP</div>
+    <div>
+      <h1>Berwyn-Paoli Little League</h1>
+      <p class="lg-sub">
+        <span>📍 Berwyn, PA</span>
+        <span class="dot">•</span>
+        <span>Chester County</span>
+        <span class="dot">•</span>
+        <span>Est. 1963</span>
+        <span class="dot">•</span>
+        <span>Chartered District 27 member</span>
+      </p>
+    </div>
+  </div>
+</header>
+<div class="lg-accent-bar"></div>
+
+<!-- Stat strip ------------------------------------------------------ -->
+<div class="container">
+  <div class="lg-stats">
+    <div class="lg-stat"><div class="n">642</div><div class="l">Registered Players</div></div>
+    <div class="lg-stat"><div class="n">48</div><div class="l">Teams</div></div>
+    <div class="lg-stat"><div class="n">1</div><div class="l">Home Field Complex</div></div>
+    <div class="lg-stat"><div class="n">5</div><div class="l">D27 Titles Since 2018</div></div>
+  </div>
+</div>
+
+<!-- Tabs ------------------------------------------------------------ -->
+<div class="lg-tabs-wrap">
+  <div class="container">
+    <div class="lg-tabs" role="tablist">
+      <button class="lg-tab active" data-panel="overview" role="tab">Overview</button>
+      <button class="lg-tab" data-panel="teams" role="tab">Teams &amp; Rosters</button>
+      <button class="lg-tab" data-panel="schedule" role="tab">Schedule</button>
+      <button class="lg-tab" data-panel="standings" role="tab">Standings</button>
+      <button class="lg-tab" data-panel="fields" role="tab">Fields</button>
+      <button class="lg-tab" data-panel="news" role="tab">News</button>
+    </div>
+  </div>
+</div>
+
+<!-- Panel: Overview ------------------------------------------------- -->
+<section id="panel-overview" class="lg-panel active">
+  <div class="container">
+    <div class="lg-overview-grid">
+      <div class="welcome-card">
+        <h3>Welcome to Berwyn-Paoli</h3>
+        <p>For over 60 years, Berwyn-Paoli Little League has been the backbone of youth baseball and softball on Chester County's Main Line. Every spring we welcome 600+ players ages 4–16 onto the green diamond at Field of Dreams, and every summer we send our best tournament teams to compete across PA District 27.</p>
+        <p>Whether your child is picking up a glove for the very first time or chasing a sectional title, our coaches, volunteers, and umpires are here to make this the best season of their year.</p>
+        <div class="sig">— <strong>Tom Coleman</strong>, League President</div>
+      </div>
+
+      <div class="info-rail">
+        <div class="info-card">
+          <h4>League Info</h4>
+          <dl>
+            <dt>Founded</dt><dd>1963</dd>
+            <dt>Charter</dt><dd>Little League, PA D27</dd>
+            <dt>Season</dt><dd>Apr – Jun (Reg) · Jun – Aug (Tourney)</dd>
+            <dt>Age Range</dt><dd>4 – 16 years</dd>
+            <dt>Website</dt><dd><a href="https://www.bpall.org" target="_blank" rel="noopener" style="color: var(--league-primary); font-weight:600;">bpall.org</a></dd>
+          </dl>
+        </div>
+        <div class="info-card">
+          <h4>Leadership</h4>
+          <dl>
+            <dt>President</dt><dd>Tom Coleman</dd>
+            <dt>VP Baseball</dt><dd>Mike DiSanto</dd>
+            <dt>VP Softball</dt><dd>Carolyn Greer</dd>
+            <dt>Player Agent</dt><dd>Rob Kenney</dd>
+            <dt>Safety Officer</dt><dd>Jen Alvarez</dd>
+          </dl>
+        </div>
+        <div class="info-card">
+          <h4>Registration</h4>
+          <dl>
+            <dt>Spring '26</dt><dd>Closed</dd>
+            <dt>Fall Ball</dt><dd>Opens Jul 15</dd>
+            <dt>Scholarship</dt><dd>Sep 8 deadline</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="divisions-strip">
+      <div class="div-card"><div class="l">Baseball</div><div class="n">T-Ball</div><div class="teams">6 teams · 4–5 YO</div></div>
+      <div class="div-card"><div class="l">Baseball</div><div class="n">AA</div><div class="teams">6 teams · 7–8 YO</div></div>
+      <div class="div-card"><div class="l">Baseball</div><div class="n">AAA</div><div class="teams">5 teams · 9–10 YO</div></div>
+      <div class="div-card"><div class="l">Baseball</div><div class="n">Majors</div><div class="teams">6 teams · 11–12 YO</div></div>
+      <div class="div-card"><div class="l">Baseball</div><div class="n">Intermediate</div><div class="teams">3 teams · 11–13 YO</div></div>
+      <div class="div-card"><div class="l">Baseball</div><div class="n">Juniors</div><div class="teams">3 teams · 13–14 YO</div></div>
+      <div class="div-card"><div class="l">Softball</div><div class="n">SB-10</div><div class="teams">4 teams · 8–10 YO</div></div>
+      <div class="div-card"><div class="l">Softball</div><div class="n">SB-12</div><div class="teams">4 teams · 10–12 YO</div></div>
+      <div class="div-card"><div class="l">Softball</div><div class="n">SB-JR</div><div class="teams">3 teams · 12–14 YO</div></div>
+    </div>
+
+    <div class="district-strip">
+      <div>
+        <h3>Berwyn-Paoli in District 27</h3>
+        <p>5 District titles since 2018 · 2024 Bennett Tournament champions · Deep benches at Majors and SB-12 every summer.</p>
+      </div>
+      <a href="champions.html" class="btn">View Titles →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Panel: Teams & Rosters ----------------------------------------- -->
+<section id="panel-teams" class="lg-panel">
+  <div class="container">
+
+    <div class="lg-section-head">
+      <h2>Teams &amp; Rosters</h2>
+      <span class="count">40 teams across 9 divisions · Spring 2026</span>
+    </div>
+
+    <!-- Majors -->
+    <div class="division-block">
+      <div class="division-head">
+        <span class="tag">Baseball</span>
+        <h3>Majors Division (11–12 YO)</h3>
+        <span class="meta">6 teams · 72 players</span>
+      </div>
+      <div class="teams-grid">
+        <details class="team-card">
+          <summary>
+            <span class="team-logo" style="background: #0C2340;">RS</span>
+            <span><span class="team-name">Red Sox</span><br><span class="team-rec">8–2 · 1st</span></span>
+            <span class="chev">▾</span>
+          </summary>
+          <div class="roster">
+            <div class="roster-row"><span class="num">3</span><span class="player-name">Jack Coleman</span><span class="pos">P/SS</span></div>
+            <div class="roster-row"><span class="num">7</span><span class="player-name">Ethan Pierce</span><span class="pos">C</span></div>
+            <div class="roster-row"><span class="num">10</span><span class="player-name">Luke DiSanto</span><span class="pos">1B</span></div>
+            <div class="roster-row"><span class="num">12</span><span class="player-name">Owen Kenney</span><span class="pos">CF</span></div>
+            <div class="roster-row"><span class="num">14</span><span class="player-name">Caleb Wu</span><span class="pos">P/3B</span></div>
+            <div class="roster-row"><span class="num">21</span><span class="player-name">Nate Brennan</span><span class="pos">2B</span></div>
+            <div class="roster-row"><span class="num">22</span><span class="player-name">Sam Alvarez</span><span class="pos">LF</span></div>
+            <div class="roster-row"><span class="num">27</span><span class="player-name">Jude Ramsey</span><span class="pos">RF</span></div>
+            <div class="roster-row"><span class="num">32</span><span class="player-name">Will Fitzgerald</span><span class="pos">P/OF</span></div>
+            <div class="roster-row"><span class="num">44</span><span class="player-name">Theo Mancini</span><span class="pos">C/1B</span></div>
+            <div class="roster-row"><span class="num">55</span><span class="player-name">Henry Okafor</span><span class="pos">SS/P</span></div>
+            <div class="roster-row"><span class="num">99</span><span class="player-name">Brooks Greenfield</span><span class="pos">OF</span></div>
+          </div>
+          <div class="staff-bar">Mgr: <strong>Mike DiSanto</strong> · Coach: <strong>Rob Kenney</strong></div>
+        </details>
+
+        <details class="team-card">
+          <summary>
+            <span class="team-logo" style="background: #C8102E;">YK</span>
+            <span><span class="team-name">Yankees</span><br><span class="team-rec">7–3 · 2nd</span></span>
+            <span class="chev">▾</span>
+          </summary>
+          <div class="roster">
+            <div class="roster-row"><span class="num">2</span><span class="player-name">Miles Patel</span><span class="pos">SS</span></div>
+            <div class="roster-row"><span class="num">5</span><span class="player-name">Connor Reilly</span><span class="pos">P/CF</span></div>
+            <div class="roster-row"><span class="num">9</span><span class="player-name">Dylan Sayed</span><span class="pos">1B</span></div>
+            <div class="roster-row"><span class="num">11</span><span class="player-name">Alex Kowalski</span><span class="pos">C</span></div>
+            <div class="roster-row"><span class="num">13</span><span class="player-name">Marcus Bell</span><span class="pos">P/3B</span></div>
+            <div class="roster-row"><span class="num">17</span><span class="player-name">Ryan Marcantonio</span><span class="pos">2B</span></div>
+            <div class="roster-row"><span class="num">24</span><span class="player-name">Colin Park</span><span class="pos">OF</span></div>
+            <div class="roster-row"><span class="num">28</span><span class="player-name">Tyler Nguyen</span><span class="pos">LF</span></div>
+            <div class="roster-row"><span class="num">31</span><span class="player-name">Ben Wasserman</span><span class="pos">P</span></div>
+            <div class="roster-row"><span class="num">42</span><span class="player-name">Aiden Callahan</span><span class="pos">RF</span></div>
+            <div class="roster-row"><span class="num">45</span><span class="player-name">Mason Fuchs</span><span class="pos">C/1B</span></div>
+            <div class="roster-row"><span class="num">72</span><span class="player-name">Logan Hart</span><span class="pos">OF</span></div>
+          </div>
+          <div class="staff-bar">Mgr: <strong>Dave Reilly</strong> · Coach: <strong>Paul Kowalski</strong></div>
+        </details>
+
+        <details class="team-card">
+          <summary>
+            <span class="team-logo" style="background: #1B365D;">DG</span>
+            <span><span class="team-name">Dodgers</span><br><span class="team-rec">6–4 · 3rd</span></span>
+            <span class="chev">▾</span>
+          </summary>
+          <div class="roster">
+            <div class="roster-row"><span class="num">1</span><span class="player-name">Jayden Cole</span><span class="pos">P/SS</span></div>
+            <div class="roster-row"><span class="num">4</span><span class="player-name">Ethan McGrath</span><span class="pos">C</span></div>
+            <div class="roster-row"><span class="num">8</span><span class="player-name">Noah Foley</span><span class="pos">1B</span></div>
+            <div class="roster-row"><span class="num">15</span><span class="player-name">Drew Schuster</span><span class="pos">CF</span></div>
+            <div class="roster-row"><span class="num">19</span><span class="player-name">Josh Carrington</span><span class="pos">3B</span></div>
+            <div class="roster-row"><span class="num">23</span><span class="player-name">Leo Moretti</span><span class="pos">2B</span></div>
+            <div class="roster-row"><span class="num">26</span><span class="player-name">Sebastian Ruiz</span><span class="pos">P/OF</span></div>
+            <div class="roster-row"><span class="num">33</span><span class="player-name">Rowan Greco</span><span class="pos">RF</span></div>
+            <div class="roster-row"><span class="num">41</span><span class="player-name">Trey Bhatt</span><span class="pos">LF</span></div>
+            <div class="roster-row"><span class="num">51</span><span class="player-name">Max Jefferson</span><span class="pos">P/1B</span></div>
+            <div class="roster-row"><span class="num">66</span><span class="player-name">Oliver Zhang</span><span class="pos">OF</span></div>
+            <div class="roster-row"><span class="num">77</span><span class="player-name">Grant McGuinness</span><span class="pos">C/3B</span></div>
+          </div>
+          <div class="staff-bar">Mgr: <strong>Steve Foley</strong> · Coach: <strong>Anthony Moretti</strong></div>
+        </details>
+
+        <details class="team-card">
+          <summary>
+            <span class="team-logo" style="background: #003831;">AS</span>
+            <span><span class="team-name">Athletics</span><br><span class="team-rec">5–5 · 4th</span></span>
+            <span class="chev">▾</span>
+          </summary>
+          <div class="roster">
+            <div class="roster-row"><span class="num">6</span><span class="player-name">Quinn Harrington</span><span class="pos">P</span></div>
+            <div class="roster-row"><span class="num">16</span><span class="player-name">Ezra Okonkwo</span><span class="pos">SS</span></div>
+            <div class="roster-row"><span class="num">18</span><span class="player-name">Finn Lawrence</span><span class="pos">C</span></div>
+            <div class="roster-row"><span class="num">20</span><span class="player-name">Chase Bellini</span><span class="pos">1B</span></div>
+            <div class="roster-row"><span class="num">25</span><span class="player-name">Maddox Greer</span><span class="pos">CF</span></div>
+            <div class="roster-row"><span class="num">29</span><span class="player-name">Asher Bruno</span><span class="pos">2B</span></div>
+            <div class="roster-row"><span class="num">37</span><span class="player-name">Isaac Whitman</span><span class="pos">3B</span></div>
+            <div class="roster-row"><span class="num">43</span><span class="player-name">Felix Carlisle</span><span class="pos">LF</span></div>
+            <div class="roster-row"><span class="num">48</span><span class="player-name">Hudson Vega</span><span class="pos">RF</span></div>
+            <div class="roster-row"><span class="num">52</span><span class="player-name">Beckett Ward</span><span class="pos">P/OF</span></div>
+            <div class="roster-row"><span class="num">63</span><span class="player-name">Kai Lindgren</span><span class="pos">P</span></div>
+            <div class="roster-row"><span class="num">88</span><span class="player-name">Declan Murphy</span><span class="pos">C/1B</span></div>
+          </div>
+          <div class="staff-bar">Mgr: <strong>Paul Harrington</strong> · Coach: <strong>Jason Greer</strong></div>
+        </details>
+
+        <details class="team-card">
+          <summary>
+            <span class="team-logo" style="background: #FD5A1E;">GT</span>
+            <span><span class="team-name">Giants</span><br><span class="team-rec">4–6 · 5th</span></span>
+            <span class="chev">▾</span>
+          </summary>
+          <div class="roster">
+            <div class="roster-row"><span class="num">0</span><span class="player-name">Zane Petrov</span><span class="pos">P/CF</span></div>
+            <div class="roster-row"><span class="num">8</span><span class="player-name">River Stansfield</span><span class="pos">SS</span></div>
+            <div class="roster-row"><span class="num">14</span><span class="player-name">Tate Avellino</span><span class="pos">C</span></div>
+            <div class="roster-row"><span class="num">22</span><span class="player-name">Silas Bordelon</span><span class="pos">1B</span></div>
+            <div class="roster-row"><span class="num">30</span><span class="player-name">Jasper Quinn</span><span class="pos">3B</span></div>
+            <div class="roster-row"><span class="num">34</span><span class="player-name">Reed Cavanaugh</span><span class="pos">2B</span></div>
+            <div class="roster-row"><span class="num">40</span><span class="player-name">Grayson Holt</span><span class="pos">P/OF</span></div>
+            <div class="roster-row"><span class="num">46</span><span class="player-name">Wyatt Ellison</span><span class="pos">LF</span></div>
+            <div class="roster-row"><span class="num">53</span><span class="player-name">Anders Kjellberg</span><span class="pos">RF</span></div>
+            <div class="roster-row"><span class="num">58</span><span class="player-name">Luca Benedetti</span><span class="pos">C/OF</span></div>
+            <div class="roster-row"><span class="num">64</span><span class="player-name">Emmett Grady</span><span class="pos">P</span></div>
+            <div class="roster-row"><span class="num">71</span><span class="player-name">Stellan Park</span><span class="pos">2B/3B</span></div>
+          </div>
+          <div class="staff-bar">Mgr: <strong>Tom Avellino</strong> · Coach: <strong>Liam Cavanaugh</strong></div>
+        </details>
+
+        <details class="team-card">
+          <summary>
+            <span class="team-logo" style="background: #BD3039;">CB</span>
+            <span><span class="team-name">Cubs</span><br><span class="team-rec">2–8 · 6th</span></span>
+            <span class="chev">▾</span>
+          </summary>
+          <div class="roster">
+            <div class="roster-row"><span class="num">3</span><span class="player-name">Brady McConnell</span><span class="pos">P</span></div>
+            <div class="roster-row"><span class="num">9</span><span class="player-name">Ryder Blanchard</span><span class="pos">SS</span></div>
+            <div class="roster-row"><span class="num">11</span><span class="player-name">Micah Thornton</span><span class="pos">C</span></div>
+            <div class="roster-row"><span class="num">15</span><span class="player-name">Jackson Whitt</span><span class="pos">1B</span></div>
+            <div class="roster-row"><span class="num">19</span><span class="player-name">Carson Iverson</span><span class="pos">CF</span></div>
+            <div class="roster-row"><span class="num">23</span><span class="player-name">Parker Devlin</span><span class="pos">2B</span></div>
+            <div class="roster-row"><span class="num">27</span><span class="player-name">Nico Pallotta</span><span class="pos">3B</span></div>
+            <div class="roster-row"><span class="num">35</span><span class="player-name">Simon Huang</span><span class="pos">P/OF</span></div>
+            <div class="roster-row"><span class="num">39</span><span class="player-name">Bryson Taylor</span><span class="pos">LF</span></div>
+            <div class="roster-row"><span class="num">47</span><span class="player-name">Ronan O'Shea</span><span class="pos">RF</span></div>
+            <div class="roster-row"><span class="num">56</span><span class="player-name">Milo Yanez</span><span class="pos">C/2B</span></div>
+            <div class="roster-row"><span class="num">69</span><span class="player-name">Axel Kasten</span><span class="pos">P/3B</span></div>
+          </div>
+          <div class="staff-bar">Mgr: <strong>Kevin Whitt</strong> · Coach: <strong>Tony Pallotta</strong></div>
+        </details>
+      </div>
+    </div>
+
+    <!-- AAA (condensed) -->
+    <div class="division-block">
+      <div class="division-head">
+        <span class="tag">Baseball</span>
+        <h3>AAA Division (9–10 YO)</h3>
+        <span class="meta">5 teams · 60 players</span>
+      </div>
+      <div class="teams-grid">
+        <details class="team-card"><summary><span class="team-logo" style="background:#0C2340;">MT</span><span><span class="team-name">Marlins</span><br><span class="team-rec">7–1 · 1st</span></span><span class="chev">▾</span></summary>
+          <div class="roster">
+            <div class="roster-row"><span class="num">4</span><span class="player-name">Leo Branson</span><span class="pos">P</span></div>
+            <div class="roster-row"><span class="num">7</span><span class="player-name">Kai Mercer</span><span class="pos">SS</span></div>
+            <div class="roster-row"><span class="num">12</span><span class="player-name">Mateo Cruz</span><span class="pos">C</span></div>
+            <div class="roster-row"><span class="num">18</span><span class="player-name">Finn Hollister</span><span class="pos">1B</span></div>
+            <div class="roster-row"><span class="num">24</span><span class="player-name">Teddy Grant</span><span class="pos">CF</span></div>
+            <div class="roster-row"><span class="num">30</span><span class="player-name">Shiloh Park</span><span class="pos">2B</span></div>
+            <div class="roster-row"><span class="num">33</span><span class="player-name">Archie Wren</span><span class="pos">3B</span></div>
+            <div class="roster-row"><span class="num">41</span><span class="player-name">Cash Donnelly</span><span class="pos">OF</span></div>
+          </div>
+          <div class="staff-bar">Mgr: <strong>Paul Mercer</strong> · Coach: <strong>Rob Grant</strong></div>
+        </details>
+        <details class="team-card"><summary><span class="team-logo" style="background:#C8102E;">PH</span><span><span class="team-name">Phillies</span><br><span class="team-rec">6–2 · 2nd</span></span><span class="chev">▾</span></summary>
+          <div class="roster"><div class="roster-row"><span class="num">—</span><span class="player-name">12 players on roster</span><span class="pos">View</span></div></div>
+          <div class="staff-bar">Mgr: <strong>Mark Stipple</strong></div>
+        </details>
+        <details class="team-card"><summary><span class="team-logo" style="background:#003831;">RY</span><span><span class="team-name">Rays</span><br><span class="team-rec">5–3 · 3rd</span></span><span class="chev">▾</span></summary>
+          <div class="roster"><div class="roster-row"><span class="num">—</span><span class="player-name">12 players on roster</span><span class="pos">View</span></div></div>
+          <div class="staff-bar">Mgr: <strong>Jason Blaine</strong></div>
+        </details>
+        <details class="team-card"><summary><span class="team-logo" style="background:#1B365D;">OR</span><span><span class="team-name">Orioles</span><br><span class="team-rec">3–5 · 4th</span></span><span class="chev">▾</span></summary>
+          <div class="roster"><div class="roster-row"><span class="num">—</span><span class="player-name">12 players on roster</span><span class="pos">View</span></div></div>
+          <div class="staff-bar">Mgr: <strong>Dave Callahan</strong></div>
+        </details>
+        <details class="team-card"><summary><span class="team-logo" style="background:#27251F;">PR</span><span><span class="team-name">Pirates</span><br><span class="team-rec">1–7 · 5th</span></span><span class="chev">▾</span></summary>
+          <div class="roster"><div class="roster-row"><span class="num">—</span><span class="player-name">12 players on roster</span><span class="pos">View</span></div></div>
+          <div class="staff-bar">Mgr: <strong>Alex Donovan</strong></div>
+        </details>
+      </div>
+    </div>
+
+    <!-- Softball SB-12 -->
+    <div class="division-block">
+      <div class="division-head">
+        <span class="tag">Softball</span>
+        <h3>SB-12 Division (10–12 YO)</h3>
+        <span class="meta">4 teams · 48 players</span>
+      </div>
+      <div class="teams-grid">
+        <details class="team-card"><summary><span class="team-logo" style="background:#C8102E;">RS</span><span><span class="team-name">Fire</span><br><span class="team-rec">6–0 · 1st</span></span><span class="chev">▾</span></summary>
+          <div class="roster">
+            <div class="roster-row"><span class="num">2</span><span class="player-name">Hannah Coleman</span><span class="pos">P</span></div>
+            <div class="roster-row"><span class="num">7</span><span class="player-name">Mia Greer</span><span class="pos">C</span></div>
+            <div class="roster-row"><span class="num">10</span><span class="player-name">Ava Pierce</span><span class="pos">SS</span></div>
+            <div class="roster-row"><span class="num">12</span><span class="player-name">Zoe Kenney</span><span class="pos">1B</span></div>
+            <div class="roster-row"><span class="num">15</span><span class="player-name">Layla Wu</span><span class="pos">CF</span></div>
+            <div class="roster-row"><span class="num">20</span><span class="player-name">Nora Fitzgerald</span><span class="pos">2B</span></div>
+            <div class="roster-row"><span class="num">22</span><span class="player-name">Ivy Brennan</span><span class="pos">3B</span></div>
+            <div class="roster-row"><span class="num">27</span><span class="player-name">Ruby Okafor</span><span class="pos">LF</span></div>
+            <div class="roster-row"><span class="num">31</span><span class="player-name">Lena Mancini</span><span class="pos">P/OF</span></div>
+            <div class="roster-row"><span class="num">44</span><span class="player-name">Claire Ramsey</span><span class="pos">RF</span></div>
+            <div class="roster-row"><span class="num">55</span><span class="player-name">Sloane Alvarez</span><span class="pos">C/1B</span></div>
+            <div class="roster-row"><span class="num">99</span><span class="player-name">June Greenfield</span><span class="pos">OF</span></div>
+          </div>
+          <div class="staff-bar">Mgr: <strong>Carolyn Greer</strong> · Coach: <strong>Jen Alvarez</strong></div>
+        </details>
+        <details class="team-card"><summary><span class="team-logo" style="background:#0C2340;">ST</span><span><span class="team-name">Storm</span><br><span class="team-rec">4–2 · 2nd</span></span><span class="chev">▾</span></summary>
+          <div class="roster"><div class="roster-row"><span class="num">—</span><span class="player-name">12 players on roster</span><span class="pos">View</span></div></div>
+          <div class="staff-bar">Mgr: <strong>Lisa Dawkins</strong></div>
+        </details>
+        <details class="team-card"><summary><span class="team-logo" style="background:#003831;">LT</span><span><span class="team-name">Lightning</span><br><span class="team-rec">2–4 · 3rd</span></span><span class="chev">▾</span></summary>
+          <div class="roster"><div class="roster-row"><span class="num">—</span><span class="player-name">12 players on roster</span><span class="pos">View</span></div></div>
+          <div class="staff-bar">Mgr: <strong>Kate Mulroney</strong></div>
+        </details>
+        <details class="team-card"><summary><span class="team-logo" style="background:#FD5A1E;">TH</span><span><span class="team-name">Thunder</span><br><span class="team-rec">0–6 · 4th</span></span><span class="chev">▾</span></summary>
+          <div class="roster"><div class="roster-row"><span class="num">—</span><span class="player-name">12 players on roster</span><span class="pos">View</span></div></div>
+          <div class="staff-bar">Mgr: <strong>Angela Rostov</strong></div>
+        </details>
+      </div>
+    </div>
+
+    <p style="text-align: center; color: var(--muted); font-size: var(--text-sm); margin-top: var(--space-6);">
+      T-Ball, AA, Intermediate, Juniors, SB-10, SB-JR divisions show similar team cards with full rosters in production.
+    </p>
+  </div>
+</section>
+
+<!-- Panel: Schedule ------------------------------------------------- -->
+<section id="panel-schedule" class="lg-panel">
+  <div class="container">
+    <div class="lg-section-head">
+      <h2>Upcoming &amp; Recent — Majors</h2>
+      <span class="count">Next 10 games</span>
+    </div>
+
+    <div class="sched-table">
+      <div class="sched-row">
+        <div class="when"><span class="d">Apr 18</span><span class="t">6:00 PM</span></div>
+        <div class="matchup"><span class="opp">Red Sox vs. Yankees</span><br><span class="meta">Field of Dreams · Field 1</span></div>
+        <span class="st-badge win">W 8–4</span>
+      </div>
+      <div class="sched-row">
+        <div class="when"><span class="d">Apr 20</span><span class="t">6:00 PM</span></div>
+        <div class="matchup"><span class="opp">Dodgers vs. Athletics</span><br><span class="meta">Field of Dreams · Field 2</span></div>
+        <span class="st-badge win">W 12–7</span>
+      </div>
+      <div class="sched-row">
+        <div class="when"><span class="d">Apr 22</span><span class="t">6:00 PM</span></div>
+        <div class="matchup"><span class="opp">Giants vs. Cubs</span><br><span class="meta">Field of Dreams · Field 1</span></div>
+        <span class="st-badge loss">L 3–6</span>
+      </div>
+      <div class="sched-row">
+        <div class="when"><span class="d">Apr 25</span><span class="t">6:00 PM</span></div>
+        <div class="matchup"><span class="opp">Red Sox vs. Dodgers</span><br><span class="meta">Field of Dreams · Field 1</span></div>
+        <span class="st-badge up">Upcoming</span>
+      </div>
+      <div class="sched-row">
+        <div class="when"><span class="d">Apr 27</span><span class="t">5:30 PM</span></div>
+        <div class="matchup"><span class="opp">Yankees vs. Athletics</span><br><span class="meta">Field of Dreams · Field 2</span></div>
+        <span class="st-badge up">Upcoming</span>
+      </div>
+      <div class="sched-row">
+        <div class="when"><span class="d">Apr 29</span><span class="t">6:00 PM</span></div>
+        <div class="matchup"><span class="opp">Giants vs. Red Sox</span><br><span class="meta">Field of Dreams · Field 1</span></div>
+        <span class="st-badge up">Upcoming</span>
+      </div>
+      <div class="sched-row">
+        <div class="when"><span class="d">May 2</span><span class="t">6:00 PM</span></div>
+        <div class="matchup"><span class="opp">Cubs vs. Athletics</span><br><span class="meta">Field of Dreams · Field 1</span></div>
+        <span class="st-badge up">Upcoming</span>
+      </div>
+      <div class="sched-row">
+        <div class="when"><span class="d">May 4</span><span class="t">6:00 PM</span></div>
+        <div class="matchup"><span class="opp">Yankees vs. Dodgers</span><br><span class="meta">Field of Dreams · Field 2</span></div>
+        <span class="st-badge up">Upcoming</span>
+      </div>
+      <div class="sched-row">
+        <div class="when"><span class="d">May 6</span><span class="t">6:00 PM</span></div>
+        <div class="matchup"><span class="opp">Red Sox vs. Cubs</span><br><span class="meta">Field of Dreams · Field 1</span></div>
+        <span class="st-badge up">Upcoming</span>
+      </div>
+      <div class="sched-row">
+        <div class="when"><span class="d">May 9</span><span class="t">10:00 AM</span></div>
+        <div class="matchup"><span class="opp">Giants vs. Dodgers</span><br><span class="meta">Field of Dreams · Field 2</span></div>
+        <span class="st-badge up">Upcoming</span>
+      </div>
+    </div>
+
+    <p style="text-align: center; color: var(--muted); font-size: var(--text-sm); margin-top: var(--space-4);">
+      Full in-house schedules for every division — live games, postponements, field assignments — render on the production league site.
+    </p>
+  </div>
+</section>
+
+<!-- Panel: Standings ----------------------------------------------- -->
+<section id="panel-standings" class="lg-panel">
+  <div class="container">
+    <div class="lg-section-head">
+      <h2>Majors Standings</h2>
+      <span class="count">As of Apr 23</span>
+    </div>
+    <table class="stand-table">
+      <thead>
+        <tr><th>#</th><th>Team</th><th class="num">W</th><th class="num">L</th><th class="num">PCT</th><th class="num">GB</th><th class="num">RS</th><th class="num">RA</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="rk">1</td><td class="team-cell">Red Sox</td><td class="num">8</td><td class="num">2</td><td class="num pct">.800</td><td class="num">—</td><td class="num">92</td><td class="num">48</td></tr>
+        <tr><td class="rk">2</td><td class="team-cell">Yankees</td><td class="num">7</td><td class="num">3</td><td class="num pct">.700</td><td class="num">1.0</td><td class="num">78</td><td class="num">55</td></tr>
+        <tr><td class="rk">3</td><td class="team-cell">Dodgers</td><td class="num">6</td><td class="num">4</td><td class="num pct">.600</td><td class="num">2.0</td><td class="num">71</td><td class="num">62</td></tr>
+        <tr><td class="rk">4</td><td class="team-cell">Athletics</td><td class="num">5</td><td class="num">5</td><td class="num pct">.500</td><td class="num">3.0</td><td class="num">68</td><td class="num">71</td></tr>
+        <tr><td class="rk">5</td><td class="team-cell">Giants</td><td class="num">4</td><td class="num">6</td><td class="num pct">.400</td><td class="num">4.0</td><td class="num">55</td><td class="num">73</td></tr>
+        <tr><td class="rk">6</td><td class="team-cell">Cubs</td><td class="num">2</td><td class="num">8</td><td class="num pct">.200</td><td class="num">6.0</td><td class="num">42</td><td class="num">97</td></tr>
+      </tbody>
+    </table>
+
+    <div class="lg-section-head" style="margin-top: var(--space-6);">
+      <h2>SB-12 Standings</h2>
+      <span class="count">As of Apr 23</span>
+    </div>
+    <table class="stand-table">
+      <thead>
+        <tr><th>#</th><th>Team</th><th class="num">W</th><th class="num">L</th><th class="num">PCT</th><th class="num">GB</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="rk">1</td><td class="team-cell">Fire</td><td class="num">6</td><td class="num">0</td><td class="num pct">1.000</td><td class="num">—</td></tr>
+        <tr><td class="rk">2</td><td class="team-cell">Storm</td><td class="num">4</td><td class="num">2</td><td class="num pct">.667</td><td class="num">2.0</td></tr>
+        <tr><td class="rk">3</td><td class="team-cell">Lightning</td><td class="num">2</td><td class="num">4</td><td class="num pct">.333</td><td class="num">4.0</td></tr>
+        <tr><td class="rk">4</td><td class="team-cell">Thunder</td><td class="num">0</td><td class="num">6</td><td class="num pct">.000</td><td class="num">6.0</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Panel: Fields -------------------------------------------------- -->
+<section id="panel-fields" class="lg-panel">
+  <div class="container">
+    <div class="lg-section-head">
+      <h2>Field of Dreams Complex</h2>
+      <span class="count">1 complex · 4 diamonds</span>
+    </div>
+
+    <div class="fields-grid">
+      <div class="field-card">
+        <h4>Field 1 — Majors / AAA</h4>
+        <p class="addr">915 Howellville Road<br>Berwyn, PA 19312</p>
+        <div class="usage"><span class="chip">Majors</span><span class="chip">AAA</span><span class="chip">Tournaments</span></div>
+      </div>
+      <div class="field-card">
+        <h4>Field 2 — AA / AAA</h4>
+        <p class="addr">915 Howellville Road<br>Berwyn, PA 19312</p>
+        <div class="usage"><span class="chip">AA</span><span class="chip">AAA</span></div>
+      </div>
+      <div class="field-card">
+        <h4>Field 3 — T-Ball / AA</h4>
+        <p class="addr">915 Howellville Road<br>Berwyn, PA 19312</p>
+        <div class="usage"><span class="chip">T-Ball</span><span class="chip">AA</span></div>
+      </div>
+      <div class="field-card">
+        <h4>Field 4 — Softball</h4>
+        <p class="addr">915 Howellville Road<br>Berwyn, PA 19312</p>
+        <div class="usage"><span class="chip">SB-10</span><span class="chip">SB-12</span><span class="chip">SB-JR</span></div>
+      </div>
+      <div class="field-card">
+        <h4>Batting Cages</h4>
+        <p class="addr">915 Howellville Road<br>Berwyn, PA 19312</p>
+        <div class="usage"><span class="chip">All divisions</span></div>
+      </div>
+      <div class="field-card">
+        <h4>Concession Stand</h4>
+        <p class="addr">915 Howellville Road<br>Berwyn, PA 19312</p>
+        <div class="usage"><span class="chip">Game days</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Panel: News ---------------------------------------------------- -->
+<section id="panel-news" class="lg-panel">
+  <div class="container">
+    <div class="lg-section-head">
+      <h2>League News</h2>
+      <span class="count">Recent announcements</span>
+    </div>
+
+    <div class="news-list">
+      <div class="news-card">
+        <div class="news-date"><div class="mo">Apr</div><div class="dy">22</div></div>
+        <div class="news-body">
+          <h3>Opening Day photo gallery now live</h3>
+          <p>Over 400 photos from Saturday's parade and first pitches at Field of Dreams. Thanks to volunteer photographer Kate Lindberg for the coverage — head to the Gallery tab on the D27 site to browse.</p>
+        </div>
+      </div>
+      <div class="news-card">
+        <div class="news-date"><div class="mo">Apr</div><div class="dy">15</div></div>
+        <div class="news-body">
+          <h3>Tournament team tryouts — May 10</h3>
+          <p>All players interested in trying out for BB-12, BB-11, Bob Jones, or SB-12 tournament teams should register through the league portal by May 7. Tryouts run Saturday May 10, 9am–1pm, Fields 1 &amp; 4.</p>
+        </div>
+      </div>
+      <div class="news-card">
+        <div class="news-date"><div class="mo">Apr</div><div class="dy">8</div></div>
+        <div class="news-body">
+          <h3>Umpire clinic this Saturday</h3>
+          <p>District UIC Frank Nikischer leads a 3-hour clinic for Majors and Juniors umpires. All current volunteer umpires are required to attend. RSVP via the D27 portal.</p>
+        </div>
+      </div>
+      <div class="news-card">
+        <div class="news-date"><div class="mo">Mar</div><div class="dy">30</div></div>
+        <div class="news-body">
+          <h3>Welcome to the 2026 season!</h3>
+          <p>First pitches across all divisions start the week of April 5. Uniforms distributed at practice. If you haven't picked up yours, check in with your team manager or at the concession stand Saturday mornings.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer ---------------------------------------------------------- -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="foot-row">
+      <div class="foot-block">
+        <strong>PA District 27</strong>
+        <p>10,000 players · 12 leagues · Chester, Delaware &amp; Montgomery Counties</p>
+      </div>
+      <div class="foot-block">
+        <strong>Contact</strong>
+        <p>Jeff Bennett, DA · <a href="mailto:jeffbennett.d27@gmail.com">jeffbennett.d27@gmail.com</a></p>
+      </div>
+      <div class="foot-block">
+        <strong>Berwyn-Paoli</strong>
+        <p><a href="https://www.bpall.org" target="_blank" rel="noopener">bpall.org</a> · 915 Howellville Rd, Berwyn, PA</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      &copy; 2026 PA District 27 Little League · Demo site by Mainline Web Design
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Tab switching
+  (function() {
+    var tabs = document.querySelectorAll('.lg-tab');
+    var panels = document.querySelectorAll('.lg-panel');
+
+    function activate(panelId) {
+      tabs.forEach(function(t) {
+        t.classList.toggle('active', t.dataset.panel === panelId);
+      });
+      panels.forEach(function(p) {
+        p.classList.toggle('active', p.id === 'panel-' + panelId);
+      });
+      if (history.replaceState) history.replaceState(null, '', '#panel-' + panelId);
+    }
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() { activate(tab.dataset.panel); });
+    });
+
+    // Deep-link support
+    var hash = window.location.hash.replace('#panel-', '');
+    if (hash && document.getElementById('panel-' + hash)) {
+      activate(hash);
+    }
+  })();
+</script>
+
+</body>
+</html>

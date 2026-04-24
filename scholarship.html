@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Laura &amp; Van Scott Scholarship · PA District 27 Little League</title>
+<meta name="description" content="The Laura and Van Scott PA District 27 Higher Education Scholarship — two $1,000 awards annually for graduating D27 players continuing their education. Applications due September 8." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<script src="config.js"></script>
+<link rel="stylesheet" href="css/styles.css" />
+
+<style>
+  .sch-hero {
+    background: linear-gradient(135deg, rgba(0,27,71,.95) 0%, rgba(0,45,114,.92) 100%), var(--d27-navy);
+    color: #fff;
+    padding: var(--space-10) 0 var(--space-8);
+    position: relative;
+    overflow: hidden;
+  }
+  .sch-hero::before {
+    content: "🎓";
+    position: absolute;
+    right: -30px; top: -20px;
+    font-size: 340px;
+    opacity: .05;
+    pointer-events: none;
+  }
+  .sch-hero .eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--d27-gold);
+    margin-bottom: var(--space-2);
+    position: relative;
+  }
+  .sch-hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(30px, 5vw, 46px);
+    line-height: 1.05;
+    margin: 0 0 var(--space-3);
+    font-weight: 700;
+    position: relative;
+    max-width: 720px;
+  }
+  .sch-hero .tagline {
+    font-size: var(--text-base);
+    opacity: .88;
+    margin: 0;
+    line-height: 1.6;
+    max-width: 640px;
+    position: relative;
+  }
+  .sch-hero .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5) var(--space-6);
+    margin-top: var(--space-5);
+    position: relative;
+  }
+  .sch-hero .stat .n {
+    font-family: 'Oswald', sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--d27-gold);
+    line-height: 1;
+  }
+  .sch-hero .stat .l {
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    opacity: .85;
+    margin-top: 4px;
+  }
+
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin: 0 0 var(--space-4);
+    padding-bottom: var(--space-2);
+    border-bottom: 2px solid var(--d27-navy);
+  }
+  .sec-head h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-xl);
+    margin: 0;
+    color: var(--d27-navy);
+    letter-spacing: .02em;
+  }
+  .sec-head .count { font-size: var(--text-xs); color: var(--muted); font-weight: 500; }
+
+  section.block { padding: var(--space-8) 0; }
+  section.block.alt { background: var(--paper); }
+
+  /* Namesake block */
+  .namesake {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--space-5);
+    align-items: start;
+  }
+  @media (max-width: 720px) { .namesake { grid-template-columns: 1fr; } }
+  .namesake-badge {
+    background: linear-gradient(135deg, var(--d27-navy), color-mix(in srgb, var(--d27-navy) 70%, black));
+    color: #fff;
+    border-radius: var(--radius-md);
+    padding: var(--space-5) var(--space-4);
+    text-align: center;
+    border: 2px solid var(--d27-gold);
+    position: relative;
+  }
+  .namesake-badge .year {
+    font-family: 'Oswald', sans-serif;
+    color: var(--d27-gold);
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-2);
+  }
+  .namesake-badge .initials {
+    font-family: 'Oswald', sans-serif;
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: var(--space-2);
+    color: var(--d27-gold);
+    letter-spacing: .05em;
+  }
+  .namesake-badge .names {
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    line-height: 1.3;
+  }
+
+  .namesake-text p {
+    margin: 0 0 var(--space-3);
+    line-height: 1.7;
+    color: var(--fg);
+  }
+  .namesake-text p:last-child { margin-bottom: 0; }
+  .namesake-text .role-tag {
+    display: inline-block;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    background: color-mix(in srgb, var(--d27-red) 8%, transparent);
+    color: var(--d27-red);
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-right: 6px;
+    margin-bottom: 8px;
+  }
+
+  /* Key info strip */
+  .keystrip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-top: var(--space-5);
+  }
+  @media (max-width: 760px) { .keystrip { grid-template-columns: repeat(2, 1fr); } }
+  .keystrip > div {
+    padding: var(--space-4);
+    text-align: center;
+    border-right: 1px solid var(--line);
+  }
+  .keystrip > div:last-child { border-right: 0; }
+  @media (max-width: 760px) {
+    .keystrip > div { border-bottom: 1px solid var(--line); }
+    .keystrip > div:nth-child(odd) { border-right: 1px solid var(--line); }
+    .keystrip > div:nth-child(even) { border-right: 0; }
+    .keystrip > div:nth-last-child(-n+2) { border-bottom: 0; }
+  }
+  .keystrip .v {
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--d27-navy);
+    line-height: 1.1;
+  }
+  .keystrip .l {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* Eligibility + How to apply grid */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5);
+  }
+  @media (max-width: 760px) { .two-col { grid-template-columns: 1fr; } }
+  .info-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--d27-red);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+  }
+  .info-card h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-lg);
+    color: var(--d27-navy);
+    margin: 0 0 var(--space-3);
+  }
+  .info-card ol, .info-card ul {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+    counter-reset: stepitem;
+  }
+  .info-card ol li {
+    position: relative;
+    padding-left: 34px;
+    font-size: var(--text-sm);
+    color: var(--fg);
+    line-height: 1.5;
+    counter-increment: stepitem;
+  }
+  .info-card ol li::before {
+    content: counter(stepitem);
+    position: absolute;
+    left: 0; top: 0;
+    width: 24px; height: 24px;
+    background: var(--d27-navy);
+    color: #fff;
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 50%;
+    display: grid; place-items: center;
+  }
+  .info-card ul li {
+    position: relative;
+    padding-left: 22px;
+    font-size: var(--text-sm);
+    color: var(--fg);
+    line-height: 1.5;
+  }
+  .info-card ul li::before {
+    content: "✓";
+    position: absolute; left: 0; top: 0;
+    color: var(--d27-red);
+    font-weight: 700;
+  }
+  .info-card strong { color: var(--d27-navy); }
+
+  /* Timeline of deadlines */
+  .deadline-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: var(--space-4);
+    padding: var(--space-3) 0;
+    border-top: 1px solid var(--line);
+    align-items: start;
+  }
+  .deadline-row:first-child { border-top: 0; }
+  .deadline-date {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    color: var(--d27-navy);
+    font-size: var(--text-base);
+  }
+  .deadline-date.urgent { color: var(--d27-red); }
+  .deadline-body h4 {
+    margin: 0 0 4px;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--fg);
+  }
+  .deadline-body p { margin: 0; font-size: var(--text-sm); color: var(--muted); line-height: 1.5; }
+
+  /* Recent recipients */
+  .recipients {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--space-3);
+  }
+  .rec-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .rec-card .year-tag {
+    position: absolute;
+    top: 0; right: 0;
+    background: var(--d27-gold);
+    color: var(--d27-navy);
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    padding: 4px 10px;
+    border-radius: 0 0 0 var(--radius-md);
+  }
+  .rec-card .name {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-base);
+    color: var(--d27-navy);
+    font-weight: 700;
+    margin-top: var(--space-4);
+    margin-bottom: 6px;
+  }
+  .rec-card .lg {
+    font-size: var(--text-xs);
+    color: var(--muted);
+    margin-bottom: var(--space-2);
+  }
+  .rec-card .sport-chip {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 10px;
+    color: #fff;
+  }
+  .rec-card .sport-chip.baseball { background: var(--d27-navy); }
+  .rec-card .sport-chip.softball { background: var(--d27-red); }
+
+  /* CTA */
+  .cta-panel {
+    background: linear-gradient(135deg, var(--d27-navy), color-mix(in srgb, var(--d27-navy) 70%, black));
+    color: #fff;
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-4);
+    align-items: center;
+  }
+  @media (max-width: 640px) { .cta-panel { grid-template-columns: 1fr; text-align: center; } }
+  .cta-panel h3 {
+    font-family: 'Oswald', sans-serif;
+    color: var(--d27-gold);
+    font-size: var(--text-xl);
+    margin: 0 0 6px;
+  }
+  .cta-panel p { margin: 0; opacity: .92; font-size: var(--text-sm); line-height: 1.6; }
+  .cta-panel .btn-apply {
+    background: var(--d27-gold);
+    color: var(--d27-navy);
+    padding: 12px var(--space-5);
+    border-radius: 6px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  /* Quote */
+  .quote {
+    background: #fff;
+    border-left: 4px solid var(--d27-gold);
+    padding: var(--space-5);
+    font-style: italic;
+    color: var(--fg);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    line-height: 1.7;
+  }
+  .quote .attrib {
+    display: block;
+    margin-top: var(--space-2);
+    font-style: normal;
+    font-size: var(--text-sm);
+    color: var(--muted);
+  }
+  .quote .attrib strong { color: var(--d27-navy); }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<!-- Nav ------------------------------------------------------------- -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html">
+      <span class="mark">D27</span>
+      <span class="name-block">
+        PA District 27
+        <span class="sub">Little League · Baseball &amp; Softball</span>
+      </span>
+    </a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="champions.html">Champions</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero ----------------------------------------------------------- -->
+<header class="sch-hero">
+  <div class="container">
+    <div class="eyebrow">Scholarship · Endowed 2005</div>
+    <h1>The Laura &amp; Van Scott Higher Education Scholarship</h1>
+    <p class="tagline">Awarded every October to graduating PA District 27 Little League players pursuing post-secondary education. Named for the first DA of D27 and the District's first Financial Coordinator.</p>
+    <div class="stats">
+      <div class="stat"><div class="n">$1,000</div><div class="l">Per Award</div></div>
+      <div class="stat"><div class="n">2</div><div class="l">Awards / Year</div></div>
+      <div class="stat"><div class="n">42</div><div class="l">Recipients to Date</div></div>
+      <div class="stat"><div class="n">Sep 8</div><div class="l">Apply By</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- Namesake ------------------------------------------------------- -->
+<section class="block">
+  <div class="container">
+    <div class="sec-head"><h2>About Laura &amp; Van Scott</h2><span class="count">Who this scholarship is for</span></div>
+
+    <div class="namesake">
+      <div class="namesake-badge">
+        <div class="year">Est. 1993 · D27</div>
+        <div class="initials">L &amp; V</div>
+        <div class="names">Laura &amp; Van<br>Scott</div>
+      </div>
+      <div class="namesake-text">
+        <p>
+          <span class="role-tag">Van · 1st DA of D27</span>
+          <span class="role-tag">Laura · Financial Coordinator</span>
+        </p>
+        <p>Van and Laura Scott were founding members of Pottstown Little League. Van served as Assistant District Administrator under Tony Marra in the old District 23. When D23 grew too large and split in 1993, Van became the first District Administrator of PA District 27 — and Laura took on the role of D27's first Financial Coordinator. They served together for the next eleven years.</p>
+        <p>They stepped down from district roles in 2004. A year later, this scholarship was endowed in their name — a gift from the leagues they had quietly held together. It's awarded every October at the annual banquet, announced by the scholarship chair to the two graduating players who best reflect what Van and Laura stood for: showing up, season after season, for the kids and the leagues.</p>
+      </div>
+    </div>
+
+    <div class="keystrip">
+      <div><div class="v">$1,000</div><div class="l">Each</div></div>
+      <div><div class="v">2 Awards</div><div class="l">Per Year</div></div>
+      <div><div class="v">September 8</div><div class="l">Deadline</div></div>
+      <div><div class="v">October 9</div><div class="l">Announced · Banquet</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Eligibility + How to Apply ------------------------------------ -->
+<section class="block alt">
+  <div class="container">
+    <div class="two-col">
+      <div class="info-card">
+        <h3>Eligibility</h3>
+        <ul>
+          <li>Minimum of <strong>4 years playing</strong> in a PA District 27 Little League</li>
+          <li>Current <strong>high school junior or senior</strong>, or a first-year college student</li>
+          <li>Pursuing post-secondary education — college, trade school, or certification program</li>
+          <li>A letter of recommendation from a D27 league officer, coach, or umpire</li>
+          <li>One page: why Little League shaped who you are, and what's next</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>How to Apply</h3>
+        <ol>
+          <li>Download the application packet from <strong>bpall.org / d27 hub</strong> (opens April 1)</li>
+          <li>Complete the application, essay, and recommendation letter</li>
+          <li>Email or mail to <strong>Suzanne Battaglia</strong>, Scholarship Chair</li>
+          <li>Postmark or send by <strong>September 8</strong></li>
+          <li>Recipients notified by phone in late September; announced at the banquet</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Deadlines ------------------------------------------------------ -->
+<section class="block">
+  <div class="container">
+    <div class="sec-head"><h2>2026 Key Dates</h2><span class="count">Cycle timeline</span></div>
+    <div class="info-card" style="border-top: none;">
+      <div class="deadline-row">
+        <span class="deadline-date">Apr 1</span>
+        <div class="deadline-body">
+          <h4>Applications open</h4>
+          <p>Packet posted to the D27 site; paper copies available at every league's clubhouse.</p>
+        </div>
+      </div>
+      <div class="deadline-row">
+        <span class="deadline-date">Aug 15</span>
+        <div class="deadline-body">
+          <h4>Recommended submission window opens</h4>
+          <p>Early submissions get an acknowledgement reply within 72 hours.</p>
+        </div>
+      </div>
+      <div class="deadline-row">
+        <span class="deadline-date urgent">Sep 8</span>
+        <div class="deadline-body">
+          <h4>Final deadline · postmark or digital timestamp</h4>
+          <p>Late applications are not accepted. No exceptions — it's how the scholarship has run for 20+ years.</p>
+        </div>
+      </div>
+      <div class="deadline-row">
+        <span class="deadline-date">Sep 20</span>
+        <div class="deadline-body">
+          <h4>Committee review + interview calls</h4>
+          <p>Scholarship chair + D27 leadership committee.</p>
+        </div>
+      </div>
+      <div class="deadline-row">
+        <span class="deadline-date">Oct 9</span>
+        <div class="deadline-body">
+          <h4>Banquet — recipients announced</h4>
+          <p>Recipients introduced in front of the 12 league boards, tournament champions, and families. Check in hand.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Recent recipients --------------------------------------------- -->
+<section class="block alt">
+  <div class="container">
+    <div class="sec-head"><h2>Recent Recipients</h2><span class="count">2024 class</span></div>
+
+    <div class="recipients">
+      <div class="rec-card">
+        <div class="year-tag">2024</div>
+        <div class="name">Matthew Valenti</div>
+        <div class="lg">Berwyn-Paoli LL</div>
+        <span class="sport-chip baseball">Baseball</span>
+      </div>
+      <div class="rec-card">
+        <div class="year-tag">2024</div>
+        <div class="name">Dyson Wade Neill</div>
+        <div class="lg">Coventry LL</div>
+        <span class="sport-chip baseball">Baseball</span>
+      </div>
+      <div class="rec-card">
+        <div class="year-tag">2024</div>
+        <div class="name">Denise Nicole Hurd</div>
+        <div class="lg">Lower Perkiomen LL</div>
+        <span class="sport-chip softball">Softball</span>
+      </div>
+      <div class="rec-card">
+        <div class="year-tag">2023</div>
+        <div class="name">Sarah McConnell</div>
+        <div class="lg">Chester Valley LL</div>
+        <span class="sport-chip softball">Softball</span>
+      </div>
+      <div class="rec-card">
+        <div class="year-tag">2023</div>
+        <div class="name">Tyler Ramsburg</div>
+        <div class="lg">Great Valley LL</div>
+        <span class="sport-chip baseball">Baseball</span>
+      </div>
+      <div class="rec-card">
+        <div class="year-tag">2022</div>
+        <div class="name">Alex Parkinson</div>
+        <div class="lg">Radnor-Wayne LL</div>
+        <span class="sport-chip baseball">Baseball</span>
+      </div>
+      <div class="rec-card">
+        <div class="year-tag">2022</div>
+        <div class="name">Madeline O'Sullivan</div>
+        <div class="lg">Lower Merion LL</div>
+        <span class="sport-chip softball">Softball</span>
+      </div>
+      <div class="rec-card">
+        <div class="year-tag">2021</div>
+        <div class="name">Jacob Trevino</div>
+        <div class="lg">Devon-Strafford LL</div>
+        <span class="sport-chip baseball">Baseball</span>
+      </div>
+    </div>
+
+    <p style="text-align: center; color: var(--muted); font-size: var(--text-sm); margin-top: var(--space-4);">
+      Full recipient archive since 2005 — 42 names across all 12 leagues — in production.
+    </p>
+  </div>
+</section>
+
+<!-- Quote ---------------------------------------------------------- -->
+<section class="block">
+  <div class="container">
+    <div class="quote">
+      "Laura and Van never asked for credit. They filed the paperwork, paid the umps, kept the books — and showed up every Saturday. This scholarship exists because we wanted to name something permanent after the people who quietly kept this district running."
+      <span class="attrib"><strong>— Suzanne Battaglia</strong>, Scholarship Chair · D27</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA ----------------------------------------------------------- -->
+<section class="block alt">
+  <div class="container">
+    <div class="cta-panel">
+      <div>
+        <h3>Ready to apply for 2026?</h3>
+        <p>Graduating D27 player? Grab the packet and get your application in well before Sep 8. Questions go to Suzanne directly.</p>
+      </div>
+      <a href="mailto:SBattaglia@yahoo.com?subject=D27 Scholarship — 2026 Application" class="btn-apply">Contact Suzanne →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -------------------------------------------------------- -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="foot-row">
+      <div class="foot-block">
+        <strong>Scholarship Chair</strong>
+        <p>Suzanne L. Battaglia · <a href="mailto:SBattaglia@yahoo.com">SBattaglia@yahoo.com</a></p>
+      </div>
+      <div class="foot-block">
+        <strong>District</strong>
+        <p>Jeff Bennett, DA · <a href="mailto:jeffbennett.d27@gmail.com">jeffbennett.d27@gmail.com</a></p>
+      </div>
+      <div class="foot-block">
+        <strong>Banquet</strong>
+        <p>October 9, 2026 · Recipients announced live</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      &copy; 2026 PA District 27 Little League · Demo site by Mainline Web Design
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

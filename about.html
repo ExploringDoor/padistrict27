@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>About · PA District 27 Little League</title>
+<meta name="description" content="PA District 27 Little League — founded 1993 when District 23 split. 12 member leagues across Chester, Delaware & Montgomery Counties. The people and the history behind the patch on every player's sleeve." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<script src="config.js"></script>
+<link rel="stylesheet" href="css/styles.css" />
+
+<style>
+  .about-hero {
+    background: linear-gradient(135deg, rgba(0,27,71,.94) 0%, rgba(0,45,114,.9) 100%), var(--d27-navy);
+    color: var(--d27-white);
+    padding: var(--space-10) 0 var(--space-8);
+    position: relative;
+    overflow: hidden;
+  }
+  .about-hero::after {
+    content: "D27";
+    position: absolute;
+    right: -20px; top: 10px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 280px;
+    font-weight: 700;
+    color: rgba(255,255,255,.04);
+    line-height: 1;
+    pointer-events: none;
+    letter-spacing: -0.04em;
+  }
+  .about-hero .eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--d27-gold);
+    margin-bottom: var(--space-2);
+  }
+  .about-hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(32px, 6vw, 54px);
+    line-height: 1;
+    margin: 0 0 var(--space-3);
+    font-weight: 700;
+    max-width: 760px;
+    position: relative;
+  }
+  .about-hero p {
+    max-width: 720px;
+    margin: 0;
+    font-size: var(--text-base);
+    opacity: .88;
+    line-height: 1.6;
+    position: relative;
+  }
+
+  /* Section headings shared */
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin: 0 0 var(--space-5);
+    padding-bottom: var(--space-2);
+    border-bottom: 2px solid var(--d27-navy);
+  }
+  .sec-head h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-xl);
+    margin: 0;
+    color: var(--d27-navy);
+    letter-spacing: .02em;
+  }
+  .sec-head .count { font-size: var(--text-xs); color: var(--muted); font-weight: 500; }
+
+  section.block { padding: var(--space-8) 0; }
+  section.block.alt { background: var(--paper); }
+
+  /* Mission */
+  .mission-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5);
+  }
+  @media (max-width: 760px) { .mission-grid { grid-template-columns: 1fr; } }
+  .mission-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--d27-red);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+  }
+  .mission-card h3 {
+    margin: 0 0 var(--space-2);
+    font-family: 'Oswald', sans-serif;
+    color: var(--d27-navy);
+    font-size: var(--text-lg);
+  }
+  .mission-card p { margin: 0 0 var(--space-3); line-height: 1.6; color: var(--fg); }
+  .mission-card ul {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+    display: grid;
+    gap: 8px;
+  }
+  .mission-card li {
+    position: relative;
+    padding-left: 22px;
+    font-size: var(--text-sm);
+    color: var(--fg);
+  }
+  .mission-card li::before {
+    content: "⚾";
+    position: absolute; left: 0; top: 0;
+    font-size: 14px;
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding: var(--space-2) 0 var(--space-2) var(--space-6);
+    border-left: 3px solid var(--d27-navy);
+  }
+  .t-item {
+    position: relative;
+    margin-bottom: var(--space-5);
+  }
+  .t-item:last-child { margin-bottom: 0; }
+  .t-item::before {
+    content: "";
+    position: absolute;
+    left: calc(-1 * var(--space-6) - 9px);
+    top: 8px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--d27-white);
+    border: 4px solid var(--d27-red);
+    box-shadow: 0 0 0 3px var(--d27-white);
+  }
+  .t-item.gold::before { border-color: var(--d27-gold); }
+  .t-year {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-xl);
+    color: var(--d27-navy);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .t-title {
+    font-weight: 600;
+    color: var(--fg);
+    margin-bottom: 4px;
+    font-size: var(--text-base);
+  }
+  .t-body { font-size: var(--text-sm); color: var(--muted); line-height: 1.6; }
+  .t-body strong { color: var(--fg); font-weight: 600; }
+
+  /* Honored figures */
+  .figures-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-4);
+  }
+  .figure {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .figure:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.08); }
+  .figure-head {
+    background: linear-gradient(135deg, var(--d27-navy), color-mix(in srgb, var(--d27-navy) 70%, black));
+    color: #fff;
+    padding: var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    position: relative;
+    overflow: hidden;
+  }
+  .figure-head::before {
+    content: "";
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 4px;
+    background: var(--d27-gold);
+  }
+  .figure-initial {
+    font-family: 'Oswald', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    background: rgba(255,255,255,.1);
+    border: 2px solid var(--d27-gold);
+    flex-shrink: 0;
+  }
+  .figure-head h3 {
+    margin: 0 0 2px;
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-lg);
+  }
+  .figure-head .role {
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    opacity: .85;
+  }
+  .figure-body {
+    padding: var(--space-4);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .figure-body p { margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--fg); }
+  .figure-tag {
+    align-self: flex-start;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    background: color-mix(in srgb, var(--d27-gold) 18%, transparent);
+    color: color-mix(in srgb, var(--d27-gold) 75%, black);
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .figure-tournament {
+    margin-top: auto;
+    padding: 10px 14px;
+    background: color-mix(in srgb, var(--d27-navy) 6%, transparent);
+    border-radius: 6px;
+    font-size: var(--text-xs);
+    color: var(--d27-navy);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+  }
+  .figure-tournament a { color: var(--d27-red); text-decoration: none; }
+
+  /* Leadership grid */
+  .leaders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--space-3);
+  }
+  .leader {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    text-align: center;
+    position: relative;
+  }
+  .leader::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--d27-red);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+  }
+  .leader .circle {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: var(--d27-navy);
+    color: var(--d27-gold);
+    display: grid; place-items: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 auto var(--space-2);
+  }
+  .leader .name {
+    font-weight: 700;
+    color: var(--fg);
+    font-size: var(--text-base);
+    margin-bottom: 4px;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: .02em;
+  }
+  .leader .title {
+    font-size: 11px;
+    color: var(--d27-navy);
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-2);
+  }
+  .leader .email {
+    font-size: var(--text-xs);
+    color: var(--muted);
+    word-break: break-word;
+  }
+  .leader .email a { color: var(--d27-red); text-decoration: none; }
+
+  /* Key facts strip */
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  @media (max-width: 760px) { .facts { grid-template-columns: repeat(2, 1fr); } }
+  .fact {
+    padding: var(--space-4);
+    text-align: center;
+    border-right: 1px solid var(--line);
+  }
+  .fact:last-child { border-right: 0; }
+  @media (max-width: 760px) {
+    .fact { border-bottom: 1px solid var(--line); }
+    .fact:nth-child(odd) { border-right: 1px solid var(--line); }
+    .fact:nth-child(even) { border-right: 0; }
+    .fact:nth-last-child(-n+2) { border-bottom: 0; }
+  }
+  .fact .n {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(28px, 5vw, 40px);
+    color: var(--d27-navy);
+    font-weight: 700;
+    line-height: 1;
+  }
+  .fact .l {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-top: 6px;
+  }
+
+  /* Banquet callout */
+  .banquet {
+    background: linear-gradient(135deg, var(--d27-navy), color-mix(in srgb, var(--d27-navy) 75%, black));
+    color: #fff;
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-4);
+    align-items: center;
+  }
+  @media (max-width: 640px) { .banquet { grid-template-columns: 1fr; } }
+  .banquet::before {
+    content: "🏆";
+    position: absolute;
+    right: -20px; bottom: -40px;
+    font-size: 180px;
+    opacity: .08;
+    pointer-events: none;
+  }
+  .banquet h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-xl);
+    margin: 0 0 6px;
+    color: var(--d27-gold);
+    position: relative;
+  }
+  .banquet p { margin: 0; font-size: var(--text-sm); opacity: .92; position: relative; line-height: 1.6; }
+  .banquet .date {
+    font-family: 'Oswald', sans-serif;
+    text-align: center;
+    background: var(--d27-gold);
+    color: var(--d27-navy);
+    padding: var(--space-3) var(--space-4);
+    border-radius: 8px;
+    position: relative;
+    min-width: 120px;
+  }
+  .banquet .date .m { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; }
+  .banquet .date .d { font-size: 34px; font-weight: 700; line-height: 1; margin: 2px 0; }
+  .banquet .date .y { font-size: 12px; font-weight: 500; opacity: .8; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<!-- Nav ------------------------------------------------------------- -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html">
+      <span class="mark">D27</span>
+      <span class="name-block">
+        PA District 27
+        <span class="sub">Little League · Baseball &amp; Softball</span>
+      </span>
+    </a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="champions.html">Champions</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero ----------------------------------------------------------- -->
+<header class="about-hero">
+  <div class="container">
+    <div class="eyebrow">About the District</div>
+    <h1>One Team.<br>One Little League.</h1>
+    <p>PA District 27 was chartered in 1993 when District 23 grew too large to serve its leagues. Thirty-plus years later, we're still the umbrella — 12 member leagues, 10,000 kids, three counties, every summer.</p>
+  </div>
+</header>
+
+<!-- Facts strip ---------------------------------------------------- -->
+<section class="block" style="padding-top: var(--space-6);">
+  <div class="container">
+    <div class="facts">
+      <div class="fact"><div class="n">1993</div><div class="l">Chartered</div></div>
+      <div class="fact"><div class="n">12</div><div class="l">Member Leagues</div></div>
+      <div class="fact"><div class="n">10,000</div><div class="l">Players Served</div></div>
+      <div class="fact"><div class="n">3</div><div class="l">Counties</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Mission -------------------------------------------------------- -->
+<section class="block">
+  <div class="container">
+    <div class="sec-head"><h2>Our Purpose</h2><span class="count">Why we do this</span></div>
+    <div class="mission-grid">
+      <div class="mission-card">
+        <h3>What the District is for</h3>
+        <p>Every one of our 12 leagues runs its own season — fields, uniforms, schedules, volunteer boards. The District exists to do the things that only make sense at the umbrella level: run All-Star and Section-qualifying tournaments, hold umpires to one standard, advocate for the leagues with Little League International, and quietly clean up the messes before they ever reach a parent's inbox.</p>
+      </div>
+      <div class="mission-card">
+        <h3>What we commit to every season</h3>
+        <ul>
+          <li>17 tournaments — baseball &amp; softball, 8-year-olds through 16</li>
+          <li>Every District game umpired by a certified volunteer crew</li>
+          <li>A standing annual scholarship for graduating D27 players</li>
+          <li>A public schedule every team can plan around by April 1</li>
+          <li>One set of playing rules, consistently applied, across all 12 leagues</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Timeline ------------------------------------------------------- -->
+<section class="block alt">
+  <div class="container">
+    <div class="sec-head"><h2>A Brief History</h2><span class="count">How we got here</span></div>
+    <div class="timeline">
+      <div class="t-item">
+        <div class="t-year">1957</div>
+        <div class="t-title">A District 23 umpire at the LLWS</div>
+        <div class="t-body">
+          <strong>Al "Pappy" Patton</strong> umpires first base at the Little League World Series Championship — the first year a non-US team competed (Monterrey, Mexico) and the only perfect game ever thrown in the LLWS Championship. That Series, and the people who volunteered around it, became the template for how this district thinks about the game.
+        </div>
+      </div>
+      <div class="t-item">
+        <div class="t-year">1984</div>
+        <div class="t-title">Pappy inducted, PA Sports Hall of Fame</div>
+        <div class="t-body">62 years behind the plate. Founding member of the Little League World Series Umpires Alumni International.</div>
+      </div>
+      <div class="t-item gold">
+        <div class="t-year">1993</div>
+        <div class="t-title">District 23 splits — District 27 is chartered</div>
+        <div class="t-body">
+          D23 had grown too large to serve every league well. Under <strong>Tony Marra</strong>, the district split along geography. <strong>Van Scott</strong> — a Pottstown LL founder who had served as Tony's ADA — was named the first Administrator of PA District 27. His wife <strong>Laura Scott</strong> took on Financial Coordinator. The patch every D27 player wears on their sleeve goes back to that year.
+        </div>
+      </div>
+      <div class="t-item">
+        <div class="t-year">2001</div>
+        <div class="t-title">Pappy passes · BB-10 renamed</div>
+        <div class="t-body">The 8-9-10 YO baseball tournament is renamed the <strong>Al "Pappy" Patton Memorial</strong>. It still runs every June at a different host complex, voted on by the 12 leagues.</div>
+      </div>
+      <div class="t-item">
+        <div class="t-year">2004</div>
+        <div class="t-title">Van &amp; Laura step down</div>
+        <div class="t-body">After 11 years they step out of district roles. The next year, the <strong>Laura &amp; Van Scott Higher Education Scholarship</strong> is endowed in their name — awarded annually at the October banquet to graduating players pursuing post-secondary education.</div>
+      </div>
+      <div class="t-item">
+        <div class="t-year">Today</div>
+        <div class="t-title">12 leagues, still one district</div>
+        <div class="t-body">The 2026 season marks 33 years of PA District 27. <strong>Jeff Bennett</strong> serves as District Administrator, <strong>Jason Saylor</strong> as ADA. This site is an open proposal to give the District what a good umbrella deserves: one place parents, coaches, and umps can count on.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Honored figures ------------------------------------------------ -->
+<section class="block">
+  <div class="container">
+    <div class="sec-head"><h2>Honored In Our Tournaments</h2><span class="count">The people our tournaments are named for</span></div>
+    <div class="figures-grid">
+
+      <div class="figure">
+        <div class="figure-head">
+          <div class="figure-initial">BJ</div>
+          <div>
+            <h3>Bob Jones</h3>
+            <div class="role">President · Bridgeport LL</div>
+          </div>
+        </div>
+        <div class="figure-body">
+          <span class="figure-tag">Died in office</span>
+          <p>Bob gave decades to youth baseball as president of Bridgeport Little League. He died while still serving. Tony Marra — who ran the old D23 — named the district's marquee Majors tournament in his honor. The <strong>Bob Jones Tournament</strong> is single-elimination: one loss and you're done. The bracket every June carries his name forward.</p>
+          <div class="figure-tournament"><span>Bob Jones Tournament · Baseball &amp; Softball</span><a href="tournament.html">View →</a></div>
+        </div>
+      </div>
+
+      <div class="figure">
+        <div class="figure-head">
+          <div class="figure-initial">JK</div>
+          <div>
+            <h3>John Klein</h3>
+            <div class="role">Volunteer · Chester Valley LL</div>
+          </div>
+        </div>
+        <div class="figure-body">
+          <span class="figure-tag">Mainstay of the old "B" tournament</span>
+          <p>John was at Chester Valley's VFW and Monument Avenue fields for what feels like every weekend of every summer for years. Before he passed, Tony Marra presented him with a banner and told him that from now on, the "B" tournament would carry his name. It runs every year at CV's complex — the same fields John worked.</p>
+          <div class="figure-tournament"><span>John Klein Tournament · 11-12 YO</span><a href="baseball.html">View →</a></div>
+        </div>
+      </div>
+
+      <div class="figure">
+        <div class="figure-head">
+          <div class="figure-initial">PP</div>
+          <div>
+            <h3>Al "Pappy" Patton</h3>
+            <div class="role">ADA D23 &amp; D27 · 62-year umpire</div>
+          </div>
+        </div>
+        <div class="figure-body">
+          <span class="figure-tag">1957 LLWS Championship, 1st base</span>
+          <p>Pappy umpired the 1957 Little League World Series Championship — the first year a non-US team competed (Monterrey, Mexico) and still the only perfect game ever pitched in an LLWS final. That game inspired the 2009 film <em>The Perfect Game</em>. Founding member of the LLWS Umpires Alumni International. Inducted into the PA Sports Hall of Fame in 1984. He was at home plate in this district longer than most of us have been alive.</p>
+          <div class="figure-tournament"><span>Al "Pappy" Patton Memorial · BB-10</span><a href="baseball.html">View →</a></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Leadership ----------------------------------------------------- -->
+<section class="block alt">
+  <div class="container">
+    <div class="sec-head"><h2>Current District Leadership</h2><span class="count">2026 season</span></div>
+
+    <div class="leaders-grid">
+      <div class="leader">
+        <div class="circle">JB</div>
+        <div class="name">Jeff Bennett</div>
+        <div class="title">District Administrator</div>
+        <div class="email"><a href="mailto:jeffbennett.d27@gmail.com">jeffbennett.d27@gmail.com</a></div>
+      </div>
+      <div class="leader">
+        <div class="circle">JS</div>
+        <div class="name">Jason Saylor</div>
+        <div class="title">Assistant DA</div>
+        <div class="email">—</div>
+      </div>
+      <div class="leader">
+        <div class="circle">SB</div>
+        <div class="name">Suzanne L. Battaglia</div>
+        <div class="title">Scholarship Chair</div>
+        <div class="email"><a href="mailto:SBattaglia@yahoo.com">SBattaglia@yahoo.com</a></div>
+      </div>
+      <div class="leader">
+        <div class="circle">FN</div>
+        <div class="name">Frank Nikischer</div>
+        <div class="title">Umpire in Chief</div>
+        <div class="email">—</div>
+      </div>
+      <div class="leader">
+        <div class="circle">AM</div>
+        <div class="name">Adam Miller</div>
+        <div class="title">Site &amp; Tech</div>
+        <div class="email"><a href="mailto:adam.miller.22@gmail.com">adam.miller.22@gmail.com</a></div>
+      </div>
+    </div>
+
+    <p style="text-align: center; color: var(--muted); font-size: var(--text-sm); margin-top: var(--space-4);">
+      Full officer directory — treasurer, league reps, tournament coordinators — in production.
+    </p>
+  </div>
+</section>
+
+<!-- Banquet -------------------------------------------------------- -->
+<section class="block">
+  <div class="container">
+    <div class="banquet">
+      <div>
+        <h3>The District 27 Annual Banquet</h3>
+        <p>Every October we gather with league boards, tournament champions, umpires, and scholarship recipients. Trophies go home. New scholarship winners are announced. The outgoing season closes, and the next one quietly begins.</p>
+      </div>
+      <div class="date">
+        <div class="m">Oct</div>
+        <div class="d">9</div>
+        <div class="y">2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Scholarship CTA ----------------------------------------------- -->
+<section class="block alt" style="padding-top: var(--space-4);">
+  <div class="container" style="text-align: center;">
+    <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px;">Scholarship</p>
+    <h3 style="font-family: 'Oswald', sans-serif; font-size: var(--text-xl); color: var(--d27-navy); margin: 0 0 var(--space-2);">The Laura &amp; Van Scott Higher Education Scholarship</h3>
+    <p style="max-width: 620px; margin: 0 auto var(--space-3); color: var(--fg); line-height: 1.6;">Two $1,000 scholarships awarded every year to graduating D27 players continuing their education. Endowed in 2005. Applications due September 8.</p>
+    <a href="scholarship.html" style="display: inline-block; background: var(--d27-gold); color: var(--d27-navy); padding: 10px var(--space-5); border-radius: 6px; font-family: 'Oswald', sans-serif; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; text-decoration: none;">Learn more →</a>
+  </div>
+</section>
+
+<!-- Footer ---------------------------------------------------------- -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="foot-row">
+      <div class="foot-block">
+        <strong>PA District 27</strong>
+        <p>10,000 players · 12 leagues · Chester, Delaware &amp; Montgomery Counties</p>
+      </div>
+      <div class="foot-block">
+        <strong>Contact</strong>
+        <p>Jeff Bennett, DA · <a href="mailto:jeffbennett.d27@gmail.com">jeffbennett.d27@gmail.com</a></p>
+      </div>
+      <div class="foot-block">
+        <strong>Chartered</strong>
+        <p>1993 · Little League · Williamsport, PA</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      &copy; 2026 PA District 27 Little League · Demo site by Mainline Web Design
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

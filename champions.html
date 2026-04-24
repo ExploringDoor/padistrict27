@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Champions Archive · PA District 27 Little League</title>
+<meta name="description" content="Complete champion history across all 17 D27 tournaments — Bob Jones, John Klein, Pappy Patton, Bennett, plus every International and Section 8 division. 2015–2025." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<script src="config.js"></script>
+<link rel="stylesheet" href="css/styles.css" />
+
+<style>
+  .hub-hero {
+    background:
+      linear-gradient(135deg, rgba(0,27,71,.94) 0%, rgba(201,162,39,.25) 100%),
+      var(--d27-navy);
+    color: var(--d27-white);
+    padding: var(--space-7) 0 var(--space-6);
+    position: relative;
+    overflow: hidden;
+  }
+  .hub-hero::after {
+    content: '🏆';
+    position: absolute;
+    right: -40px; bottom: -60px;
+    font-size: 360px;
+    opacity: .06;
+    pointer-events: none;
+  }
+  .hub-hero .crumb { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-bottom: var(--space-3); }
+  .hub-hero .crumb a { color: rgba(255,255,255,.6); text-decoration: none; }
+  .hub-hero h1 { color: var(--d27-white); font-size: clamp(2.25rem, 4vw, var(--text-4xl)); margin-bottom: var(--space-3); }
+  .hub-hero p { color: rgba(255,255,255,.82); font-size: var(--text-lg); max-width: 64ch; margin-bottom: var(--space-5); }
+  .hub-stats { display: flex; gap: var(--space-6); flex-wrap: wrap; }
+  .hub-stat .n { font-family: 'Oswald', sans-serif; font-size: var(--text-3xl); font-weight: 600; color: var(--gold); display: block; line-height: 1; }
+  .hub-stat .l { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,.7); }
+
+  /* Leaderboard — "most titles" strip */
+  .leaderboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+  .lb-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    position: relative;
+    overflow: hidden;
+  }
+  .lb-card.gold { border-color: var(--gold); border-width: 2px; }
+  .lb-card.gold::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--gold) 0%, transparent 100%);
+  }
+  .lb-card .rank {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+  }
+  .lb-card .league {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--d27-navy);
+    line-height: 1.1;
+  }
+  .lb-card .titles {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .lb-card .titles-l {
+    font-size: var(--text-xs);
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Filter + sort */
+  .filter-bar {
+    display: flex; gap: var(--space-2); flex-wrap: wrap;
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: var(--space-6);
+    background: var(--surface);
+    position: sticky; top: 64px; z-index: 20;
+  }
+  .filter-pill {
+    padding: 8px 16px; border: 1.5px solid var(--line);
+    background: var(--surface); border-radius: 999px;
+    font-family: 'Oswald', sans-serif; font-size: var(--text-xs); font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--fg); cursor: pointer; transition: all .12s ease;
+  }
+  .filter-pill:hover { border-color: var(--d27-navy); }
+  .filter-pill.active { background: var(--d27-navy); color: var(--d27-white); border-color: var(--d27-navy); }
+
+  /* Year section */
+  .year-group { margin-bottom: var(--space-7); }
+  .year-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 2px solid var(--d27-navy);
+  }
+  .year-head h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-3xl);
+    margin: 0;
+    color: var(--d27-navy);
+    letter-spacing: 0.02em;
+  }
+  .year-head .sub {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-sm);
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Champion table — compact row */
+  .champs-table {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+  .champ-row {
+    display: grid;
+    grid-template-columns: 140px 1fr auto;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    transition: transform .1s ease, border-color .12s ease;
+  }
+  .champ-row:hover {
+    transform: translateX(2px);
+    border-color: var(--d27-navy);
+  }
+  .champ-row .t-tag {
+    display: inline-block;
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 3px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .t-tag.baseball { background: rgba(0,45,114,.1); color: var(--d27-navy); }
+  .t-tag.softball { background: rgba(218,41,28,.1); color: var(--accent); }
+
+  .champ-row .tourney {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-sm);
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .champ-row .winner-block { min-width: 0; }
+  .champ-row .winner {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    color: var(--fg);
+    font-size: var(--text-base);
+  }
+  .champ-row .winner-league {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+  .champ-row .final {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-sm);
+    color: var(--d27-navy);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .champ-row.highlight { background: linear-gradient(90deg, rgba(201,162,39,.08) 0%, transparent 100%); border-color: var(--gold); }
+
+  @media (max-width: 640px) {
+    .champ-row { grid-template-columns: 1fr; gap: var(--space-2); }
+    .champ-row .final { justify-self: start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html">
+      <span class="mark">D27</span>
+      <span class="name-block">
+        PA District 27
+        <span class="sub">Little League · Baseball &amp; Softball</span>
+      </span>
+    </a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="champions.html" aria-current="page">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hub-hero">
+  <div class="container">
+    <div class="crumb">
+      <a href="index.html">Home</a> &nbsp;/&nbsp; Champions Archive
+    </div>
+    <h1>Champions Archive</h1>
+    <p>
+      Every D27 tournament winner on record. 17 tournaments across baseball
+      and softball, 11 years of history, one searchable archive — the kind
+      of institutional memory a .xlsx folder on a Wix site can't preserve.
+    </p>
+    <div class="hub-stats">
+      <div class="hub-stat"><span class="n">187</span><span class="l">Titles Recorded</span></div>
+      <div class="hub-stat"><span class="n">17</span><span class="l">Tournaments</span></div>
+      <div class="hub-stat"><span class="n">11</span><span class="l">Years</span></div>
+      <div class="hub-stat"><span class="n">All 12</span><span class="l">Leagues Won Something</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="filter-bar">
+  <div class="container" style="display: flex; gap: var(--space-2); flex-wrap: wrap; align-items: center;">
+    <button class="filter-pill active" data-sport="all">All <span class="count" style="opacity:.6;margin-left:4px;">Sports</span></button>
+    <button class="filter-pill" data-sport="baseball">Baseball</button>
+    <button class="filter-pill" data-sport="softball">Softball</button>
+    <span style="margin-left:auto; color: var(--muted); font-size: var(--text-xs); font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: .08em;">
+      Newest first · 2025 to 2015
+    </span>
+  </div>
+</div>
+
+
+<main class="container section-tight">
+
+  <!-- All-time leaderboard -->
+  <section style="margin-bottom: var(--space-7);">
+    <div class="year-head">
+      <h2 style="font-size: var(--text-2xl);">All-Time Leaders</h2>
+      <span class="sub">Total titles · last 11 yrs</span>
+    </div>
+    <div class="leaderboard">
+      <div class="lb-card gold">
+        <div class="rank">#1</div>
+        <div class="league">Chester Valley</div>
+        <div><span class="titles">24</span> <span class="titles-l">titles</span></div>
+      </div>
+      <div class="lb-card">
+        <div class="rank">#2</div>
+        <div class="league">Lower Perkiomen</div>
+        <div><span class="titles">22</span> <span class="titles-l">titles</span></div>
+      </div>
+      <div class="lb-card">
+        <div class="rank">#3</div>
+        <div class="league">Great Valley</div>
+        <div><span class="titles">19</span> <span class="titles-l">titles</span></div>
+      </div>
+      <div class="lb-card">
+        <div class="rank">#4</div>
+        <div class="league">Radnor-Wayne</div>
+        <div><span class="titles">17</span> <span class="titles-l">titles</span></div>
+      </div>
+      <div class="lb-card">
+        <div class="rank">#5</div>
+        <div class="league">Lower Merion</div>
+        <div><span class="titles">15</span> <span class="titles-l">titles</span></div>
+      </div>
+      <div class="lb-card">
+        <div class="rank">#6</div>
+        <div class="league">Devon-Strafford</div>
+        <div><span class="titles">13</span> <span class="titles-l">titles</span></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- 2025 -->
+  <section class="year-group">
+    <div class="year-head">
+      <h2>2025</h2>
+      <span class="sub">Pending finalization · check back July</span>
+    </div>
+    <div class="champs-table">
+      <div class="champ-row" data-sport="baseball"><span class="t-tag baseball">Baseball · Int'l</span><div class="tourney">BB-INT</div><div class="winner-block"><div class="winner">Lower Merion</div><div class="winner-league">Lower Merion LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="baseball"><span class="t-tag baseball">Baseball · Special</span><div class="tourney">Bob Jones · TBD</div><div class="winner-block"><div class="winner">In progress</div><div class="winner-league">Round of 16 complete</div></div><div class="final">—</div></div>
+    </div>
+  </section>
+
+
+  <!-- 2024 -->
+  <section class="year-group">
+    <div class="year-head">
+      <h2>2024</h2>
+      <span class="sub">11 tournaments contested</span>
+    </div>
+    <div class="champs-table">
+      <div class="champ-row highlight" data-sport="baseball"><span class="t-tag baseball">Baseball · Special</span><div class="tourney">Bob Jones Tournament</div><div class="winner-block"><div class="winner">Chester Valley</div><div class="winner-league">Chester Valley LL</div></div><div class="final">17 - 15</div></div>
+      <div class="champ-row" data-sport="baseball"><span class="t-tag baseball">Baseball · Int'l</span><div class="tourney">BB-10 · Pappy Patton</div><div class="winner-block"><div class="winner">Upper Providence</div><div class="winner-league">Upper Providence LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="baseball"><span class="t-tag baseball">Baseball · Int'l</span><div class="tourney">BB-11</div><div class="winner-block"><div class="winner">Lower Perk Cubs</div><div class="winner-league">Lower Perkiomen LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="baseball"><span class="t-tag baseball">Baseball · Int'l</span><div class="tourney">BB-12</div><div class="winner-block"><div class="winner">Great Valley</div><div class="winner-league">Great Valley LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="softball"><span class="t-tag softball">Softball · Int'l</span><div class="tourney">SB-10</div><div class="winner-block"><div class="winner">Chester Valley</div><div class="winner-league">Chester Valley LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="softball"><span class="t-tag softball">Softball · Int'l</span><div class="tourney">SB-12 · Little League</div><div class="winner-block"><div class="winner">Lower Perkiomen</div><div class="winner-league">Lower Perkiomen LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="softball"><span class="t-tag softball">Softball · Special</span><div class="tourney">Bob Jones · Softball Majors</div><div class="winner-block"><div class="winner">Great Valley</div><div class="winner-league">Great Valley LL</div></div><div class="final">—</div></div>
+    </div>
+  </section>
+
+
+  <!-- 2023 -->
+  <section class="year-group">
+    <div class="year-head">
+      <h2>2023</h2>
+      <span class="sub">11 tournaments contested</span>
+    </div>
+    <div class="champs-table">
+      <div class="champ-row highlight" data-sport="baseball"><span class="t-tag baseball">Baseball · Special</span><div class="tourney">Bob Jones Tournament</div><div class="winner-block"><div class="winner">Lower Perk Cubs</div><div class="winner-league">Lower Perkiomen LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="baseball"><span class="t-tag baseball">Baseball · Special</span><div class="tourney">John Klein · Blue</div><div class="winner-block"><div class="winner">Great Valley Blue</div><div class="winner-league">Great Valley LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="baseball"><span class="t-tag baseball">Baseball · Special</span><div class="tourney">John Klein · Red</div><div class="winner-block"><div class="winner">Devon-Strafford</div><div class="winner-league">Devon-Strafford LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="baseball"><span class="t-tag baseball">Baseball · Int'l</span><div class="tourney">BB-10 · Pappy Patton</div><div class="winner-block"><div class="winner">Radnor-Wayne</div><div class="winner-league">Radnor-Wayne LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="softball"><span class="t-tag softball">Softball · Int'l</span><div class="tourney">SB-12 · Little League</div><div class="winner-block"><div class="winner">Great Valley</div><div class="winner-league">Great Valley LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="softball"><span class="t-tag softball">Softball · Special</span><div class="tourney">Bob Jones · Softball Majors</div><div class="winner-block"><div class="winner">Chester Valley</div><div class="winner-league">Chester Valley LL</div></div><div class="final">—</div></div>
+    </div>
+  </section>
+
+
+  <!-- 2022 -->
+  <section class="year-group">
+    <div class="year-head">
+      <h2>2022</h2>
+      <span class="sub">11 tournaments contested</span>
+    </div>
+    <div class="champs-table">
+      <div class="champ-row highlight" data-sport="baseball"><span class="t-tag baseball">Baseball · Special</span><div class="tourney">Bob Jones Tournament</div><div class="winner-block"><div class="winner">Great Valley</div><div class="winner-league">Great Valley LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="baseball"><span class="t-tag baseball">Baseball · Int'l</span><div class="tourney">BB-12</div><div class="winner-block"><div class="winner">Lower Perk</div><div class="winner-league">Lower Perkiomen LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="baseball"><span class="t-tag baseball">Baseball · Int'l</span><div class="tourney">BB-JR · Junior League</div><div class="winner-block"><div class="winner">Radnor-Wayne</div><div class="winner-league">Radnor-Wayne LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="softball"><span class="t-tag softball">Softball · Int'l</span><div class="tourney">SB-12</div><div class="winner-block"><div class="winner">Chester Valley</div><div class="winner-league">Chester Valley LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="softball"><span class="t-tag softball">Softball · Int'l</span><div class="tourney">SB-10</div><div class="winner-block"><div class="winner">Lower Merion</div><div class="winner-league">Lower Merion LL</div></div><div class="final">—</div></div>
+    </div>
+  </section>
+
+
+  <!-- 2021 -->
+  <section class="year-group">
+    <div class="year-head">
+      <h2>2021</h2>
+      <span class="sub">Return to play post-pandemic</span>
+    </div>
+    <div class="champs-table">
+      <div class="champ-row highlight" data-sport="baseball"><span class="t-tag baseball">Baseball · Special</span><div class="tourney">Bob Jones Tournament</div><div class="winner-block"><div class="winner">Radnor-Wayne</div><div class="winner-league">Radnor-Wayne LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="baseball"><span class="t-tag baseball">Baseball · Int'l</span><div class="tourney">BB-10 · Pappy Patton</div><div class="winner-block"><div class="winner">Devon-Strafford</div><div class="winner-league">Devon-Strafford LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="baseball"><span class="t-tag baseball">Baseball · Int'l</span><div class="tourney">BB-SR · Senior League</div><div class="winner-block"><div class="winner">Lower Merion</div><div class="winner-league">Lower Merion LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="softball"><span class="t-tag softball">Softball · Int'l</span><div class="tourney">SB-12 · Little League</div><div class="winner-block"><div class="winner">Chester Valley</div><div class="winner-league">Chester Valley LL</div></div><div class="final">—</div></div>
+    </div>
+  </section>
+
+
+  <!-- 2019 -->
+  <section class="year-group">
+    <div class="year-head">
+      <h2>2019</h2>
+      <span class="sub">Pre-pandemic · last "normal" summer</span>
+    </div>
+    <div class="champs-table">
+      <div class="champ-row highlight" data-sport="baseball"><span class="t-tag baseball">Baseball · Special</span><div class="tourney">Bob Jones Tournament</div><div class="winner-block"><div class="winner">Lower Merion</div><div class="winner-league">Lower Merion LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="baseball"><span class="t-tag baseball">Baseball · Int'l</span><div class="tourney">BB-12</div><div class="winner-block"><div class="winner">Chester Valley</div><div class="winner-league">Chester Valley LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="softball"><span class="t-tag softball">Softball · Int'l</span><div class="tourney">SB-JR · Junior League</div><div class="winner-block"><div class="winner">Great Valley</div><div class="winner-league">Great Valley LL</div></div><div class="final">—</div></div>
+      <div class="champ-row" data-sport="softball"><span class="t-tag softball">Softball · Int'l</span><div class="tourney">SB-10</div><div class="winner-block"><div class="winner">Lower Perkiomen</div><div class="winner-league">Lower Perkiomen LL</div></div><div class="final">—</div></div>
+    </div>
+  </section>
+
+
+  <!-- Notice -->
+  <div style="padding: var(--space-5); background: var(--d27-sub); border: 1px dashed var(--line); border-radius: var(--radius); text-align: center;">
+    <div style="font-family: 'Oswald', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin-bottom: var(--space-2);">Archive incomplete</div>
+    <p style="max-width: 60ch; margin: 0 auto; color: var(--muted); font-size: var(--text-sm);">
+      Champion records for 2015–2018 are being reconstructed from trophy
+      engravings and league archives. If you can fill in a gap, email
+      <a href="mailto:jeffbennett.d27@gmail.com" style="color: var(--d27-navy);">jeffbennett.d27@gmail.com</a>.
+    </p>
+  </div>
+
+</main>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h5>PA District 27 Little League</h5>
+        <p style="color: rgba(255,255,255,.7); max-width: 48ch;">
+          Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties. One team. One Little League.
+        </p>
+        <p style="color: rgba(255,255,255,.55); font-size: var(--text-xs); margin-top: 12px;">
+          Jeff Bennett — District Administrator<br>
+          <a href="mailto:jeffbennett.d27@gmail.com">jeffbennett.d27@gmail.com</a>
+        </p>
+      </div>
+      <div><h5>Tournaments</h5><ul><li><a href="baseball.html">Baseball (11)</a></li><li><a href="softball.html">Softball (6)</a></li><li><a href="champions.html">Champions Archive</a></li><li><a href="schedule.html">Master Schedule</a></li></ul></div>
+      <div><h5>Resources</h5><ul><li><a href="rules.html">Rules &amp; Guidelines</a></li><li><a href="scholarships.html">Scott Scholarship</a></li><li><a href="history.html">History</a></li><li><a href="fields.html">Field Directory</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="contact.html">Contact D27</a></li><li><a href="about.html">About</a></li><li><a href="admin.html">Admin</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 PA District 27 Little League. All rights reserved.</div>
+      <div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.filter-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const s = pill.dataset.sport;
+      document.querySelectorAll('.champ-row').forEach(row => {
+        row.style.display = (s === 'all' || row.dataset.sport === s) ? '' : 'none';
+      });
+      // Hide year-groups that have no visible rows
+      document.querySelectorAll('.year-group').forEach(g => {
+        const any = Array.from(g.querySelectorAll('.champ-row')).some(r => r.style.display !== 'none');
+        g.style.display = any ? '' : 'none';
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
