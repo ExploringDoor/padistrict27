@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Admin Console · PA District 27</title>
+<meta name="description" content="D27 Admin Console — create tournaments with AI, update scores, manage leagues and rosters, and broadcast notifications across the district." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="css/styles.css" />
+
+<style>
+  /* Layout ---------------------------------------------------------- */
+  .admin-shell {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: calc(100vh - 64px);
+    background: var(--paper);
+  }
+  @media (max-width: 980px) {
+    .admin-shell { grid-template-columns: 1fr; }
+    .admin-side { display: none; }
+  }
+  .admin-side {
+    background: var(--d27-navy);
+    color: var(--d27-white);
+    padding: var(--space-4) 0;
+    border-right: 1px solid rgba(255,255,255,.08);
+  }
+  .admin-side .sig {
+    padding: 0 var(--space-4) var(--space-3);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    margin-bottom: var(--space-3);
+  }
+  .admin-side .sig .role {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: .18em;
+    color: var(--d27-gold);
+    text-transform: uppercase;
+  }
+  .admin-side .sig .name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .admin-side nav ul { list-style: none; padding: 0; margin: 0; }
+  .admin-side nav li a {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px var(--space-4);
+    color: rgba(255,255,255,.82);
+    text-decoration: none;
+    font-size: 14px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 500;
+    border-left: 3px solid transparent;
+    transition: background .15s, border-color .15s;
+  }
+  .admin-side nav li a:hover { background: rgba(255,255,255,.05); color: var(--d27-white); }
+  .admin-side nav li a.active {
+    background: rgba(201,162,39,.12);
+    border-left-color: var(--d27-gold);
+    color: var(--d27-white);
+  }
+  .admin-side nav li a .ico { width: 20px; text-align: center; }
+
+  .admin-main { padding: var(--space-5); overflow-x: hidden; }
+  .admin-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: var(--space-4);
+    flex-wrap: wrap; gap: var(--space-2);
+  }
+  .admin-header h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-2xl);
+    color: var(--d27-navy);
+    margin: 0;
+  }
+  .admin-header .stamp {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* KPI cards ------------------------------------------------------- */
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+  .kpi {
+    background: var(--d27-white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi::before {
+    content: "";
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--d27-navy);
+  }
+  .kpi.gold::before { background: var(--d27-gold); }
+  .kpi.red::before { background: var(--d27-red); }
+  .kpi.green::before { background: #16a34a; }
+  .kpi .label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .kpi .n {
+    font-family: 'Oswald', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--d27-navy);
+    line-height: 1.1;
+    margin-top: 4px;
+  }
+  .kpi .delta {
+    font-size: 12px;
+    color: #16a34a;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .kpi .delta.down { color: var(--d27-red); }
+
+  /* Panels ---------------------------------------------------------- */
+  .panel {
+    background: var(--d27-white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+  .panel-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap; gap: 8px;
+  }
+  .panel-head h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-xl);
+    color: var(--d27-navy);
+    margin: 0;
+    letter-spacing: .02em;
+  }
+  .panel-head .sub {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* AI Generator ---------------------------------------------------- */
+  .ai-gen {
+    background: linear-gradient(135deg, rgba(0,27,71,.04) 0%, rgba(201,162,39,.08) 100%);
+    border: 1px solid var(--d27-gold);
+    position: relative;
+  }
+  .ai-gen::before {
+    content: "✨";
+    position: absolute;
+    right: var(--space-3); top: var(--space-3);
+    font-size: 28px;
+  }
+  .ai-gen h2 .ai-chip {
+    display: inline-block;
+    background: var(--d27-navy);
+    color: var(--d27-gold);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    letter-spacing: .14em;
+    margin-left: 10px;
+    vertical-align: middle;
+    font-weight: 600;
+  }
+  .ai-prompt {
+    width: 100%;
+    min-height: 110px;
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    resize: vertical;
+    background: var(--d27-white);
+  }
+  .ai-prompt:focus { outline: 2px solid var(--d27-gold); border-color: var(--d27-gold); }
+  .ai-suggestions {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin: var(--space-2) 0 var(--space-3);
+  }
+  .ai-sug {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: var(--d27-navy);
+    cursor: pointer;
+    font-family: 'Manrope', sans-serif;
+    transition: background .15s, border-color .15s;
+  }
+  .ai-sug:hover { background: var(--d27-navy); color: var(--d27-white); border-color: var(--d27-navy); }
+  .ai-output {
+    margin-top: var(--space-3);
+    padding: var(--space-3);
+    background: var(--d27-white);
+    border: 1px solid var(--d27-gold);
+    border-radius: 8px;
+    display: none;
+  }
+  .ai-output.visible { display: block; animation: fadeSlide .4s ease-out; }
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .ai-output h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--d27-navy);
+    margin: 0 0 var(--space-2);
+  }
+  .ai-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+  .ai-summary .item {
+    background: var(--paper);
+    padding: 10px 12px;
+    border-radius: 6px;
+    border-left: 3px solid var(--d27-navy);
+  }
+  .ai-summary .item .k {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .ai-summary .item .v {
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--d27-navy);
+  }
+  .ai-schedule-preview {
+    display: block;
+    max-height: 280px;
+    overflow-y: auto;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 0;
+  }
+  .ai-schedule-preview table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .ai-schedule-preview th {
+    background: var(--d27-navy);
+    color: var(--d27-white);
+    text-align: left;
+    padding: 8px 12px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    position: sticky; top: 0;
+  }
+  .ai-schedule-preview td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--line);
+    font-family: 'Manrope', sans-serif;
+  }
+  .ai-schedule-preview tr:nth-child(even) td { background: var(--paper); }
+  .ai-schedule-preview .round-head td {
+    background: var(--d27-gold);
+    color: var(--d27-navy);
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+  }
+  .ai-actions {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-top: var(--space-3);
+  }
+
+  /* Games table ----------------------------------------------------- */
+  .games-tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .games-tbl th {
+    background: var(--paper);
+    text-align: left;
+    padding: 10px 12px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--d27-navy);
+    border-bottom: 2px solid var(--d27-navy);
+  }
+  .games-tbl td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .games-tbl tr:hover td { background: rgba(0,27,71,.02); }
+  .gs-status {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .gs-status.sched { background: #e5e7eb; color: #4b5563; }
+  .gs-status.live { background: var(--d27-red); color: white; animation: pulse 1.5s infinite; }
+  .gs-status.final { background: #16a34a; color: white; }
+  .gs-status.ppd { background: #f59e0b; color: white; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.6;} }
+  .icon-btn {
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--d27-navy);
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .icon-btn:hover { background: var(--d27-navy); color: var(--d27-white); border-color: var(--d27-navy); }
+
+  /* Activity feed --------------------------------------------------- */
+  .feed { list-style: none; padding: 0; margin: 0; }
+  .feed li {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: center;
+  }
+  .feed li:last-child { border-bottom: 0; }
+  .feed .dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--d27-navy);
+    color: var(--d27-white);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .feed .dot.red { background: var(--d27-red); }
+  .feed .dot.gold { background: var(--d27-gold); color: var(--d27-navy); }
+  .feed .dot.green { background: #16a34a; }
+  .feed .msg { font-size: 14px; color: var(--fg); }
+  .feed .msg .who { font-weight: 600; color: var(--d27-navy); }
+  .feed .when { font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+  /* Quick-actions --------------------------------------------------- */
+  .qa-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: var(--space-2);
+  }
+  .qa {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--d27-navy);
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    transition: background .15s, transform .15s;
+  }
+  .qa:hover { background: var(--d27-navy); color: var(--d27-white); transform: translateY(-2px); }
+  .qa .ico {
+    width: 28px; height: 28px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--d27-navy);
+    color: var(--d27-gold);
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  .qa:hover .ico { background: var(--d27-gold); color: var(--d27-navy); }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<!-- Nav ------------------------------------------------------------- -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html">
+      <span class="mark">D27</span>
+      <span class="name-block">
+        PA District 27
+        <span class="sub">Little League · Baseball &amp; Softball</span>
+      </span>
+    </a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="admin.html" aria-current="page" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px;">Admin</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Admin shell ---------------------------------------------------- -->
+<div class="admin-shell">
+
+  <!-- Side nav -->
+  <aside class="admin-side">
+    <div class="sig">
+      <div class="role">Signed in · DA</div>
+      <div class="name">Jeff Bennett</div>
+    </div>
+    <nav>
+      <ul>
+        <li><a class="active" href="#overview"><span class="ico">📊</span>Overview</a></li>
+        <li><a href="#tournaments"><span class="ico">🏆</span>Tournaments</a></li>
+        <li><a href="#ai-create"><span class="ico">✨</span>AI Scheduler</a></li>
+        <li><a href="#games"><span class="ico">⚾</span>Games &amp; Scores</a></li>
+        <li><a href="#leagues"><span class="ico">🏟️</span>Leagues</a></li>
+        <li><a href="#rosters"><span class="ico">👥</span>Rosters</a></li>
+        <li><a href="#fields"><span class="ico">📍</span>Fields &amp; Status</a></li>
+        <li><a href="#umpires"><span class="ico">🧑‍⚖️</span>Umpires</a></li>
+        <li><a href="#broadcasts"><span class="ico">📢</span>Broadcasts</a></li>
+        <li><a href="#audit"><span class="ico">📝</span>Audit Log</a></li>
+        <li><a href="#settings"><span class="ico">⚙️</span>Settings</a></li>
+        <li style="margin-top:24px;"><a href="login.html"><span class="ico">↩</span>Sign out</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="admin-main">
+
+    <div class="admin-header">
+      <div>
+        <div class="stamp">Tournament season · Week 3 · April 24, 2026</div>
+        <h1>District Overview</h1>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <a href="#ai-create" class="btn btn-primary" style="background: var(--d27-gold); color: var(--d27-navy);">✨ AI Generate Tournament</a>
+        <button class="btn btn-ghost" onclick="alert('Demo — notification broadcast composer')">📢 Broadcast</button>
+      </div>
+    </div>
+
+    <!-- KPI row -->
+    <div class="kpis">
+      <div class="kpi">
+        <div class="label">Active Tournaments</div>
+        <div class="n">6</div>
+        <div class="delta">▲ 2 this week</div>
+      </div>
+      <div class="kpi gold">
+        <div class="label">Games This Week</div>
+        <div class="n">48</div>
+        <div class="delta">12 today</div>
+      </div>
+      <div class="kpi red">
+        <div class="label">Pending Score Entry</div>
+        <div class="n">3</div>
+        <div class="delta down">Oldest · 2h ago</div>
+      </div>
+      <div class="kpi green">
+        <div class="label">RSVP Rate</div>
+        <div class="n">94%</div>
+        <div class="delta">▲ 3.2% vs LW</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Field Status</div>
+        <div class="n">20 / 23</div>
+        <div class="delta">2 wet · 1 closed</div>
+      </div>
+    </div>
+
+    <!-- AI Generator panel -->
+    <section class="panel ai-gen" id="ai-create">
+      <div class="panel-head">
+        <h2>AI Tournament Generator <span class="ai-chip">NEW</span></h2>
+        <div class="sub">Describe the tournament · D27 AI drafts the full bracket &amp; schedule</div>
+      </div>
+      <p style="font-size: 14px; color: var(--muted); max-width: 720px; margin: 0 0 var(--space-3);">
+        Tell D27 AI what you want — age division, format, dates, participating leagues, field constraints — and it will build a complete tournament: seeding, bracket, per-game field &amp; umpire assignments, and rain-date logic. Edit any part before publishing.
+      </p>
+
+      <label for="aiPrompt" style="font-family:'Oswald', sans-serif; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:6px;">Describe your tournament</label>
+      <textarea id="aiPrompt" class="ai-prompt" placeholder="Example: Create a 10U baseball tournament for 8 D27 leagues, single-elimination, June 14–21 at Monument Ave and Field of Dreams. Two-game guarantee. Rain dates June 22–23. Seed by regular-season record."></textarea>
+
+      <div class="ai-suggestions">
+        <span class="ai-sug" onclick="fillPrompt(0)">▶ 10U Baseball · 8 leagues · single-elim</span>
+        <span class="ai-sug" onclick="fillPrompt(1)">▶ 12U Softball · pool play + bracket</span>
+        <span class="ai-sug" onclick="fillPrompt(2)">▶ Senior League · 50/70 · double-elim</span>
+        <span class="ai-sug" onclick="fillPrompt(3)">▶ All-Star 11–12 · Section qualifier</span>
+      </div>
+
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="generateTournament()" style="background: var(--d27-gold); color: var(--d27-navy);">✨ Generate Tournament</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('aiPrompt').value=''; document.getElementById('aiOut').classList.remove('visible');">Clear</button>
+      </div>
+
+      <!-- AI Output mockup -->
+      <div id="aiOut" class="ai-output">
+        <h3>✨ D27 AI · Draft 1 · Generated in 2.1s</h3>
+
+        <div class="ai-summary">
+          <div class="item"><div class="k">Format</div><div class="v">Single-Elim</div></div>
+          <div class="item"><div class="k">Teams</div><div class="v">8</div></div>
+          <div class="item"><div class="k">Games</div><div class="v">7</div></div>
+          <div class="item"><div class="k">Window</div><div class="v">Jun 14–21</div></div>
+          <div class="item"><div class="k">Fields</div><div class="v">2</div></div>
+          <div class="item"><div class="k">Rain Dates</div><div class="v">Jun 22–23</div></div>
+        </div>
+
+        <div class="ai-schedule-preview">
+          <table>
+            <thead>
+              <tr>
+                <th>Game</th><th>Date</th><th>Time</th><th>Matchup</th><th>Field</th><th>Umps</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="round-head"><td colspan="6">Quarterfinals · June 14–15</td></tr>
+              <tr><td>QF1</td><td>Sat Jun 14</td><td>10:00 AM</td><td>#1 Berwyn-Paoli vs #8 Pottstown</td><td>Monument Ave 1</td><td>Torres, Li</td></tr>
+              <tr><td>QF2</td><td>Sat Jun 14</td><td>12:30 PM</td><td>#4 Methacton vs #5 Chester Valley</td><td>Monument Ave 1</td><td>Patel, Ng</td></tr>
+              <tr><td>QF3</td><td>Sat Jun 14</td><td>10:00 AM</td><td>#2 Phoenixville vs #7 Marple</td><td>Field of Dreams</td><td>Rivera, Tan</td></tr>
+              <tr><td>QF4</td><td>Sat Jun 14</td><td>12:30 PM</td><td>#3 Collegeville vs #6 Radnor</td><td>Field of Dreams</td><td>Abernathy, Kim</td></tr>
+              <tr class="round-head"><td colspan="6">Semifinals · June 18</td></tr>
+              <tr><td>SF1</td><td>Wed Jun 18</td><td>5:30 PM</td><td>QF1 Winner vs QF2 Winner</td><td>Monument Ave 1</td><td>Torres, Rivera</td></tr>
+              <tr><td>SF2</td><td>Wed Jun 18</td><td>7:30 PM</td><td>QF3 Winner vs QF4 Winner</td><td>Monument Ave 1</td><td>Patel, Abernathy</td></tr>
+              <tr class="round-head"><td colspan="6">Championship · June 21</td></tr>
+              <tr><td>Final</td><td>Sat Jun 21</td><td>6:00 PM</td><td>SF1 Winner vs SF2 Winner</td><td>Monument Ave 1</td><td>Torres, Patel, Rivera</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="background: rgba(0,27,71,.04); padding: 10px 12px; border-radius: 6px; margin-top: var(--space-3); font-size: 13px; color: var(--d27-navy);">
+          <strong style="font-family:'Oswald', sans-serif; letter-spacing:.06em;">✓ Conflicts detected &amp; resolved:</strong>
+          • Avoided Methacton Sunday game (league policy)
+          • Spread QF games across two fields to meet 2-hour turnover rule
+          • Assigned 2 umpires per game + 3-ump Final per LL rulebook
+        </div>
+
+        <div class="ai-actions">
+          <button class="btn btn-primary" onclick="alert('Demo — would publish to schedule.html, notify captains, and open bracket on tournament.html')">✓ Publish to District</button>
+          <button class="btn btn-ghost" onclick="alert('Demo — edit individual games inline')">Edit Games</button>
+          <button class="btn btn-ghost" onclick="alert('Demo — regenerate with new constraints')">🔄 Regenerate</button>
+          <button class="btn btn-ghost" onclick="alert('Demo — export to PDF')">Export PDF</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick actions -->
+    <section class="panel" id="quick">
+      <div class="panel-head">
+        <h2>Quick Actions</h2>
+      </div>
+      <div class="qa-grid">
+        <a class="qa" href="#ai-create"><span class="ico">✨</span>AI Tournament</a>
+        <a class="qa" href="#games"><span class="ico">⚾</span>Update Scores</a>
+        <a class="qa" href="#rosters"><span class="ico">👥</span>Manage Rosters</a>
+        <a class="qa" href="#fields"><span class="ico">📍</span>Field Status</a>
+        <a class="qa" href="#broadcasts"><span class="ico">📢</span>Send Alert</a>
+        <a class="qa" href="#umpires"><span class="ico">🧑‍⚖️</span>Assign Umps</a>
+        <a class="qa" href="champions.html"><span class="ico">🏆</span>Post Champion</a>
+        <a class="qa" href="#audit"><span class="ico">📝</span>Audit Log</a>
+      </div>
+    </section>
+
+    <!-- Games & Scores -->
+    <section class="panel" id="games">
+      <div class="panel-head">
+        <h2>Games &amp; Scores · Today</h2>
+        <div class="sub"><a href="#" style="color: var(--d27-navy);">View week →</a></div>
+      </div>
+      <table class="games-tbl">
+        <thead>
+          <tr>
+            <th>Time</th><th>Tournament</th><th>Matchup</th><th>Field</th><th>Score</th><th>Status</th><th style="text-align:right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>10:00 AM</td>
+            <td>Bob Jones · QF1</td>
+            <td>Berwyn-Paoli vs Pottstown</td>
+            <td>Monument 1</td>
+            <td><strong>12 – 2</strong></td>
+            <td><span class="gs-status final">Final</span></td>
+            <td style="text-align:right; white-space:nowrap;">
+              <button class="icon-btn" onclick="location.href='game-final.html'">Box</button>
+              <button class="icon-btn" onclick="alert('Demo — edit box score')">Edit</button>
+            </td>
+          </tr>
+          <tr>
+            <td>12:30 PM</td>
+            <td>Bob Jones · QF2</td>
+            <td>Methacton vs Chester Valley</td>
+            <td>Monument 1</td>
+            <td><strong>4 – 3</strong> <span style="color:var(--muted); font-size:12px;">(Top 5)</span></td>
+            <td><span class="gs-status live">Live</span></td>
+            <td style="text-align:right; white-space:nowrap;">
+              <button class="icon-btn" onclick="location.href='game.html'">Live</button>
+              <button class="icon-btn" onclick="alert('Demo — update score')">Edit</button>
+            </td>
+          </tr>
+          <tr>
+            <td>3:00 PM</td>
+            <td>Bob Jones · QF3</td>
+            <td>Phoenixville vs Marple</td>
+            <td>Field of Dreams</td>
+            <td>—</td>
+            <td><span class="gs-status sched">Scheduled</span></td>
+            <td style="text-align:right; white-space:nowrap;">
+              <button class="icon-btn" onclick="alert('Demo — start live scoring session')">Start</button>
+              <button class="icon-btn" onclick="alert('Demo — edit game')">Edit</button>
+            </td>
+          </tr>
+          <tr>
+            <td>5:30 PM</td>
+            <td>Summer Fun · R2</td>
+            <td>Collegeville vs Radnor</td>
+            <td>Field of Dreams</td>
+            <td>—</td>
+            <td><span class="gs-status ppd">PPD · Rain</span></td>
+            <td style="text-align:right; white-space:nowrap;">
+              <button class="icon-btn" onclick="alert('Demo — reschedule game to rain date')">Resched</button>
+              <button class="icon-btn" onclick="alert('Demo — notify teams')">Notify</button>
+            </td>
+          </tr>
+          <tr>
+            <td>7:30 PM</td>
+            <td>50/70 · Pool B</td>
+            <td>Exton-West Whiteland vs BP</td>
+            <td>Memorial Park</td>
+            <td>—</td>
+            <td><span class="gs-status sched">Scheduled</span></td>
+            <td style="text-align:right; white-space:nowrap;">
+              <button class="icon-btn">Start</button>
+              <button class="icon-btn">Edit</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);" class="split-row">
+
+      <!-- Recent Activity -->
+      <section class="panel" id="audit" style="margin-bottom:0;">
+        <div class="panel-head">
+          <h2>Recent Activity</h2>
+          <div class="sub">Last 2 hours</div>
+        </div>
+        <ul class="feed">
+          <li>
+            <span class="dot green">✓</span>
+            <span class="msg"><span class="who">Jeff Bennett</span> published <strong>Bob Jones QF1 Final</strong> · BP 12, Pottstown 2</span>
+            <span class="when">8 min ago</span>
+          </li>
+          <li>
+            <span class="dot red">⚾</span>
+            <span class="msg"><span class="who">Tom Caldwell (Captain, Methacton)</span> started live scoring · <strong>MT vs CV</strong></span>
+            <span class="when">22 min ago</span>
+          </li>
+          <li>
+            <span class="dot gold">✨</span>
+            <span class="msg"><span class="who">AI Scheduler</span> drafted <strong>10U Summer Fun</strong> · pending publish</span>
+            <span class="when">41 min ago</span>
+          </li>
+          <li>
+            <span class="dot">📢</span>
+            <span class="msg"><span class="who">Jeff Bennett</span> sent rainout notice · <strong>Summer Fun R2</strong> · 240 recipients</span>
+            <span class="when">1h ago</span>
+          </li>
+          <li>
+            <span class="dot">👥</span>
+            <span class="msg"><span class="who">Sarah Nguyen (Pres, Radnor)</span> updated roster · <strong>Radnor 12U Red</strong> · +2 players</span>
+            <span class="when">1h 14m ago</span>
+          </li>
+          <li>
+            <span class="dot green">✓</span>
+            <span class="msg"><span class="who">Mike O'Brien (Ump)</span> confirmed assignments · <strong>June 14 Saturday</strong> · 4 games</span>
+            <span class="when">2h ago</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Leagues overview -->
+      <section class="panel" id="leagues" style="margin-bottom:0;">
+        <div class="panel-head">
+          <h2>Member Leagues · 12</h2>
+          <div class="sub"><a href="leagues.html" style="color: var(--d27-navy);">Full directory →</a></div>
+        </div>
+        <table class="games-tbl" style="font-size: 13px;">
+          <thead>
+            <tr><th>League</th><th>Teams</th><th>Players</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Berwyn-Paoli</strong></td><td>48</td><td>624</td><td><span class="gs-status final">Active</span></td></tr>
+            <tr><td><strong>Chester Valley</strong></td><td>42</td><td>546</td><td><span class="gs-status final">Active</span></td></tr>
+            <tr><td><strong>Methacton</strong></td><td>38</td><td>494</td><td><span class="gs-status final">Active</span></td></tr>
+            <tr><td><strong>Phoenixville</strong></td><td>34</td><td>442</td><td><span class="gs-status final">Active</span></td></tr>
+            <tr><td><strong>Pottstown</strong></td><td>31</td><td>403</td><td><span class="gs-status final">Active</span></td></tr>
+            <tr><td><strong>Collegeville</strong></td><td>29</td><td>377</td><td><span class="gs-status sched">Roster due</span></td></tr>
+            <tr><td colspan="4" style="text-align:center;"><a href="leagues.html" style="color: var(--d27-navy); font-family:'Oswald', sans-serif; font-size:12px; letter-spacing:.1em; text-transform:uppercase;">+ 6 more leagues →</a></td></tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // AI tournament prompt suggestions
+  const PROMPTS = [
+    "Create a 10U baseball tournament for 8 D27 leagues, single-elimination, June 14–21 at Monument Ave and Field of Dreams. Two-game guarantee via consolation. Rain dates June 22–23. Seed by regular-season record.",
+    "12U softball tournament — 12 teams, pool play (3 pools of 4) into single-elimination bracket. July 6–13 at Gambone Park and Memorial. Two games per pool day, seeding by pool record then head-to-head then runs-allowed.",
+    "Senior League 50/70 — 6 teams, double-elimination, July 20–28 at Memorial Park. Two-game guarantee is automatic. Start 6 PM weekdays, 10 AM & 2 PM Saturdays.",
+    "All-Star 11–12 Section 4 qualifier — 4 D27 teams, D25 & D28 winners join. Round-robin pool into single-elim. Hosted at Monument Ave complex July 1–7. Per LL rulebook: 2 umps per game, 3 for championship."
+  ];
+  function fillPrompt(i) {
+    document.getElementById('aiPrompt').value = PROMPTS[i];
+    document.getElementById('aiPrompt').focus();
+  }
+
+  function generateTournament() {
+    const promptEl = document.getElementById('aiPrompt');
+    if (!promptEl.value.trim()) {
+      promptEl.value = PROMPTS[0];
+    }
+    const out = document.getElementById('aiOut');
+    out.classList.remove('visible');
+    // Fake "thinking" delay
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✨ Generating...';
+    btn.disabled = true;
+    setTimeout(() => {
+      out.classList.add('visible');
+      btn.textContent = orig;
+      btn.disabled = false;
+      out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 1400);
+  }
+
+  // Side nav highlight
+  document.querySelectorAll('.admin-side nav a').forEach(a => {
+    a.addEventListener('click', function() {
+      document.querySelectorAll('.admin-side nav a').forEach(x => x.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Responsive split-row
+  const style = document.createElement('style');
+  style.textContent = '@media (max-width: 880px) { .split-row { grid-template-columns: 1fr !important; } }';
+  document.head.appendChild(style);
+</script>
+
+</body>
+</html>

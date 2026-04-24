@@ -16,7 +16,10 @@
 
 <style>
   .about-hero {
-    background: linear-gradient(135deg, rgba(0,27,71,.94) 0%, rgba(0,45,114,.9) 100%), var(--d27-navy);
+    background:
+      linear-gradient(135deg, rgba(0,27,71,.88) 0%, rgba(0,45,114,.78) 55%, rgba(0,27,71,.6) 100%),
+      url('assets/d27-field-sunset.jpeg') center/cover no-repeat,
+      var(--d27-navy);
     color: var(--d27-white);
     padding: var(--space-10) 0 var(--space-8);
     position: relative;
@@ -472,9 +475,13 @@
 </section>
 
 <!-- Timeline ------------------------------------------------------- -->
-<section class="block alt">
+<section class="block alt" id="history">
   <div class="container">
     <div class="sec-head"><h2>A Brief History</h2><span class="count">How we got here</span></div>
+    <figure style="margin: 0 0 var(--space-5); border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--line); box-shadow: 0 4px 18px rgba(0,27,71,.12); max-width: 920px;">
+      <img src="assets/d27-vintage-pennant.jpeg" alt="PA District 27 Little League vintage felt pennant on a wood table with a baseball glove and ball" style="display:block; width: 100%; height: auto; max-height: 360px; object-fit: cover;" />
+      <figcaption style="font-size: var(--text-xs); color: var(--muted); padding: 8px 14px; background: var(--paper); border-top: 1px solid var(--line); font-family: 'Oswald', sans-serif; letter-spacing: .06em; text-transform: uppercase;">Original District patch design · in service since the 1993 charter</figcaption>
+    </figure>
     <div class="timeline">
       <div class="t-item">
         <div class="t-year">1957</div>
@@ -621,6 +628,40 @@
         <div class="y">2026</div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- Field Directory ------------------------------------------------ -->
+<section class="block" id="fields" style="padding-top: var(--space-4);">
+  <div class="container">
+    <div class="sec-head"><h2>Field Directory</h2><span class="count">Host venues across D27</span></div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-3);">
+      <div style="background: var(--paper); border: 1px solid var(--line); border-left: 4px solid var(--d27-navy); border-radius: var(--radius-md); padding: var(--space-3);">
+        <h4 style="font-family: 'Oswald', sans-serif; margin: 0 0 4px; color: var(--d27-navy);">Monument Ave Complex</h4>
+        <p style="margin: 0; font-size: var(--text-sm); color: var(--muted);">Chester Valley LL · Malvern, PA<br>4 diamonds · lighted · primary tournament site</p>
+      </div>
+      <div style="background: var(--paper); border: 1px solid var(--line); border-left: 4px solid var(--d27-navy); border-radius: var(--radius-md); padding: var(--space-3);">
+        <h4 style="font-family: 'Oswald', sans-serif; margin: 0 0 4px; color: var(--d27-navy);">Field of Dreams</h4>
+        <p style="margin: 0; font-size: var(--text-sm); color: var(--muted);">Berwyn-Paoli LL · Berwyn, PA<br>3 diamonds · home to 48 BP teams</p>
+      </div>
+      <div style="background: var(--paper); border: 1px solid var(--line); border-left: 4px solid var(--d27-navy); border-radius: var(--radius-md); padding: var(--space-3);">
+        <h4 style="font-family: 'Oswald', sans-serif; margin: 0 0 4px; color: var(--d27-navy);">Gambone Park</h4>
+        <p style="margin: 0; font-size: var(--text-sm); color: var(--muted);">Methacton LL · Norristown, PA<br>2 diamonds · softball host</p>
+      </div>
+      <div style="background: var(--paper); border: 1px solid var(--line); border-left: 4px solid var(--d27-navy); border-radius: var(--radius-md); padding: var(--space-3);">
+        <h4 style="font-family: 'Oswald', sans-serif; margin: 0 0 4px; color: var(--d27-navy);">Memorial Park</h4>
+        <p style="margin: 0; font-size: var(--text-sm); color: var(--muted);">Phoenixville LL · Phoenixville, PA<br>2 diamonds · 50/70 Bob Jones host</p>
+      </div>
+      <div style="background: var(--paper); border: 1px solid var(--line); border-left: 4px solid var(--d27-navy); border-radius: var(--radius-md); padding: var(--space-3);">
+        <h4 style="font-family: 'Oswald', sans-serif; margin: 0 0 4px; color: var(--d27-navy);">Ricketts Complex</h4>
+        <p style="margin: 0; font-size: var(--text-sm); color: var(--muted);">Pottstown LL · Pottstown, PA<br>3 diamonds</p>
+      </div>
+      <div style="background: var(--paper); border: 1px solid var(--line); border-left: 4px solid var(--d27-navy); border-radius: var(--radius-md); padding: var(--space-3);">
+        <h4 style="font-family: 'Oswald', sans-serif; margin: 0 0 4px; color: var(--d27-navy);">Marple Fields</h4>
+        <p style="margin: 0; font-size: var(--text-sm); color: var(--muted);">Marple LL · Broomall, PA<br>2 diamonds · Senior League</p>
+      </div>
+    </div>
+    <p style="margin: var(--space-4) 0 0; font-size: var(--text-sm); color: var(--muted); text-align: center;">Complete field directory with maps, parking, and facility notes available in the <a href="rules.html" style="color: var(--d27-navy);">league handbook</a>.</p>
   </div>
 </section>
 

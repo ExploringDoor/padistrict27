@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Captain Portal · PA District 27</title>
+<meta name="description" content="D27 Captain Portal — roster management, schedule edits, live scoring, GameChanger PDF upload, RSVP tracking, and team chat." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="css/styles.css" />
+
+<style>
+  .cap-hero {
+    background: linear-gradient(135deg, rgba(0,27,71,.95) 0%, rgba(218,41,28,.8) 100%), var(--d27-navy);
+    color: var(--d27-white);
+    padding: var(--space-6) 0 var(--space-5);
+    position: relative;
+    overflow: hidden;
+  }
+  .cap-hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(28px, 5vw, 42px);
+    margin: 0 0 4px;
+  }
+  .cap-hero .eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: .18em;
+    color: var(--d27-gold);
+    text-transform: uppercase;
+  }
+  .cap-hero .team-row {
+    display: flex; gap: var(--space-3); align-items: center;
+    margin-top: var(--space-2);
+    flex-wrap: wrap;
+  }
+  .cap-hero .team-badge {
+    background: var(--d27-gold);
+    color: var(--d27-navy);
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .cap-hero .record {
+    font-family: 'Oswald', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+  }
+  .cap-hero .record .sub {
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(255,255,255,.7);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  /* Tabs ------------------------------------------------------------ */
+  .cap-tabs {
+    background: var(--d27-white);
+    border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .cap-tabs-inner {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 0;
+  }
+  .cap-tabs button {
+    background: none;
+    border: 0;
+    padding: 14px 18px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    position: relative;
+    transition: color .15s, border-color .15s;
+  }
+  .cap-tabs button:hover { color: var(--d27-navy); }
+  .cap-tabs button.active {
+    color: var(--d27-navy);
+    border-bottom-color: var(--d27-red);
+  }
+  .cap-tabs button .badge {
+    display: inline-block;
+    background: var(--d27-red);
+    color: var(--d27-white);
+    border-radius: 10px;
+    padding: 1px 7px;
+    font-size: 10px;
+    margin-left: 6px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+  }
+
+  .cap-panel { display: none; padding: var(--space-5) 0; }
+  .cap-panel.active { display: block; }
+
+  /* Cards & panels -------------------------------------------------- */
+  .c-card {
+    background: var(--d27-white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+  .c-card h3 {
+    font-family: 'Oswald', sans-serif;
+    color: var(--d27-navy);
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-xl);
+    letter-spacing: .02em;
+  }
+  .c-card .sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: var(--space-2);
+  }
+
+  /* Roster ---------------------------------------------------------- */
+  .roster-tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .roster-tbl th {
+    background: var(--paper);
+    padding: 8px 10px;
+    text-align: left;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--d27-navy);
+    border-bottom: 2px solid var(--d27-navy);
+  }
+  .roster-tbl td { padding: 10px; border-bottom: 1px solid var(--line); }
+  .roster-tbl .jn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px;
+    background: var(--d27-navy);
+    color: var(--d27-gold);
+    border-radius: 50%;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .roster-tbl tr:hover td { background: rgba(0,27,71,.02); }
+  .pos-chip {
+    display: inline-block;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: .06em;
+    color: var(--d27-navy);
+    margin-right: 3px;
+  }
+
+  /* Schedule -------------------------------------------------------- */
+  .sched-row {
+    display: grid;
+    grid-template-columns: 72px 1fr auto auto;
+    gap: var(--space-3);
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .sched-row:last-child { border-bottom: 0; }
+  .sched-date {
+    text-align: center;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 6px 0;
+  }
+  .sched-date .m {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--d27-red);
+  }
+  .sched-date .d {
+    font-family: 'Oswald', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--d27-navy);
+    line-height: 1;
+  }
+  .sched-meta { font-size: 13px; color: var(--muted); }
+  .sched-meta .match {
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px;
+    color: var(--d27-navy);
+    font-weight: 500;
+    letter-spacing: .02em;
+  }
+
+  /* RSVP ------------------------------------------------------------ */
+  .rsvp-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+  @media (max-width: 600px) { .rsvp-summary { grid-template-columns: repeat(2, 1fr); } }
+  .rsvp-pill {
+    padding: var(--space-2);
+    border-radius: var(--radius-sm);
+    text-align: center;
+    background: var(--paper);
+    border: 1px solid var(--line);
+  }
+  .rsvp-pill .n {
+    font-family: 'Oswald', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .rsvp-pill .l {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .rsvp-pill.going { background: rgba(22,163,74,.08); border-color: #16a34a; }
+  .rsvp-pill.going .n { color: #16a34a; }
+  .rsvp-pill.maybe { background: rgba(245,158,11,.08); border-color: #f59e0b; }
+  .rsvp-pill.maybe .n { color: #b45309; }
+  .rsvp-pill.nope { background: rgba(218,41,28,.08); border-color: var(--d27-red); }
+  .rsvp-pill.nope .n { color: var(--d27-red); }
+  .rsvp-pill.noreply .n { color: var(--muted); }
+
+  .rsvp-list { list-style: none; padding: 0; margin: 0; }
+  .rsvp-list li {
+    display: grid;
+    grid-template-columns: 36px 1fr auto auto;
+    gap: 10px;
+    padding: 8px 0;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+  }
+  .rsvp-list li:last-child { border-bottom: 0; }
+  .rsvp-list .jn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px;
+    background: var(--d27-navy);
+    color: var(--d27-gold);
+    border-radius: 50%;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+  }
+  .rsvp-status { font-size: 13px; font-family: 'Oswald', sans-serif; letter-spacing: .04em; padding: 3px 10px; border-radius: 10px; }
+  .rsvp-status.going { background: rgba(22,163,74,.15); color: #15803d; }
+  .rsvp-status.maybe { background: rgba(245,158,11,.15); color: #b45309; }
+  .rsvp-status.nope { background: rgba(218,41,28,.15); color: #b91c1c; }
+  .rsvp-status.noreply { background: var(--paper); color: var(--muted); border: 1px dashed var(--line); }
+  .btn-mini {
+    background: var(--d27-navy);
+    color: var(--d27-white);
+    border: 0;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .btn-mini:hover { background: var(--d27-red); }
+  .btn-mini:disabled { background: var(--line); color: var(--muted); cursor: not-allowed; }
+
+  /* Score entry ----------------------------------------------------- */
+  .score-methods {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+  }
+  @media (max-width: 880px) { .score-methods { grid-template-columns: 1fr; } }
+  .score-method {
+    background: var(--d27-white);
+    border: 2px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s, transform .2s, background .2s;
+  }
+  .score-method:hover {
+    border-color: var(--d27-red);
+    transform: translateY(-3px);
+    background: rgba(218,41,28,.03);
+  }
+  .score-method .ico {
+    font-size: 40px;
+    margin-bottom: var(--space-2);
+  }
+  .score-method h4 {
+    font-family: 'Oswald', sans-serif;
+    color: var(--d27-navy);
+    margin: 0 0 6px;
+    font-size: var(--text-lg);
+    letter-spacing: .02em;
+  }
+  .score-method p {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+  .score-method .tag {
+    display: inline-block;
+    background: var(--d27-gold);
+    color: var(--d27-navy);
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 10px;
+    letter-spacing: .1em;
+    margin-top: var(--space-2);
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .pdf-drop {
+    background: var(--paper);
+    border: 2px dashed var(--line);
+    border-radius: 8px;
+    padding: var(--space-3);
+    text-align: center;
+    margin-top: var(--space-3);
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .pdf-drop strong { color: var(--d27-navy); }
+
+  /* Chat ------------------------------------------------------------ */
+  .chat-wrap {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    height: 520px;
+    background: var(--d27-white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  @media (max-width: 720px) { .chat-wrap { grid-template-columns: 1fr; height: auto; } .chat-channels { max-height: 140px; overflow-y: auto; } }
+  .chat-channels {
+    background: var(--paper);
+    border-right: 1px solid var(--line);
+    padding: var(--space-2);
+  }
+  .chat-channels h5 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: var(--space-2) 0 6px;
+    padding: 0 6px;
+  }
+  .chan {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+    color: var(--d27-navy);
+    margin-bottom: 2px;
+  }
+  .chan:hover { background: rgba(0,27,71,.06); }
+  .chan.active { background: var(--d27-navy); color: var(--d27-white); }
+  .chan .unread {
+    background: var(--d27-red);
+    color: var(--d27-white);
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+  .chan.active .unread { background: var(--d27-gold); color: var(--d27-navy); }
+
+  .chat-main { display: flex; flex-direction: column; }
+  .chat-head {
+    padding: 12px var(--space-3);
+    border-bottom: 1px solid var(--line);
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: .04em;
+    color: var(--d27-navy);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .chat-head .members { font-size: 12px; color: var(--muted); font-family: 'Manrope', sans-serif; letter-spacing: 0; }
+  .chat-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-3);
+    background: var(--paper);
+  }
+  .msg {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 10px;
+    margin-bottom: var(--space-3);
+  }
+  .msg .av {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--d27-navy);
+    color: var(--d27-gold);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .msg .av.red { background: var(--d27-red); color: var(--d27-white); }
+  .msg .body { background: var(--d27-white); padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); }
+  .msg .who { font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: .04em; color: var(--d27-navy); font-weight: 600; margin-bottom: 2px; }
+  .msg .who .when { font-family: 'Manrope', sans-serif; color: var(--muted); font-size: 11px; font-weight: 400; letter-spacing: 0; margin-left: 6px; }
+  .msg .txt { font-size: 14px; color: var(--fg); line-height: 1.45; }
+
+  .chat-input {
+    border-top: 1px solid var(--line);
+    padding: 10px;
+    display: flex;
+    gap: 8px;
+    background: var(--d27-white);
+  }
+  .chat-input input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+    background: var(--paper);
+  }
+  .chat-input button {
+    background: var(--d27-navy);
+    color: var(--d27-white);
+    border: 0;
+    padding: 0 18px;
+    border-radius: 20px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<!-- Nav ------------------------------------------------------------- -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html">
+      <span class="mark">D27</span>
+      <span class="name-block">
+        PA District 27
+        <span class="sub">Little League · Baseball &amp; Softball</span>
+      </span>
+    </a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="captain.html" aria-current="page" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px;">Captain</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Captain hero ---------------------------------------------------- -->
+<header class="cap-hero">
+  <div class="container">
+    <div class="eyebrow">Captain Portal · Berwyn-Paoli LL</div>
+    <h1>Berwyn-Paoli 12U Red</h1>
+    <div class="team-row">
+      <span class="team-badge">Manager · Tom Caldwell</span>
+      <div class="record">9–1 <span class="sub">Regular season · #1 seed</span></div>
+      <div class="record">2–0 <span class="sub">Bob Jones</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- Tabs ------------------------------------------------------------ -->
+<div class="cap-tabs">
+  <div class="container cap-tabs-inner">
+    <button class="active" data-panel="dashboard">Dashboard</button>
+    <button data-panel="roster">Roster</button>
+    <button data-panel="schedule">Schedule</button>
+    <button data-panel="scoring">Score Entry</button>
+    <button data-panel="rsvp">RSVPs<span class="badge">4</span></button>
+    <button data-panel="chat">Team Chat<span class="badge">12</span></button>
+    <button data-panel="scout">Scout</button>
+  </div>
+</div>
+
+<!-- Panels ---------------------------------------------------------- -->
+<main>
+
+  <!-- Dashboard ----------------------------------------------------- -->
+  <section class="cap-panel active" id="panel-dashboard">
+    <div class="container">
+      <div style="display:grid; grid-template-columns: 2fr 1fr; gap: var(--space-3);">
+        <div>
+          <div class="c-card">
+            <h3>🔴 Next Game · in 3 days</h3>
+            <p class="sub">Bob Jones · Semifinal · Wednesday June 18 · 5:30 PM</p>
+            <div style="display:grid; grid-template-columns: 1fr auto 1fr; gap: var(--space-3); align-items:center; padding: var(--space-3); background: var(--paper); border-radius: var(--radius-sm);">
+              <div style="text-align:center;">
+                <div style="font-family:'Oswald', sans-serif; font-size:22px; color:var(--d27-navy); font-weight:600;">BP Red</div>
+                <div style="color:var(--muted); font-size:12px; letter-spacing:.1em; text-transform:uppercase; font-family:'Oswald', sans-serif;">Home · #1 seed</div>
+              </div>
+              <div style="font-family:'Oswald', sans-serif; font-size:14px; color:var(--muted); letter-spacing:.08em;">vs</div>
+              <div style="text-align:center;">
+                <div style="font-family:'Oswald', sans-serif; font-size:22px; color:var(--d27-navy); font-weight:600;">Methacton</div>
+                <div style="color:var(--muted); font-size:12px; letter-spacing:.1em; text-transform:uppercase; font-family:'Oswald', sans-serif;">QF2 Winner</div>
+              </div>
+            </div>
+            <p style="margin: var(--space-3) 0 0; font-size:14px;"><strong>Field:</strong> Monument Ave 1 · <strong>Umps:</strong> Torres, Rivera · <strong>Weather:</strong> 78° Sunny, NW 8mph</p>
+            <div style="display:flex; gap:8px; margin-top: var(--space-3); flex-wrap:wrap;">
+              <button class="btn btn-primary" onclick="switchTab('rsvp')">Check RSVPs (8 of 13)</button>
+              <button class="btn btn-ghost" onclick="switchTab('scout')">📊 Scout Methacton</button>
+              <button class="btn btn-ghost" onclick="switchTab('chat')">📣 Message Team</button>
+            </div>
+          </div>
+
+          <div class="c-card">
+            <h3>📌 To Do</h3>
+            <ul style="list-style:none; padding:0; margin:0;">
+              <li style="padding: 10px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;">
+                <span><strong style="color:var(--d27-red);">⚠</strong> Post QF1 box score · <span style="color:var(--muted); font-size:13px;">BP 12, Pottstown 2 · awaiting submission</span></span>
+                <button class="btn-mini" onclick="switchTab('scoring')">Enter</button>
+              </li>
+              <li style="padding: 10px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;">
+                <span>Nudge 4 parents to RSVP · SF vs Methacton</span>
+                <button class="btn-mini" onclick="switchTab('rsvp')">Remind</button>
+              </li>
+              <li style="padding: 10px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;">
+                <span>Confirm roster — medical release for #14 M. Patel</span>
+                <button class="btn-mini" onclick="switchTab('roster')">Open</button>
+              </li>
+              <li style="padding: 10px 0; display:flex; justify-content:space-between; align-items:center;">
+                <span>Review Methacton scouting report · 18 games logged</span>
+                <button class="btn-mini" onclick="switchTab('scout')">View</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div>
+          <div class="c-card">
+            <h3>Last 5</h3>
+            <ul style="list-style:none; padding:0; margin:0; font-size:13px;">
+              <li style="padding:8px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between;"><span>vs Pottstown · QF1</span><strong style="color:#16a34a;">W 12–2</strong></li>
+              <li style="padding:8px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between;"><span>vs Coatesville · R1</span><strong style="color:#16a34a;">W 8–1</strong></li>
+              <li style="padding:8px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between;"><span>@ Phoenixville · Reg</span><strong style="color:#16a34a;">W 6–4</strong></li>
+              <li style="padding:8px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between;"><span>vs Methacton · Reg</span><strong style="color:var(--d27-red);">L 3–5</strong></li>
+              <li style="padding:8px 0; display:flex; justify-content:space-between;"><span>@ Chester Valley · Reg</span><strong style="color:#16a34a;">W 10–2</strong></li>
+            </ul>
+          </div>
+
+          <div class="c-card">
+            <h3>Notifications</h3>
+            <ul style="list-style:none; padding:0; margin:0; font-size:13px;">
+              <li style="padding:8px 0; border-bottom:1px solid var(--line);"><span style="color:var(--d27-gold);">📢</span> <strong>District:</strong> SF field moved to Monument 1</li>
+              <li style="padding:8px 0; border-bottom:1px solid var(--line);"><span style="color:var(--d27-red);">⚠</span> <strong>Rules:</strong> Pitch-count reminder · J. Ryan at 54</li>
+              <li style="padding:8px 0;"><span style="color:#16a34a;">✓</span> <strong>Ump confirmed:</strong> Torres &amp; Rivera for SF</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Roster -------------------------------------------------------- -->
+  <section class="cap-panel" id="panel-roster">
+    <div class="container">
+      <div class="c-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom: var(--space-3);">
+          <div>
+            <h3 style="margin-bottom:4px;">Roster · 13 players</h3>
+            <div class="sub">Locked for tournament play · coaches can add bench/sub with 24h notice to DA</div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-ghost" onclick="alert('Demo — add player')">+ Add Player</button>
+            <button class="btn btn-ghost" onclick="alert('Demo — export roster PDF')">Export PDF</button>
+          </div>
+        </div>
+        <table class="roster-tbl">
+          <thead>
+            <tr><th>#</th><th>Name</th><th>Pos</th><th>Bats/Throws</th><th>DOB</th><th>Status</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="jn">1</span></td><td><strong>Luke DiSanto</strong></td><td><span class="pos-chip">SS</span><span class="pos-chip">P</span></td><td>R / R</td><td>2013-04-11</td><td><span class="rsvp-status going">Active</span></td><td><button class="btn-mini">Edit</button></td></tr>
+            <tr><td><span class="jn">3</span></td><td><strong>Caleb Wu</strong></td><td><span class="pos-chip">P</span><span class="pos-chip">1B</span></td><td>L / L</td><td>2013-06-22</td><td><span class="rsvp-status going">Active</span></td><td><button class="btn-mini">Edit</button></td></tr>
+            <tr><td><span class="jn">7</span></td><td><strong>Ethan Pierce</strong></td><td><span class="pos-chip">CF</span><span class="pos-chip">3B</span></td><td>R / R</td><td>2013-02-18</td><td><span class="rsvp-status going">Active</span></td><td><button class="btn-mini">Edit</button></td></tr>
+            <tr><td><span class="jn">9</span></td><td><strong>Jack Ryan</strong></td><td><span class="pos-chip">P</span><span class="pos-chip">OF</span></td><td>R / R</td><td>2013-01-05</td><td><span class="rsvp-status maybe">Pitch rest</span></td><td><button class="btn-mini">Edit</button></td></tr>
+            <tr><td><span class="jn">10</span></td><td><strong>Max Hollis</strong></td><td><span class="pos-chip">C</span></td><td>R / R</td><td>2013-08-14</td><td><span class="rsvp-status going">Active</span></td><td><button class="btn-mini">Edit</button></td></tr>
+            <tr><td><span class="jn">11</span></td><td><strong>Owen Park</strong></td><td><span class="pos-chip">2B</span></td><td>S / R</td><td>2013-11-02</td><td><span class="rsvp-status going">Active</span></td><td><button class="btn-mini">Edit</button></td></tr>
+            <tr><td><span class="jn">12</span></td><td><strong>Noah Diaz</strong></td><td><span class="pos-chip">RF</span><span class="pos-chip">1B</span></td><td>L / R</td><td>2013-05-28</td><td><span class="rsvp-status going">Active</span></td><td><button class="btn-mini">Edit</button></td></tr>
+            <tr><td><span class="jn">14</span></td><td><strong>Mateo Patel</strong></td><td><span class="pos-chip">LF</span></td><td>R / R</td><td>2013-09-15</td><td><span class="rsvp-status nope">Missing med release</span></td><td><button class="btn-mini">Fix</button></td></tr>
+            <tr><td><span class="jn">17</span></td><td><strong>Gavin Brooks</strong></td><td><span class="pos-chip">3B</span><span class="pos-chip">P</span></td><td>R / R</td><td>2013-07-09</td><td><span class="rsvp-status going">Active</span></td><td><button class="btn-mini">Edit</button></td></tr>
+            <tr><td><span class="jn">18</span></td><td><strong>Liam Foster</strong></td><td><span class="pos-chip">OF</span></td><td>R / R</td><td>2013-03-24</td><td><span class="rsvp-status going">Active</span></td><td><button class="btn-mini">Edit</button></td></tr>
+            <tr><td><span class="jn">22</span></td><td><strong>Tyler Nguyen</strong></td><td><span class="pos-chip">P</span><span class="pos-chip">OF</span></td><td>R / R</td><td>2013-10-12</td><td><span class="rsvp-status going">Active</span></td><td><button class="btn-mini">Edit</button></td></tr>
+            <tr><td><span class="jn">24</span></td><td><strong>Aiden Lee</strong></td><td><span class="pos-chip">C</span><span class="pos-chip">1B</span></td><td>R / R</td><td>2013-12-01</td><td><span class="rsvp-status going">Active</span></td><td><button class="btn-mini">Edit</button></td></tr>
+            <tr><td><span class="jn">27</span></td><td><strong>Ryan Torres</strong></td><td><span class="pos-chip">2B</span><span class="pos-chip">OF</span></td><td>R / R</td><td>2013-02-04</td><td><span class="rsvp-status going">Active</span></td><td><button class="btn-mini">Edit</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Schedule ------------------------------------------------------ -->
+  <section class="cap-panel" id="panel-schedule">
+    <div class="container">
+      <div class="c-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom: var(--space-2);">
+          <div>
+            <h3 style="margin-bottom:4px;">Team Schedule</h3>
+            <div class="sub">Bob Jones Tournament · regular season games archived</div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-ghost" onclick="alert('Demo — add practice / team event')">+ Add Practice</button>
+            <button class="btn btn-ghost" onclick="alert('Demo — sync to Apple/Google Calendar')">📅 Sync Calendar</button>
+          </div>
+        </div>
+        <div style="margin-top: var(--space-3);">
+          <div class="sched-row">
+            <div class="sched-date"><div class="m">Jun</div><div class="d">18</div></div>
+            <div class="sched-meta">
+              <div class="match">vs Methacton · Bob Jones SF</div>
+              Monument Ave 1 · 5:30 PM · Umps: Torres, Rivera
+            </div>
+            <span class="gs-status sched" style="display:inline-block; padding:2px 10px; border-radius:10px; font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; background:#e5e7eb; color:#4b5563;">Scheduled</span>
+            <button class="btn-mini" onclick="alert('Demo — request reschedule (routes to admin)')">Edit</button>
+          </div>
+          <div class="sched-row">
+            <div class="sched-date"><div class="m">Jun</div><div class="d">21</div></div>
+            <div class="sched-meta">
+              <div class="match">Championship · TBD (SF winner)</div>
+              Monument Ave 1 · 6:00 PM · if SF W
+            </div>
+            <span class="gs-status sched" style="display:inline-block; padding:2px 10px; border-radius:10px; font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; background:#e5e7eb; color:#4b5563;">Tentative</span>
+            <button class="btn-mini">Edit</button>
+          </div>
+          <div class="sched-row" style="background:rgba(22,163,74,.04);">
+            <div class="sched-date"><div class="m">Jun</div><div class="d">14</div></div>
+            <div class="sched-meta">
+              <div class="match">vs Pottstown · QF1</div>
+              Monument Ave 1 · 10:00 AM · W 12–2
+            </div>
+            <span style="display:inline-block; padding:2px 10px; border-radius:10px; font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; background:#16a34a; color:white;">Final</span>
+            <button class="btn-mini" onclick="location.href='game-final.html'">Box</button>
+          </div>
+          <div class="sched-row" style="background:rgba(22,163,74,.04);">
+            <div class="sched-date"><div class="m">Jun</div><div class="d">12</div></div>
+            <div class="sched-meta">
+              <div class="match">vs Coatesville · R1</div>
+              Field of Dreams · 6:00 PM · W 8–1
+            </div>
+            <span style="display:inline-block; padding:2px 10px; border-radius:10px; font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; background:#16a34a; color:white;">Final</span>
+            <button class="btn-mini">Box</button>
+          </div>
+          <div class="sched-row">
+            <div class="sched-date"><div class="m">Jun</div><div class="d">10</div></div>
+            <div class="sched-meta">
+              <div class="match">Team Practice · Fielding / Relays</div>
+              Field of Dreams Diamond 2 · 6:00 PM
+            </div>
+            <span style="display:inline-block; padding:2px 10px; border-radius:10px; font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; background:var(--paper); color:var(--d27-navy); border:1px solid var(--line);">Practice</span>
+            <button class="btn-mini">Edit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Score Entry --------------------------------------------------- -->
+  <section class="cap-panel" id="panel-scoring">
+    <div class="container">
+      <div class="c-card">
+        <h3>Enter a Score</h3>
+        <div class="sub">Three ways to get results in. Everything lands on <a href="schedule.html" style="color:var(--d27-navy);">schedule.html</a> and the tournament bracket instantly.</div>
+        <div class="score-methods">
+          <div class="score-method" onclick="alert('Demo — open live scoring console (pitch-by-pitch, GameChanger-style entry)')">
+            <div class="ico">⚾</div>
+            <h4>Live Scoring</h4>
+            <p>Pitch-by-pitch scoring in your pocket. Updates the district live board in real time.</p>
+            <span class="tag">Most Popular</span>
+          </div>
+          <div class="score-method" onclick="document.getElementById('pdfDrop').scrollIntoView({behavior:'smooth'});">
+            <div class="ico">📄</div>
+            <h4>GameChanger PDF</h4>
+            <p>Already scored in GC? Drop in the exported PDF — we parse box score, PBP, and stats automatically.</p>
+            <span class="tag">1-Click Import</span>
+          </div>
+          <div class="score-method" onclick="alert('Demo — open manual box score entry form (8-slot linescore, batter table, pitcher table)')">
+            <div class="ico">✏️</div>
+            <h4>Manual Box Score</h4>
+            <p>Type in the linescore, batters, pitchers, and notable plays. Under 2 minutes.</p>
+            <span class="tag">Fastest</span>
+          </div>
+        </div>
+
+        <div class="pdf-drop" id="pdfDrop">
+          <div style="font-size:32px; margin-bottom:6px;">📥</div>
+          <strong>Drop GameChanger PDF here</strong> — or <a href="#" onclick="event.preventDefault(); alert('Demo — file picker');" style="color:var(--d27-navy); text-decoration:underline;">choose file</a>
+          <div style="margin-top:6px; font-size:12px; color:var(--muted);">Parses box score, play-by-play, and individual stats. Supports GC Classic &amp; GC Team Manager exports.</div>
+        </div>
+      </div>
+
+      <div class="c-card">
+        <h3>Recent Submissions</h3>
+        <ul style="list-style:none; padding:0; margin:0;">
+          <li style="padding: 10px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;">
+            <span><strong>BP vs Pottstown · QF1</strong> · <span style="color:var(--muted); font-size:13px;">12–2 · via GameChanger PDF · 2h ago</span></span>
+            <span style="display:inline-block; padding:2px 10px; border-radius:10px; font-family:'Oswald',sans-serif; font-size:11px; background:#16a34a; color:white; letter-spacing:.08em; text-transform:uppercase;">Published</span>
+          </li>
+          <li style="padding: 10px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;">
+            <span><strong>BP vs Coatesville · R1</strong> · <span style="color:var(--muted); font-size:13px;">8–1 · manual · Jun 12</span></span>
+            <span style="display:inline-block; padding:2px 10px; border-radius:10px; font-family:'Oswald',sans-serif; font-size:11px; background:#16a34a; color:white; letter-spacing:.08em; text-transform:uppercase;">Published</span>
+          </li>
+          <li style="padding: 10px 0; display:flex; justify-content:space-between; align-items:center;">
+            <span><strong>BP @ CV · Regular</strong> · <span style="color:var(--muted); font-size:13px;">10–2 · live scored · Jun 3</span></span>
+            <span style="display:inline-block; padding:2px 10px; border-radius:10px; font-family:'Oswald',sans-serif; font-size:11px; background:#16a34a; color:white; letter-spacing:.08em; text-transform:uppercase;">Published</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- RSVP ---------------------------------------------------------- -->
+  <section class="cap-panel" id="panel-rsvp">
+    <div class="container">
+      <div class="c-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom: var(--space-3);">
+          <div>
+            <h3 style="margin-bottom:4px;">RSVPs · SF vs Methacton</h3>
+            <div class="sub">Wed Jun 18 · 5:30 PM · Monument Ave 1</div>
+          </div>
+          <button class="btn btn-primary" onclick="alert('Demo — push notification + SMS to 4 no-replies');">📢 Remind All No-Replies (4)</button>
+        </div>
+
+        <div class="rsvp-summary">
+          <div class="rsvp-pill going"><div class="n">8</div><div class="l">Going</div></div>
+          <div class="rsvp-pill maybe"><div class="n">1</div><div class="l">Maybe</div></div>
+          <div class="rsvp-pill nope"><div class="n">0</div><div class="l">Can't</div></div>
+          <div class="rsvp-pill noreply"><div class="n">4</div><div class="l">No Reply</div></div>
+        </div>
+
+        <ul class="rsvp-list">
+          <li><span class="jn">1</span><span>Luke DiSanto</span><span class="rsvp-status going">Going</span><button class="btn-mini" disabled>—</button></li>
+          <li><span class="jn">3</span><span>Caleb Wu</span><span class="rsvp-status going">Going</span><button class="btn-mini" disabled>—</button></li>
+          <li><span class="jn">7</span><span>Ethan Pierce</span><span class="rsvp-status going">Going</span><button class="btn-mini" disabled>—</button></li>
+          <li><span class="jn">9</span><span>Jack Ryan</span><span class="rsvp-status maybe">Maybe · arm check</span><button class="btn-mini" onclick="alert('Demo — message parent')">Msg</button></li>
+          <li><span class="jn">10</span><span>Max Hollis</span><span class="rsvp-status going">Going</span><button class="btn-mini" disabled>—</button></li>
+          <li><span class="jn">11</span><span>Owen Park</span><span class="rsvp-status going">Going</span><button class="btn-mini" disabled>—</button></li>
+          <li><span class="jn">12</span><span>Noah Diaz</span><span class="rsvp-status noreply">No Reply</span><button class="btn-mini" onclick="alert('Demo — reminder sent to Diaz parents');">Remind</button></li>
+          <li><span class="jn">14</span><span>Mateo Patel</span><span class="rsvp-status noreply">No Reply</span><button class="btn-mini" onclick="alert('Demo — reminder sent to Patel parents');">Remind</button></li>
+          <li><span class="jn">17</span><span>Gavin Brooks</span><span class="rsvp-status going">Going</span><button class="btn-mini" disabled>—</button></li>
+          <li><span class="jn">18</span><span>Liam Foster</span><span class="rsvp-status going">Going</span><button class="btn-mini" disabled>—</button></li>
+          <li><span class="jn">22</span><span>Tyler Nguyen</span><span class="rsvp-status noreply">No Reply</span><button class="btn-mini" onclick="alert('Demo — reminder sent to Nguyen parents');">Remind</button></li>
+          <li><span class="jn">24</span><span>Aiden Lee</span><span class="rsvp-status going">Going</span><button class="btn-mini" disabled>—</button></li>
+          <li><span class="jn">27</span><span>Ryan Torres</span><span class="rsvp-status noreply">No Reply</span><button class="btn-mini" onclick="alert('Demo — reminder sent to Torres parents');">Remind</button></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chat ---------------------------------------------------------- -->
+  <section class="cap-panel" id="panel-chat">
+    <div class="container">
+      <div class="chat-wrap">
+        <aside class="chat-channels">
+          <h5>Team</h5>
+          <div class="chan active">#team-general <span class="unread">3</span></div>
+          <div class="chan">#announcements</div>
+          <div class="chan">#carpool</div>
+          <h5>Coaches Only</h5>
+          <div class="chan">#captains <span class="unread">9</span></div>
+          <div class="chan">#lineup-planning</div>
+          <h5>Direct</h5>
+          <div class="chan">Tom &amp; J. Ryan's Dad</div>
+          <div class="chan">Tom &amp; DA Jeff</div>
+        </aside>
+
+        <div class="chat-main">
+          <div class="chat-head">
+            <div>#team-general</div>
+            <div class="members">28 members · 13 players + parents</div>
+          </div>
+          <div class="chat-body">
+            <div class="msg"><span class="av">TC</span><div class="body"><div class="who">Coach Tom <span class="when">Today, 8:42 AM</span></div><div class="txt">Great win yesterday, squad! 🔥 Semifinal is Wed 5:30 at Monument. RSVP by tomorrow night please — need to finalize lineup.</div></div></div>
+            <div class="msg"><span class="av red">AP</span><div class="body"><div class="who">Alex Park (Owen's mom) <span class="when">Today, 9:15 AM</span></div><div class="txt">Owen's in! Can bring snack for Wed?</div></div></div>
+            <div class="msg"><span class="av">TC</span><div class="body"><div class="who">Coach Tom <span class="when">Today, 9:17 AM</span></div><div class="txt">Yes please! Fruit &amp; Gatorade would be great 🙏</div></div></div>
+            <div class="msg"><span class="av red">JR</span><div class="body"><div class="who">Jack Ryan's Dad <span class="when">Today, 10:02 AM</span></div><div class="txt">Checking on Jack's arm tonight — he threw 54 in QF. Will confirm AM.</div></div></div>
+            <div class="msg"><span class="av">TC</span><div class="body"><div class="who">Coach Tom <span class="when">Today, 10:04 AM</span></div><div class="txt">No pressure — Caleb's fresh &amp; Gavin lined up as backup. Let Jack rest if needed.</div></div></div>
+            <div class="msg"><span class="av red">MH</span><div class="body"><div class="who">Max Hollis <span class="when">Today, 11:20 AM</span></div><div class="txt">Coach what time should we get there? 🧢⚾</div></div></div>
+            <div class="msg"><span class="av">TC</span><div class="body"><div class="who">Coach Tom <span class="when">Today, 11:22 AM</span></div><div class="txt">4:45 for warmups. Full uniform — navy pants this time.</div></div></div>
+          </div>
+          <div class="chat-input">
+            <input type="text" placeholder="Message #team-general..." onkeydown="if(event.key==='Enter' && this.value){ alert('Demo — would post: '+this.value); this.value=''; }" />
+            <button onclick="alert('Demo — post message')">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scout --------------------------------------------------------- -->
+  <section class="cap-panel" id="panel-scout">
+    <div class="container">
+      <div class="c-card">
+        <h3>🔍 Scout · Next Opponent</h3>
+        <div class="sub">Since you won QF1, you play <strong>Methacton</strong> in SF · Wed Jun 18 · 5:30 PM · Monument Ave 1</div>
+
+        <div style="display:grid; grid-template-columns: 2fr 1fr; gap: var(--space-4); margin-top: var(--space-3);">
+          <div>
+            <h4 style="font-family:'Oswald', sans-serif; color:var(--d27-navy); margin:0 0 var(--space-2); letter-spacing:.02em;">Team Snapshot · Methacton 12U</h4>
+            <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: var(--space-3);">
+              <div style="background:var(--paper); padding:8px; border-radius:6px; text-align:center;"><div style="font-family:'Oswald',sans-serif; font-size:24px; color:var(--d27-navy); font-weight:700;">8–2</div><div style="font-size:11px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase;">Record</div></div>
+              <div style="background:var(--paper); padding:8px; border-radius:6px; text-align:center;"><div style="font-family:'Oswald',sans-serif; font-size:24px; color:var(--d27-navy); font-weight:700;">.328</div><div style="font-size:11px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase;">Team BA</div></div>
+              <div style="background:var(--paper); padding:8px; border-radius:6px; text-align:center;"><div style="font-family:'Oswald',sans-serif; font-size:24px; color:var(--d27-navy); font-weight:700;">3.88</div><div style="font-size:11px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase;">Team ERA</div></div>
+              <div style="background:var(--paper); padding:8px; border-radius:6px; text-align:center;"><div style="font-family:'Oswald',sans-serif; font-size:24px; color:var(--d27-navy); font-weight:700;">#4</div><div style="font-size:11px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase;">Seed</div></div>
+            </div>
+
+            <h4 style="font-family:'Oswald', sans-serif; color:var(--d27-navy); margin:var(--space-3) 0 var(--space-2); letter-spacing:.02em;">Probable Lineup</h4>
+            <table class="roster-tbl" style="font-size:13px;">
+              <thead><tr><th>#</th><th>Name</th><th>Pos</th><th>AVG</th><th>OPS</th><th>Note</th></tr></thead>
+              <tbody>
+                <tr><td><span class="jn">1</span></td><td><strong>Miles Hartley</strong></td><td><span class="pos-chip">SS</span></td><td>.412</td><td>1.088</td><td>Leads off · high contact, will bunt</td></tr>
+                <tr><td><span class="jn">8</span></td><td><strong>Diego Reyes</strong></td><td><span class="pos-chip">CF</span></td><td>.385</td><td>.972</td><td>Gap power · pull-heavy to RF</td></tr>
+                <tr><td><span class="jn">4</span></td><td><strong>Ben Kowalski</strong></td><td><span class="pos-chip">1B</span></td><td>.364</td><td>1.104</td><td><strong style="color:var(--d27-red);">Danger man</strong> · 6 HR this year</td></tr>
+                <tr><td><span class="jn">22</span></td><td><strong>Luca Vento</strong></td><td><span class="pos-chip">C</span></td><td>.310</td><td>.855</td><td>Patient · 18 BB</td></tr>
+                <tr><td><span class="jn">5</span></td><td><strong>Hunter James</strong></td><td><span class="pos-chip">3B</span></td><td>.298</td><td>.812</td><td>Pulls off on breaking balls</td></tr>
+                <tr><td><span class="jn">13</span></td><td><strong>Will Tran</strong></td><td><span class="pos-chip">2B</span></td><td>.276</td><td>.724</td><td>Slap hitter · bunt defense</td></tr>
+                <tr><td><span class="jn">17</span></td><td><strong>Ryder Chen</strong></td><td><span class="pos-chip">RF</span></td><td>.260</td><td>.690</td><td>Speed · steals on 1st move</td></tr>
+                <tr><td><span class="jn">21</span></td><td><strong>Cam Bishop</strong></td><td><span class="pos-chip">LF</span></td><td>.244</td><td>.612</td><td>First-pitch swinger</td></tr>
+                <tr><td><span class="jn">11</span></td><td><strong>Theo Park</strong></td><td><span class="pos-chip">P</span></td><td>.180</td><td>.498</td><td>9 hole · likely sub DH</td></tr>
+              </tbody>
+            </table>
+
+            <h4 style="font-family:'Oswald', sans-serif; color:var(--d27-navy); margin:var(--space-3) 0 var(--space-2); letter-spacing:.02em;">Probable Starter · Miles Hartley (#1)</h4>
+            <p style="font-size:14px; line-height:1.6; color:var(--fg);">
+              RHP · 82–86 fastball (4-seam, sits 83), 2-seam at 78, curve at 64. <strong>First-pitch strike 64% of the time</strong> — aggressive counts early. Works inside to RHB, loses command with 2 strikes. Last outing: 5 IP, 2 ER, 7 K, 2 BB vs Chester Valley. Pitch count entering: <strong>0</strong> — has full 85 available.
+            </p>
+          </div>
+
+          <div>
+            <div class="c-card" style="margin:0;">
+              <h4 style="font-family:'Oswald', sans-serif; color:var(--d27-navy); margin:0 0 var(--space-2); letter-spacing:.02em; font-size:15px;">Head-to-Head · 2026</h4>
+              <div style="font-size:13px;">
+                <div style="padding:8px 0; border-bottom:1px solid var(--line);"><strong>May 18 · BP 3, MT 5</strong><br><span style="color:var(--muted); font-size:12px;">Regular · Kowalski 2-for-4 · Hartley 6K</span></div>
+                <div style="padding:8px 0;"><strong>Apr 27 · BP 7, MT 6 (8)</strong><br><span style="color:var(--muted); font-size:12px;">Regular · DiSanto walk-off · Pierce 3-for-4</span></div>
+              </div>
+            </div>
+
+            <div class="c-card" style="margin-top: var(--space-3);">
+              <h4 style="font-family:'Oswald', sans-serif; color:var(--d27-navy); margin:0 0 var(--space-2); letter-spacing:.02em; font-size:15px;">🎯 Keys to the Game</h4>
+              <ul style="font-size:13px; line-height:1.6; padding-left: 18px; margin:0; color:var(--fg);">
+                <li><strong>Attack Hartley early</strong> — 64% first-pitch strikes, swing first FB inner-half</li>
+                <li><strong>Pitch around #4 Kowalski</strong> RISP 2 out, walk is fine</li>
+                <li>Bunt defense on #1 &amp; #13 — charge hard</li>
+                <li>Hartley tires after 55 pitches — be patient 3rd time through</li>
+                <li>MT weak on breaking stuff away · Caleb's curve plays</li>
+              </ul>
+            </div>
+
+            <div class="c-card" style="margin-top: var(--space-3);">
+              <h4 style="font-family:'Oswald', sans-serif; color:var(--d27-navy); margin:0 0 var(--space-2); letter-spacing:.02em; font-size:15px;">🏆 If you win...</h4>
+              <p style="font-size:13px; color:var(--fg); margin:0;">
+                You play the <strong>QF3/QF4 winner</strong> (Phoenixville vs Marple · Sat Jun 14 10 AM, or Collegeville vs Radnor 12:30 PM) in the <strong>Championship · Sat Jun 21 · 6 PM · Monument Ave 1</strong>.
+              </p>
+              <a href="tournament.html" style="font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--d27-navy); margin-top: 8px; display:inline-block;">View full bracket →</a>
+            </div>
+
+            <div class="c-card" style="margin-top: var(--space-3); background:rgba(201,162,39,.08); border-color:var(--d27-gold);">
+              <h4 style="font-family:'Oswald', sans-serif; color:var(--d27-navy); margin:0 0 var(--space-2); letter-spacing:.02em; font-size:15px;">✨ D27 AI · Scout Digest</h4>
+              <p style="font-size:13px; color:var(--fg); margin:0; line-height:1.6;">
+                Methacton's offense is top-3 in the district — they hunt fastballs early and run hard on first move. Their weakness is breaking stuff low &amp; away; Caleb's curve profiles well. Hartley is legit (64% first-pitch K), but his command fades after pitch 55. <strong>Recommend: early ambush on Hartley innings 1–2, patience 4th-through</strong>, keep Kowalski off the bases. BP wins this ~58%.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // Tab switching
+  function switchTab(panelId) {
+    document.querySelectorAll('.cap-tabs button').forEach(b => b.classList.toggle('active', b.dataset.panel === panelId));
+    document.querySelectorAll('.cap-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + panelId));
+    window.scrollTo({ top: document.querySelector('.cap-tabs').offsetTop, behavior: 'smooth' });
+  }
+  document.querySelectorAll('.cap-tabs button').forEach(b => {
+    b.addEventListener('click', () => switchTab(b.dataset.panel));
+  });
+
+  // Drop zone visual
+  const drop = document.getElementById('pdfDrop');
+  if (drop) {
+    drop.addEventListener('dragover', e => { e.preventDefault(); drop.style.borderColor = 'var(--d27-red)'; drop.style.background = 'rgba(218,41,28,.06)'; });
+    drop.addEventListener('dragleave', e => { drop.style.borderColor = ''; drop.style.background = ''; });
+    drop.addEventListener('drop', e => { e.preventDefault(); drop.style.borderColor = ''; drop.style.background = ''; alert('Demo — parsed GameChanger PDF, pre-filled box score ready for review'); });
+  }
+</script>
+
+</body>
+</html>

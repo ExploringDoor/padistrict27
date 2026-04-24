@@ -203,15 +203,13 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px; height: 40px;
-  background: var(--d27-red);
+  width: 44px; height: 44px;
+  background: url('../assets/d27-crest.jpeg') center/cover no-repeat, var(--d27-white);
   border-radius: 50%;
-  font-family: 'Oswald', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--d27-white);
-  letter-spacing: 0;
+  font-size: 0;
+  color: transparent;
   line-height: 1;
+  box-shadow: 0 0 0 2px rgba(255,255,255,.12), 0 2px 6px rgba(0,0,0,.25);
 }
 .nav-brand .sub {
   font-family: 'Manrope', sans-serif;
