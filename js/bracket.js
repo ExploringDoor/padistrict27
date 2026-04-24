@@ -54,7 +54,10 @@
   }
 
   function renderMatch(matchId, game, seeds, isPending) {
-    const match = el('div', 'br-match' + (isPending ? ' pending' : ''));
+    const hasResult = game && game.winner && game.topScore != null && game.botScore != null;
+    const isLive = game && game.live === true;
+    const classes = 'br-match' + (isPending ? ' pending' : '') + (hasResult ? ' has-result' : '') + (isLive ? ' is-live' : '');
+    const match = el('div', classes);
     match.dataset.match = matchId;
 
     if (!game) {
@@ -78,6 +81,30 @@
       foot.textContent = [game.date, game.field].filter(Boolean).join(' · ');
       match.appendChild(foot);
     }
+
+    // Click-through targets
+    if (hasResult) {
+      match.addEventListener('click', function () { window.location.href = game.boxUrl || 'game-final.html'; });
+    } else if (isLive) {
+      match.addEventListener('click', function () { window.location.href = game.liveUrl || 'game.html'; });
+    } else if (game.top && game.bot) {
+      match.addEventListener('click', function () {
+        if (typeof showBracketPreview === 'function') {
+          showBracketPreview(match, game, top, bot);
+        }
+      });
+    }
+
+    // Hover preview card
+    if (game.top && game.bot && !hasResult && !isLive) {
+      match.addEventListener('mouseenter', function () {
+        if (typeof showBracketPreview === 'function') showBracketPreview(match, game, top, bot);
+      });
+      match.addEventListener('mouseleave', function () {
+        if (typeof hideBracketPreview === 'function') hideBracketPreview();
+      });
+    }
+
     return match;
   }
 

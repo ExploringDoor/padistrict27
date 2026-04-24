@@ -383,6 +383,7 @@
       <li><a href="champions.html">Champions</a></li>
       <li><a href="rules.html">Rules</a></li>
       <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
     </ul>
   </div>
 </nav>
@@ -463,8 +464,81 @@
     <div id="bracket-container"></div>
 
     <p class="text-muted" style="font-size: var(--text-xs); text-align: center; margin-top: var(--space-5);">
-      Seeds based on regular-season league standings. Higher seed is home team.
+      Seeds based on regular-season league standings. Higher seed is home team. <strong>Hover any matchup for matchup preview · click for live box / final box.</strong>
     </p>
+
+    <!-- Scout / Next Up panel ---------------------------------------- -->
+    <section style="margin-top: var(--space-6); padding: var(--space-4); background: linear-gradient(135deg, rgba(0,27,71,.04) 0%, rgba(201,162,39,.08) 100%); border: 1px solid var(--d27-gold); border-radius: var(--radius-md);">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom: var(--space-2);">
+        <span style="font-size:20px;">🔍</span>
+        <h3 style="font-family:'Oswald', sans-serif; color: var(--d27-navy); margin:0; letter-spacing:.02em;">Scout · Next Up</h3>
+        <span style="background: var(--d27-navy); color: var(--d27-gold); font-family:'Oswald', sans-serif; font-size:10px; letter-spacing:.14em; padding:2px 8px; border-radius:4px; text-transform:uppercase;">Since You Won</span>
+      </div>
+      <p style="font-size:14px; color:var(--muted); margin:0 0 var(--space-3);">Chester Valley (#1 seed) just advanced to the Semifinal. Here's who's waiting, when you play, and what to watch for.</p>
+
+      <div style="display:grid; grid-template-columns: 1.6fr 1fr; gap: var(--space-3);" class="scout-grid">
+        <!-- Next opponent card -->
+        <div style="background: var(--d27-white); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: var(--space-3);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom: var(--space-2); padding-bottom: var(--space-2); border-bottom: 1px solid var(--line);">
+            <div>
+              <div style="font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.14em; color:var(--d27-red); text-transform:uppercase;">Semifinal · R3 M1</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:20px; color:var(--d27-navy); font-weight:600; letter-spacing:.02em;">Chester Valley <span style="color:var(--muted);">vs</span> Lower Perk Cubs</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:'Oswald',sans-serif; font-size:18px; color:var(--d27-navy);">Thu Jun 25</div>
+              <div style="font-size:13px; color:var(--muted);">6:30 PM · Monument Ave 1</div>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: var(--space-3);">
+            <div style="background:var(--paper); padding:8px; border-radius:6px; text-align:center;"><div style="font-family:'Oswald',sans-serif; font-size:20px; color:var(--d27-navy); font-weight:700;">16–4</div><div style="font-size:10px; color:var(--muted); letter-spacing:.12em; text-transform:uppercase;">Record</div></div>
+            <div style="background:var(--paper); padding:8px; border-radius:6px; text-align:center;"><div style="font-family:'Oswald',sans-serif; font-size:20px; color:var(--d27-navy); font-weight:700;">.318</div><div style="font-size:10px; color:var(--muted); letter-spacing:.12em; text-transform:uppercase;">Team BA</div></div>
+            <div style="background:var(--paper); padding:8px; border-radius:6px; text-align:center;"><div style="font-family:'Oswald',sans-serif; font-size:20px; color:var(--d27-navy); font-weight:700;">3.42</div><div style="font-size:10px; color:var(--muted); letter-spacing:.12em; text-transform:uppercase;">Team ERA</div></div>
+            <div style="background:var(--paper); padding:8px; border-radius:6px; text-align:center;"><div style="font-family:'Oswald',sans-serif; font-size:20px; color:var(--d27-navy); font-weight:700;">#4</div><div style="font-size:10px; color:var(--muted); letter-spacing:.12em; text-transform:uppercase;">Seed</div></div>
+          </div>
+
+          <h4 style="font-family:'Oswald',sans-serif; color:var(--d27-navy); font-size:13px; letter-spacing:.08em; margin:0 0 8px; text-transform:uppercase;">Key Hitters</h4>
+          <ul style="list-style:none; padding:0; margin:0 0 var(--space-3); font-size:13px;">
+            <li style="padding:6px 0; border-bottom:1px solid var(--line);"><strong>#1 Jaxon Ruiz</strong> · SS · .421 / 1.12 OPS · 4 HR · <span style="color:var(--d27-red);">Pulls everything</span></li>
+            <li style="padding:6px 0; border-bottom:1px solid var(--line);"><strong>#7 Beckett Flynn</strong> · CF · .386 · 15 SB · <span style="color:var(--muted);">Aggressive on first pitch</span></li>
+            <li style="padding:6px 0;"><strong>#4 Sam Roberts</strong> · 1B · .358 · 3 HR · <span style="color:var(--muted);">Swings through high heat</span></li>
+          </ul>
+
+          <h4 style="font-family:'Oswald',sans-serif; color:var(--d27-navy); font-size:13px; letter-spacing:.08em; margin:0 0 8px; text-transform:uppercase;">Probable Starter · Tyler Morgan (#14)</h4>
+          <p style="font-size:13px; color:var(--fg); line-height:1.55; margin:0;">
+            RHP · fastball 76–80, 2-seam 72, change 68. Works east-west · throws strike 62%. Last outing: 5 IP, 1 ER, 8 K, 1 BB. Enters with <strong>0 pitches</strong> — full 85 available.
+          </p>
+        </div>
+
+        <!-- Keys + if-you-win -->
+        <div style="display:flex; flex-direction:column; gap: var(--space-3);">
+          <div style="background: var(--d27-white); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: var(--space-3);">
+            <h4 style="font-family:'Oswald',sans-serif; color:var(--d27-navy); font-size:13px; letter-spacing:.08em; margin:0 0 8px; text-transform:uppercase;">🎯 Keys to the Game</h4>
+            <ul style="font-size:13px; line-height:1.55; padding-left: 18px; margin:0; color:var(--fg);">
+              <li>Work Morgan deep — he fades after pitch 55</li>
+              <li>First-pitch strike aggression vs Ruiz — he'll chase</li>
+              <li>Pick-off attention on Flynn — steals 1st-move</li>
+              <li>Gap-to-gap approach · Lower Perk outfield plays shallow</li>
+            </ul>
+          </div>
+
+          <div style="background: var(--d27-white); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: var(--space-3);">
+            <h4 style="font-family:'Oswald',sans-serif; color:var(--d27-navy); font-size:13px; letter-spacing:.08em; margin:0 0 8px; text-transform:uppercase;">🏆 If You Win...</h4>
+            <p style="font-size:13px; color:var(--fg); margin:0 0 6px; line-height:1.55;">You play <strong>the SF-2 winner</strong> (Radnor-Wayne vs Lower Merion/Lower Providence winner) in the <strong>Championship · Sat Jun 28 · 2:00 PM</strong> at the championship site (TBD).</p>
+            <div style="font-size:12px; color:var(--muted); font-family:'Oswald',sans-serif; letter-spacing:.06em; text-transform:uppercase; margin-top: 6px;">SF-2 tips off: Jun 25 · 6:30 PM</div>
+          </div>
+
+          <div style="background: linear-gradient(135deg, rgba(0,27,71,.04) 0%, rgba(201,162,39,.06) 100%); border: 1px solid var(--d27-gold); border-radius: var(--radius-sm); padding: var(--space-3);">
+            <h4 style="font-family:'Oswald',sans-serif; color:var(--d27-navy); font-size:13px; letter-spacing:.08em; margin:0 0 8px; text-transform:uppercase;">✨ D27 AI · Win Probability</h4>
+            <div style="display:flex; align-items:center; gap: 12px; margin-bottom: 8px;">
+              <div style="flex:1; height:8px; background:var(--line); border-radius:4px; overflow:hidden;"><div style="width:62%; height:100%; background: linear-gradient(90deg, var(--d27-navy), var(--d27-gold));"></div></div>
+              <div style="font-family:'Oswald',sans-serif; font-size:18px; color:var(--d27-navy); font-weight:700;">62%</div>
+            </div>
+            <p style="font-size:12px; color:var(--fg); margin:0; line-height:1.55;">Chester Valley favored based on 20-game sample, head-to-head history (2–0 vs Lower Perk), and rested ace Kai Sutton (pitching SF).</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
   </section>
 
@@ -726,6 +800,7 @@
           <li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li>
           <li><a href="contact.html">Contact D27</a></li>
           <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
           <li><a href="admin.html">Admin</a></li>
         </ul>
       </div>
@@ -777,20 +852,20 @@
     ],
     games: {
       // Round 1 — all 8 games complete
-      "r1m1": { top: 1,  bot: 16, topScore: 12, botScore: 2, winner: 'top', date: 'Jun 16', field: 'Chester Valley F1' },
-      "r1m2": { top: 8,  bot: 9,  topScore: 7,  botScore: 5, winner: 'top', date: 'Jun 16', field: 'Exton Field A' },
-      "r1m3": { top: 5,  bot: 12, topScore: 9,  botScore: 3, winner: 'top', date: 'Jun 17', field: 'Upper Providence' },
-      "r1m4": { top: 4,  bot: 13, topScore: 10, botScore: 4, winner: 'top', date: 'Jun 17', field: 'Lower Perk Majors' },
-      "r1m5": { top: 6,  bot: 11, topScore: 5,  botScore: 4, winner: 'top', date: 'Jun 18', field: 'Great Valley' },
-      "r1m6": { top: 3,  bot: 14, topScore: 8,  botScore: 1, winner: 'top', date: 'Jun 18', field: 'Radnor-Wayne F1' },
-      "r1m7": { top: 7,  bot: 10, topScore: 6,  botScore: 5, winner: 'top', date: 'Jun 19', field: 'Lower Providence' },
-      "r1m8": { top: 2,  bot: 15, topScore: 11, botScore: 1, winner: 'top', date: 'Jun 19', field: 'Lower Merion F3' },
+      "r1m1": { top: 1,  bot: 16, topScore: 12, botScore: 2, winner: 'top', date: 'Jun 16', field: 'Chester Valley F1', boxUrl: 'game-final.html' },
+      "r1m2": { top: 8,  bot: 9,  topScore: 7,  botScore: 5, winner: 'top', date: 'Jun 16', field: 'Exton Field A', boxUrl: 'game-final.html' },
+      "r1m3": { top: 5,  bot: 12, topScore: 9,  botScore: 3, winner: 'top', date: 'Jun 17', field: 'Upper Providence', boxUrl: 'game-final.html' },
+      "r1m4": { top: 4,  bot: 13, topScore: 10, botScore: 4, winner: 'top', date: 'Jun 17', field: 'Lower Perk Majors', boxUrl: 'game-final.html' },
+      "r1m5": { top: 6,  bot: 11, topScore: 5,  botScore: 4, winner: 'top', date: 'Jun 18', field: 'Great Valley', boxUrl: 'game-final.html' },
+      "r1m6": { top: 3,  bot: 14, topScore: 8,  botScore: 1, winner: 'top', date: 'Jun 18', field: 'Radnor-Wayne F1', boxUrl: 'game-final.html' },
+      "r1m7": { top: 7,  bot: 10, topScore: 6,  botScore: 5, winner: 'top', date: 'Jun 19', field: 'Lower Providence', boxUrl: 'game-final.html' },
+      "r1m8": { top: 2,  bot: 15, topScore: 11, botScore: 1, winner: 'top', date: 'Jun 19', field: 'Lower Merion F3', boxUrl: 'game-final.html' },
 
-      // Round 2 — Quarterfinals — 3 of 4 complete, last is scheduled
-      "r2m1": { top: 1, bot: 8, topScore: 6, botScore: 3, winner: 'top', date: 'Jun 20', field: 'Chester Valley F1' },
-      "r2m2": { top: 4, bot: 5, topScore: 8, botScore: 7, winner: 'top', date: 'Jun 21', field: 'Lower Perk Majors' },
-      "r2m3": { top: 3, bot: 6, topScore: 4, botScore: 3, winner: 'top', date: 'Jun 22', field: 'Radnor-Wayne F1' },
-      "r2m4": { top: 2, bot: 7, time: 'Jun 23 · 6:00p', field: 'Lower Merion F3' },
+      // Round 2 — Quarterfinals — 2 complete, 1 live, 1 scheduled
+      "r2m1": { top: 1, bot: 8, topScore: 6, botScore: 3, winner: 'top', date: 'Jun 20', field: 'Chester Valley F1', boxUrl: 'game-final.html' },
+      "r2m2": { top: 4, bot: 5, topScore: 8, botScore: 7, winner: 'top', date: 'Jun 21', field: 'Lower Perk Majors', boxUrl: 'game-final.html' },
+      "r2m3": { top: 3, bot: 6, topScore: 4, botScore: 3, winner: 'top', date: 'Jun 22', field: 'Radnor-Wayne F1', boxUrl: 'game-final.html' },
+      "r2m4": { top: 2, bot: 7, topScore: 4, botScore: 3, live: true, date: 'Jun 23 · T5', field: 'Lower Merion F3', liveUrl: 'game.html' },
 
       // Round 3 — Semifinals — awaiting R2M4
       "r3m1": { top: 1, bot: 4, time: 'Jun 25 · 6:30p', field: 'TBD' },
@@ -809,7 +884,123 @@
     const tab = document.querySelector('.t-tab[data-panel="' + which + '"]');
     if (tab) tab.click();
   }
+
+  // ── Bracket hover preview popup ────────────────────────────────────
+  let previewEl = null;
+  let hideTimer = null;
+  function ensurePreview() {
+    if (previewEl) return previewEl;
+    previewEl = document.createElement('div');
+    previewEl.className = 'br-preview';
+    document.body.appendChild(previewEl);
+    return previewEl;
+  }
+  window.showBracketPreview = function (matchNode, game, topSeed, botSeed) {
+    clearTimeout(hideTimer);
+    const el = ensurePreview();
+    const when = game.time || game.date || 'TBD';
+    const field = game.field || 'TBD';
+    el.innerHTML =
+      '<div class="bp-head">🔍 Matchup Preview</div>' +
+      '<div class="bp-row"><span class="bp-seed">#' + (topSeed ? topSeed.seed : '—') + '</span><span class="bp-team">' + (topSeed ? topSeed.team : 'TBD') + '</span><span class="bp-rec">' + (topSeed ? (topSeed.record || '') : '') + '</span></div>' +
+      '<div class="bp-vs">vs</div>' +
+      '<div class="bp-row"><span class="bp-seed">#' + (botSeed ? botSeed.seed : '—') + '</span><span class="bp-team">' + (botSeed ? botSeed.team : 'TBD') + '</span><span class="bp-rec">' + (botSeed ? (botSeed.record || '') : '') + '</span></div>' +
+      '<div class="bp-meta"><strong>' + when + '</strong> · ' + field + '</div>' +
+      '<div class="bp-tip">Tap when game goes live for box score</div>';
+    const rect = matchNode.getBoundingClientRect();
+    const top = window.scrollY + rect.top - 8;
+    let left = window.scrollX + rect.right + 12;
+    if (left + 280 > window.scrollX + window.innerWidth) {
+      left = window.scrollX + rect.left - 280 - 12;
+    }
+    if (left < window.scrollX + 12) left = window.scrollX + 12;
+    el.style.top = top + 'px';
+    el.style.left = left + 'px';
+    el.classList.add('visible');
+  };
+  window.hideBracketPreview = function () {
+    hideTimer = setTimeout(function () {
+      if (previewEl) previewEl.classList.remove('visible');
+    }, 120);
+  };
 </script>
+
+<style>
+  .br-preview {
+    position: absolute;
+    width: 280px;
+    background: var(--d27-navy);
+    color: var(--d27-white);
+    border-radius: 10px;
+    padding: 14px;
+    box-shadow: 0 10px 36px rgba(0,0,0,.32), 0 0 0 3px rgba(0,120,255,.22);
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity .15s, transform .15s;
+    pointer-events: none;
+    z-index: 1000;
+    font-family: 'Manrope', sans-serif;
+  }
+  .br-preview.visible { opacity: 1; transform: translateY(0); }
+  .br-preview .bp-head {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: .14em;
+    color: var(--d27-gold);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,255,255,.14);
+  }
+  .br-preview .bp-row {
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    gap: 8px;
+    align-items: center;
+    padding: 6px 0;
+  }
+  .br-preview .bp-seed {
+    background: var(--d27-gold);
+    color: var(--d27-navy);
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+  }
+  .br-preview .bp-team { font-family: 'Oswald', sans-serif; font-size: 14px; letter-spacing: .02em; }
+  .br-preview .bp-rec { font-size: 11px; color: rgba(255,255,255,.7); font-family: 'Manrope', sans-serif; }
+  .br-preview .bp-vs {
+    text-align: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: .14em;
+    color: rgba(255,255,255,.5);
+    padding: 4px 0;
+  }
+  .br-preview .bp-meta {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,.14);
+    font-size: 13px;
+    color: var(--d27-white);
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: .02em;
+  }
+  .br-preview .bp-tip {
+    margin-top: 6px;
+    font-size: 11px;
+    color: rgba(255,255,255,.55);
+    font-style: italic;
+  }
+  @media (max-width: 640px) {
+    .br-preview { display: none !important; }
+  }
+  @media (max-width: 900px) {
+    .scout-grid { grid-template-columns: 1fr !important; }
+  }
+</style>
 
 </body>
 </html>

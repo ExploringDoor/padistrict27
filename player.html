@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Player &amp; Parent Portal · PA District 27</title>
+<meta name="description" content="D27 Player &amp; Parent Portal — RSVP to games, team chat with coaches &amp; teammates, live notifications, stats, and season photos." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="css/styles.css" />
+
+<style>
+  .p-hero {
+    background: linear-gradient(135deg, rgba(0,27,71,.94) 0%, rgba(0,45,114,.85) 60%, rgba(201,162,39,.65) 100%), var(--d27-navy);
+    color: var(--d27-white);
+    padding: var(--space-5) 0 var(--space-4);
+    overflow: hidden;
+  }
+  .p-hero-inner {
+    display: grid;
+    grid-template-columns: 72px 1fr auto;
+    gap: var(--space-3);
+    align-items: center;
+  }
+  @media (max-width: 640px) { .p-hero-inner { grid-template-columns: 56px 1fr; } .p-hero-cta { grid-column: 1 / -1; } }
+  .p-hero .av {
+    width: 72px; height: 72px;
+    background: var(--d27-gold);
+    color: var(--d27-navy);
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+  }
+  @media (max-width: 640px) { .p-hero .av { width: 56px; height: 56px; font-size: 22px; } }
+  .p-hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(24px, 4vw, 34px);
+    margin: 0 0 2px;
+  }
+  .p-hero .sub {
+    font-size: 13px;
+    opacity: .82;
+    font-family: 'Manrope', sans-serif;
+  }
+  .p-hero .sub .chip {
+    background: rgba(255,255,255,.14);
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 11px;
+    letter-spacing: .08em;
+    font-family: 'Oswald', sans-serif;
+    margin-left: 6px;
+    text-transform: uppercase;
+  }
+
+  /* Tabs */
+  .p-tabs {
+    background: var(--d27-white);
+    border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .p-tabs-inner { display:flex; gap: 4px; overflow-x: auto; }
+  .p-tabs button {
+    background: none; border: 0; padding: 13px 18px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+  }
+  .p-tabs button.active { color: var(--d27-navy); border-bottom-color: var(--d27-gold); }
+  .p-tabs button .badge {
+    display: inline-block;
+    background: var(--d27-red);
+    color: var(--d27-white);
+    border-radius: 10px;
+    padding: 1px 7px;
+    font-size: 10px;
+    margin-left: 6px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+  }
+  .p-panel { display: none; padding: var(--space-4) 0; }
+  .p-panel.active { display: block; }
+
+  .p-card {
+    background: var(--d27-white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+  .p-card h3 {
+    font-family: 'Oswald', sans-serif;
+    color: var(--d27-navy);
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-xl);
+  }
+  .p-card .sub { font-size: 13px; color: var(--muted); margin-bottom: var(--space-2); }
+
+  /* RSVP big buttons */
+  .rsvp-game {
+    padding: var(--space-3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: var(--d27-white);
+    margin-bottom: var(--space-3);
+  }
+  .rsvp-game .row {
+    display: grid;
+    grid-template-columns: 72px 1fr auto;
+    gap: var(--space-3);
+    align-items: center;
+  }
+  @media (max-width: 640px) { .rsvp-game .row { grid-template-columns: 60px 1fr; } .rsvp-game .status-chip { grid-column: 1 / -1; justify-self: start; } }
+  .rsvp-game .date-box {
+    text-align: center;
+    background: var(--d27-navy);
+    color: var(--d27-white);
+    border-radius: 8px;
+    padding: 8px;
+  }
+  .rsvp-game .date-box .m { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: .12em; color: var(--d27-gold); text-transform: uppercase; }
+  .rsvp-game .date-box .d { font-family: 'Oswald', sans-serif; font-size: 28px; font-weight: 700; line-height: 1; }
+  .rsvp-game .match {
+    font-family: 'Oswald', sans-serif;
+    font-size: 17px;
+    color: var(--d27-navy);
+    margin-bottom: 2px;
+    letter-spacing: .02em;
+  }
+  .rsvp-game .meta { font-size: 13px; color: var(--muted); }
+  .rsvp-game .actions {
+    display: flex; gap: 8px;
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--line);
+  }
+  .rsvp-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: 2px solid var(--line);
+    background: var(--d27-white);
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all .15s;
+  }
+  .rsvp-btn:hover { border-color: var(--d27-navy); color: var(--d27-navy); }
+  .rsvp-btn.selected.going { background: #16a34a; color: white; border-color: #16a34a; }
+  .rsvp-btn.selected.maybe { background: #f59e0b; color: white; border-color: #f59e0b; }
+  .rsvp-btn.selected.nope { background: var(--d27-red); color: white; border-color: var(--d27-red); }
+
+  .status-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 10px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  /* Notifications */
+  .notif-row {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: center;
+  }
+  .notif-row:last-child { border-bottom: 0; }
+  .notif-row .ico {
+    width: 36px; height: 36px;
+    background: var(--d27-navy);
+    color: var(--d27-gold);
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 15px;
+  }
+  .notif-row .ico.red { background: var(--d27-red); color: white; }
+  .notif-row .ico.green { background: #16a34a; color: white; }
+  .notif-row .ico.gold { background: var(--d27-gold); color: var(--d27-navy); }
+  .notif-row .title { font-size: 14px; color: var(--d27-navy); font-weight: 600; }
+  .notif-row .body { font-size: 13px; color: var(--muted); }
+  .notif-row .when { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .notif-row.unread { background: rgba(201,162,39,.06); border-left: 3px solid var(--d27-gold); padding-left: 10px; margin-left: -10px; }
+
+  .toggle-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+  }
+  .toggle-row:last-child { border-bottom: 0; }
+  .toggle {
+    width: 40px; height: 22px;
+    background: var(--line);
+    border-radius: 11px;
+    position: relative;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .toggle::after {
+    content: ""; position: absolute; top: 2px; left: 2px;
+    width: 18px; height: 18px;
+    background: white;
+    border-radius: 50%;
+    transition: left .2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  }
+  .toggle.on { background: #16a34a; }
+  .toggle.on::after { left: 20px; }
+
+  /* Chat (reuse captain's pattern, simpler) */
+  .chat-wrap {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    height: 500px;
+    background: var(--d27-white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  @media (max-width: 640px) { .chat-wrap { grid-template-columns: 1fr; height: auto; } .chat-channels { display: none; } }
+  .chat-channels { background: var(--paper); border-right: 1px solid var(--line); padding: var(--space-2); }
+  .chat-channels h5 { font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin: var(--space-2) 0 6px; padding: 0 6px; }
+  .chan { padding: 8px 10px; border-radius: 4px; cursor: pointer; font-family: 'Manrope', sans-serif; font-size: 14px; color: var(--d27-navy); margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; }
+  .chan:hover { background: rgba(0,27,71,.06); }
+  .chan.active { background: var(--d27-navy); color: var(--d27-white); }
+  .chan .unread { background: var(--d27-red); color: white; font-size: 10px; padding: 1px 7px; border-radius: 10px; font-weight: 700; }
+  .chat-main { display: flex; flex-direction: column; }
+  .chat-head { padding: 12px var(--space-3); border-bottom: 1px solid var(--line); font-family: 'Oswald', sans-serif; color: var(--d27-navy); }
+  .chat-body { flex: 1; overflow-y: auto; padding: var(--space-3); background: var(--paper); }
+  .msg { display: grid; grid-template-columns: 36px 1fr; gap: 10px; margin-bottom: var(--space-3); }
+  .msg .av { width: 36px; height: 36px; border-radius: 50%; background: var(--d27-navy); color: var(--d27-gold); display: inline-flex; align-items: center; justify-content: center; font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 13px; }
+  .msg .av.red { background: var(--d27-red); color: white; }
+  .msg .body { background: var(--d27-white); padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); }
+  .msg .who { font-family: 'Oswald', sans-serif; font-size: 12px; color: var(--d27-navy); font-weight: 600; margin-bottom: 2px; }
+  .msg .who .when { font-family: 'Manrope', sans-serif; color: var(--muted); font-size: 11px; font-weight: 400; margin-left: 6px; }
+  .msg .txt { font-size: 14px; color: var(--fg); line-height: 1.45; }
+  .chat-input { border-top: 1px solid var(--line); padding: 10px; display: flex; gap: 8px; }
+  .chat-input input { flex: 1; padding: 10px 12px; border: 1px solid var(--line); border-radius: 20px; background: var(--paper); font-size: 14px; font-family: 'Manrope', sans-serif; }
+  .chat-input button { background: var(--d27-navy); color: white; border: 0; padding: 0 16px; border-radius: 20px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+  @media (max-width: 720px) { .stat-row { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 420px) { .stat-row { grid-template-columns: repeat(2, 1fr); } }
+  .stat-card { background: var(--paper); padding: var(--space-2); border-radius: 6px; text-align: center; border: 1px solid var(--line); }
+  .stat-card .n { font-family: 'Oswald', sans-serif; font-size: 22px; color: var(--d27-navy); font-weight: 700; line-height: 1; }
+  .stat-card .l { font-size: 10px; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; margin-top: 3px; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html">
+      <span class="mark">D27</span>
+      <span class="name-block">
+        PA District 27
+        <span class="sub">Little League · Baseball &amp; Softball</span>
+      </span>
+    </a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="player.html" aria-current="page" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px;">My Team</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero ------------------------------------------------------------ -->
+<header class="p-hero">
+  <div class="container p-hero-inner">
+    <span class="av">LD</span>
+    <div>
+      <h1>Luke DiSanto</h1>
+      <div class="sub">#1 · SS/P · Berwyn-Paoli 12U Red <span class="chip">2026 Season</span></div>
+    </div>
+    <div class="p-hero-cta">
+      <button class="btn btn-primary" onclick="document.querySelector('[data-panel=\"upcoming\"]').click();" style="background: var(--d27-gold); color: var(--d27-navy);">RSVP to Next Game</button>
+    </div>
+  </div>
+</header>
+
+<!-- Tabs ------------------------------------------------------------ -->
+<div class="p-tabs">
+  <div class="container p-tabs-inner">
+    <button class="active" data-panel="upcoming">Upcoming</button>
+    <button data-panel="chat">Team Chat<span class="badge">3</span></button>
+    <button data-panel="notifs">Notifications<span class="badge">5</span></button>
+    <button data-panel="stats">My Stats</button>
+    <button data-panel="settings">Settings</button>
+  </div>
+</div>
+
+<main>
+
+  <!-- Upcoming / RSVP ---------------------------------------------- -->
+  <section class="p-panel active" id="panel-upcoming">
+    <div class="container">
+      <div class="p-card" style="background: linear-gradient(135deg, rgba(0,27,71,.04) 0%, rgba(201,162,39,.06) 100%); border-color: var(--d27-gold);">
+        <h3>📣 Action Needed · RSVP by Tuesday</h3>
+        <div class="sub">Coach Tom needs your answer before the semifinal lineup</div>
+      </div>
+
+      <!-- Next game · not yet responded -->
+      <div class="rsvp-game" data-game="sf">
+        <div class="row">
+          <div class="date-box">
+            <div class="m">Jun</div>
+            <div class="d">18</div>
+          </div>
+          <div>
+            <div class="match">vs Methacton · Bob Jones SF</div>
+            <div class="meta">Wed · 5:30 PM · Monument Ave 1 · <strong>Warmups 4:45</strong></div>
+            <div class="meta" style="margin-top: 4px;">Coach Tom: "Full uniform, navy pants this time."</div>
+          </div>
+          <span class="status-chip" style="background: #f59e0b; color: white;">⚠ No Reply</span>
+        </div>
+        <div class="actions">
+          <button class="rsvp-btn" data-answer="going" onclick="setRsvp(this)">✓ Going</button>
+          <button class="rsvp-btn" data-answer="maybe" onclick="setRsvp(this)">? Maybe</button>
+          <button class="rsvp-btn" data-answer="nope" onclick="setRsvp(this)">✗ Can't Make It</button>
+        </div>
+      </div>
+
+      <!-- Championship (if win) -->
+      <div class="rsvp-game" data-game="final">
+        <div class="row">
+          <div class="date-box">
+            <div class="m">Jun</div>
+            <div class="d">21</div>
+          </div>
+          <div>
+            <div class="match">Championship · Bob Jones Final</div>
+            <div class="meta">Sat · 6:00 PM · Monument Ave 1 · if BP wins SF</div>
+            <div class="meta" style="margin-top: 4px;">RSVP opens after Wednesday's result</div>
+          </div>
+          <span class="status-chip" style="background: #e5e7eb; color: #4b5563;">Tentative</span>
+        </div>
+      </div>
+
+      <!-- Practice -->
+      <div class="rsvp-game" data-game="practice">
+        <div class="row">
+          <div class="date-box" style="background: #f59e0b;">
+            <div class="m">Jun</div>
+            <div class="d">17</div>
+          </div>
+          <div>
+            <div class="match">Team Practice · Pre-SF tune-up</div>
+            <div class="meta">Tue · 6:00 PM · Field of Dreams Diamond 2</div>
+          </div>
+          <span class="status-chip" style="background: #16a34a; color: white;">✓ Going</span>
+        </div>
+        <div class="actions">
+          <button class="rsvp-btn selected going" data-answer="going">✓ Going</button>
+          <button class="rsvp-btn" data-answer="maybe" onclick="setRsvp(this)">? Maybe</button>
+          <button class="rsvp-btn" data-answer="nope" onclick="setRsvp(this)">✗ Can't</button>
+        </div>
+      </div>
+
+      <!-- Completed game -->
+      <div class="p-card" style="margin-top: var(--space-4);">
+        <h3>Recent Results</h3>
+        <div class="sub">Your last 3 · <a href="captain.html#panel-schedule" style="color:var(--d27-navy);">full schedule →</a></div>
+        <div style="padding:12px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-family:'Oswald',sans-serif; font-size:16px; color:var(--d27-navy);">BP Red vs Pottstown · QF1</div>
+            <div style="font-size:13px; color:var(--muted);">Sat Jun 14 · 10:00 AM · Monument · <strong>You: 3-for-3, HR, 5 RBI</strong></div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-family:'Oswald',sans-serif; font-size:20px; color:#16a34a; font-weight:700;">W 12–2</div>
+            <a href="game-final.html" style="font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.1em; color:var(--d27-navy); text-transform:uppercase;">Box Score →</a>
+          </div>
+        </div>
+        <div style="padding:12px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-family:'Oswald',sans-serif; font-size:16px; color:var(--d27-navy);">BP Red vs Coatesville · R1</div>
+            <div style="font-size:13px; color:var(--muted);">Thu Jun 12 · 6:00 PM · Field of Dreams · <strong>You: 2-for-4, 2B</strong></div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-family:'Oswald',sans-serif; font-size:20px; color:#16a34a; font-weight:700;">W 8–1</div>
+            <a href="#" style="font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.1em; color:var(--d27-navy); text-transform:uppercase;">Box Score →</a>
+          </div>
+        </div>
+        <div style="padding:12px 0; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-family:'Oswald',sans-serif; font-size:16px; color:var(--d27-navy);">BP Red @ Phoenixville · Reg</div>
+            <div style="font-size:13px; color:var(--muted);">Mon Jun 9 · 6:00 PM · Memorial Park · <strong>You: 1-for-3, 2 RBI</strong></div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-family:'Oswald',sans-serif; font-size:20px; color:#16a34a; font-weight:700;">W 6–4</div>
+            <a href="#" style="font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.1em; color:var(--d27-navy); text-transform:uppercase;">Box Score →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chat --------------------------------------------------------- -->
+  <section class="p-panel" id="panel-chat">
+    <div class="container">
+      <div class="chat-wrap">
+        <aside class="chat-channels">
+          <h5>Channels</h5>
+          <div class="chan active">#team-general <span class="unread">3</span></div>
+          <div class="chan">#announcements</div>
+          <div class="chan">#carpool</div>
+          <div class="chan">Direct · Coach Tom</div>
+        </aside>
+        <div class="chat-main">
+          <div class="chat-head">#team-general · BP Red 12U</div>
+          <div class="chat-body">
+            <div class="msg"><span class="av">TC</span><div class="body"><div class="who">Coach Tom <span class="when">Today, 8:42 AM</span></div><div class="txt">Great win yesterday, squad! 🔥 Semifinal is Wed 5:30 at Monument. RSVP by tomorrow night please — need to finalize lineup.</div></div></div>
+            <div class="msg"><span class="av red">AP</span><div class="body"><div class="who">Alex Park (Owen's mom) <span class="when">Today, 9:15 AM</span></div><div class="txt">Owen's in! Can bring snack for Wed?</div></div></div>
+            <div class="msg"><span class="av">TC</span><div class="body"><div class="who">Coach Tom <span class="when">Today, 9:17 AM</span></div><div class="txt">Yes please! Fruit &amp; Gatorade would be great 🙏</div></div></div>
+            <div class="msg"><span class="av red">MD</span><div class="body"><div class="who">Mom <span class="when">Today, 10:01 AM</span></div><div class="txt">Luke we need to RSVP — going?</div></div></div>
+            <div class="msg"><span class="av red">JR</span><div class="body"><div class="who">Jack Ryan's Dad <span class="when">Today, 10:02 AM</span></div><div class="txt">Checking on Jack's arm tonight — he threw 54 in QF. Will confirm AM.</div></div></div>
+            <div class="msg"><span class="av">TC</span><div class="body"><div class="who">Coach Tom <span class="when">Today, 10:04 AM</span></div><div class="txt">No pressure — Caleb's fresh &amp; Gavin lined up as backup. Let Jack rest if needed.</div></div></div>
+          </div>
+          <div class="chat-input">
+            <input type="text" placeholder="Message #team-general..." onkeydown="if(event.key==='Enter' && this.value){ alert('Demo — would post: '+this.value); this.value=''; }" />
+            <button onclick="alert('Demo — post')">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Notifications ------------------------------------------------- -->
+  <section class="p-panel" id="panel-notifs">
+    <div class="container">
+      <div class="p-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--space-2);">
+          <h3 style="margin:0;">Notifications</h3>
+          <button class="btn btn-ghost" onclick="markAllRead()" style="padding: 6px 12px; font-size: 12px;">Mark all read</button>
+        </div>
+        <div class="notif-row unread">
+          <span class="ico gold">⚠</span>
+          <div>
+            <div class="title">Please RSVP to SF vs Methacton</div>
+            <div class="body">Coach Tom · Wed Jun 18, 5:30 PM · 4 others haven't replied</div>
+          </div>
+          <div class="when">1h ago</div>
+        </div>
+        <div class="notif-row unread">
+          <span class="ico">📢</span>
+          <div>
+            <div class="title">District: Field assignment changed</div>
+            <div class="body">SF moved to Monument Ave 1 (from Field of Dreams)</div>
+          </div>
+          <div class="when">2h ago</div>
+        </div>
+        <div class="notif-row unread">
+          <span class="ico green">✓</span>
+          <div>
+            <div class="title">Box score posted: BP 12, Pottstown 2</div>
+            <div class="body">You went 3-for-3 with a HR and 5 RBI · Named MVP</div>
+          </div>
+          <div class="when">3h ago</div>
+        </div>
+        <div class="notif-row unread">
+          <span class="ico red">💬</span>
+          <div>
+            <div class="title">New message · #team-general</div>
+            <div class="body">Mom: "Luke we need to RSVP — going?"</div>
+          </div>
+          <div class="when">5h ago</div>
+        </div>
+        <div class="notif-row unread">
+          <span class="ico">📅</span>
+          <div>
+            <div class="title">Reminder: Tuesday practice</div>
+            <div class="body">Pre-SF tune-up · Field of Dreams Diamond 2 · 6:00 PM</div>
+          </div>
+          <div class="when">Yesterday</div>
+        </div>
+        <div class="notif-row">
+          <span class="ico">🏆</span>
+          <div>
+            <div class="title">Nominated for BP All-Star 11U team</div>
+            <div class="body">Roster posts June 22 · no action needed</div>
+          </div>
+          <div class="when">2 days ago</div>
+        </div>
+        <div class="notif-row">
+          <span class="ico">📊</span>
+          <div>
+            <div class="title">Season stats milestone</div>
+            <div class="body">You passed .400 · now hitting .412 on the season</div>
+          </div>
+          <div class="when">3 days ago</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats --------------------------------------------------------- -->
+  <section class="p-panel" id="panel-stats">
+    <div class="container">
+      <div class="p-card">
+        <h3>My Season · 2026</h3>
+        <div class="sub">Berwyn-Paoli 12U Red · 12 games played</div>
+
+        <h4 style="font-family:'Oswald', sans-serif; color:var(--d27-navy); margin:var(--space-3) 0 var(--space-2); letter-spacing:.02em;">Batting</h4>
+        <div class="stat-row">
+          <div class="stat-card"><div class="n">.412</div><div class="l">AVG</div></div>
+          <div class="stat-card"><div class="n">.524</div><div class="l">OBP</div></div>
+          <div class="stat-card"><div class="n">.736</div><div class="l">SLG</div></div>
+          <div class="stat-card"><div class="n">14</div><div class="l">RBI</div></div>
+          <div class="stat-card"><div class="n">3</div><div class="l">HR</div></div>
+          <div class="stat-card"><div class="n">12</div><div class="l">R</div></div>
+          <div class="stat-card"><div class="n">21</div><div class="l">H</div></div>
+          <div class="stat-card"><div class="n">4</div><div class="l">2B</div></div>
+          <div class="stat-card"><div class="n">1</div><div class="l">3B</div></div>
+          <div class="stat-card"><div class="n">8</div><div class="l">SB</div></div>
+        </div>
+
+        <h4 style="font-family:'Oswald', sans-serif; color:var(--d27-navy); margin:var(--space-3) 0 var(--space-2); letter-spacing:.02em;">Pitching</h4>
+        <div class="stat-row">
+          <div class="stat-card"><div class="n">3–0</div><div class="l">W-L</div></div>
+          <div class="stat-card"><div class="n">2.14</div><div class="l">ERA</div></div>
+          <div class="stat-card"><div class="n">24</div><div class="l">K</div></div>
+          <div class="stat-card"><div class="n">8</div><div class="l">BB</div></div>
+          <div class="stat-card"><div class="n">19.2</div><div class="l">IP</div></div>
+        </div>
+
+        <h4 style="font-family:'Oswald', sans-serif; color:var(--d27-navy); margin:var(--space-3) 0 var(--space-2); letter-spacing:.02em;">Team Leaderboard</h4>
+        <table class="roster-tbl" style="font-size:13px; width:100%; border-collapse:collapse;">
+          <thead><tr style="background:var(--paper);"><th style="padding:8px 10px; text-align:left; font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--d27-navy); border-bottom:2px solid var(--d27-navy);">Category</th><th style="padding:8px 10px; text-align:left; font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--d27-navy); border-bottom:2px solid var(--d27-navy);">Leader</th><th style="padding:8px 10px; text-align:left; font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--d27-navy); border-bottom:2px solid var(--d27-navy);">Value</th><th style="padding:8px 10px; text-align:left; font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--d27-navy); border-bottom:2px solid var(--d27-navy);">You</th></tr></thead>
+          <tbody>
+            <tr><td style="padding:10px; border-bottom:1px solid var(--line);">AVG</td><td style="padding:10px; border-bottom:1px solid var(--line);"><strong style="color:var(--d27-gold);">You (DiSanto)</strong></td><td style="padding:10px; border-bottom:1px solid var(--line);">.412</td><td style="padding:10px; border-bottom:1px solid var(--line);">1st</td></tr>
+            <tr><td style="padding:10px; border-bottom:1px solid var(--line);">RBI</td><td style="padding:10px; border-bottom:1px solid var(--line);">Wu</td><td style="padding:10px; border-bottom:1px solid var(--line);">18</td><td style="padding:10px; border-bottom:1px solid var(--line);">2nd (14)</td></tr>
+            <tr><td style="padding:10px; border-bottom:1px solid var(--line);">HR</td><td style="padding:10px; border-bottom:1px solid var(--line);">Pierce</td><td style="padding:10px; border-bottom:1px solid var(--line);">4</td><td style="padding:10px; border-bottom:1px solid var(--line);">T-2nd (3)</td></tr>
+            <tr><td style="padding:10px; border-bottom:1px solid var(--line);">ERA</td><td style="padding:10px; border-bottom:1px solid var(--line);">Wu</td><td style="padding:10px; border-bottom:1px solid var(--line);">1.82</td><td style="padding:10px; border-bottom:1px solid var(--line);">2nd (2.14)</td></tr>
+            <tr><td style="padding:10px;">K</td><td style="padding:10px;"><strong style="color:var(--d27-gold);">You (DiSanto)</strong></td><td style="padding:10px;">24</td><td style="padding:10px;">1st</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Settings ------------------------------------------------------ -->
+  <section class="p-panel" id="panel-settings">
+    <div class="container">
+      <div class="p-card">
+        <h3>Notification Preferences</h3>
+        <div class="sub">Control what you hear about and how</div>
+
+        <h4 style="font-family:'Oswald', sans-serif; color:var(--d27-navy); margin:var(--space-3) 0 var(--space-2); letter-spacing:.02em; font-size:14px;">Push Notifications</h4>
+        <div class="toggle-row"><span>Game reminders (24h before)</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="toggle-row"><span>Lineup posted</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="toggle-row"><span>Rainouts &amp; reschedules</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="toggle-row"><span>Team chat messages</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="toggle-row"><span>District announcements</span><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+        <div class="toggle-row"><span>Scholarship &amp; All-Star alerts</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="toggle-row"><span>Season stat milestones</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+
+        <h4 style="font-family:'Oswald', sans-serif; color:var(--d27-navy); margin:var(--space-3) 0 var(--space-2); letter-spacing:.02em; font-size:14px;">Parent Contacts</h4>
+        <div class="toggle-row"><span>SMS reminders to parent (Mom)</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="toggle-row"><span>Email digest to parent (Dad)</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+
+        <div style="margin-top: var(--space-3);">
+          <a href="login.html" style="color: var(--d27-red); font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing:.08em; text-transform:uppercase;">Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  function switchTab(panelId) {
+    document.querySelectorAll('.p-tabs button').forEach(b => b.classList.toggle('active', b.dataset.panel === panelId));
+    document.querySelectorAll('.p-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + panelId));
+    window.scrollTo({ top: document.querySelector('.p-tabs').offsetTop, behavior: 'smooth' });
+  }
+  document.querySelectorAll('.p-tabs button').forEach(b => {
+    b.addEventListener('click', () => switchTab(b.dataset.panel));
+  });
+
+  function setRsvp(btn) {
+    const game = btn.closest('.rsvp-game');
+    game.querySelectorAll('.rsvp-btn').forEach(b => b.classList.remove('selected', 'going', 'maybe', 'nope'));
+    btn.classList.add('selected', btn.dataset.answer);
+    const chip = game.querySelector('.status-chip');
+    if (chip) {
+      const map = {
+        going: ['✓ Going', '#16a34a'],
+        maybe: ['? Maybe', '#f59e0b'],
+        nope: ['✗ Can\'t', 'var(--d27-red)']
+      };
+      chip.textContent = map[btn.dataset.answer][0];
+      chip.style.background = map[btn.dataset.answer][1];
+      chip.style.color = 'white';
+    }
+  }
+
+  function markAllRead() {
+    document.querySelectorAll('.notif-row.unread').forEach(r => r.classList.remove('unread'));
+    document.querySelectorAll('.p-tabs button[data-panel="notifs"] .badge').forEach(b => b.style.display = 'none');
+  }
+</script>
+
+</body>
+</html>
