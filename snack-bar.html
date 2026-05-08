@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Snack Bar Schedule · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .sb-hero { background: linear-gradient(135deg, var(--d27-red), #7F1D1D); color:#fff; padding: 56px 0 36px; border-bottom: 4px solid var(--d27-gold); }
+  .sb-hero h1 { font-family: var(--font-display); font-size: clamp(34px, 5vw, 54px); margin: 0; }
+  .sb-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .sb-hero p { color: rgba(255,255,255,.85); max-width: 60ch; margin: 14px 0 0; }
+
+  .sb-toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin: 24px 0 20px; align-items: center; }
+  .sb-toolbar select { padding: 9px 12px; border: 1px solid var(--line); border-radius: 5px; font-size: 13px; background: var(--surface); }
+  .sb-toolbar .right { margin-left: auto; font-size: 13px; color: var(--muted); }
+
+  .sb-week { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-bottom: 18px; }
+  .sb-week-head { background: var(--d27-navy); color: #fff; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .sb-week-head h2 { margin: 0; font-family: var(--font-display); font-size: 18px; }
+  .sb-week-head .stat { color: var(--d27-gold); font-size: 13px; font-family: var(--font-display); }
+
+  .sb-day { display: grid; grid-template-columns: 100px 1fr; border-bottom: 1px solid var(--line); }
+  .sb-day:last-child { border-bottom: 0; }
+  @media (max-width: 600px) { .sb-day { grid-template-columns: 1fr; } }
+  .sb-day .label { background: var(--d27-sub); padding: 14px; font-family: var(--font-display); font-weight: 700; color: var(--d27-navy); font-size: 14px; letter-spacing: .04em; text-transform: uppercase; display: flex; flex-direction: column; justify-content: center; }
+  .sb-day .label .d { font-size: 22px; line-height: 1; }
+  .sb-day .label .m { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .sb-day .shifts { padding: 12px 14px; display: grid; grid-template-columns: 1fr; gap: 6px; }
+
+  .sb-shift { display: grid; grid-template-columns: 80px 1fr auto; gap: 12px; align-items: center; padding: 8px 12px; border: 1px solid var(--line); border-radius: 5px; }
+  .sb-shift.filled { background: rgba(16,185,129,.04); border-color: rgba(16,185,129,.28); }
+  .sb-shift.open { background: rgba(218,41,28,.04); border-color: rgba(218,41,28,.3); }
+  .sb-shift .time { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--d27-navy); }
+  .sb-shift .who { font-size: 13px; }
+  .sb-shift .who .nm { font-weight: 700; }
+  .sb-shift .who .meta { color: var(--muted); font-size: 11px; }
+  .sb-shift .badge { font-size: 11px; padding: 3px 9px; border-radius: 3px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .sb-shift.filled .badge { background: #ECFDF5; color: #059669; }
+  .sb-shift.open .badge { background: var(--d27-red); color: #fff; cursor: pointer; }
+
+  .sb-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+  @media (max-width: 700px) { .sb-stats { grid-template-columns: repeat(2, 1fr); } }
+  .sb-stat { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 14px; text-align: center; }
+  .sb-stat .n { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--d27-navy); }
+  .sb-stat .l { color: var(--muted); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; margin-top: 4px; }
+
+  .sb-info { background: linear-gradient(90deg, rgba(218,41,28,.05), rgba(201,162,39,.04)); border: 1px solid rgba(0,45,114,.12); border-left: 4px solid var(--d27-red); padding: 16px 20px; border-radius: 6px; margin-top: 24px; }
+  .sb-info h3 { margin: 0 0 6px; font-family: var(--font-display); color: var(--d27-navy); }
+  .sb-info p { margin: 0 0 6px; font-size: 13px; color: var(--muted); line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="sb-hero">
+  <div class="container">
+    <div class="eyebrow">🥨 D27 SNACK BAR · BERWYN-PAOLI</div>
+    <h1>Snack Bar Schedule</h1>
+    <p>Each player's family signs up for one shift per season. Tips support the Scott Scholarship. Your shift = free snacks for your kid + bragging rights at next week's game.</p>
+  </div>
+</header>
+
+<main class="container" style="padding: 0 0 64px;">
+
+  <div class="sb-stats">
+    <div class="sb-stat"><div class="n">42 / 48</div><div class="l">Shifts Filled · This Season</div></div>
+    <div class="sb-stat"><div class="n">6</div><div class="l">Open This Week</div></div>
+    <div class="sb-stat"><div class="n">$3,840</div><div class="l">Tips → Scholarship YTD</div></div>
+    <div class="sb-stat"><div class="n">12</div><div class="l">Volunteers · This Week</div></div>
+  </div>
+
+  <div class="sb-toolbar">
+    <select><option>Berwyn-Paoli LL</option><option>Methacton LL</option><option>Chester Valley LL</option><option>Lower Merion LL</option><option>All Leagues</option></select>
+    <select><option>This Week (May 4–10)</option><option>Next Week</option><option>Whole Season</option></select>
+    <select><option>All Shifts</option><option>Open Only</option><option>My Shifts</option></select>
+    <span class="right">Auto-reminds 24h before your shift · text + email</span>
+  </div>
+
+  <div class="sb-week">
+    <div class="sb-week-head">
+      <h2>Week of Monday May 4 – Sunday May 10, 2026</h2>
+      <div class="stat">14 shifts · 8 filled · 6 open</div>
+    </div>
+
+    <div class="sb-day">
+      <div class="label"><div class="d">Mon 5</div><div class="m">May</div></div>
+      <div class="shifts">
+        <div class="sb-shift filled"><div class="time">5:30 – 8:00P</div><div class="who"><div class="nm">Wright Family</div><div class="meta">BP Red 12U · son #11 Brendan</div></div><span class="badge">✓ Filled</span></div>
+      </div>
+    </div>
+
+    <div class="sb-day">
+      <div class="label"><div class="d">Tue 6</div><div class="m">May</div></div>
+      <div class="shifts">
+        <div class="sb-shift filled"><div class="time">5:30 – 7:00P</div><div class="who"><div class="nm">Park Family</div><div class="meta">BP Blue 12U · son #7 Alex</div></div><span class="badge">✓ Filled</span></div>
+        <div class="sb-shift open"><div class="time">7:00 – 8:30P</div><div class="who"><div class="nm">Open shift</div><div class="meta">Late shift · cleanup + lock-up</div></div><button class="badge" onclick="alert('Demo — claims shift, sends confirmation, adds to your calendar')">+ Take Shift</button></div>
+      </div>
+    </div>
+
+    <div class="sb-day">
+      <div class="label"><div class="d">Wed 7</div><div class="m">May</div></div>
+      <div class="shifts">
+        <div class="sb-shift filled"><div class="time">5:00 – 7:00P</div><div class="who"><div class="nm">Connors Family</div><div class="meta">BP Blue 11U · son #17 Tate</div></div><span class="badge">✓ Filled</span></div>
+        <div class="sb-shift filled"><div class="time">7:00 – 9:00P</div><div class="who"><div class="nm">Hollis Family</div><div class="meta">BP Red 12U · son #22 Max</div></div><span class="badge">✓ Filled</span></div>
+      </div>
+    </div>
+
+    <div class="sb-day">
+      <div class="label"><div class="d">Thu 8</div><div class="m">May</div></div>
+      <div class="shifts">
+        <div class="sb-shift open"><div class="time">5:30 – 7:30P</div><div class="who"><div class="nm">Open shift</div><div class="meta">Coverage needed for double-header</div></div><button class="badge" onclick="alert('Demo — claim shift')">+ Take Shift</button></div>
+      </div>
+    </div>
+
+    <div class="sb-day">
+      <div class="label"><div class="d">Fri 9</div><div class="m">May</div></div>
+      <div class="shifts">
+        <div class="sb-shift open"><div class="time">5:00 – 9:00P</div><div class="who"><div class="nm">Open · Friday Night Lights</div><div class="meta">Big-night shift · concession runs 4 games · solid tips</div></div><button class="badge" onclick="alert('Demo — claim shift')">+ Take Shift</button></div>
+      </div>
+    </div>
+
+    <div class="sb-day">
+      <div class="label"><div class="d">Sat 10</div><div class="m">May</div></div>
+      <div class="shifts">
+        <div class="sb-shift filled"><div class="time">8:00A – 12:00P</div><div class="who"><div class="nm">Patel Family</div><div class="meta">BP Red 12U · son #31 Sam</div></div><span class="badge">✓ Filled</span></div>
+        <div class="sb-shift open"><div class="time">12:00 – 4:00P</div><div class="who"><div class="nm">Open · Mid-Day</div><div class="meta">Saturday Special — heaviest day</div></div><button class="badge" onclick="alert('Demo — claim shift')">+ Take Shift</button></div>
+        <div class="sb-shift filled"><div class="time">4:00 – 8:00P</div><div class="who"><div class="nm">Caldwell Family</div><div class="meta">BP Red 12U · coach</div></div><span class="badge">✓ Filled</span></div>
+      </div>
+    </div>
+
+    <div class="sb-day">
+      <div class="label"><div class="d">Sun 11</div><div class="m">May</div></div>
+      <div class="shifts">
+        <div class="sb-shift open"><div class="time">9:00A – 1:00P</div><div class="who"><div class="nm">Open · Sunday AM</div><div class="meta">Tournament prep day</div></div><button class="badge" onclick="alert('Demo — claim shift')">+ Take Shift</button></div>
+        <div class="sb-shift open"><div class="time">1:00 – 5:00P</div><div class="who"><div class="nm">Open · Sunday PM</div><div class="meta">Tournament prep day · cleanup</div></div><button class="badge" onclick="alert('Demo — claim shift')">+ Take Shift</button></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sb-info">
+    <h3>The deal</h3>
+    <p>One family = one shift per season. Trade with another family if your week doesn't work. Cancellations &lt; 48 hours get reassigned to a backup. League cellphone (handled by snack-bar coordinator) goes home with the closing shift to lock up.</p>
+    <p>Drinks, hot dogs, pretzels, candy, Gatorade. League supplies — you don't shop, you sell. Tips go in a jar. End-of-night count + drop into the lockbox. <a href="treasury.html" style="color: var(--d27-navy); font-weight: 600;">Treasury page</a> shows running totals.</p>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="standings.html">Standings</a></li><li><a href="stats.html">Stats Leaders</a></li></ul></div>
+      <div><h5>League Tools</h5><ul><li><a href="snack-bar.html">Snack Bar</a></li><li><a href="treasury.html">Treasury</a></li><li><a href="equipment.html">Equipment</a></li><li><a href="tryouts.html">Tryouts</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+</body>
+</html>

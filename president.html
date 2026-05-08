@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>League President Portal · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  body { background: var(--d27-paper); }
+
+  .pp-hero { background: linear-gradient(135deg, var(--d27-navy), var(--d27-navy-dark)); color:#fff; padding: 36px 0; border-bottom: 4px solid var(--d27-gold); }
+  .pp-hero .top { display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .pp-hero h1 { font-family: var(--font-display); margin: 0; font-size: 28px; }
+  .pp-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 11px; font-weight: 600; }
+  .pp-sig { display: flex; gap: 12px; align-items: center; }
+  .pp-sig .av { width: 44px; height: 44px; border-radius: 50%; background: var(--d27-gold); color: var(--d27-navy); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 14px; }
+  .pp-sig .nm { font-weight: 700; }
+  .pp-sig .role { color: rgba(255,255,255,.7); font-size: 11px; letter-spacing:.06em; text-transform: uppercase; }
+
+  .pp-kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 24px 0 24px; }
+  @media (max-width: 880px) { .pp-kpis { grid-template-columns: repeat(2, 1fr); } }
+  .pp-kpi { background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--d27-navy); border-radius: 8px; padding: 16px; }
+  .pp-kpi.gold { border-top-color: var(--d27-gold); }
+  .pp-kpi.red { border-top-color: var(--d27-red); }
+  .pp-kpi.green { border-top-color: #10B981; }
+  .pp-kpi .lbl { color: var(--muted); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; }
+  .pp-kpi .n { font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--d27-navy); margin-top: 4px; line-height: 1; }
+  .pp-kpi .delta { font-size: 12px; color: #059669; margin-top: 4px; }
+  .pp-kpi .delta.down { color: var(--d27-red); }
+
+  .pp-cols { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; }
+  @media (max-width: 980px) { .pp-cols { grid-template-columns: 1fr; } }
+
+  .pp-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px; margin-bottom: 18px; }
+  .pp-card h2 { font-family: var(--font-display); margin: 0 0 4px; color: var(--d27-navy); font-size: 19px; }
+  .pp-card .sub { color: var(--muted); font-size: 12px; margin-bottom: 14px; }
+
+  .pp-tasks { list-style: none; padding: 0; margin: 0; }
+  .pp-tasks li { padding: 12px 0; border-bottom: 1px dashed var(--line); display: flex; gap: 12px; align-items: center; }
+  .pp-tasks li:last-child { border-bottom: 0; }
+  .pp-tasks .ico { width: 32px; height: 32px; border-radius: 50%; background: var(--d27-sub); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .pp-tasks .ico.urgent { background: #FEE2E2; }
+  .pp-tasks .ico.warn { background: #FEF3C7; }
+  .pp-tasks .ico.ok { background: #ECFDF5; }
+  .pp-tasks .body { flex: 1; }
+  .pp-tasks .title { font-weight: 700; font-size: 14px; }
+  .pp-tasks .meta { color: var(--muted); font-size: 12px; }
+  .pp-tasks button { background: var(--d27-navy); color: #fff; border: none; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 700; cursor: pointer; }
+
+  .pp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .pp-table th { background: var(--d27-navy); color: #fff; padding: 9px 10px; text-align: left; font-family: var(--font-display); font-size: 11px; letter-spacing:.06em; text-transform: uppercase; }
+  .pp-table td { padding: 10px; border-bottom: 1px solid var(--line); }
+  .pp-table tr:hover td { background: rgba(0,45,114,.02); }
+  .pp-table .nm { font-weight: 700; }
+
+  .pp-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  @media (max-width: 540px) { .pp-actions { grid-template-columns: 1fr; } }
+  .pp-actions a { background: var(--surface); border: 1px solid var(--line); padding: 14px; border-radius: 6px; text-decoration: none; color: var(--d27-ink); display: flex; gap: 10px; align-items: center; transition: all .15s; }
+  .pp-actions a:hover { border-color: var(--d27-navy); background: rgba(0,45,114,.02); }
+  .pp-actions .ico { font-size: 24px; }
+  .pp-actions .nm { font-weight: 700; font-size: 14px; color: var(--d27-navy); }
+  .pp-actions .meta { font-size: 11px; color: var(--muted); }
+
+  .pp-pie { display: flex; align-items: center; gap: 18px; }
+  .pp-pie .ring { width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(#10B981 0% 78%, #F59E0B 78% 92%, #DC2626 92% 100%); display: flex; align-items: center; justify-content: center; }
+  .pp-pie .ring::before { content: ''; width: 60px; height: 60px; border-radius: 50%; background: var(--surface); position: absolute; }
+  .pp-pie .ring span { position: relative; font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--d27-navy); }
+  .pp-pie .legend div { font-size: 12px; padding: 2px 0; }
+  .pp-pie .legend span { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+
+  .pp-feed { font-size: 13px; }
+  .pp-feed li { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--line); }
+  .pp-feed li:last-child { border-bottom: 0; }
+  .pp-feed .when { color: var(--muted); font-size: 11px; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="pp-hero">
+  <div class="container">
+    <div class="top">
+      <div>
+        <div class="eyebrow">LEAGUE PRESIDENT PORTAL</div>
+        <h1>Berwyn-Paoli Little League · Spring 2026</h1>
+      </div>
+      <div class="pp-sig">
+        <div class="av">JM</div>
+        <div><div class="nm">Janet Murphy</div><div class="role">President · BP · 7th year</div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container" style="padding: 24px 0 64px;">
+
+  <div class="pp-kpis">
+    <div class="pp-kpi"><div class="lbl">Registered Players</div><div class="n">642</div><div class="delta">+34 vs 2025</div></div>
+    <div class="pp-kpi gold"><div class="lbl">Active Teams</div><div class="n">48</div><div class="delta">across 9 divisions</div></div>
+    <div class="pp-kpi green"><div class="lbl">Coach Compliance</div><div class="n">94%</div><div class="delta">3 lapsed</div></div>
+    <div class="pp-kpi red"><div class="lbl">Open Action Items</div><div class="n">7</div><div class="delta down">2 urgent</div></div>
+    <div class="pp-kpi gold"><div class="lbl">Sponsorship Funded</div><div class="n">$48K</div><div class="delta">87% of 2026 goal</div></div>
+  </div>
+
+  <div class="pp-cols">
+
+    <!-- Left column -->
+    <div>
+      <div class="pp-card">
+        <h2>Action Items · This Week</h2>
+        <div class="sub">Issues only the league president can resolve</div>
+        <ul class="pp-tasks">
+          <li>
+            <div class="ico urgent">⚠</div>
+            <div class="body"><div class="title">3 coaches lapsed certification</div><div class="meta">Mike Hollis · Brian O'Halloran · Tony Pasq · suspended from dugout until renewed</div></div>
+            <a href="coaches.html"><button>Review</button></a>
+          </li>
+          <li>
+            <div class="ico urgent">⚠</div>
+            <div class="body"><div class="title">Tournament team roster freeze · 2 days</div><div class="meta">Submit BP 12U All-Stars to D27 by June 1 · 13 players selected · 1 residency to verify</div></div>
+            <a href="all-stars.html"><button>Submit</button></a>
+          </li>
+          <li>
+            <div class="ico warn">!</div>
+            <div class="body"><div class="title">Field of Dreams F2 booking conflict</div><div class="meta">Two practices double-booked Wed Jun 12 5:30P — coaches Park (12U) and Henley (10U)</div></div>
+            <a href="fields.html"><button>Resolve</button></a>
+          </li>
+          <li>
+            <div class="ico warn">!</div>
+            <div class="body"><div class="title">Score discrepancy needs resolution</div><div class="meta">BP Blue 11U vs Tredyffrin · captains submitted different finals · ump scorebook awaiting</div></div>
+            <a href="admin.html#disputes"><button>View</button></a>
+          </li>
+          <li>
+            <div class="ico ok">✓</div>
+            <div class="body"><div class="title">Volunteer signups · 4 new this week</div><div class="meta">Approve background-check submissions: 2 scorekeepers, 1 field crew, 1 photographer</div></div>
+            <a href="volunteer.html"><button>Approve</button></a>
+          </li>
+          <li>
+            <div class="ico">📅</div>
+            <div class="body"><div class="title">Banquet date selection</div><div class="meta">Reserve Drexelbrook for October — committee votes Oct 17 vs Oct 24</div></div>
+            <button onclick="alert('Demo — vote recorded')">Vote</button>
+          </li>
+          <li>
+            <div class="ico">💰</div>
+            <div class="body"><div class="title">Wawa sponsorship renewal · $5K</div><div class="meta">Champion-tier · expires June 30 · contact: Dave Petrillo · email drafted</div></div>
+            <button onclick="alert('Demo — opens email composer with draft')">Send</button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="pp-card">
+        <h2>Team Compliance Snapshot</h2>
+        <div class="sub">All 48 teams · click any row for full detail</div>
+        <table class="pp-table">
+          <thead><tr><th>Team</th><th>Coach</th><th style="text-align:center;">Cert</th><th style="text-align:center;">Roster</th><th style="text-align:center;">Submitted Scores</th></tr></thead>
+          <tbody>
+            <tr><td><div class="nm">BP Red 12U</div></td><td>T. Caldwell</td><td style="text-align:center; color:#059669;">✓ Full</td><td style="text-align:center;">14/14</td><td style="text-align:center;">10/10</td></tr>
+            <tr><td><div class="nm">BP Blue 12U</div></td><td>K. Park</td><td style="text-align:center; color:#059669;">✓ Full</td><td style="text-align:center;">13/14</td><td style="text-align:center; color:var(--d27-red);">9/10</td></tr>
+            <tr><td><div class="nm">BP White 12U</div></td><td>M. Hollis</td><td style="text-align:center; color:var(--d27-red);">✕ Lapsed</td><td style="text-align:center;">14/14</td><td style="text-align:center;">10/10</td></tr>
+            <tr><td><div class="nm">BP Red 11U</div></td><td>D. Wright</td><td style="text-align:center; color:#059669;">✓ Full</td><td style="text-align:center;">12/13</td><td style="text-align:center;">10/10</td></tr>
+            <tr><td><div class="nm">BP Blue 11U</div></td><td>S. Connors</td><td style="text-align:center; color:#059669;">✓ Full</td><td style="text-align:center;">13/13</td><td style="text-align:center; color:#B45309;">8/10</td></tr>
+            <tr><td><div class="nm">BP Red 10U</div></td><td>P. O'Connor</td><td style="text-align:center; color:#B45309;">⚠ Expiring</td><td style="text-align:center;">12/12</td><td style="text-align:center;">10/10</td></tr>
+            <tr><td colspan="5" style="color:var(--muted); text-align:center;">+42 more teams · view all →</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pp-card">
+        <h2>Recent Activity</h2>
+        <ul class="pp-feed" style="list-style:none; padding:0; margin:0;">
+          <li><span class="when">2m ago</span><span><b>Tom Caldwell</b> submitted SF lineup card · 14 players</span></li>
+          <li><span class="when">17m ago</span><span><b>Sarah Patel</b> approved 2 volunteer applications</span></li>
+          <li><span class="when">38m ago</span><span><b>D27 Admin</b> published Bob Jones tournament bracket</span></li>
+          <li><span class="when">1h ago</span><span><b>Auto-cron</b> emailed cert reminders to 4 coaches</span></li>
+          <li><span class="when">2h ago</span><span><b>Mike Russo</b> updated Field of Dreams F1 to "Open"</span></li>
+          <li><span class="when">3h ago</span><span><b>Jenny Albright</b> uploaded 18 photos · BP vs Pottstown QF</span></li>
+          <li><span class="when">5h ago</span><span><b>Pat Connors</b> RSVP'd as plate ump for Sat 10 AM</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Right column -->
+    <aside>
+      <div class="pp-card">
+        <h2>League Health</h2>
+        <div class="sub">Roster + Cert + Score Submission rolled into one</div>
+        <div class="pp-pie">
+          <div class="ring" style="position: relative;"><span>78%</span></div>
+          <div class="legend">
+            <div><span style="background:#10B981;"></span>Healthy · 38 teams</div>
+            <div><span style="background:#F59E0B;"></span>Action soon · 7 teams</div>
+            <div><span style="background:#DC2626;"></span>Issues · 3 teams</div>
+          </div>
+        </div>
+        <p style="margin: 14px 0 0; color: var(--muted); font-size: 12px;">D27 reports this metric to LL International each quarter. Above 90% earns Quality Charter status (financial perks + LL HQ visibility).</p>
+      </div>
+
+      <div class="pp-card">
+        <h2>Quick Actions</h2>
+        <div class="pp-actions">
+          <a href="captain.html"><span class="ico">⚾</span><div><div class="nm">View Captain Portal</div><div class="meta">Coach inbox</div></div></a>
+          <a href="admin.html#broadcasts"><span class="ico">📣</span><div><div class="nm">Broadcast to BP</div><div class="meta">1,840 recipients</div></div></a>
+          <a href="volunteer.html"><span class="ico">🙋</span><div><div class="nm">Approve Vols</div><div class="meta">4 pending</div></div></a>
+          <a href="treasury.html"><span class="ico">💰</span><div><div class="nm">Treasury</div><div class="meta">$24,820 cash</div></div></a>
+          <a href="snack-bar.html"><span class="ico">🥨</span><div><div class="nm">Snack Bar</div><div class="meta">3 shifts open</div></div></a>
+          <a href="equipment.html"><span class="ico">🧤</span><div><div class="nm">Equipment</div><div class="meta">42 items in inventory</div></div></a>
+          <a href="tryouts.html"><span class="ico">🏟</span><div><div class="nm">Tryouts</div><div class="meta">Spring '27 scheduling</div></div></a>
+          <a href="all-stars.html"><span class="ico">⭐</span><div><div class="nm">All-Star Roster</div><div class="meta">13 players · submit by Jun 1</div></div></a>
+        </div>
+      </div>
+
+      <div class="pp-card">
+        <h2>League Officers</h2>
+        <ul style="list-style:none; padding:0; margin:0; font-size: 13px;">
+          <li style="padding: 6px 0; border-bottom: 1px dashed var(--line); display:flex; justify-content:space-between;"><span>President</span><b>Janet Murphy</b></li>
+          <li style="padding: 6px 0; border-bottom: 1px dashed var(--line); display:flex; justify-content:space-between;"><span>VP Baseball</span><b>Joel Park</b></li>
+          <li style="padding: 6px 0; border-bottom: 1px dashed var(--line); display:flex; justify-content:space-between;"><span>VP Softball</span><b>Liz Connors</b></li>
+          <li style="padding: 6px 0; border-bottom: 1px dashed var(--line); display:flex; justify-content:space-between;"><span>Treasurer</span><b>Dan Wright</b></li>
+          <li style="padding: 6px 0; border-bottom: 1px dashed var(--line); display:flex; justify-content:space-between;"><span>Player Agent</span><b>Sarah Patel</b></li>
+          <li style="padding: 6px 0; border-bottom: 1px dashed var(--line); display:flex; justify-content:space-between;"><span>Safety Officer</span><b>Carlos Reyes</b></li>
+          <li style="padding: 6px 0; display:flex; justify-content:space-between;"><span>Equipment Mgr</span><b>Mike Russo</b></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="pitch-count.html">Pitch Count</a></li><li><a href="standings.html">Standings</a></li><li><a href="stats.html">Stats Leaders</a></li></ul></div>
+      <div><h5>League Tools</h5><ul><li><a href="treasury.html">Treasury</a></li><li><a href="snack-bar.html">Snack Bar</a></li><li><a href="equipment.html">Equipment</a></li><li><a href="tryouts.html">Tryouts</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>D27 Swag Store · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .st-hero { background: linear-gradient(135deg, var(--d27-navy), var(--d27-navy-dark)); color: #fff; padding: 56px 0 36px; border-bottom: 4px solid var(--d27-gold); position: relative; overflow: hidden; }
+  .st-hero::after { content:''; position:absolute; right:-50px; top:-50px; width:300px; height:300px; background: radial-gradient(circle, rgba(201,162,39,.18), transparent 60%); }
+  .st-hero h1 { font-family: var(--font-display); font-size: clamp(34px, 5vw, 54px); margin: 0; position:relative; }
+  .st-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .st-hero p { color: rgba(255,255,255,.78); max-width: 60ch; margin: 14px 0 0; position:relative; }
+
+  .st-tabs { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 2px solid var(--line); margin: 28px 0 22px; }
+  .st-tab { background: none; border: none; padding: 10px 14px; font-family: var(--font-display); font-size: 14px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; }
+  .st-tab.active { color: var(--d27-navy); border-bottom-color: var(--d27-red); }
+
+  .st-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+  .st-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; cursor: pointer; transition: all .15s; }
+  .st-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,.08); border-color: var(--d27-navy); }
+
+  .st-img { aspect-ratio: 1; background: linear-gradient(135deg, var(--d27-navy), var(--d27-navy-dark)); position: relative; display: flex; align-items: center; justify-content: center; color: #fff; font-family: var(--font-display); font-size: 28px; letter-spacing: .04em; padding: 18px; text-align: center; }
+  .st-img.tee { background: linear-gradient(135deg, #1F2937, var(--d27-navy)); }
+  .st-img.hat { background: linear-gradient(135deg, var(--d27-navy), #001034); }
+  .st-img.hood { background: linear-gradient(135deg, #2D1B69, var(--d27-navy)); }
+  .st-img.youth { background: linear-gradient(135deg, var(--d27-red), #7F1D1D); }
+  .st-img.bag { background: linear-gradient(135deg, #064E3B, var(--d27-navy)); }
+  .st-img.print { background: linear-gradient(135deg, var(--d27-gold), #B45309); color: var(--d27-navy); }
+  .st-img.fleece { background: linear-gradient(135deg, #57534E, var(--d27-navy)); }
+  .st-img::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, rgba(255,255,255,.04), rgba(255,255,255,.04) 2px, transparent 2px, transparent 14px); }
+  .st-img .crest { position: absolute; bottom: 14px; right: 14px; background: rgba(255,255,255,.14); padding: 4px 10px; border-radius: 3px; font-size: 10px; font-family: var(--font-display); }
+
+  .st-meta { padding: 14px 16px; }
+  .st-meta .nm { font-weight: 700; font-size: 15px; color: var(--d27-ink); }
+  .st-meta .desc { color: var(--muted); font-size: 12px; margin-top: 2px; min-height: 32px; }
+  .st-meta .row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+  .st-meta .price { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--d27-red); }
+  .st-meta .add { background: var(--d27-navy); color: #fff; border: none; padding: 6px 14px; border-radius: 4px; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+
+  .st-banner { background: linear-gradient(90deg, rgba(218,41,28,.05), rgba(201,162,39,.04)); border:1px solid rgba(0,45,114,.12); border-left: 4px solid var(--d27-gold); padding: 18px 24px; border-radius: 6px; margin-bottom: 22px; display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; }
+  @media (max-width: 600px) { .st-banner { grid-template-columns: 1fr; } }
+  .st-banner h3 { margin: 0 0 4px; font-family: var(--font-display); color: var(--d27-navy); font-size: 18px; }
+  .st-banner p { margin: 0; color: var(--muted); font-size: 13px; }
+  .st-banner a { background: var(--d27-red); color: #fff; padding: 12px 22px; border-radius: 5px; text-decoration: none; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+
+  .st-cart { position: fixed; bottom: 24px; right: 24px; background: var(--d27-navy); color: #fff; padding: 14px 20px; border-radius: 999px; font-family: var(--font-display); font-weight: 700; font-size: 14px; letter-spacing: .04em; cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,.25); border: 2px solid var(--d27-gold); }
+  .st-cart-count { background: var(--d27-red); border-radius: 50%; padding: 2px 8px; margin-left: 8px; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="st-hero">
+  <div class="container">
+    <div class="eyebrow">D27 OFFICIAL · 2026 SEASON</div>
+    <h1>Swag Store</h1>
+    <p>Tees, hats, hoodies, and game-day gear with the official D27 crest. Profits split — 50% to your home league, 50% to the Scott Memorial Scholarship Fund. Print-on-demand, ships in 5–7 days.</p>
+  </div>
+</header>
+
+<main class="container" style="padding: 0 0 96px;">
+
+  <div class="st-banner">
+    <div>
+      <h3>🎉 50/50 Profit Split — wear it, fund it</h3>
+      <p>Every dollar of profit is split evenly between your home league and the Scott Memorial Scholarship Fund. Pick your league at checkout.</p>
+    </div>
+    <a href="#shop">Shop Now →</a>
+  </div>
+
+  <div class="st-tabs" id="shop">
+    <button class="st-tab active">All Apparel</button>
+    <button class="st-tab">Tees</button>
+    <button class="st-tab">Hats</button>
+    <button class="st-tab">Hoodies / Fleece</button>
+    <button class="st-tab">Bags &amp; Accessories</button>
+    <button class="st-tab">Youth Sizes</button>
+    <button class="st-tab">Tournament Drops</button>
+  </div>
+
+  <div class="st-grid">
+
+    <div class="st-card" onclick="addCart()">
+      <div class="st-img tee">D27<br/>CLASSIC<span class="crest">⚾ Crest</span></div>
+      <div class="meta st-meta"><div class="nm">D27 Classic Tee · Navy</div><div class="desc">Soft cotton-blend · gold crest, red accents.</div><div class="row"><span class="price">$24</span><button class="add" onclick="event.stopPropagation(); addCart()">Add to Cart</button></div></div>
+    </div>
+
+    <div class="st-card" onclick="addCart()">
+      <div class="st-img hat">DISTRICT 27<br/>FLEX FIT<span class="crest">⚾ Crest</span></div>
+      <div class="meta st-meta"><div class="nm">D27 Cap · Flex Fit</div><div class="desc">Navy w/ gold "D27" embroidery, S/M and L/XL.</div><div class="row"><span class="price">$28</span><button class="add" onclick="event.stopPropagation(); addCart()">Add to Cart</button></div></div>
+    </div>
+
+    <div class="st-card" onclick="addCart()">
+      <div class="st-img hood">PA D27<br/>HOODIE<span class="crest">⚾ Crest</span></div>
+      <div class="meta st-meta"><div class="nm">D27 Pullover Hoodie</div><div class="desc">Heavy navy fleece · embroidered chest crest.</div><div class="row"><span class="price">$48</span><button class="add" onclick="event.stopPropagation(); addCart()">Add to Cart</button></div></div>
+    </div>
+
+    <div class="st-card" onclick="addCart()">
+      <div class="st-img youth">D27<br/>FUTURE STAR<span class="crest">YOUTH</span></div>
+      <div class="meta st-meta"><div class="nm">Future Star Tee · Youth</div><div class="desc">Sizes XS-XL · "I'm a future D27 All-Star" back print.</div><div class="row"><span class="price">$18</span><button class="add" onclick="event.stopPropagation(); addCart()">Add to Cart</button></div></div>
+    </div>
+
+    <div class="st-card" onclick="addCart()">
+      <div class="st-img bag">D27<br/>DUFFEL<span class="crest">⚾ Crest</span></div>
+      <div class="meta st-meta"><div class="nm">Carry-All Equipment Bag</div><div class="desc">Holds 3 bats + helmet + cleats. Forest/navy · $5 ships free.</div><div class="row"><span class="price">$42</span><button class="add" onclick="event.stopPropagation(); addCart()">Add to Cart</button></div></div>
+    </div>
+
+    <div class="st-card" onclick="addCart()">
+      <div class="st-img tee">CHESTER<br/>VALLEY<span class="crest">CV · MAROON</span></div>
+      <div class="meta st-meta"><div class="nm">Chester Valley LL Tee</div><div class="desc">Maroon w/ gold crest. Family pride or alumni.</div><div class="row"><span class="price">$22</span><button class="add" onclick="event.stopPropagation(); addCart()">Add to Cart</button></div></div>
+    </div>
+
+    <div class="st-card" onclick="addCart()">
+      <div class="st-img tee">METHACTON<br/>LITTLE LEAGUE<span class="crest">METH · BLACK</span></div>
+      <div class="meta st-meta"><div class="nm">Methacton LL Tee</div><div class="desc">Black w/ gold "Methacton 1968" wordmark.</div><div class="row"><span class="price">$22</span><button class="add" onclick="event.stopPropagation(); addCart()">Add to Cart</button></div></div>
+    </div>
+
+    <div class="st-card" onclick="addCart()">
+      <div class="st-img tee">BERWYN-PAOLI<br/>LL<span class="crest">BP · NAVY</span></div>
+      <div class="meta st-meta"><div class="nm">BP Field of Dreams Tee</div><div class="desc">"Where dreams round the bases" tagline back-print.</div><div class="row"><span class="price">$22</span><button class="add" onclick="event.stopPropagation(); addCart()">Add to Cart</button></div></div>
+    </div>
+
+    <div class="st-card" onclick="addCart()">
+      <div class="st-img fleece">QUARTER ZIP<br/>D27<span class="crest">⚾ Crest</span></div>
+      <div class="meta st-meta"><div class="nm">Coach's Quarter-Zip</div><div class="desc">Performance fleece · embroidered "Coach" + crest.</div><div class="row"><span class="price">$54</span><button class="add" onclick="event.stopPropagation(); addCart()">Add to Cart</button></div></div>
+    </div>
+
+    <div class="st-card" onclick="addCart()">
+      <div class="st-img print">BOB JONES<br/>2026 CHAMPS<span class="crest">⭐ Tournament</span></div>
+      <div class="meta st-meta"><div class="nm">Bob Jones Champion Tee 2026</div><div class="desc">Tournament drop · only champion-team families. Limited run.</div><div class="row"><span class="price">$32</span><button class="add" onclick="event.stopPropagation(); addCart()">Pre-order</button></div></div>
+    </div>
+
+    <div class="st-card" onclick="addCart()">
+      <div class="st-img hat">PARENT<br/>BLEACHER<span class="crest">DAD/MOM</span></div>
+      <div class="meta st-meta"><div class="nm">Bleacher Cap · D27</div><div class="desc">Embroidered "Little League Parent · 2026". Best gift.</div><div class="row"><span class="price">$26</span><button class="add" onclick="event.stopPropagation(); addCart()">Add to Cart</button></div></div>
+    </div>
+
+    <div class="st-card" onclick="addCart()">
+      <div class="st-img bag">UMP GEAR<br/>BAG<span class="crest">BLUES</span></div>
+      <div class="meta st-meta"><div class="nm">Umpire's Equipment Bag</div><div class="desc">Holds full plate gear, cert + LL rulebook pocket. Limited.</div><div class="row"><span class="price">$58</span><button class="add" onclick="event.stopPropagation(); addCart()">Add to Cart</button></div></div>
+    </div>
+
+  </div>
+
+</main>
+
+<div class="st-cart" onclick="alert('Demo — opens checkout. Production: Stripe Checkout with profit-split toggle for league + scholarship.')">
+  🛒 Cart <span class="st-cart-count" id="cart-count">0</span>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="standings.html">Standings</a></li><li><a href="stats.html">Stats Leaders</a></li></ul></div>
+      <div><h5>Community</h5><ul><li><a href="photos.html">Photos</a></li><li><a href="store.html">Swag Store</a></li><li><a href="equipment.html">Equipment</a></li><li><a href="volunteer.html">Volunteer</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+<script>
+let cartCount = 0;
+function addCart() {
+  cartCount++;
+  document.getElementById('cart-count').textContent = cartCount;
+}
+document.querySelectorAll('.st-tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.st-tab').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+}));
+</script>
+
+</body>
+</html>

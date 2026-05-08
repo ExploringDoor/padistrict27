@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Photos · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .ph-hero { background: linear-gradient(135deg, var(--d27-navy), var(--d27-navy-dark)); color:#fff; padding: 56px 0 36px; border-bottom: 4px solid var(--d27-gold); }
+  .ph-hero h1 { font-family: var(--font-display); font-size: clamp(34px, 5vw, 54px); margin: 0; }
+  .ph-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .ph-hero p { color: rgba(255,255,255,.78); max-width: 60ch; margin: 14px 0 0; }
+
+  .ph-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 28px 0 18px; border-bottom: 2px solid var(--line); }
+  .ph-tab { background: none; border: none; padding: 10px 14px; font-family: var(--font-display); font-size: 14px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; }
+  .ph-tab.active { color: var(--d27-navy); border-bottom-color: var(--d27-red); }
+
+  .ph-album { margin-bottom: 36px; }
+  .ph-album-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 14px; gap: 14px; flex-wrap: wrap; }
+  .ph-album-head h2 { font-family: var(--font-display); margin: 0; color: var(--d27-navy); font-size: 24px; }
+  .ph-album-head .meta { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .ph-album-head .download { background: var(--surface); border: 1px solid var(--line); padding: 8px 14px; border-radius: 5px; font-size: 13px; color: var(--d27-navy); font-weight: 600; text-decoration: none; }
+
+  .ph-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+  .ph-tile { aspect-ratio: 1; border-radius: 6px; overflow: hidden; position: relative; cursor: pointer; transition: transform .15s; }
+  .ph-tile:hover { transform: scale(1.02); box-shadow: 0 8px 20px rgba(0,0,0,.15); }
+  .ph-tile.feature { aspect-ratio: 16/9; grid-column: span 2; }
+  @media (max-width: 600px) { .ph-tile.feature { grid-column: auto; aspect-ratio: 1; } }
+  .ph-tile-bg { position: absolute; inset: 0; background: linear-gradient(135deg, var(--d27-navy), var(--d27-red)); }
+  .ph-tile-bg.v2 { background: linear-gradient(135deg, var(--d27-navy), var(--d27-gold)); }
+  .ph-tile-bg.v3 { background: linear-gradient(135deg, var(--d27-red), var(--d27-gold)); }
+  .ph-tile-bg.v4 { background: linear-gradient(135deg, #1F2937, var(--d27-gold)); }
+  .ph-tile-bg.v5 { background: linear-gradient(135deg, #7F1D1D, var(--d27-gold)); }
+  .ph-tile-bg.v6 { background: linear-gradient(135deg, #064E3B, var(--d27-gold)); }
+  .ph-tile-bg::after { content:''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, rgba(255,255,255,.04), rgba(255,255,255,.04) 2px, transparent 2px, transparent 14px); }
+  .ph-tile-cap { position: absolute; bottom: 0; left: 0; right: 0; padding: 10px 12px; color: #fff; font-family: var(--font-display); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; background: linear-gradient(180deg, transparent, rgba(0,0,0,.6)); }
+  .ph-tile-tag { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,.55); color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; }
+
+  .ph-cta { background: linear-gradient(90deg, rgba(201,162,39,.06), rgba(0,45,114,.04)); border: 1px solid rgba(0,45,114,.12); border-left: 4px solid var(--d27-gold); padding: 18px 22px; border-radius: 6px; margin: 24px 0; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .ph-cta .ico { font-size: 32px; }
+  .ph-cta h3 { margin: 0 0 4px; font-family: var(--font-display); color: var(--d27-navy); }
+  .ph-cta p { margin: 0; font-size: 13px; color: var(--muted); }
+  .ph-cta a { background: var(--d27-navy); color: #fff; padding: 10px 18px; border-radius: 5px; text-decoration: none; font-weight: 700; font-size: 13px; margin-left: auto; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="ph-hero">
+  <div class="container">
+    <div class="eyebrow">D27 COMMUNITY</div>
+    <h1>Photos &amp; Memories</h1>
+    <p>Opening Day, championship games, snack bar volunteers, banquet nights, and everything in between. Submitted by parents and team-photo volunteers across all 12 leagues.</p>
+  </div>
+</header>
+
+<main class="container" style="padding: 0 0 64px;">
+
+  <div class="ph-tabs">
+    <button class="ph-tab active">2026 Season</button>
+    <button class="ph-tab">Tournaments</button>
+    <button class="ph-tab">Opening Day</button>
+    <button class="ph-tab">Banquets &amp; Awards</button>
+    <button class="ph-tab">All-Stars</button>
+    <button class="ph-tab">Archive (2008–)</button>
+  </div>
+
+  <div class="ph-cta">
+    <div class="ico">📸</div>
+    <div>
+      <h3>Got a great shot?</h3>
+      <p>Parents, scorekeepers, and photo volunteers can submit photos for any team or league. Reviewed within 24 hours; player privacy preserved.</p>
+    </div>
+    <a href="#" onclick="event.preventDefault(); alert('Demo — opens upload form. Production: drag-and-drop multi-photo upload with auto-tag for team/event/date.')">Submit Photos →</a>
+  </div>
+
+  <!-- Featured album -->
+  <section class="ph-album">
+    <div class="ph-album-head">
+      <div>
+        <h2>Bob Jones Tournament 2026 · Quarterfinals</h2>
+        <div class="meta">June 14 · 4 games · 8 photographers · 217 photos</div>
+      </div>
+      <a class="download" href="#" onclick="event.preventDefault(); alert('Demo — downloads zip of all 217 photos in original resolution.')">⤓ Download album</a>
+    </div>
+    <div class="ph-grid">
+      <div class="ph-tile feature"><div class="ph-tile-bg"></div><span class="ph-tile-tag">⭐ Editor's Pick</span><div class="ph-tile-cap">BP vs Pottstown · Game-winning hit · Field of Dreams</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v2"></div><div class="ph-tile-cap">QF1 lineup intros</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v3"></div><div class="ph-tile-cap">First pitch · Caldwell</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v4"></div><div class="ph-tile-cap">Methacton dugout</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v5"></div><div class="ph-tile-cap">CV warmup</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v6"></div><div class="ph-tile-cap">Lower Perk RBI</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg"></div><div class="ph-tile-cap">QF2 stretch</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v2"></div><div class="ph-tile-cap">Snack bar crew</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v3"></div><div class="ph-tile-cap">9th inning</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v4"></div><div class="ph-tile-cap">Trophy hand-off</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v5"></div><div class="ph-tile-cap">Family hug</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v6"></div><span class="ph-tile-tag">+205</span><div class="ph-tile-cap">View album →</div></div>
+    </div>
+  </section>
+
+  <!-- Opening Day -->
+  <section class="ph-album">
+    <div class="ph-album-head">
+      <div>
+        <h2>Opening Day 2026 — All Twelve Leagues</h2>
+        <div class="meta">April 4 · 12 leagues · 1,420 photos · 87 volunteers</div>
+      </div>
+      <a class="download" href="#" onclick="event.preventDefault(); alert('Demo download');">⤓ Download album</a>
+    </div>
+    <div class="ph-grid">
+      <div class="ph-tile feature"><div class="ph-tile-bg v2"></div><span class="ph-tile-tag">⭐ Editor's Pick</span><div class="ph-tile-cap">Methacton parade · Indian Creek Rd · 8 AM</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg"></div><div class="ph-tile-cap">BP color guard</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v3"></div><div class="ph-tile-cap">CV opening pitch</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v4"></div><div class="ph-tile-cap">Lower Perk anthem</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v5"></div><div class="ph-tile-cap">Marple T-Ball</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v6"></div><div class="ph-tile-cap">Penn Wood mayor</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg"></div><div class="ph-tile-cap">PVL fireworks</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v2"></div><div class="ph-tile-cap">Pottstown band</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v3"></div><div class="ph-tile-cap">Springfield 4U</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v4"></div><div class="ph-tile-cap">Tredyffrin sign</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v5"></div><div class="ph-tile-cap">LM 9U</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v6"></div><span class="ph-tile-tag">+1408</span><div class="ph-tile-cap">View album →</div></div>
+    </div>
+  </section>
+
+  <!-- 2025 Banquet -->
+  <section class="ph-album">
+    <div class="ph-album-head">
+      <div>
+        <h2>2025 District Banquet</h2>
+        <div class="meta">October 17, 2025 · Drexelbrook · 312 attendees · 84 photos</div>
+      </div>
+      <a class="download" href="#" onclick="event.preventDefault(); alert('Demo download');">⤓ Download album</a>
+    </div>
+    <div class="ph-grid">
+      <div class="ph-tile feature"><div class="ph-tile-bg v3"></div><div class="ph-tile-cap">Cole Patel · 2025 Player of the Year</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg"></div><div class="ph-tile-cap">Mark Henley accepts</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v2"></div><div class="ph-tile-cap">Volunteer awards</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v4"></div><div class="ph-tile-cap">Scott Family</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v5"></div><div class="ph-tile-cap">Sportsmanship MN 11U</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v6"></div><div class="ph-tile-cap">Jeff & Jason</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg"></div><div class="ph-tile-cap">Slideshow · 2008-2025</div></div>
+      <div class="ph-tile"><div class="ph-tile-bg v2"></div><span class="ph-tile-tag">+76</span><div class="ph-tile-cap">View album →</div></div>
+    </div>
+  </section>
+
+  <div class="ph-cta">
+    <div class="ico">🔒</div>
+    <div>
+      <h3>Privacy &amp; consent</h3>
+      <p>D27 follows Little League privacy guidelines. Photos showing identifiable players under 13 require parent consent (set in <a href="player.html#settings" style="color: var(--d27-navy); font-weight: 600;">Player Settings</a>). Parents can request removal anytime.</p>
+    </div>
+    <a href="#" onclick="event.preventDefault(); alert('Demo — opens consent + removal request form');">Manage Consent →</a>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="pitch-count.html">Pitch Count</a></li><li><a href="standings.html">Standings</a></li><li><a href="stats.html">Stats Leaders</a></li></ul></div>
+      <div><h5>Community</h5><ul><li><a href="photos.html">Photos</a></li><li><a href="awards.html">Awards</a></li><li><a href="all-stars.html">All-Stars</a></li><li><a href="volunteer.html">Volunteer</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.ph-tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.ph-tab').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+}));
+</script>
+
+</body>
+</html>

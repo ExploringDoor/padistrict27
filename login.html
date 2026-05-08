@@ -49,13 +49,16 @@
   }
   .role-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--space-3);
     margin-top: calc(-1 * var(--space-6));
     position: relative;
     z-index: 2;
   }
-  @media (max-width: 880px) {
+  @media (max-width: 1100px) {
+    .role-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
     .role-grid { grid-template-columns: 1fr; }
   }
   .role-card {
@@ -223,16 +226,31 @@
       <!-- Admin -->
       <div class="role-card admin" data-role="admin">
         <span class="icon" aria-hidden="true">⚙️</span>
-        <h3>Admin</h3>
-        <div class="role-sub">DA, ADA, League Presidents</div>
+        <h3>District Admin</h3>
+        <div class="role-sub">DA, ADA · district-wide</div>
         <ul>
           <li>Create &amp; publish tournament schedules</li>
           <li>Update scores, override brackets, post results</li>
           <li>Manage all 12 member leagues &amp; rosters</li>
           <li>Generate tournaments with AI assistant</li>
-          <li>Broadcast notifications across the district</li>
+          <li>Broadcast notifications district-wide</li>
         </ul>
         <a href="admin.html" class="btn btn-primary">Enter Admin Console →</a>
+      </div>
+
+      <!-- League President -->
+      <div class="role-card admin" data-role="president" style="border-top-color: var(--d27-gold);">
+        <span class="icon" aria-hidden="true" style="background: var(--d27-gold); color: var(--d27-navy);">🏛</span>
+        <h3>League President</h3>
+        <div class="role-sub">12 member leagues</div>
+        <ul>
+          <li>Single-league dashboard &amp; KPIs</li>
+          <li>Action items + coach-cert oversight</li>
+          <li>Treasury · Snack bar · Equipment</li>
+          <li>All-Star roster submission</li>
+          <li>Volunteer approvals · league chat</li>
+        </ul>
+        <a href="president.html" class="btn btn-primary">Open President Dashboard →</a>
       </div>
 
       <!-- Captain -->

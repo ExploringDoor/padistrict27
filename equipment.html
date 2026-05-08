@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Equipment Exchange · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .eq-hero { background: linear-gradient(135deg, var(--d27-navy), var(--d27-red)); color:#fff; padding: 56px 0 36px; border-bottom: 4px solid var(--d27-gold); }
+  .eq-hero h1 { font-family: var(--font-display); font-size: clamp(34px, 5vw, 54px); margin: 0; }
+  .eq-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .eq-hero p { color: rgba(255,255,255,.78); max-width: 60ch; margin: 14px 0 0; }
+
+  .eq-toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin: 24px 0 18px; align-items: center; }
+  .eq-toolbar select, .eq-toolbar input { padding: 9px 12px; border: 1px solid var(--line); border-radius: 5px; font-size: 13px; background: var(--surface); }
+  .eq-toolbar input { min-width: 180px; }
+  .eq-toolbar .btn { background: var(--d27-red); color: #fff; border: none; padding: 9px 18px; border-radius: 5px; font-weight: 700; cursor: pointer; margin-left: auto; font-size: 13px; }
+
+  .eq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+  .eq-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; transition: all .15s; cursor: pointer; }
+  .eq-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.08); border-color: var(--d27-navy); }
+
+  .eq-img { aspect-ratio: 1.4; background: linear-gradient(135deg, var(--d27-navy), var(--d27-navy-dark)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 48px; position: relative; }
+  .eq-img.glove { background: linear-gradient(135deg, #92400E, #78350F); }
+  .eq-img.bat { background: linear-gradient(135deg, #1E40AF, #1E3A8A); }
+  .eq-img.cleats { background: linear-gradient(135deg, #DC2626, #991B1B); }
+  .eq-img.helmet { background: linear-gradient(135deg, #475569, #1E293B); }
+  .eq-img.catcher { background: linear-gradient(135deg, #6D28D9, #4C1D95); }
+  .eq-img.bag { background: linear-gradient(135deg, #059669, #047857); }
+  .eq-img .tag { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,.55); color: #fff; padding: 3px 9px; border-radius: 3px; font-size: 11px; font-weight: 700; }
+  .eq-img .tag.free { background: #10B981; }
+
+  .eq-meta { padding: 14px; }
+  .eq-meta .nm { font-weight: 700; font-size: 15px; color: var(--d27-navy); margin-bottom: 4px; }
+  .eq-meta .desc { color: var(--muted); font-size: 12px; line-height: 1.4; margin-bottom: 8px; min-height: 32px; }
+  .eq-meta .price-row { display: flex; justify-content: space-between; align-items: center; padding-top: 8px; border-top: 1px solid var(--line); }
+  .eq-meta .price { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--d27-red); }
+  .eq-meta .price.free { color: #10B981; }
+  .eq-meta .from { color: var(--muted); font-size: 11px; }
+
+  .eq-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px; }
+  @media (max-width: 700px) { .eq-stats { grid-template-columns: repeat(2, 1fr); } }
+  .eq-stat { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 14px; text-align: center; }
+  .eq-stat .n { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--d27-navy); }
+  .eq-stat .l { color: var(--muted); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; margin-top: 4px; }
+
+  .eq-info { background: linear-gradient(90deg, rgba(201,162,39,.06), rgba(0,45,114,.04)); border: 1px solid rgba(0,45,114,.12); border-left: 4px solid var(--d27-gold); padding: 16px 20px; border-radius: 6px; margin-top: 24px; }
+  .eq-info h3 { margin: 0 0 6px; font-family: var(--font-display); color: var(--d27-navy); }
+  .eq-info p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="eq-hero">
+  <div class="container">
+    <div class="eyebrow">D27 COMMUNITY MARKETPLACE</div>
+    <h1>Equipment Exchange</h1>
+    <p>Outgrown a glove? Need cleats? Local-only listings between D27 families. Free or low-cost. Reduce waste, save money, keep gear in the game. Background-check verified parents only.</p>
+  </div>
+</header>
+
+<main class="container" style="padding: 0 0 64px;">
+
+  <div class="eq-stats">
+    <div class="eq-stat"><div class="n">42</div><div class="l">Items Listed</div></div>
+    <div class="eq-stat"><div class="n">18</div><div class="l">Free Items</div></div>
+    <div class="eq-stat"><div class="n">214</div><div class="l">Items Exchanged · 2026</div></div>
+    <div class="eq-stat"><div class="n">$8,200</div><div class="l">Saved by Families</div></div>
+  </div>
+
+  <div class="eq-toolbar">
+    <input type="text" placeholder="Search gloves, bats, cleats..." />
+    <select><option>All Categories</option><option>Gloves</option><option>Bats</option><option>Cleats</option><option>Helmets</option><option>Catcher's Gear</option><option>Bags</option><option>Apparel</option></select>
+    <select><option>All Sizes</option><option>Youth S</option><option>Youth M</option><option>Youth L</option><option>Adult S</option><option>Adult M</option><option>Adult L</option></select>
+    <select><option>All Leagues</option><option>Berwyn-Paoli</option><option>Methacton</option><option>Chester Valley</option><option>Lower Merion</option><option>Lower Perkiomen</option><option>Marple Newtown</option><option>Penn Wood</option><option>Phoenixville</option></select>
+    <select><option>Free + Paid</option><option>Free Only</option><option>Under $25</option><option>Under $50</option></select>
+    <button class="btn" onclick="alert('Demo — opens listing form: photos, category, condition, price, location pickup.')">+ List an Item</button>
+  </div>
+
+  <div class="eq-grid">
+
+    <div class="eq-card">
+      <div class="eq-img glove">🧤<span class="tag">Like New</span></div>
+      <div class="eq-meta">
+        <div class="nm">Wilson A2K SC1786 · 11.5"</div>
+        <div class="desc">Outgrown — used 1 season. Pro-grade infielder glove. Black/copper.</div>
+        <div class="price-row"><span class="price">$120</span><span class="from">BP · Park family</span></div>
+      </div>
+    </div>
+
+    <div class="eq-card">
+      <div class="eq-img bat">🥎<span class="tag free">FREE</span></div>
+      <div class="eq-meta">
+        <div class="nm">Easton Hype 30/20 · -10</div>
+        <div class="desc">Free to a younger player. Has a small dent in the barrel but legal for rec play.</div>
+        <div class="price-row"><span class="price free">FREE</span><span class="from">Methacton · Hartley</span></div>
+      </div>
+    </div>
+
+    <div class="eq-card">
+      <div class="eq-img cleats">👟<span class="tag">Good</span></div>
+      <div class="eq-meta">
+        <div class="nm">Mizuno Dominant Cleats · Y3</div>
+        <div class="desc">Black/red. One season. Cleaned and treated.</div>
+        <div class="price-row"><span class="price">$15</span><span class="from">CV · Roberts</span></div>
+      </div>
+    </div>
+
+    <div class="eq-card">
+      <div class="eq-img helmet">⛑<span class="tag">Like New</span></div>
+      <div class="eq-meta">
+        <div class="nm">Rawlings Mach Adjust Helmet</div>
+        <div class="desc">NOCSAE-cert. Adjustable 6 1/2 – 7 1/2. Navy. Includes facemask.</div>
+        <div class="price-row"><span class="price">$25</span><span class="from">BP · Wright</span></div>
+      </div>
+    </div>
+
+    <div class="eq-card">
+      <div class="eq-img catcher">🥎<span class="tag">Good</span></div>
+      <div class="eq-meta">
+        <div class="nm">Easton Catcher's Set · 12-15U</div>
+        <div class="desc">Mask, chest protector, leg guards, bag. Black. Replaced foam in chest.</div>
+        <div class="price-row"><span class="price">$80</span><span class="from">Methacton · Doyle</span></div>
+      </div>
+    </div>
+
+    <div class="eq-card">
+      <div class="eq-img glove">🧤<span class="tag free">FREE</span></div>
+      <div class="eq-meta">
+        <div class="nm">Tee-ball glove · Right-hand</div>
+        <div class="desc">9.5" perfect for 4-6 year olds. Was Aiden's first glove. Now too small.</div>
+        <div class="price-row"><span class="price free">FREE</span><span class="from">CV · Park</span></div>
+      </div>
+    </div>
+
+    <div class="eq-card">
+      <div class="eq-img bag">🎒<span class="tag">Like New</span></div>
+      <div class="eq-meta">
+        <div class="nm">Easton Walk-Off Backpack</div>
+        <div class="desc">Holds 2 bats, helmet, glove, cleats. Black/red. 1 season use.</div>
+        <div class="price-row"><span class="price">$30</span><span class="from">Penn Wood · Reyes</span></div>
+      </div>
+    </div>
+
+    <div class="eq-card">
+      <div class="eq-img bat">🥎<span class="tag">Excellent</span></div>
+      <div class="eq-meta">
+        <div class="nm">Marucci CAT9 Connect 31/26 · -5</div>
+        <div class="desc">Top-shelf 50/70 / Junior League bat. Used 12 games. No dings.</div>
+        <div class="price-row"><span class="price">$165</span><span class="from">BP · Caldwell</span></div>
+      </div>
+    </div>
+
+    <div class="eq-card">
+      <div class="eq-img cleats">👟<span class="tag free">FREE</span></div>
+      <div class="eq-meta">
+        <div class="nm">Adidas Adizero Y2 (kid)</div>
+        <div class="desc">Slight wear on toe. Perfect for first-year tee-ball.</div>
+        <div class="price-row"><span class="price free">FREE</span><span class="from">Marple · Russo</span></div>
+      </div>
+    </div>
+
+    <div class="eq-card">
+      <div class="eq-img helmet">⛑<span class="tag">Good</span></div>
+      <div class="eq-meta">
+        <div class="nm">Easton Z5 Helmet · S/M</div>
+        <div class="desc">Multi-color. Some scuffs from use, no cracks.</div>
+        <div class="price-row"><span class="price">$10</span><span class="from">Springfield · O'Halloran</span></div>
+      </div>
+    </div>
+
+    <div class="eq-card">
+      <div class="eq-img glove">🧤<span class="tag">Like New</span></div>
+      <div class="eq-meta">
+        <div class="nm">Rawlings Heart of the Hide PRO204</div>
+        <div class="desc">11.5" infielder. Brown leather. Broken in by Edge Pro.</div>
+        <div class="price-row"><span class="price">$140</span><span class="from">CV · Ruiz</span></div>
+      </div>
+    </div>
+
+    <div class="eq-card">
+      <div class="eq-img bag">🎒<span class="tag free">FREE</span></div>
+      <div class="eq-meta">
+        <div class="nm">Team duffel · Berwyn-Paoli logo</div>
+        <div class="desc">Old-style logo (pre-2020). Free to a BP family who wants the throwback.</div>
+        <div class="price-row"><span class="price free">FREE</span><span class="from">BP · O'Connor</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="eq-info">
+    <h3>How it works</h3>
+    <p>1. <b>List an item</b> — photos, condition, price (or free). 2. <b>Buyer messages</b> through D27 — your contact info stays private until you accept. 3. <b>Meet at any league field</b> for the swap — that's it. Verified D27 parents only (background check on file). All transactions stay in the family.</p>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="standings.html">Standings</a></li><li><a href="stats.html">Stats Leaders</a></li></ul></div>
+      <div><h5>Community</h5><ul><li><a href="photos.html">Photos</a></li><li><a href="awards.html">Awards</a></li><li><a href="equipment.html">Equipment</a></li><li><a href="volunteer.html">Volunteer</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+</body>
+</html>

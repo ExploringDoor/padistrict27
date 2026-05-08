@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Treasury · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .ts-hero { background: linear-gradient(180deg, var(--d27-navy), var(--d27-navy-dark)); color:#fff; padding: 56px 0 36px; border-bottom: 4px solid var(--d27-gold); }
+  .ts-hero h1 { font-family: var(--font-display); font-size: clamp(34px, 5vw, 54px); margin: 0; }
+  .ts-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .ts-hero p { color: rgba(255,255,255,.78); max-width: 60ch; margin: 14px 0 0; }
+
+  .ts-tabs { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 2px solid var(--line); margin: 28px 0 18px; }
+  .ts-tab { background: none; border: none; padding: 10px 14px; font-family: var(--font-display); font-size: 14px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; }
+  .ts-tab.active { color: var(--d27-navy); border-bottom-color: var(--d27-gold); }
+
+  .ts-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 22px; }
+  @media (max-width: 720px) { .ts-summary { grid-template-columns: repeat(2, 1fr); } }
+  .ts-stat { background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--d27-navy); border-radius: 8px; padding: 18px; }
+  .ts-stat.green { border-top-color: #059669; }
+  .ts-stat.gold { border-top-color: var(--d27-gold); }
+  .ts-stat.red { border-top-color: var(--d27-red); }
+  .ts-stat .l { color: var(--muted); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; }
+  .ts-stat .n { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--d27-navy); margin-top: 4px; line-height: 1; }
+  .ts-stat .delta { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .ts-stat.green .n { color: #059669; }
+  .ts-stat.red .n { color: var(--d27-red); }
+
+  .ts-cols { display: grid; grid-template-columns: 1.4fr 1fr; gap: 22px; }
+  @media (max-width: 980px) { .ts-cols { grid-template-columns: 1fr; } }
+
+  .ts-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 22px; margin-bottom: 18px; }
+  .ts-card h2 { font-family: var(--font-display); margin: 0 0 14px; color: var(--d27-navy); font-size: 22px; }
+
+  .ts-bar { width: 100%; height: 14px; background: var(--d27-sub); border-radius: 999px; overflow: hidden; margin-top: 6px; }
+  .ts-bar .fill { height: 100%; border-radius: 999px; transition: width .6s; }
+  .ts-bar .fill.green { background: linear-gradient(90deg, #10B981, #059669); }
+  .ts-bar .fill.gold { background: linear-gradient(90deg, #C9A227, #B45309); }
+
+  .ts-budget { display: grid; grid-template-columns: 1fr auto auto auto; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .ts-budget:last-child { border-bottom: 0; }
+  .ts-budget .nm { font-weight: 700; }
+  .ts-budget .nm small { display: block; color: var(--muted); font-size: 11px; font-weight: 500; margin-top: 1px; }
+  .ts-budget .num { font-family: var(--font-display); font-size: 14px; color: var(--d27-navy); white-space: nowrap; }
+  .ts-budget .pct { font-family: var(--font-display); font-size: 13px; color: var(--muted); }
+
+  .ts-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .ts-table th { background: var(--d27-navy); color: #fff; padding: 10px 12px; text-align: left; font-family: var(--font-display); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+  .ts-table th.right, .ts-table td.right { text-align: right; }
+  .ts-table td { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  .ts-table .pos { color: #059669; font-weight: 700; }
+  .ts-table .neg { color: var(--d27-red); font-weight: 700; }
+  .ts-table .meta { color: var(--muted); font-size: 11px; }
+
+  .ts-side { display: flex; flex-direction: column; gap: 18px; }
+  .ts-side .ts-card h3 { margin: 0 0 8px; font-family: var(--font-display); color: var(--d27-navy); font-size: 14px; letter-spacing: .04em; text-transform: uppercase; }
+  .ts-side .ts-card p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.55; }
+  .ts-side .ts-card .stat { font-family: var(--font-display); font-size: 26px; color: var(--d27-navy); font-weight: 700; line-height: 1; margin-bottom: 4px; }
+
+  .ts-note { background: linear-gradient(90deg, rgba(201,162,39,.06), rgba(0,45,114,.04)); border: 1px solid rgba(0,45,114,.12); border-left: 4px solid var(--d27-gold); padding: 16px 20px; border-radius: 6px; margin-top: 24px; }
+  .ts-note h3 { margin: 0 0 6px; font-family: var(--font-display); color: var(--d27-navy); }
+  .ts-note p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="ts-hero">
+  <div class="container">
+    <div class="eyebrow">D27 LEAGUE TOOLS · TREASURY</div>
+    <h1>Treasury &amp; Financial Transparency</h1>
+    <p>Per-league budget tracking, donor history, and end-of-year audit trail. Replaces the spreadsheet-and-Venmo era. Public-facing transparency drives donor trust + simplifies LL Quality Charter renewal.</p>
+  </div>
+</header>
+
+<main class="container" style="padding: 0 0 64px;">
+
+  <div class="ts-tabs">
+    <button class="ts-tab active">Berwyn-Paoli LL</button>
+    <button class="ts-tab">Methacton LL</button>
+    <button class="ts-tab">Chester Valley LL</button>
+    <button class="ts-tab">D27 District (combined)</button>
+    <button class="ts-tab">Scott Scholarship Fund</button>
+  </div>
+
+  <div class="ts-summary">
+    <div class="ts-stat green"><div class="l">Cash on Hand</div><div class="n">$24,820</div><div class="delta">checking + reserve</div></div>
+    <div class="ts-stat gold"><div class="l">2026 Budget</div><div class="n">$58,400</div><div class="delta">42% spent · on-track</div></div>
+    <div class="ts-stat"><div class="l">Sponsorship Funded</div><div class="n">$48,000</div><div class="delta">87% of $55K goal</div></div>
+    <div class="ts-stat red"><div class="l">Outstanding A/R</div><div class="n">$1,840</div><div class="delta">12 unpaid registrations</div></div>
+  </div>
+
+  <div class="ts-cols">
+
+    <div>
+      <div class="ts-card">
+        <h2>2026 Budget · Berwyn-Paoli</h2>
+
+        <div class="ts-budget">
+          <div><div class="nm">Field Maintenance &amp; Drag</div><small>Mowing, infield mix, lining</small></div>
+          <div class="num">$8,400 / $9,500</div>
+          <div class="pct">88%</div>
+          <div style="width: 100px;"><div class="ts-bar"><div class="fill green" style="width:88%"></div></div></div>
+        </div>
+
+        <div class="ts-budget">
+          <div><div class="nm">Umpire Stipends</div><small>$30-60/game · 314 games</small></div>
+          <div class="num">$6,200 / $11,200</div>
+          <div class="pct">55%</div>
+          <div style="width: 100px;"><div class="ts-bar"><div class="fill gold" style="width:55%"></div></div></div>
+        </div>
+
+        <div class="ts-budget">
+          <div><div class="nm">Equipment &amp; Supplies</div><small>Bats, balls, helmets, catcher gear</small></div>
+          <div class="num">$4,800 / $7,000</div>
+          <div class="pct">69%</div>
+          <div style="width: 100px;"><div class="ts-bar"><div class="fill green" style="width:69%"></div></div></div>
+        </div>
+
+        <div class="ts-budget">
+          <div><div class="nm">Uniforms (2026)</div><small>642 jerseys · BP Red/Blue/White/etc</small></div>
+          <div class="num">$8,200 / $8,500</div>
+          <div class="pct">96%</div>
+          <div style="width: 100px;"><div class="ts-bar"><div class="fill green" style="width:96%"></div></div></div>
+        </div>
+
+        <div class="ts-budget">
+          <div><div class="nm">LL Insurance + Charter</div><small>National LL fees · ~$28/player</small></div>
+          <div class="num">$4,400 / $4,400</div>
+          <div class="pct">100%</div>
+          <div style="width: 100px;"><div class="ts-bar"><div class="fill green" style="width:100%"></div></div></div>
+        </div>
+
+        <div class="ts-budget">
+          <div><div class="nm">Tournament Entry Fees</div><small>D27 + outside · Bob Jones, Pappy Patton</small></div>
+          <div class="num">$1,200 / $3,000</div>
+          <div class="pct">40%</div>
+          <div style="width: 100px;"><div class="ts-bar"><div class="fill gold" style="width:40%"></div></div></div>
+        </div>
+
+        <div class="ts-budget">
+          <div><div class="nm">Year-End Banquet</div><small>Reserved Drexelbrook · Oct 17</small></div>
+          <div class="num">$0 / $4,500</div>
+          <div class="pct">0%</div>
+          <div style="width: 100px;"><div class="ts-bar"><div class="fill" style="width:0%; background:var(--line);"></div></div></div>
+        </div>
+
+        <div class="ts-budget">
+          <div><div class="nm">Reserve Fund Transfer</div><small>Auto-deposit · 5% of revenue</small></div>
+          <div class="num">$1,420 / $2,800</div>
+          <div class="pct">51%</div>
+          <div style="width: 100px;"><div class="ts-bar"><div class="fill green" style="width:51%"></div></div></div>
+        </div>
+
+        <div class="ts-budget" style="background: rgba(0,45,114,.04); padding: 14px 12px; border-radius: 6px;">
+          <div><div class="nm" style="color:var(--d27-navy); font-family:var(--font-display); font-size: 16px;">Total · 2026 Spending</div><small>vs $58,400 budget</small></div>
+          <div class="num" style="font-size: 18px; font-weight: 700;">$24,620 / $58,400</div>
+          <div class="pct" style="font-weight:700;">42%</div>
+          <div style="width: 100px;"><div class="ts-bar" style="height: 18px;"><div class="fill green" style="width:42%"></div></div></div>
+        </div>
+      </div>
+
+      <div class="ts-card">
+        <h2>Recent Transactions</h2>
+        <table class="ts-table">
+          <thead><tr><th>Date</th><th>Description</th><th>Category</th><th class="right">Amount</th></tr></thead>
+          <tbody>
+            <tr><td>May 1</td><td>Wawa renewal · Champion sponsor 2026</td><td class="meta">Sponsorship</td><td class="right pos">+$5,000</td></tr>
+            <tr><td>Apr 30</td><td>Snack bar deposit · April</td><td class="meta">Snack Bar</td><td class="right pos">+$2,440</td></tr>
+            <tr><td>Apr 29</td><td>Wilson · 24 dozen baseballs</td><td class="meta">Equipment</td><td class="right neg">-$840</td></tr>
+            <tr><td>Apr 28</td><td>Tournament entry · Bob Jones (1 team)</td><td class="meta">Tournament</td><td class="right neg">-$400</td></tr>
+            <tr><td>Apr 26</td><td>Umpire stipends · Wk 4 (12 games)</td><td class="meta">Umpires</td><td class="right neg">-$1,080</td></tr>
+            <tr><td>Apr 24</td><td>Field of Dreams · turf maintenance</td><td class="meta">Fields</td><td class="right neg">-$650</td></tr>
+            <tr><td>Apr 22</td><td>Vetri Cucina · All-Star sponsor</td><td class="meta">Sponsorship</td><td class="right pos">+$2,500</td></tr>
+            <tr><td>Apr 20</td><td>Berwyn Tavern · Rookie sponsor</td><td class="meta">Sponsorship</td><td class="right pos">+$500</td></tr>
+            <tr><td>Apr 18</td><td>Concession ice machine repair</td><td class="meta">Snack Bar</td><td class="right neg">-$280</td></tr>
+            <tr><td>Apr 14</td><td>22 spring registrations</td><td class="meta">Registration</td><td class="right pos">+$5,940</td></tr>
+            <tr><td>Apr 12</td><td>JDP background check renewal · 18 coaches</td><td class="meta">Compliance</td><td class="right neg">-$450</td></tr>
+            <tr><td colspan="4" style="color: var(--muted); text-align:center;"><a href="#" style="color: var(--d27-navy); font-weight: 600;">View full ledger (412 entries)</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <aside class="ts-side">
+      <div class="ts-card">
+        <h3>2026 Sponsor Funding Goal</h3>
+        <div class="stat">$48,000 / $55,000</div>
+        <div class="ts-bar"><div class="fill gold" style="width: 87%;"></div></div>
+        <p style="margin-top:10px;">87% of goal · 4 deals in pipeline · projected close $52K by June 30. <a href="sponsors.html" style="color: var(--d27-navy); font-weight: 600;">View sponsor wall →</a></p>
+      </div>
+
+      <div class="ts-card">
+        <h3>Scholarship Tracker</h3>
+        <p>$2,460 raised this season toward the Scott Memorial Scholarship Fund — primarily snack-bar tips and the 5K registration round-up. <a href="scholarship.html" style="color: var(--d27-navy); font-weight: 600;">Donate →</a></p>
+      </div>
+
+      <div class="ts-card">
+        <h3>End-of-Year Audit</h3>
+        <p>Auto-generates 990-EZ-ready P&amp;L and balance sheet for 501(c)(3) reporting. CPA approves with one click. Saves the typical league $1,200/year in accountant fees.</p>
+      </div>
+
+      <div class="ts-card">
+        <h3>Quality Charter Status</h3>
+        <p style="margin-bottom: 8px;"><b>BP currently: Quality Charter ✓</b></p>
+        <p>Required for LL HQ recognition. Treasury transparency, coach compliance, and player-development metrics roll into one report. <a href="president.html" style="color: var(--d27-navy); font-weight: 600;">President dashboard →</a></p>
+      </div>
+    </aside>
+  </div>
+
+  <div class="ts-note">
+    <h3>How the data flows</h3>
+    <p>Stripe webhooks pull registration revenue and donations in real time. Snack-bar tip drops are entered nightly. Bank balance auto-syncs through Plaid. League treasurer approves expense submissions from board members. CPAs export YE reports as Excel or PDF. Audit trail tamper-proof.</p>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="standings.html">Standings</a></li><li><a href="stats.html">Stats Leaders</a></li></ul></div>
+      <div><h5>League Tools</h5><ul><li><a href="treasury.html">Treasury</a></li><li><a href="snack-bar.html">Snack Bar</a></li><li><a href="equipment.html">Equipment</a></li><li><a href="tryouts.html">Tryouts</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.ts-tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.ts-tab').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+}));
+</script>
+
+</body>
+</html>

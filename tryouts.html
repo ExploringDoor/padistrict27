@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Tryouts &amp; Registration · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .tr-hero { background: linear-gradient(180deg, var(--d27-navy), var(--d27-navy-dark)); color:#fff; padding: 56px 0 36px; border-bottom: 4px solid var(--d27-gold); }
+  .tr-hero h1 { font-family: var(--font-display); font-size: clamp(34px, 5vw, 54px); margin: 0; }
+  .tr-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .tr-hero p { color: rgba(255,255,255,.78); max-width: 60ch; margin: 14px 0 0; }
+
+  .tr-tabs { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 2px solid var(--line); margin: 28px 0 18px; }
+  .tr-tab { background: none; border: none; padding: 10px 14px; font-family: var(--font-display); font-size: 14px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; }
+  .tr-tab.active { color: var(--d27-navy); border-bottom-color: var(--d27-red); }
+
+  .tr-banner { background: linear-gradient(90deg, rgba(218,41,28,.06), rgba(201,162,39,.04)); border: 1px solid rgba(218,41,28,.18); border-left: 4px solid var(--d27-red); padding: 16px 20px; border-radius: 6px; margin-bottom: 22px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .tr-banner .ico { font-size: 32px; }
+  .tr-banner h3 { margin: 0 0 4px; font-family: var(--font-display); color: var(--d27-red); }
+  .tr-banner p { margin: 0; font-size: 13px; color: var(--muted); }
+
+  .tr-event { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px; margin-bottom: 14px; display: grid; grid-template-columns: 84px 1fr auto; gap: 18px; align-items: center; }
+  @media (max-width: 660px) { .tr-event { grid-template-columns: 70px 1fr; } .tr-event .actions { grid-column: 1 / -1; justify-self: start; } }
+  .tr-event .when { text-align: center; background: var(--d27-navy); color: #fff; border-radius: 6px; padding: 10px 6px; }
+  .tr-event .when .m { font-family: var(--font-display); font-size: 11px; letter-spacing: .12em; color: var(--d27-gold); text-transform: uppercase; }
+  .tr-event .when .d { font-family: var(--font-display); font-size: 28px; font-weight: 700; line-height: 1; }
+  .tr-event .when .y { font-family: var(--font-display); font-size: 11px; color: rgba(255,255,255,.7); margin-top: 2px; }
+  .tr-event h3 { font-family: var(--font-display); margin: 0 0 4px; color: var(--d27-navy); font-size: 19px; }
+  .tr-event .meta { color: var(--muted); font-size: 13px; }
+  .tr-event .meta span::before { content: '·'; margin: 0 8px; color: var(--d27-gold); }
+  .tr-event .meta span:first-child::before { content: ''; margin: 0; }
+  .tr-event .pills { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .tr-event .pill { background: var(--d27-sub); color: var(--d27-navy); padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .tr-event .pill.urgent { background: #FEE2E2; color: var(--d27-red); }
+  .tr-event .actions a { background: var(--d27-navy); color: #fff; padding: 10px 18px; border-radius: 5px; text-decoration: none; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+  .tr-event .actions a.ghost { background: var(--surface); color: var(--d27-navy); border: 1px solid var(--d27-navy); }
+
+  .tr-cols { display: grid; grid-template-columns: 1fr 320px; gap: 24px; }
+  @media (max-width: 980px) { .tr-cols { grid-template-columns: 1fr; } }
+
+  .tr-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 22px; }
+  .tr-card h2 { font-family: var(--font-display); margin: 0 0 12px; color: var(--d27-navy); }
+  .tr-card h3 { font-family: var(--font-display); margin: 0 0 6px; color: var(--d27-navy); font-size: 16px; letter-spacing: .04em; text-transform: uppercase; }
+  .tr-card p { font-size: 13px; color: var(--muted); margin: 0 0 8px; line-height: 1.55; }
+
+  .tr-side { display: flex; flex-direction: column; gap: 16px; }
+  .tr-side .stat { font-family: var(--font-display); font-size: 32px; color: var(--d27-red); font-weight: 700; line-height: 1; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="tr-hero">
+  <div class="container">
+    <div class="eyebrow">SPRING 2027 · TRYOUT &amp; REGISTRATION SEASON</div>
+    <h1>Tryouts &amp; Registration</h1>
+    <p>Every D27 league sets its own tryout dates. Below: the master calendar across all 12 leagues, plus links to each league's online registration. Spring 2027 registration opens November 15, 2026.</p>
+  </div>
+</header>
+
+<main class="container" style="padding: 0 0 64px;">
+
+  <div class="tr-banner">
+    <div class="ico">⏰</div>
+    <div>
+      <h3>Spring 2027 registration opens November 15, 2026</h3>
+      <p>Early-bird discount through December 31. Tryouts begin late February per league.</p>
+    </div>
+  </div>
+
+  <div class="tr-tabs">
+    <button class="tr-tab active">All Leagues</button>
+    <button class="tr-tab">Berwyn-Paoli</button>
+    <button class="tr-tab">Methacton</button>
+    <button class="tr-tab">Chester Valley</button>
+    <button class="tr-tab">Lower Merion</button>
+    <button class="tr-tab">Lower Perkiomen</button>
+    <button class="tr-tab">Marple Newtown</button>
+    <button class="tr-tab">Penn Wood</button>
+  </div>
+
+  <div class="tr-cols">
+
+    <div>
+      <h2 style="font-family: var(--font-display); color: var(--d27-navy); margin: 0 0 14px; font-size: 24px;">February – March 2027</h2>
+
+      <div class="tr-event">
+        <div class="when"><div class="m">Feb</div><div class="d">21</div><div class="y">2027</div></div>
+        <div>
+          <h3>Berwyn-Paoli · 12U Major Tryouts</h3>
+          <div class="meta"><span>Sat · 9:00 AM – 12:00 PM</span><span>Field of Dreams F1</span><span>Birth years 2014-2015</span></div>
+          <div class="pills"><span class="pill">Pitching · Hitting · Fielding</span><span class="pill">Player Agent: Sarah Patel</span></div>
+        </div>
+        <div class="actions"><a href="#" onclick="event.preventDefault(); alert('Demo — opens BP registration portal');">Register →</a></div>
+      </div>
+
+      <div class="tr-event">
+        <div class="when"><div class="m">Feb</div><div class="d">22</div><div class="y">2027</div></div>
+        <div>
+          <h3>Berwyn-Paoli · 11U / 10U Tryouts</h3>
+          <div class="meta"><span>Sun · 10:00 AM – 1:00 PM</span><span>Field of Dreams F1+F2</span><span>Birth years 2016-2017</span></div>
+          <div class="pills"><span class="pill">Pitching · Hitting · Fielding</span></div>
+        </div>
+        <div class="actions"><a href="#" onclick="event.preventDefault(); alert('Demo registration');">Register →</a></div>
+      </div>
+
+      <div class="tr-event">
+        <div class="when"><div class="m">Feb</div><div class="d">28</div><div class="y">2027</div></div>
+        <div>
+          <h3>Methacton · All Divisions Tryouts</h3>
+          <div class="meta"><span>Sat · 8:00 AM – 4:00 PM</span><span>Ricketts Sports Complex</span><span>Birth years 2014-2018</span></div>
+          <div class="pills"><span class="pill">Two-day event (continues Sun)</span><span class="pill">Coach Education Day same weekend</span></div>
+        </div>
+        <div class="actions"><a href="#" onclick="event.preventDefault(); alert('Demo registration');">Register →</a></div>
+      </div>
+
+      <div class="tr-event">
+        <div class="when"><div class="m">Mar</div><div class="d">1</div><div class="y">2027</div></div>
+        <div>
+          <h3>Chester Valley · 12U &amp; 11U Tryouts</h3>
+          <div class="meta"><span>Sun · 11:00 AM – 2:30 PM</span><span>CV Senior Diamond</span><span>Birth years 2015-2016</span></div>
+          <div class="pills"><span class="pill urgent">CAPS AT 60 PLAYERS</span><span class="pill">Coach: Pat Lynch</span></div>
+        </div>
+        <div class="actions"><a href="#" onclick="event.preventDefault(); alert('Demo registration');">Register →</a></div>
+      </div>
+
+      <div class="tr-event">
+        <div class="when"><div class="m">Mar</div><div class="d">7</div><div class="y">2027</div></div>
+        <div>
+          <h3>Lower Merion · Major / Minor Tryouts</h3>
+          <div class="meta"><span>Sat · 9:00 AM – 12:00 PM</span><span>LM F1+F2</span><span>Birth years 2014-2017</span></div>
+          <div class="pills"><span class="pill">Indoor backup if rained out</span></div>
+        </div>
+        <div class="actions"><a href="#" onclick="event.preventDefault(); alert('Demo registration');">Register →</a></div>
+      </div>
+
+      <div class="tr-event">
+        <div class="when"><div class="m">Mar</div><div class="d">8</div><div class="y">2027</div></div>
+        <div>
+          <h3>Lower Perkiomen · Spring Tryouts</h3>
+          <div class="meta"><span>Sun · 10:00 AM – 2:00 PM</span><span>Gambone Park · Majors Field</span><span>All ages 7-12</span></div>
+        </div>
+        <div class="actions"><a href="#" onclick="event.preventDefault(); alert('Demo registration');">Register →</a></div>
+      </div>
+
+      <div class="tr-event">
+        <div class="when"><div class="m">Mar</div><div class="d">14</div><div class="y">2027</div></div>
+        <div>
+          <h3>Marple Newtown · Tryouts</h3>
+          <div class="meta"><span>Sat · 9:00 AM – 1:00 PM</span><span>Marple Fields A+B</span><span>Birth years 2014-2018</span></div>
+          <div class="pills"><span class="pill">Softball + Baseball same day</span></div>
+        </div>
+        <div class="actions"><a href="#" onclick="event.preventDefault(); alert('Demo registration');">Register →</a></div>
+      </div>
+
+      <div class="tr-event">
+        <div class="when"><div class="m">Mar</div><div class="d">15</div><div class="y">2027</div></div>
+        <div>
+          <h3>Penn Wood · Major / Minor Tryouts</h3>
+          <div class="meta"><span>Sun · 10:00 AM – 12:30 PM</span><span>Penn Wood Park</span><span>Birth years 2015-2017</span></div>
+        </div>
+        <div class="actions"><a href="#" onclick="event.preventDefault(); alert('Demo registration');">Register →</a></div>
+      </div>
+
+      <div class="tr-event">
+        <div class="when"><div class="m">Mar</div><div class="d">21</div><div class="y">2027</div></div>
+        <div>
+          <h3>Phoenixville · Spring Tryouts</h3>
+          <div class="meta"><span>Sat · 9:00 AM – 12:00 PM</span><span>PVL Main Field</span><span>All ages</span></div>
+          <div class="pills"><span class="pill">Skills clinic Friday night</span></div>
+        </div>
+        <div class="actions"><a href="#" onclick="event.preventDefault(); alert('Demo registration');">Register →</a></div>
+      </div>
+
+      <h2 style="font-family: var(--font-display); color: var(--d27-navy); margin: 30px 0 14px; font-size: 24px;">Free Skills Clinics · Pre-Tryout</h2>
+
+      <div class="tr-event">
+        <div class="when" style="background:var(--d27-red);"><div class="m">Feb</div><div class="d">14</div><div class="y">2027</div></div>
+        <div>
+          <h3>D27 District-Wide Pitching &amp; Hitting Clinic · Free</h3>
+          <div class="meta"><span>Sat · 10:00 AM – 12:00 PM</span><span>Indoor at Drexel Athletic Facility</span><span>Ages 9–14</span></div>
+          <div class="pills"><span class="pill">Pat Connors plate-ump clinic</span><span class="pill">Coaches incl Tom Caldwell &amp; Sam Riccardo</span></div>
+        </div>
+        <div class="actions"><a href="#" onclick="event.preventDefault(); alert('Demo signup');">Register →</a></div>
+      </div>
+
+      <div class="tr-card" style="margin-top: 30px;">
+        <h2>How D27 Tryouts Work</h2>
+        <p style="font-size: 14px; line-height: 1.6;">All D27 leagues use evaluation-based player placement to keep teams balanced. Players attend tryouts, are evaluated by coaches and coordinators on hitting, fielding, throwing, and (for older divisions) pitching. League player agents then handle a draft to balance teams. Younger divisions (T-ball, Coach Pitch, 7-8U) typically don't tryout — friend requests honored when possible. Late registration accepted with smaller chance of preferred placement.</p>
+      </div>
+
+    </div>
+
+    <aside class="tr-side">
+      <div class="tr-card">
+        <h3>2027 Registration</h3>
+        <p>Opens <b>Nov 15, 2026</b> at 8 AM. Early-bird ends <b>Dec 31</b>. Each D27 league handles its own boundary check + roster formation.</p>
+        <p><a href="leagues.html" style="color: var(--d27-navy); font-weight: 600;">Find your league boundary →</a></p>
+      </div>
+      <div class="tr-card">
+        <h3>Fees</h3>
+        <p>Range $135–$295 per player depending on age + league. Multi-child discounts. Scholarship available for any family — see <a href="scholarship.html" style="color: var(--d27-navy); font-weight: 600;">Scott Scholarship</a>. No family pays for need.</p>
+      </div>
+      <div class="tr-card">
+        <h3>Boundaries</h3>
+        <p>Little League is residency-based. You play for your chartered league. Use the LL boundary tool or <a href="leagues.html" style="color: var(--d27-navy); font-weight: 600;">D27 league finder</a>.</p>
+      </div>
+      <div class="tr-card">
+        <h3>Last Year's Numbers</h3>
+        <div class="stat">9,612</div>
+        <div style="color: var(--muted); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px;">Players registered Spring 2026</div>
+        <p>Up 4.8% YoY. Largest cohort: 8U Coach Pitch.</p>
+      </div>
+    </aside>
+
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="standings.html">Standings</a></li><li><a href="stats.html">Stats Leaders</a></li></ul></div>
+      <div><h5>Community</h5><ul><li><a href="photos.html">Photos</a></li><li><a href="awards.html">Awards</a></li><li><a href="equipment.html">Equipment</a></li><li><a href="tryouts.html">Tryouts</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.tr-tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.tr-tab').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+}));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>District Stats Leaderboard · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .lb-hero { background: linear-gradient(180deg, var(--d27-navy), var(--d27-navy-dark)); color:#fff; padding: 56px 0 36px; border-bottom: 4px solid var(--d27-gold); }
+  .lb-hero h1 { font-family: var(--font-display); font-size: clamp(34px, 5vw, 54px); margin: 0; }
+  .lb-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .lb-hero p { color: rgba(255,255,255,.78); max-width: 60ch; margin: 14px 0 0; }
+
+  .lb-toolbar { display:flex; gap:8px; flex-wrap:wrap; margin: 24px 0 18px; align-items:center; }
+  .lb-toolbar select { padding: 8px 12px; border:1px solid var(--line); border-radius:5px; font-size: 13px; background: var(--surface); }
+  .lb-toolbar .right { margin-left:auto; font-size: 13px; color: var(--muted); }
+
+  .lb-tabs { display:flex; gap:6px; flex-wrap:wrap; border-bottom: 2px solid var(--line); margin-bottom: 18px; }
+  .lb-tab { background:none; border:none; padding:10px 14px; font-family:var(--font-display); font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); cursor:pointer; border-bottom: 3px solid transparent; margin-bottom:-2px; }
+  .lb-tab.active { color: var(--d27-navy); border-bottom-color: var(--d27-red); }
+
+  .lb-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  @media (max-width: 880px) { .lb-grid { grid-template-columns: 1fr; } }
+
+  .lb-card { background: var(--surface); border:1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .lb-card-head { background: linear-gradient(90deg, var(--d27-navy), var(--d27-navy-dark)); color:#fff; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; }
+  .lb-card-head h2 { font-family: var(--font-display); margin: 0; font-size: 18px; }
+  .lb-card-head .stat { color: var(--d27-gold); font-family: var(--font-display); font-size: 12px; letter-spacing:.06em; text-transform:uppercase; }
+
+  .lb-row { display: grid; grid-template-columns: 32px 1fr auto; gap: 12px; align-items: center; padding: 11px 18px; border-bottom: 1px solid var(--line); }
+  .lb-row:last-child { border-bottom: 0; }
+  .lb-row:hover { background: rgba(0,45,114,.02); }
+  .lb-row .rank { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--d27-navy); text-align:center; }
+  .lb-row.top1 .rank { color: var(--d27-gold); }
+  .lb-row.top1 { background: linear-gradient(90deg, rgba(201,162,39,.08), transparent); }
+  .lb-row.top2 .rank { color: #94A3B8; }
+  .lb-row.top3 .rank { color: #C7763C; }
+
+  .lb-row .nm { font-weight: 700; font-size: 14px; }
+  .lb-row .meta { color: var(--muted); font-size: 11px; }
+  .lb-row .val { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--d27-navy); text-align:right; }
+  .lb-row .val small { font-size: 11px; color: var(--muted); display: block; font-family: var(--font-body); font-weight: 500; letter-spacing: 0; }
+
+  .lb-banner { background: linear-gradient(90deg, rgba(218,41,28,.05), rgba(201,162,39,.04)); border:1px solid rgba(0,45,114,.1); border-radius:8px; padding: 16px 20px; margin-bottom: 20px; display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+  .lb-banner .ico { font-size: 28px; }
+  .lb-banner h3 { margin: 0 0 4px; font-family: var(--font-display); color: var(--d27-navy); font-size: 17px; }
+  .lb-banner p { margin: 0; font-size: 13px; color: var(--muted); }
+
+  .lb-spotlight { background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--d27-gold); border-radius: 8px; padding: 22px; margin-bottom: 24px; display: grid; grid-template-columns: 100px 1fr auto; gap: 18px; align-items: center; }
+  @media (max-width: 700px) { .lb-spotlight { grid-template-columns: 80px 1fr; } .lb-spotlight .actions { grid-column: 1 / -1; } }
+  .lb-spotlight .av { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, var(--d27-navy), var(--d27-red)); color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 36px; }
+  .lb-spotlight h2 { margin: 0; font-family: var(--font-display); color: var(--d27-navy); font-size: 26px; }
+  .lb-spotlight .role { color: var(--muted); font-size: 13px; margin: 4px 0 8px; }
+  .lb-spotlight .stat-line { font-family: var(--font-display); font-size: 14px; color: var(--d27-navy); }
+  .lb-spotlight .stat-line span { display: inline-block; padding: 4px 10px; background: var(--d27-sub); border-radius: 3px; margin-right: 6px; margin-top: 4px; }
+  .lb-spotlight .actions a { background: var(--d27-navy); color: #fff; padding: 10px 18px; border-radius: 5px; text-decoration: none; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="lb-hero">
+  <div class="container">
+    <div class="eyebrow">2026 SEASON · WEEK 6</div>
+    <h1>District Stats Leaderboards</h1>
+    <p>Top hitters, pitchers, and fielders across all twelve member leagues. Updates after every game closes through GameChanger import or manual box-score entry.</p>
+  </div>
+</header>
+
+<main class="container" style="padding: 0 0 64px;">
+
+  <!-- Spotlight -->
+  <div class="lb-spotlight">
+    <div class="av">LD</div>
+    <div>
+      <h2>Player of the Week · Luke DiSanto</h2>
+      <div class="role">Berwyn-Paoli Red 12U · #1 SS/P · age 12</div>
+      <div class="stat-line">
+        <span>5-for-7 weekend</span>
+        <span>2 HR</span>
+        <span>9 RBI</span>
+        <span>5 IP, 0 ER</span>
+        <span>11 K</span>
+        <span>2-0 record</span>
+      </div>
+    </div>
+    <div class="actions"><a href="player.html">View Profile →</a></div>
+  </div>
+
+  <div class="lb-banner">
+    <div class="ico">🔥</div>
+    <div>
+      <h3>3 district records on the line this weekend</h3>
+      <p>Miles Hartley (Methacton, 31 K) is 3 K from the 12U single-season record. Brielle Ortiz (Marple SB, .498) chases the .500 club. Tyler Morgan (CV) is 2 IP from breaking 25.</p>
+    </div>
+  </div>
+
+  <div class="lb-toolbar">
+    <select>
+      <option>All Divisions</option>
+      <option>12U Majors</option><option>11U</option><option>10U Pappy Patton</option><option>9U</option><option>50/70 Intermediate</option><option>Junior League</option><option>Senior League</option><option>12U Softball</option><option>10U Softball</option>
+    </select>
+    <select>
+      <option>All Leagues (12)</option>
+      <option>Berwyn-Paoli</option><option>Chester Valley</option><option>Methacton</option><option>Lower Merion</option><option>Lower Perkiomen</option><option>Marple Newtown</option><option>Penn Wood</option><option>Phoenixville</option><option>Pottstown</option><option>Springfield</option><option>Tredyffrin</option><option>Lansdale-Ambler</option>
+    </select>
+    <select>
+      <option>Min. 25 PA / 10 IP</option>
+      <option>Min. 50 PA / 20 IP</option>
+      <option>No minimum</option>
+    </select>
+    <span class="right">Auto-updates after every closed game · 18 games this week</span>
+  </div>
+
+  <div class="lb-tabs">
+    <button class="lb-tab active">Hitting</button>
+    <button class="lb-tab">Pitching</button>
+    <button class="lb-tab">Fielding</button>
+    <button class="lb-tab">Catching</button>
+    <button class="lb-tab">Speed / Baserunning</button>
+    <button class="lb-tab">Power</button>
+  </div>
+
+  <div class="lb-grid">
+
+    <div class="lb-card">
+      <div class="lb-card-head"><h2>Batting Average</h2><span class="stat">Min. 25 PA</span></div>
+      <div class="lb-row top1"><div class="rank">1</div><div><div class="nm">Brielle Ortiz</div><div class="meta">Marple Newtown · 12U SB · #5</div></div><div class="val">.498<small>21-for-42</small></div></div>
+      <div class="lb-row top2"><div class="rank">2</div><div><div class="nm">Holden Pierce</div><div class="meta">Methacton Gold · 9U · #15</div></div><div class="val">.488<small>20-for-41</small></div></div>
+      <div class="lb-row top3"><div class="rank">3</div><div><div class="nm">Cora Whelan</div><div class="meta">Penn Wood · 10U SB · #11</div></div><div class="val">.444<small>20-for-45</small></div></div>
+      <div class="lb-row"><div class="rank">4</div><div><div class="nm">Luke DiSanto</div><div class="meta">Berwyn-Paoli Red · 12U · #1</div></div><div class="val">.412<small>21-for-51</small></div></div>
+      <div class="lb-row"><div class="rank">5</div><div><div class="nm">Jaxon Ruiz</div><div class="meta">Chester Valley · 11U · #1</div></div><div class="val">.402<small>19-for-47</small></div></div>
+      <div class="lb-row"><div class="rank">6</div><div><div class="nm">Miles Hartley</div><div class="meta">Methacton Gold · 12U · #2</div></div><div class="val">.378<small>17-for-45</small></div></div>
+      <div class="lb-row"><div class="rank">7</div><div><div class="nm">Theo Velez</div><div class="meta">Methacton · 10U · #8</div></div><div class="val">.358<small>17-for-47</small></div></div>
+      <div class="lb-row"><div class="rank">8</div><div><div class="nm">Beckett Flynn</div><div class="meta">Chester Valley · 11U · #7</div></div><div class="val">.341<small>15-for-44</small></div></div>
+    </div>
+
+    <div class="lb-card">
+      <div class="lb-card-head"><h2>On-Base %</h2><span class="stat">Min. 25 PA</span></div>
+      <div class="lb-row top1"><div class="rank">1</div><div><div class="nm">Luke DiSanto</div><div class="meta">Berwyn-Paoli Red · 12U</div></div><div class="val">.524<small>27 OB / 51 PA</small></div></div>
+      <div class="lb-row top2"><div class="rank">2</div><div><div class="nm">Brielle Ortiz</div><div class="meta">Marple SB · 12U</div></div><div class="val">.581<small>26 OB / 45 PA</small></div></div>
+      <div class="lb-row top3"><div class="rank">3</div><div><div class="nm">Holden Pierce</div><div class="meta">Methacton · 9U</div></div><div class="val">.561<small>23 OB / 41 PA</small></div></div>
+      <div class="lb-row"><div class="rank">4</div><div><div class="nm">Jaxon Ruiz</div><div class="meta">Chester Valley · 11U</div></div><div class="val">.510<small>24/47</small></div></div>
+      <div class="lb-row"><div class="rank">5</div><div><div class="nm">Cora Whelan</div><div class="meta">Penn Wood SB · 10U</div></div><div class="val">.480<small>24/50</small></div></div>
+      <div class="lb-row"><div class="rank">6</div><div><div class="nm">Theo Velez</div><div class="meta">Methacton · 10U</div></div><div class="val">.434<small>23/53</small></div></div>
+    </div>
+
+    <div class="lb-card">
+      <div class="lb-card-head"><h2>RBIs</h2><span class="stat">Through Week 6</span></div>
+      <div class="lb-row top1"><div class="rank">1</div><div><div class="nm">Luke DiSanto</div><div class="meta">Berwyn-Paoli Red · 12U</div></div><div class="val">14<small>10 games</small></div></div>
+      <div class="lb-row top2"><div class="rank">2</div><div><div class="nm">Cole Ramirez</div><div class="meta">Berwyn-Paoli Red · 12U</div></div><div class="val">12<small>10 games</small></div></div>
+      <div class="lb-row top3"><div class="rank">3</div><div><div class="nm">Brielle Ortiz</div><div class="meta">Marple SB · 12U</div></div><div class="val">11<small>9 games</small></div></div>
+      <div class="lb-row"><div class="rank">4</div><div><div class="nm">Sam Roberts</div><div class="meta">Chester Valley Gold · 12U</div></div><div class="val">11<small>10 games</small></div></div>
+      <div class="lb-row"><div class="rank">5</div><div><div class="nm">Theo Velez</div><div class="meta">Methacton · 10U</div></div><div class="val">11<small>10 games</small></div></div>
+      <div class="lb-row"><div class="rank">6</div><div><div class="nm">Jenna Pirro</div><div class="meta">Chester Valley SB · 12U</div></div><div class="val">10<small>9 games</small></div></div>
+    </div>
+
+    <div class="lb-card">
+      <div class="lb-card-head"><h2>Home Runs</h2><span class="stat">2026 Season</span></div>
+      <div class="lb-row top1"><div class="rank">1</div><div><div class="nm">Luke DiSanto</div><div class="meta">Berwyn-Paoli Red · 12U</div></div><div class="val">3<small>2 over fence</small></div></div>
+      <div class="lb-row top2"><div class="rank">2</div><div><div class="nm">Sam Roberts</div><div class="meta">Chester Valley Gold · 12U</div></div><div class="val">3<small>1 grand slam</small></div></div>
+      <div class="lb-row top3"><div class="rank">3</div><div><div class="nm">Ben Kowalski</div><div class="meta">Methacton Black · 12U</div></div><div class="val">2<small>both walk-offs</small></div></div>
+      <div class="lb-row"><div class="rank">4</div><div><div class="nm">Brielle Ortiz</div><div class="meta">Marple SB · 12U</div></div><div class="val">2</div></div>
+      <div class="lb-row"><div class="rank">5</div><div><div class="nm">Tyler Morgan</div><div class="meta">Chester Valley Black · 12U</div></div><div class="val">2</div></div>
+    </div>
+
+    <div class="lb-card">
+      <div class="lb-card-head"><h2>ERA</h2><span class="stat">Min. 10 IP</span></div>
+      <div class="lb-row top1"><div class="rank">1</div><div><div class="nm">Brielle Ortiz</div><div class="meta">Marple SB · 12U · #5</div></div><div class="val">1.32<small>4 ER / 28 IP</small></div></div>
+      <div class="lb-row top2"><div class="rank">2</div><div><div class="nm">Miles Hartley</div><div class="meta">Methacton Gold · 12U · #2</div></div><div class="val">1.87<small>5 ER / 24 IP</small></div></div>
+      <div class="lb-row top3"><div class="rank">3</div><div><div class="nm">Tyler Morgan</div><div class="meta">Chester Valley Black · 12U · #8</div></div><div class="val">2.07<small>5 ER / 22 IP</small></div></div>
+      <div class="lb-row"><div class="rank">4</div><div><div class="nm">Luke DiSanto</div><div class="meta">Berwyn-Paoli Red · 12U · #1</div></div><div class="val">2.14<small>6 ER / 19.2 IP</small></div></div>
+      <div class="lb-row"><div class="rank">5</div><div><div class="nm">Theo Velez</div><div class="meta">Methacton · 10U · #8</div></div><div class="val">2.41<small>5 ER / 18.2 IP</small></div></div>
+      <div class="lb-row"><div class="rank">6</div><div><div class="nm">Cole Ramirez</div><div class="meta">Berwyn-Paoli Red · 12U · #3</div></div><div class="val">2.75<small>5 ER / 16.1 IP</small></div></div>
+    </div>
+
+    <div class="lb-card">
+      <div class="lb-card-head"><h2>Strikeouts</h2><span class="stat">2026 Season</span></div>
+      <div class="lb-row top1"><div class="rank">1</div><div><div class="nm">Brielle Ortiz</div><div class="meta">Marple SB · 12U</div></div><div class="val">51<small>28 IP · 16.4 K/9</small></div></div>
+      <div class="lb-row top2"><div class="rank">2</div><div><div class="nm">Tyler Morgan</div><div class="meta">Chester Valley Black · 12U</div></div><div class="val">38<small>22 IP · 15.5 K/9</small></div></div>
+      <div class="lb-row top3"><div class="rank">3</div><div><div class="nm">Miles Hartley</div><div class="meta">Methacton Gold · 12U</div></div><div class="val">31<small>24 IP · 11.6 K/9</small></div></div>
+      <div class="lb-row"><div class="rank">4</div><div><div class="nm">Luke DiSanto</div><div class="meta">Berwyn-Paoli Red · 12U</div></div><div class="val">24<small>19.2 IP · 11.0 K/9</small></div></div>
+      <div class="lb-row"><div class="rank">5</div><div><div class="nm">Theo Velez</div><div class="meta">Methacton · 10U</div></div><div class="val">22<small>18.2 IP · 10.6 K/9</small></div></div>
+    </div>
+
+    <div class="lb-card">
+      <div class="lb-card-head"><h2>WHIP</h2><span class="stat">Min. 10 IP</span></div>
+      <div class="lb-row top1"><div class="rank">1</div><div><div class="nm">Brielle Ortiz</div><div class="meta">Marple SB · 12U</div></div><div class="val">0.78<small>22 H+BB / 28 IP</small></div></div>
+      <div class="lb-row top2"><div class="rank">2</div><div><div class="nm">Miles Hartley</div><div class="meta">Methacton Gold · 12U</div></div><div class="val">0.87<small>21/24</small></div></div>
+      <div class="lb-row top3"><div class="rank">3</div><div><div class="nm">Tyler Morgan</div><div class="meta">Chester Valley Black</div></div><div class="val">0.92<small>20/22</small></div></div>
+      <div class="lb-row"><div class="rank">4</div><div><div class="nm">Luke DiSanto</div><div class="meta">Berwyn-Paoli Red</div></div><div class="val">1.01<small>20/19.2</small></div></div>
+    </div>
+
+    <div class="lb-card">
+      <div class="lb-card-head"><h2>Stolen Bases</h2><span class="stat">2026 Season</span></div>
+      <div class="lb-row top1"><div class="rank">1</div><div><div class="nm">Jaxon Ruiz</div><div class="meta">Chester Valley · 11U</div></div><div class="val">18<small>0 caught</small></div></div>
+      <div class="lb-row top2"><div class="rank">2</div><div><div class="nm">Holden Pierce</div><div class="meta">Methacton · 9U</div></div><div class="val">12<small>1 caught</small></div></div>
+      <div class="lb-row top3"><div class="rank">3</div><div><div class="nm">Alex Park</div><div class="meta">Berwyn-Paoli Blue · 12U</div></div><div class="val">11</div></div>
+      <div class="lb-row"><div class="rank">4</div><div><div class="nm">Aiden Park</div><div class="meta">Chester Valley · 12U</div></div><div class="val">9</div></div>
+      <div class="lb-row"><div class="rank">5</div><div><div class="nm">Beckett Flynn</div><div class="meta">Chester Valley · 11U</div></div><div class="val">9</div></div>
+    </div>
+
+    <div class="lb-card">
+      <div class="lb-card-head"><h2>Fielding %</h2><span class="stat">Min. 30 chances</span></div>
+      <div class="lb-row top1"><div class="rank">1</div><div><div class="nm">Marco Russo</div><div class="meta">Berwyn-Paoli Red · 12U · 3B</div></div><div class="val">1.000<small>34/34, 0 E</small></div></div>
+      <div class="lb-row top2"><div class="rank">2</div><div><div class="nm">Devin Choi</div><div class="meta">Berwyn-Paoli Blue · 12U · 2B</div></div><div class="val">1.000<small>31/31, 0 E</small></div></div>
+      <div class="lb-row top3"><div class="rank">3</div><div><div class="nm">Jaxon Ruiz</div><div class="meta">Chester Valley · 11U · SS</div></div><div class="val">.972<small>35/36, 1 E</small></div></div>
+      <div class="lb-row"><div class="rank">4</div><div><div class="nm">Caleb Bianchi</div><div class="meta">Methacton Gold · 12U · 2B</div></div><div class="val">.969<small>31/32, 1 E</small></div></div>
+    </div>
+
+    <div class="lb-card">
+      <div class="lb-card-head"><h2>Caught Stealing %</h2><span class="stat">Catchers · Min. 10 attempts</span></div>
+      <div class="lb-row top1"><div class="rank">1</div><div><div class="nm">Cora Whelan</div><div class="meta">Penn Wood SB · 10U · #11</div></div><div class="val">61.5%<small>8 of 13</small></div></div>
+      <div class="lb-row top2"><div class="rank">2</div><div><div class="nm">Brendan Wright</div><div class="meta">Berwyn-Paoli Red · 12U · #11</div></div><div class="val">53.8%<small>7 of 13</small></div></div>
+      <div class="lb-row top3"><div class="rank">3</div><div><div class="nm">Eli Goss</div><div class="meta">Chester Valley Gold · 12U · #10</div></div><div class="val">50.0%<small>6 of 12</small></div></div>
+      <div class="lb-row"><div class="rank">4</div><div><div class="nm">Wyatt Doyle</div><div class="meta">Methacton White · 12U · #11</div></div><div class="val">45.5%<small>5 of 11</small></div></div>
+    </div>
+
+  </div>
+
+  <div style="background: var(--surface); border:1px solid var(--line); border-radius:8px; padding: 22px; margin-top: 22px;">
+    <h2 style="font-family: var(--font-display); margin: 0 0 12px; color: var(--d27-navy);">Where these stats come from</h2>
+    <p style="margin: 0 0 8px; color: var(--muted); line-height: 1.65; max-width: 75ch;">Captains submit box scores after every game via the Score Entry tab — live scoring, GameChanger PDF import, or manual box-score form. Stats roll up overnight. Discrepancies between captain submissions are flagged to admin (see <a href="admin.html#disputes" style="color: var(--d27-navy); font-weight: 600;">Score Discrepancy Inbox</a>) and held out of leaderboards until resolved. League presidents can audit their own league's submissions.</p>
+    <p style="margin:0; color: var(--muted); font-size: 13px;">Privacy: only first name + last initial shown for players under 13 unless parents have opted in via <a href="player.html#settings" style="color: var(--d27-navy); font-weight: 600;">Player Settings</a>.</p>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="pitch-count.html">Pitch Count</a></li><li><a href="standings.html">Standings</a></li><li><a href="stats.html">Stats Leaders</a></li></ul></div>
+      <div><h5>Resources</h5><ul><li><a href="rules.html">Rules</a></li><li><a href="scholarship.html">Scholarship</a></li><li><a href="all-stars.html">All-Stars</a></li><li><a href="awards.html">Awards</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.lb-tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.lb-tab').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+}));
+</script>
+
+</body>
+</html>
