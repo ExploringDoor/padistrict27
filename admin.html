@@ -435,7 +435,7 @@
       <li><a href="baseball.html">Baseball</a></li>
       <li><a href="softball.html">Softball</a></li>
       <li><a href="schedule.html">Schedule</a></li>
-      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="admin.html" aria-current="page" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px;">Admin</a></li>
     </ul>
@@ -459,8 +459,13 @@
         <li><a href="#games"><span class="ico">⚾</span>Games &amp; Scores</a></li>
         <li><a href="#leagues"><span class="ico">🏟️</span>Leagues</a></li>
         <li><a href="#rosters"><span class="ico">👥</span>Rosters</a></li>
-        <li><a href="#fields"><span class="ico">📍</span>Fields &amp; Status</a></li>
-        <li><a href="#umpires"><span class="ico">🧑‍⚖️</span>Umpires</a></li>
+        <li><a href="fields.html"><span class="ico">📍</span>Fields &amp; Status</a></li>
+        <li><a href="umpires.html"><span class="ico">🧑‍⚖️</span>Umpires</a></li>
+        <li><a href="pitch-count.html"><span class="ico">⚾</span>Pitch Count</a></li>
+        <li><a href="coaches.html"><span class="ico">🎓</span>Coach Cert</a></li>
+        <li><a href="standings.html"><span class="ico">📈</span>Standings</a></li>
+        <li><a href="all-stars.html"><span class="ico">⭐</span>All-Stars</a></li>
+        <li><a href="#disputes"><span class="ico" style="color: var(--d27-red);">⚠</span>Score Disputes <span style="background:var(--d27-red); color:#fff; font-size:10px; padding:2px 6px; border-radius:3px; margin-left:6px;">2</span></a></li>
         <li><a href="#broadcasts"><span class="ico">📢</span>Broadcasts</a></li>
         <li><a href="#audit"><span class="ico">📝</span>Audit Log</a></li>
         <li><a href="#settings"><span class="ico">⚙️</span>Settings</a></li>
@@ -584,6 +589,118 @@
           <button class="btn btn-ghost" onclick="alert('Demo — edit individual games inline')">Edit Games</button>
           <button class="btn btn-ghost" onclick="alert('Demo — regenerate with new constraints')">🔄 Regenerate</button>
           <button class="btn btn-ghost" onclick="alert('Demo — export to PDF')">Export PDF</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Score Discrepancy Inbox -->
+    <section class="panel" id="disputes" style="border-left: 4px solid var(--d27-red);">
+      <div class="panel-head">
+        <h2 style="color: var(--d27-red);">⚠ Score Discrepancy Inbox</h2>
+        <div class="sub">2 games where captain submissions don't agree</div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr; gap: 14px;">
+
+        <div style="background: linear-gradient(90deg, rgba(218,41,28,.04), transparent); border:1px solid rgba(218,41,28,.2); border-radius: 8px; padding: 18px 20px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap;">
+            <div>
+              <div style="font-family: var(--font-display); font-weight: 700; color: var(--d27-navy); font-size: 17px;">Lansdale-Ambler vs Tredyffrin · 12U Reg</div>
+              <div style="color: var(--muted); font-size: 12px; margin-top: 2px;">Saturday, May 2 · 10:30 AM · LA Field 2 · Plate ump: Connors</div>
+            </div>
+            <span style="background: #FEE2E2; color: var(--d27-red); padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing:.06em; text-transform:uppercase;">Discrepancy</span>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px;">
+            <div style="background: var(--surface); border:1px solid var(--line); border-radius:6px; padding: 12px;">
+              <div style="font-size: 11px; letter-spacing:.06em; color:var(--muted); text-transform:uppercase; font-weight:700; margin-bottom: 6px;">LA Captain Submission</div>
+              <div style="font-family: var(--font-display); font-size: 22px; font-weight:700; color: var(--d27-navy);">LA 9 · TRED 8</div>
+              <div style="color:var(--muted); font-size: 12px; margin-top: 4px;">Submitted by Mark Henley · 12:48 PM · GameChanger PDF</div>
+            </div>
+            <div style="background: var(--surface); border:1px solid var(--line); border-radius:6px; padding: 12px;">
+              <div style="font-size: 11px; letter-spacing:.06em; color:var(--muted); text-transform:uppercase; font-weight:700; margin-bottom: 6px;">TRED Captain Submission</div>
+              <div style="font-family: var(--font-display); font-size: 22px; font-weight:700; color: var(--d27-red);">LA 9 · TRED 9</div>
+              <div style="color:var(--muted); font-size: 12px; margin-top: 4px;">Submitted by Linda Cole · 12:51 PM · manual entry</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; margin-top: 14px; flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="alert('Demo — pulls plate ump scorebook + GameChanger PDF, side-by-side comparison')">View Source Docs</button>
+            <button class="btn btn-ghost" onclick="alert('Demo — emails both captains and ump for clarification')">Request Re-submit</button>
+            <button class="btn btn-ghost" onclick="alert('Demo — accepts plate ump as authoritative')">Accept Ump Score</button>
+          </div>
+        </div>
+
+        <div style="background: linear-gradient(90deg, rgba(218,41,28,.04), transparent); border:1px solid rgba(218,41,28,.2); border-radius: 8px; padding: 18px 20px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap;">
+            <div>
+              <div style="font-family: var(--font-display); font-weight: 700; color: var(--d27-navy); font-size: 17px;">Marple Newtown vs Springfield · 11U Reg</div>
+              <div style="color: var(--muted); font-size: 12px; margin-top: 2px;">Sunday, May 3 · 1:00 PM · Marple A · Plate ump: Sokol</div>
+            </div>
+            <span style="background: #FEE2E2; color: var(--d27-red); padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing:.06em; text-transform:uppercase;">Discrepancy</span>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px;">
+            <div style="background: var(--surface); border:1px solid var(--line); border-radius:6px; padding: 12px;">
+              <div style="font-size: 11px; letter-spacing:.06em; color:var(--muted); text-transform:uppercase; font-weight:700; margin-bottom: 6px;">MN Captain</div>
+              <div style="font-family: var(--font-display); font-size: 22px; font-weight:700; color: var(--d27-navy);">MN 6 · SPR 5</div>
+              <div style="color:var(--muted); font-size: 12px; margin-top: 4px;">5 innings, mercy</div>
+            </div>
+            <div style="background: var(--surface); border:1px solid var(--line); border-radius:6px; padding: 12px;">
+              <div style="font-size: 11px; letter-spacing:.06em; color:var(--muted); text-transform:uppercase; font-weight:700; margin-bottom: 6px;">SPR Captain</div>
+              <div style="font-family: var(--font-display); font-size: 22px; font-weight:700; color: var(--d27-red);">MN 6 · SPR 6</div>
+              <div style="color:var(--muted); font-size: 12px; margin-top: 4px;">6 innings, claims sub-1 in B6</div>
+            </div>
+          </div>
+        </div>
+
+        <p style="color:var(--muted); font-size: 13px; margin: 4px 0 0;">Production behavior: when both captains submit, scores compared automatically. If they don't match, neither score posts to standings until admin resolves. Both captains and the plate umpire are notified to provide source documentation.</p>
+      </div>
+    </section>
+
+    <!-- Mass Broadcast -->
+    <section class="panel" id="broadcasts">
+      <div class="panel-head">
+        <h2>📣 Mass Broadcast</h2>
+        <div class="sub">Send district-wide alerts in 30 seconds</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div style="border:1px solid var(--line); border-radius:8px; padding: 14px;">
+          <h3 style="margin: 0 0 8px; font-family: var(--font-display); color: var(--d27-navy); font-size: 14px; letter-spacing:.06em; text-transform:uppercase;">Audience</h3>
+          <select style="width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:5px; font: inherit; font-size: 14px; margin-bottom: 8px;">
+            <option>All D27 leagues · 25,400 recipients</option>
+            <option>One league: Berwyn-Paoli · 1,840</option>
+            <option>One league: Methacton · 1,650</option>
+            <option>One league: Chester Valley · 1,420</option>
+            <option>By division: 12U Majors · 380 captains/parents</option>
+            <option>Tournament: Bob Jones participants · 224</option>
+            <option>Captains only · 248</option>
+            <option>Umpires only · 42</option>
+          </select>
+          <h3 style="margin: 12px 0 8px; font-family: var(--font-display); color: var(--d27-navy); font-size: 14px; letter-spacing:.06em; text-transform:uppercase;">Channel</h3>
+          <label style="display:flex; align-items:center; gap:6px; padding: 6px 0; font-size: 14px;"><input type="checkbox" checked /> Email</label>
+          <label style="display:flex; align-items:center; gap:6px; padding: 6px 0; font-size: 14px;"><input type="checkbox" checked /> SMS</label>
+          <label style="display:flex; align-items:center; gap:6px; padding: 6px 0; font-size: 14px;"><input type="checkbox" /> Push notification (app)</label>
+          <label style="display:flex; align-items:center; gap:6px; padding: 6px 0; font-size: 14px;"><input type="checkbox" /> Post to Facebook</label>
+        </div>
+        <div style="border:1px solid var(--line); border-radius:8px; padding: 14px;">
+          <h3 style="margin: 0 0 8px; font-family: var(--font-display); color: var(--d27-navy); font-size: 14px; letter-spacing:.06em; text-transform:uppercase;">Quick Templates</h3>
+          <button class="btn btn-ghost" style="width:100%; margin-bottom: 6px; text-align:left;" onclick="alert('Demo — fills compose with rainout text, all today\\'s games attached')">⛈ Rainout — Today's Games</button>
+          <button class="btn btn-ghost" style="width:100%; margin-bottom: 6px; text-align:left;" onclick="alert('Demo — opens schedule change template with affected captains pre-loaded')">🔄 Schedule Change</button>
+          <button class="btn btn-ghost" style="width:100%; margin-bottom: 6px; text-align:left;" onclick="alert('Demo — field-closed template with reroute suggestions')">📍 Field Closed Notice</button>
+          <button class="btn btn-ghost" style="width:100%; margin-bottom: 6px; text-align:left;" onclick="alert('Demo — uniform reminder template')">👕 Uniform Reminder</button>
+          <button class="btn btn-ghost" style="width:100%; margin-bottom: 6px; text-align:left;" onclick="alert('Demo — picture-day template with photographer info')">📸 Picture Day</button>
+          <button class="btn btn-ghost" style="width:100%; text-align:left;" onclick="alert('Demo — All-Star reminder')">⭐ All-Star Notice</button>
+        </div>
+      </div>
+
+      <div style="border:1px solid var(--line); border-radius:8px; padding: 14px; margin-top: 14px;">
+        <h3 style="margin: 0 0 8px; font-family: var(--font-display); color: var(--d27-navy); font-size: 14px; letter-spacing:.06em; text-transform:uppercase;">Compose</h3>
+        <input type="text" placeholder="Subject — keep under 60 chars" style="width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:5px; font: inherit; font-size:14px; margin-bottom:8px;" />
+        <textarea rows="4" placeholder="Message — SMS will truncate at 160 chars" style="width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:5px; font: inherit; font-size: 14px; resize: vertical;"></textarea>
+        <div style="display:flex; gap:8px; margin-top: 10px; flex-wrap:wrap; align-items:center;">
+          <button class="btn btn-primary" onclick="alert('Demo — sends in 30 seconds. Production: SendGrid for email, Twilio for SMS, Firebase for push.')">📤 Send Broadcast</button>
+          <button class="btn btn-ghost" onclick="alert('Demo — saves draft for later')">Save Draft</button>
+          <button class="btn btn-ghost" onclick="alert('Demo — schedules for future send')">⏰ Schedule</button>
+          <span style="color:var(--muted); font-size:12px; margin-left:auto;">Last broadcast: 1h ago · 240 recipients · 96% delivered</span>
         </div>
       </div>
     </section>

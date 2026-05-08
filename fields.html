@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Field Status Board · PA District 27</title>
+<meta name="description" content="Live field-status board for all D27 complexes — open, closed, wet, lights on. Updated by league admins in real time." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .fs-hero { background: linear-gradient(180deg, var(--d27-navy), var(--d27-navy-dark)); color: #fff; padding: 56px 0 36px; border-bottom: 4px solid var(--d27-gold); }
+  .fs-hero h1 { font-family: var(--font-display); font-size: clamp(34px, 5vw, 54px); margin: 0; letter-spacing: -.01em; }
+  .fs-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .fs-hero p { color: rgba(255,255,255,.78); max-width: 60ch; margin: 14px 0 0; }
+  .fs-hero .updated { display: inline-flex; gap: 6px; align-items: center; margin-top: 18px; background: rgba(255,255,255,.08); padding: 6px 12px; border-radius: 999px; font-size: 13px; }
+  .fs-pulse { width: 8px; height: 8px; border-radius: 50%; background: #34D399; box-shadow: 0 0 0 0 rgba(52,211,153,.6); animation: fsPulse 1.6s infinite; }
+  @keyframes fsPulse { 0% { box-shadow: 0 0 0 0 rgba(52,211,153,.6); } 70% { box-shadow: 0 0 0 10px rgba(52,211,153,0); } 100% { box-shadow: 0 0 0 0 rgba(52,211,153,0); } }
+
+  .fs-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: -28px 0 28px; position: relative; z-index: 2; }
+  @media (max-width: 720px) { .fs-summary { grid-template-columns: repeat(2, 1fr); } }
+  .fs-stat { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; box-shadow: 0 6px 18px rgba(0,0,0,.06); }
+  .fs-stat .n { font-family: var(--font-display); font-size: 36px; font-weight: 700; line-height: 1; }
+  .fs-stat .l { color: var(--muted); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; display: block; }
+  .fs-stat.ok .n { color: #059669; }
+  .fs-stat.wet .n { color: #B45309; }
+  .fs-stat.closed .n { color: var(--d27-red); }
+  .fs-stat.lights .n { color: #7C3AED; }
+
+  .fs-controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+  .fs-pill { padding: 7px 14px; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; }
+  .fs-pill.active { background: var(--d27-navy); color: #fff; border-color: var(--d27-navy); }
+
+  .fs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .fs-card { background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--line); border-radius: 8px; padding: 16px 18px; }
+  .fs-card[data-status="open"] { border-left-color: #10B981; }
+  .fs-card[data-status="wet"] { border-left-color: #F59E0B; }
+  .fs-card[data-status="closed"] { border-left-color: var(--d27-red); }
+  .fs-card[data-status="lights"] { border-left-color: #7C3AED; }
+
+  .fs-card h3 { margin: 0 0 4px; font-family: var(--font-display); font-size: 19px; }
+  .fs-card .where { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+  .fs-badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 11px; letter-spacing: .08em; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; }
+  .fs-badge.open { background: #ECFDF5; color: #059669; }
+  .fs-badge.wet  { background: #FEF3C7; color: #B45309; }
+  .fs-badge.closed { background: #FEE2E2; color: var(--d27-red); }
+  .fs-badge.lights { background: #EDE9FE; color: #6D28D9; }
+
+  .fs-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; font-size: 13px; }
+  .fs-fields > div { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed var(--line); }
+  .fs-fields > div:last-child, .fs-fields > div:nth-last-child(2) { border-bottom: 0; }
+  .fs-fields .ok { color: #059669; font-weight: 700; }
+  .fs-fields .wet { color: #B45309; font-weight: 700; }
+  .fs-fields .closed { color: var(--d27-red); font-weight: 700; }
+
+  .fs-foot { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+
+  .fs-admin-note { background: linear-gradient(90deg, rgba(201,162,39,.06), rgba(0,45,114,.04)); border: 1px solid rgba(0,45,114,.12); border-left: 4px solid var(--d27-gold); border-radius: 6px; padding: 14px 18px; margin: 24px 0 32px; }
+  .fs-admin-note h4 { margin: 0 0 4px; font-family: var(--font-display); color: var(--d27-navy); }
+  .fs-admin-note p { margin: 0; font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="fs-hero">
+  <div class="container">
+    <div class="eyebrow">D27 OPERATIONS</div>
+    <h1>Field Status Board</h1>
+    <p>Live conditions for every complex in District 27. League admins update directly — no group texts, no guessing. Saturday games stay on, or stay off, with district-wide visibility.</p>
+    <div class="updated"><span class="fs-pulse"></span> Last updated 4 minutes ago · auto-refresh every 60s</div>
+  </div>
+</header>
+
+<main class="container" style="padding: 0 0 64px;">
+
+  <div class="fs-summary">
+    <div class="fs-stat ok"><div class="n">14</div><span class="l">Fields Open</span></div>
+    <div class="fs-stat wet"><div class="n">3</div><span class="l">Wet · Inspect AM</span></div>
+    <div class="fs-stat closed"><div class="n">2</div><span class="l">Closed</span></div>
+    <div class="fs-stat lights"><div class="n">5</div><span class="l">Lights On Tonight</span></div>
+  </div>
+
+  <div class="fs-controls">
+    <button class="fs-pill active" onclick="filterFields('all', this)">All Complexes</button>
+    <button class="fs-pill" onclick="filterFields('open', this)">Open Only</button>
+    <button class="fs-pill" onclick="filterFields('wet', this)">Wet</button>
+    <button class="fs-pill" onclick="filterFields('closed', this)">Closed</button>
+    <button class="fs-pill" onclick="filterFields('lights', this)">Lights On</button>
+  </div>
+
+  <div class="fs-grid" id="fsGrid">
+
+    <div class="fs-card" data-status="open">
+      <span class="fs-badge open">● Open</span>
+      <h3>Field of Dreams</h3>
+      <div class="where">Berwyn-Paoli LL · 1100 Cassatt Rd, Berwyn</div>
+      <div class="fs-fields">
+        <div><span>Field 1</span><span class="ok">OK</span></div>
+        <div><span>Field 2</span><span class="ok">OK</span></div>
+        <div><span>Tee Field</span><span class="ok">OK</span></div>
+        <div><span>Cages</span><span class="ok">OK</span></div>
+      </div>
+      <div class="fs-foot"><span>Updated by Tom Caldwell · 7:42 AM</span><span>☀ 72° dry</span></div>
+    </div>
+
+    <div class="fs-card" data-status="wet">
+      <span class="fs-badge wet">▲ Wet · AM Inspect</span>
+      <h3>Monument Avenue</h3>
+      <div class="where">Marple Newtown LL · 5 Monument Rd, Broomall</div>
+      <div class="fs-fields">
+        <div><span>Field 1</span><span class="wet">SOFT</span></div>
+        <div><span>Field 2</span><span class="ok">OK</span></div>
+        <div><span>Field 3</span><span class="wet">SOFT</span></div>
+        <div><span>Bullpen</span><span class="ok">OK</span></div>
+      </div>
+      <div class="fs-foot"><span>Mike Russo · 6:15 AM</span><span>0.3" overnight rain</span></div>
+    </div>
+
+    <div class="fs-card" data-status="lights">
+      <span class="fs-badge lights">✦ Lights On · 6:30P</span>
+      <h3>Gambone Memorial Park</h3>
+      <div class="where">Lower Perkiomen LL · 200 Lewis Rd, Royersford</div>
+      <div class="fs-fields">
+        <div><span>Majors</span><span class="ok">OK</span></div>
+        <div><span>Minors</span><span class="ok">OK</span></div>
+        <div><span>Softball</span><span class="ok">OK</span></div>
+        <div><span>Tee</span><span class="ok">OK</span></div>
+      </div>
+      <div class="fs-foot"><span>Auto-set per game schedule</span><span>☀ 68°</span></div>
+    </div>
+
+    <div class="fs-card" data-status="closed">
+      <span class="fs-badge closed">✕ Closed</span>
+      <h3>Memorial Park</h3>
+      <div class="where">Springfield LL · 50 Powell Rd, Springfield</div>
+      <div class="fs-fields">
+        <div><span>Field 1</span><span class="closed">FLOOD</span></div>
+        <div><span>Field 2</span><span class="closed">FLOOD</span></div>
+        <div><span>Field 3</span><span class="closed">FLOOD</span></div>
+        <div><span>Snack Bar</span><span class="ok">OK</span></div>
+      </div>
+      <div class="fs-foot"><span>Joe Vincelli · 5:50 AM</span><span>Crum Creek 4ft over</span></div>
+    </div>
+
+    <div class="fs-card" data-status="open">
+      <span class="fs-badge open">● Open</span>
+      <h3>Ricketts Sports Complex</h3>
+      <div class="where">Methacton LL · 1000 W Indian Creek Rd, Worcester</div>
+      <div class="fs-fields">
+        <div><span>Williamsport</span><span class="ok">OK</span></div>
+        <div><span>50/70</span><span class="ok">OK</span></div>
+        <div><span>Sr League</span><span class="ok">OK</span></div>
+        <div><span>SB Diamond</span><span class="ok">OK</span></div>
+      </div>
+      <div class="fs-foot"><span>Sam Riccardo · 7:10 AM</span><span>☀ 71° dry</span></div>
+    </div>
+
+    <div class="fs-card" data-status="open">
+      <span class="fs-badge open">● Open</span>
+      <h3>Marple Fields</h3>
+      <div class="where">Marple Newtown LL · 200 Sproul Rd, Broomall</div>
+      <div class="fs-fields">
+        <div><span>Field A</span><span class="ok">OK</span></div>
+        <div><span>Field B</span><span class="ok">OK</span></div>
+        <div><span>Tee A</span><span class="ok">OK</span></div>
+        <div><span>Tee B</span><span class="ok">OK</span></div>
+      </div>
+      <div class="fs-foot"><span>Auto · clear since 9PM</span><span>☀ 72°</span></div>
+    </div>
+
+    <div class="fs-card" data-status="lights">
+      <span class="fs-badge lights">✦ Lights On · 7:15P</span>
+      <h3>Lower Merion F3</h3>
+      <div class="where">Lower Merion LL · 300 Llanfair Rd, Ardmore</div>
+      <div class="fs-fields">
+        <div><span>F1</span><span class="ok">OK</span></div>
+        <div><span>F2</span><span class="ok">OK</span></div>
+        <div><span>F3 (lights)</span><span class="ok">OK</span></div>
+        <div><span>Cages</span><span class="ok">OK</span></div>
+      </div>
+      <div class="fs-foot"><span>Lights req'd: SF Bob Jones</span><span>☀ 70°</span></div>
+    </div>
+
+    <div class="fs-card" data-status="open">
+      <span class="fs-badge open">● Open</span>
+      <h3>Chester Valley Complex</h3>
+      <div class="where">Chester Valley LL · 100 Whitford Hills Dr, Exton</div>
+      <div class="fs-fields">
+        <div><span>Senior</span><span class="ok">OK</span></div>
+        <div><span>Major</span><span class="ok">OK</span></div>
+        <div><span>Minor</span><span class="ok">OK</span></div>
+        <div><span>SB Hill</span><span class="ok">OK</span></div>
+      </div>
+      <div class="fs-foot"><span>Pat Lynch · 7:30 AM</span><span>☀ 71° dry</span></div>
+    </div>
+
+    <div class="fs-card" data-status="wet">
+      <span class="fs-badge wet">▲ Wet · AM Inspect</span>
+      <h3>Penn Wood Park</h3>
+      <div class="where">Penn Wood LL · 1500 Bond Ave, Lansdowne</div>
+      <div class="fs-fields">
+        <div><span>Major</span><span class="wet">SOFT</span></div>
+        <div><span>Minor</span><span class="ok">OK</span></div>
+        <div><span>Tee</span><span class="ok">OK</span></div>
+        <div><span>Cages</span><span class="ok">OK</span></div>
+      </div>
+      <div class="fs-foot"><span>Carlos Reyes · 6:40 AM</span><span>0.2" rain</span></div>
+    </div>
+
+  </div>
+
+  <div class="fs-admin-note">
+    <h4>How it works (production)</h4>
+    <p>Each league's field crew has a magic-link bookmark. One tap toggles status. Notifications fan out to scheduled games' captains, umpires, and parents on that day. District-wide weather radar layered on top. Historical log per field (last 30 days) for grant applications and grounds-crew planning.</p>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="pitch-count.html">Pitch Count</a></li><li><a href="standings.html">Standings</a></li></ul></div>
+      <div><h5>Resources</h5><ul><li><a href="rules.html">Rules</a></li><li><a href="scholarship.html">Scholarship</a></li><li><a href="all-stars.html">All-Stars</a></li><li><a href="awards.html">Awards</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+<script>
+function filterFields(status, btn) {
+  document.querySelectorAll('.fs-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.fs-card').forEach(c => {
+    c.style.display = (status === 'all' || c.dataset.status === status) ? '' : 'none';
+  });
+}
+</script>
+
+</body>
+</html>

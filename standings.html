@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>District Standings · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .st-hero { background: linear-gradient(180deg, var(--d27-navy), var(--d27-navy-dark)); color:#fff; padding: 56px 0 36px; border-bottom: 4px solid var(--d27-gold); }
+  .st-hero h1 { font-family: var(--font-display); font-size: clamp(34px, 5vw, 54px); margin: 0; }
+  .st-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .st-hero p { color: rgba(255,255,255,.78); max-width: 60ch; margin: 14px 0 0; }
+
+  .st-tabs { display:flex; gap:8px; flex-wrap:wrap; margin: 28px 0 18px; border-bottom:2px solid var(--line); }
+  .st-tab { background:none; border:none; padding:10px 14px; font-family:var(--font-display); font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); cursor:pointer; border-bottom: 3px solid transparent; margin-bottom:-2px; }
+  .st-tab.active { color:var(--d27-navy); border-bottom-color: var(--d27-red); }
+
+  .st-table { width: 100%; border-collapse: collapse; background:var(--surface); border:1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .st-table th { background: var(--d27-navy); color:#fff; text-align:left; padding: 12px 14px; font-family:var(--font-display); font-size:12px; letter-spacing:.06em; text-transform:uppercase; }
+  .st-table th.center, .st-table td.center { text-align:center; }
+  .st-table th.right, .st-table td.right { text-align:right; }
+  .st-table td { padding: 11px 14px; border-bottom: 1px solid var(--line); font-size:14px; }
+  .st-table tr:last-child td { border-bottom: 0; }
+  .st-table tr:hover td { background: rgba(0,45,114,.03); }
+  .st-table tr.row1 td { background: linear-gradient(90deg, rgba(201,162,39,.12), transparent); }
+  .st-table tr.row1 .rk { color:var(--d27-gold); }
+  .st-table .rk { font-family: var(--font-display); font-weight:700; font-size:18px; color:var(--d27-navy); width: 36px; }
+  .st-table .nm { font-weight:700; }
+  .st-table .nm small { display:block; color:var(--muted); font-weight:500; font-size:11px; margin-top:1px; }
+  .st-table .pct { font-family:var(--font-display); font-weight:700; font-size:15px; color:var(--d27-navy); }
+  .st-table .strk { padding:2px 8px; border-radius:3px; font-size:11px; font-weight:700; letter-spacing:.04em; }
+  .st-table .strk.w { background:#ECFDF5; color:#059669; }
+  .st-table .strk.l { background:#FEE2E2; color:var(--d27-red); }
+  .st-table .form { display:inline-flex; gap:3px; }
+  .st-table .form span { width:18px; height:18px; display:inline-flex; align-items:center; justify-content:center; border-radius:3px; font-size:10px; font-weight:700; color:#fff; }
+  .st-table .form .w { background:#10B981; }
+  .st-table .form .l { background:var(--d27-red); }
+  .st-table .form .t { background:#94A3B8; }
+
+  .st-card { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:22px; margin-bottom:22px; }
+  .st-card h2 { font-family:var(--font-display); margin:0 0 12px; color:var(--d27-navy); font-size:22px; }
+  .st-card h2 .div-label { font-size:12px; color:var(--d27-red); letter-spacing:.08em; margin-left:8px; vertical-align: middle; padding: 3px 8px; background: #FEE2E2; border-radius:3px; }
+
+  .st-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 980px) { .st-grid { grid-template-columns: 1fr; } }
+
+  .st-toolbar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; align-items:center; }
+  .st-toolbar select { padding: 8px 12px; border:1px solid var(--line); border-radius:5px; font-size:13px; background:var(--surface); }
+  .st-toolbar .right { margin-left:auto; display:flex; gap:8px; }
+  .st-toolbar .right a { font-size: 13px; color:var(--d27-navy); font-weight:600; padding:8px 12px; background:var(--surface); border:1px solid var(--line); border-radius:5px; text-decoration:none; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="st-hero">
+  <div class="container">
+    <div class="eyebrow">REGULAR SEASON · 2026</div>
+    <h1>District-Wide Standings</h1>
+    <p>All 12 leagues, every age division, ranked side-by-side. Tournament seeding pulled directly from these standings — no more emailed PDFs.</p>
+  </div>
+</header>
+
+<main class="container" style="padding: 0 0 64px;">
+
+  <div class="st-tabs">
+    <button class="st-tab active">12U Baseball</button>
+    <button class="st-tab">11U Baseball</button>
+    <button class="st-tab">10U Baseball</button>
+    <button class="st-tab">9U Baseball</button>
+    <button class="st-tab">50/70 Intermediate</button>
+    <button class="st-tab">Junior League</button>
+    <button class="st-tab">Senior League</button>
+    <button class="st-tab">12U Softball</button>
+    <button class="st-tab">10U Softball</button>
+  </div>
+
+  <div class="st-toolbar">
+    <select><option>Sort: Win %</option><option>Sort: Run Differential</option><option>Sort: Streak</option><option>Sort: Last 10</option></select>
+    <select><option>All Divisions</option><option>Division A</option><option>Division B</option></select>
+    <span style="font-size:13px; color:var(--muted);">Last updated 18 min ago · auto-refresh on every game close</span>
+    <div class="right">
+      <a href="#" onclick="window.print(); return false;">🖨 Print</a>
+      <a href="#" onclick="alert('Demo — exports current view as PDF for distribution'); return false;">📄 Export PDF</a>
+    </div>
+  </div>
+
+  <div class="st-grid">
+    <div class="st-card">
+      <h2>12U Majors <span class="div-label">Division A</span></h2>
+      <table class="st-table">
+        <thead><tr><th>#</th><th>Team</th><th class="center">W-L</th><th class="center">PCT</th><th class="center">RS-RA</th><th class="center">Strk</th><th class="center">L5</th></tr></thead>
+        <tbody>
+          <tr class="row1"><td class="rk">1</td><td><div class="nm">Berwyn-Paoli Red <small>BP</small></div></td><td class="center">9-1</td><td class="center pct">.900</td><td class="center">+58</td><td class="center"><span class="strk w">W6</span></td><td class="center"><span class="form"><span class="w">W</span><span class="w">W</span><span class="w">W</span><span class="w">W</span><span class="w">W</span></span></td></tr>
+          <tr><td class="rk">2</td><td><div class="nm">Methacton Gold <small>METH</small></div></td><td class="center">8-2</td><td class="center pct">.800</td><td class="center">+41</td><td class="center"><span class="strk w">W3</span></td><td class="center"><span class="form"><span class="w">W</span><span class="l">L</span><span class="w">W</span><span class="w">W</span><span class="w">W</span></span></td></tr>
+          <tr><td class="rk">3</td><td><div class="nm">Chester Valley Maroon <small>CV</small></div></td><td class="center">7-3</td><td class="center pct">.700</td><td class="center">+22</td><td class="center"><span class="strk w">W2</span></td><td class="center"><span class="form"><span class="l">L</span><span class="w">W</span><span class="l">L</span><span class="w">W</span><span class="w">W</span></span></td></tr>
+          <tr><td class="rk">4</td><td><div class="nm">Lower Perkiomen Cubs <small>LPK</small></div></td><td class="center">6-4</td><td class="center pct">.600</td><td class="center">+8</td><td class="center"><span class="strk l">L1</span></td><td class="center"><span class="form"><span class="w">W</span><span class="w">W</span><span class="l">L</span><span class="w">W</span><span class="l">L</span></span></td></tr>
+          <tr><td class="rk">5</td><td><div class="nm">Penn Wood <small>PW</small></div></td><td class="center">5-5</td><td class="center pct">.500</td><td class="center">-3</td><td class="center"><span class="strk w">W1</span></td><td class="center"><span class="form"><span class="l">L</span><span class="l">L</span><span class="w">W</span><span class="l">L</span><span class="w">W</span></span></td></tr>
+          <tr><td class="rk">6</td><td><div class="nm">Marple Newtown <small>MN</small></div></td><td class="center">4-6</td><td class="center pct">.400</td><td class="center">-12</td><td class="center"><span class="strk l">L2</span></td><td class="center"><span class="form"><span class="w">W</span><span class="w">W</span><span class="l">L</span><span class="l">L</span><span class="l">L</span></span></td></tr>
+          <tr><td class="rk">7</td><td><div class="nm">Springfield <small>SPR</small></div></td><td class="center">3-7</td><td class="center pct">.300</td><td class="center">-28</td><td class="center"><span class="strk l">L4</span></td><td class="center"><span class="form"><span class="w">W</span><span class="w">W</span><span class="l">L</span><span class="l">L</span><span class="l">L</span></span></td></tr>
+          <tr><td class="rk">8</td><td><div class="nm">Pottstown <small>POT</small></div></td><td class="center">2-8</td><td class="center pct">.200</td><td class="center">-44</td><td class="center"><span class="strk l">L3</span></td><td class="center"><span class="form"><span class="l">L</span><span class="w">W</span><span class="l">L</span><span class="l">L</span><span class="l">L</span></span></td></tr>
+          <tr><td class="rk">9</td><td><div class="nm">Lower Merion <small>LM</small></div></td><td class="center">1-9</td><td class="center pct">.100</td><td class="center">-42</td><td class="center"><span class="strk l">L5</span></td><td class="center"><span class="form"><span class="l">L</span><span class="l">L</span><span class="l">L</span><span class="l">L</span><span class="l">L</span></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="st-card">
+      <h2>12U Majors <span class="div-label">Division B</span></h2>
+      <table class="st-table">
+        <thead><tr><th>#</th><th>Team</th><th class="center">W-L</th><th class="center">PCT</th><th class="center">RS-RA</th><th class="center">Strk</th><th class="center">L5</th></tr></thead>
+        <tbody>
+          <tr class="row1"><td class="rk">1</td><td><div class="nm">Methacton Black <small>METH</small></div></td><td class="center">9-1</td><td class="center pct">.900</td><td class="center">+62</td><td class="center"><span class="strk w">W7</span></td><td class="center"><span class="form"><span class="w">W</span><span class="w">W</span><span class="w">W</span><span class="w">W</span><span class="w">W</span></span></td></tr>
+          <tr><td class="rk">2</td><td><div class="nm">BP Blue <small>BP</small></div></td><td class="center">7-3</td><td class="center pct">.700</td><td class="center">+19</td><td class="center"><span class="strk w">W2</span></td><td class="center"><span class="form"><span class="l">L</span><span class="w">W</span><span class="w">W</span><span class="l">L</span><span class="w">W</span></span></td></tr>
+          <tr><td class="rk">3</td><td><div class="nm">CV Gold <small>CV</small></div></td><td class="center">7-3</td><td class="center pct">.700</td><td class="center">+14</td><td class="center"><span class="strk l">L1</span></td><td class="center"><span class="form"><span class="w">W</span><span class="w">W</span><span class="w">W</span><span class="w">W</span><span class="l">L</span></span></td></tr>
+          <tr><td class="rk">4</td><td><div class="nm">Lansdale-Ambler <small>LA</small></div></td><td class="center">5-5</td><td class="center pct">.500</td><td class="center">-2</td><td class="center"><span class="strk w">W1</span></td><td class="center"><span class="form"><span class="l">L</span><span class="w">W</span><span class="l">L</span><span class="w">W</span><span class="w">W</span></span></td></tr>
+          <tr><td class="rk">5</td><td><div class="nm">Phoenixville <small>PVL</small></div></td><td class="center">5-5</td><td class="center pct">.500</td><td class="center">+1</td><td class="center"><span class="strk l">L2</span></td><td class="center"><span class="form"><span class="w">W</span><span class="l">L</span><span class="w">W</span><span class="l">L</span><span class="l">L</span></span></td></tr>
+          <tr><td class="rk">6</td><td><div class="nm">Phoenixville Area <small>PA</small></div></td><td class="center">4-6</td><td class="center pct">.400</td><td class="center">-15</td><td class="center"><span class="strk l">L1</span></td><td class="center"><span class="form"><span class="l">L</span><span class="l">L</span><span class="w">W</span><span class="w">W</span><span class="l">L</span></span></td></tr>
+          <tr><td class="rk">7</td><td><div class="nm">Tredyffrin <small>TRED</small></div></td><td class="center">3-7</td><td class="center pct">.300</td><td class="center">-22</td><td class="center"><span class="strk w">W1</span></td><td class="center"><span class="form"><span class="l">L</span><span class="l">L</span><span class="l">L</span><span class="l">L</span><span class="w">W</span></span></td></tr>
+          <tr><td class="rk">8</td><td><div class="nm">Norristown <small>NORR</small></div></td><td class="center">2-8</td><td class="center pct">.200</td><td class="center">-38</td><td class="center"><span class="strk l">L4</span></td><td class="center"><span class="form"><span class="w">W</span><span class="l">L</span><span class="l">L</span><span class="l">L</span><span class="l">L</span></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="st-card">
+    <h2>How standings power tournament seeding</h2>
+    <p style="color:var(--muted); margin:0; line-height:1.7;">When the regular season closes June 1, top finishers in each division qualify for D27's bracket tournaments (Bob Jones, Pappy Patton, etc.). Win-percent is primary; head-to-head and run differential break ties. Live game scoring updates these tables in real time — no more hand-tabulated standings or "the website hasn't been updated since April" emails. League presidents see only their teams' records via single-league filter; D27 admin sees the whole district.</p>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="pitch-count.html">Pitch Count</a></li><li><a href="standings.html">Standings</a></li></ul></div>
+      <div><h5>Resources</h5><ul><li><a href="rules.html">Rules</a></li><li><a href="scholarship.html">Scholarship</a></li><li><a href="all-stars.html">All-Stars</a></li><li><a href="awards.html">Awards</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.st-tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.st-tab').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+}));
+</script>
+
+</body>
+</html>

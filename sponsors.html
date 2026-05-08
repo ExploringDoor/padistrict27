@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Sponsors · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .sp-hero { background: linear-gradient(180deg, var(--d27-navy), var(--d27-navy-dark)); color:#fff; padding: 64px 0 40px; border-bottom: 4px solid var(--d27-gold); position:relative; overflow:hidden; }
+  .sp-hero::after { content:''; position:absolute; right:-100px; top:-50px; width:400px; height:400px; background: radial-gradient(circle, rgba(201,162,39,.2), transparent 60%); }
+  .sp-hero h1 { font-family: var(--font-display); font-size: clamp(38px, 5vw, 60px); margin: 0; letter-spacing: -.01em; position:relative; }
+  .sp-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .sp-hero p { color: rgba(255,255,255,.78); max-width: 64ch; margin: 14px 0 0; position:relative; }
+  .sp-hero .nums { display:flex; gap:36px; margin-top:24px; flex-wrap:wrap; position:relative; }
+  .sp-hero .nums div { font-family:var(--font-display); }
+  .sp-hero .nums .n { font-size:32px; font-weight:700; color:var(--d27-gold); display:block; line-height:1; }
+  .sp-hero .nums .l { font-size:11px; letter-spacing:.1em; color:rgba(255,255,255,.7); text-transform:uppercase; }
+
+  .sp-tier { margin-bottom: 40px; }
+  .sp-tier-head { display:flex; align-items:center; gap:14px; margin-bottom: 18px; padding-bottom: 8px; border-bottom: 2px solid var(--line); }
+  .sp-tier-head h2 { font-family:var(--font-display); margin:0; color:var(--d27-navy); font-size: 28px; letter-spacing: .02em; }
+  .sp-tier-head .badge { background: linear-gradient(90deg, var(--d27-gold), #E8C760); color:var(--d27-navy); padding: 5px 12px; border-radius: 4px; font-family:var(--font-display); font-size: 12px; font-weight: 700; letter-spacing:.06em; text-transform:uppercase; }
+  .sp-tier-head .badge.silver { background: linear-gradient(90deg, #C0C8D1, #DDE3EB); color:var(--d27-navy); }
+  .sp-tier-head .badge.bronze { background: linear-gradient(90deg, #C7763C, #E2986A); color: #fff; }
+  .sp-tier-head .price { color:var(--muted); font-size:13px; margin-left:auto; }
+
+  .sp-grid-1 { display:grid; grid-template-columns: 1fr; gap:18px; }
+  .sp-grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:18px; }
+  .sp-grid-3 { display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
+  .sp-grid-4 { display:grid; grid-template-columns: repeat(4, 1fr); gap:14px; }
+  @media (max-width:900px){ .sp-grid-2,.sp-grid-3,.sp-grid-4 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width:540px){ .sp-grid-2,.sp-grid-3,.sp-grid-4 { grid-template-columns: 1fr; } }
+
+  .sp-card { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding: 28px; text-align:center; position:relative; transition: all .2s; }
+  .sp-card:hover { transform: translateY(-2px); box-shadow:0 12px 28px rgba(0,0,0,.08); border-color:var(--d27-navy); }
+  .sp-card.champ { border-top: 5px solid var(--d27-gold); padding: 36px; }
+  .sp-card.allstar { border-top: 4px solid #94A3B8; padding: 28px; }
+  .sp-card.bronze { border-top: 3px solid #C7763C; padding: 22px; }
+
+  .sp-logo { font-family:var(--font-display); font-weight:700; font-size: 28px; color:var(--d27-navy); letter-spacing:.02em; }
+  .sp-card.champ .sp-logo { font-size: 38px; }
+  .sp-card.bronze .sp-logo { font-size: 22px; }
+  .sp-meta { color:var(--muted); font-size:12px; margin-top: 6px; letter-spacing:.04em; text-transform:uppercase; }
+  .sp-loc { color:var(--muted); font-size:12px; margin-top: 4px; }
+  .sp-link { display:inline-block; margin-top: 12px; color: var(--d27-navy); font-weight:600; font-size:13px; text-decoration:none; padding: 4px 10px; background: var(--d27-sub); border-radius: 4px; }
+
+  .sp-cta { background: linear-gradient(135deg, var(--d27-navy), var(--d27-navy-dark)); color:#fff; border-radius:10px; padding: 36px; margin-top: 30px; display:grid; grid-template-columns: 1.5fr 1fr; gap: 32px; }
+  @media (max-width: 760px){ .sp-cta { grid-template-columns: 1fr; } }
+  .sp-cta h2 { font-family:var(--font-display); margin: 0 0 12px; font-size: 32px; letter-spacing:-.01em; }
+  .sp-cta p { color: rgba(255,255,255,.78); margin:0 0 14px; line-height:1.6; }
+  .sp-cta .btn { background: var(--d27-gold); color:var(--d27-navy); padding: 12px 22px; border-radius: 5px; font-weight:700; font-family:var(--font-display); letter-spacing:.06em; text-transform:uppercase; text-decoration:none; display:inline-block; }
+  .sp-cta .ben { background: rgba(255,255,255,.08); padding: 18px; border-radius: 8px; font-size: 13px; }
+  .sp-cta .ben h4 { font-family:var(--font-display); color: var(--d27-gold); margin:0 0 8px; font-size:14px; letter-spacing:.06em; text-transform:uppercase; }
+  .sp-cta .ben ul { padding: 0 0 0 18px; margin:0; color: rgba(255,255,255,.85); }
+  .sp-cta .ben li { margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="sp-hero">
+  <div class="container">
+    <div class="eyebrow">2026 SEASON</div>
+    <h1>Sponsors &amp; Community Partners</h1>
+    <p>Local businesses make D27 baseball and softball happen. Their dollars fund jerseys, equipment, scholarships, and field maintenance for 10,000 kids across three counties. Thank you.</p>
+    <div class="nums">
+      <div><span class="n">87</span><span class="l">Active Sponsors</span></div>
+      <div><span class="n">$214K</span><span class="l">Raised in 2025</span></div>
+      <div><span class="n">10,000</span><span class="l">Kids Reached</span></div>
+      <div><span class="n">12</span><span class="l">Member Leagues</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="container" style="padding: 32px 0 64px;">
+
+  <!-- Champion tier -->
+  <section class="sp-tier">
+    <div class="sp-tier-head">
+      <h2>Champion Sponsors</h2>
+      <span class="badge">★ Champion · $5,000+</span>
+      <span class="price">District-wide presence · jersey patch · championship banner sponsorship</span>
+    </div>
+    <div class="sp-grid-2">
+      <div class="sp-card champ">
+        <div class="sp-logo">Wawa</div>
+        <div class="sp-meta">Proud Champion Sponsor · 14th Year</div>
+        <div class="sp-loc">Wawa, PA · Headquarters</div>
+        <a class="sp-link" href="#">Visit wawa.com →</a>
+      </div>
+      <div class="sp-card champ">
+        <div class="sp-logo">Main Line Health</div>
+        <div class="sp-meta">Official Healthcare Partner</div>
+        <div class="sp-loc">Bryn Mawr, PA</div>
+        <a class="sp-link" href="#">mainlinehealth.org →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- All-Star tier -->
+  <section class="sp-tier">
+    <div class="sp-tier-head">
+      <h2>All-Star Sponsors</h2>
+      <span class="badge silver">All-Star · $2,500</span>
+      <span class="price">Tournament naming · scoreboard rotation · field signage</span>
+    </div>
+    <div class="sp-grid-3">
+      <div class="sp-card allstar">
+        <div class="sp-logo">Vetri Cucina</div>
+        <div class="sp-meta">All-Star Sponsor</div>
+        <div class="sp-loc">Philadelphia, PA</div>
+      </div>
+      <div class="sp-card allstar">
+        <div class="sp-logo">Berwyn Tavern</div>
+        <div class="sp-meta">All-Star Sponsor · 9th Year</div>
+        <div class="sp-loc">Berwyn, PA</div>
+      </div>
+      <div class="sp-card allstar">
+        <div class="sp-logo">Iron Hill Brewery</div>
+        <div class="sp-meta">All-Star Sponsor</div>
+        <div class="sp-loc">Phoenixville, PA</div>
+      </div>
+      <div class="sp-card allstar">
+        <div class="sp-logo">Riverstone Capital</div>
+        <div class="sp-meta">All-Star Sponsor</div>
+        <div class="sp-loc">Wayne, PA</div>
+      </div>
+      <div class="sp-card allstar">
+        <div class="sp-logo">Dick's Sporting Goods</div>
+        <div class="sp-meta">All-Star Sponsor · Equipment Partner</div>
+        <div class="sp-loc">King of Prussia, PA</div>
+      </div>
+      <div class="sp-card allstar">
+        <div class="sp-logo">Penn Medicine</div>
+        <div class="sp-meta">All-Star Sponsor · Healthcare</div>
+        <div class="sp-loc">Wynnewood, PA</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rookie tier -->
+  <section class="sp-tier">
+    <div class="sp-tier-head">
+      <h2>Rookie Sponsors</h2>
+      <span class="badge bronze">Rookie · $500</span>
+      <span class="price">Team jersey sponsorship · website logo · social shoutouts</span>
+    </div>
+    <div class="sp-grid-4">
+      <div class="sp-card bronze"><div class="sp-logo">Berwyn Pizza</div><div class="sp-meta">BP Red 12U</div></div>
+      <div class="sp-card bronze"><div class="sp-logo">Carlino's</div><div class="sp-meta">BP Blue 11U</div></div>
+      <div class="sp-card bronze"><div class="sp-logo">Christopher's</div><div class="sp-meta">CV Maroon 12U</div></div>
+      <div class="sp-card bronze"><div class="sp-logo">Manhattan Bagel</div><div class="sp-meta">METH Gold 10U</div></div>
+      <div class="sp-card bronze"><div class="sp-logo">Devon Auto</div><div class="sp-meta">BP White 9U</div></div>
+      <div class="sp-card bronze"><div class="sp-logo">Phoenixville Federal</div><div class="sp-meta">PVL Major</div></div>
+      <div class="sp-card bronze"><div class="sp-logo">Lansdowne Theater</div><div class="sp-meta">Penn Wood 12U</div></div>
+      <div class="sp-card bronze"><div class="sp-logo">Bryn Mawr Trust</div><div class="sp-meta">LM Major</div></div>
+      <div class="sp-card bronze"><div class="sp-logo">Springfield Country Club</div><div class="sp-meta">SPR 11U</div></div>
+      <div class="sp-card bronze"><div class="sp-logo">Pottstown Roofing</div><div class="sp-meta">POT 10U</div></div>
+      <div class="sp-card bronze"><div class="sp-logo">Marple Pharmacy</div><div class="sp-meta">MN 12U</div></div>
+      <div class="sp-card bronze"><div class="sp-logo">Royersford Inn</div><div class="sp-meta">LPK Cubs 12U</div></div>
+      <div class="sp-card bronze"><div class="sp-logo">Lansdale Catholic Boosters</div><div class="sp-meta">LA 11U</div></div>
+      <div class="sp-card bronze"><div class="sp-logo">Exton Optical</div><div class="sp-meta">CV Gold 11U</div></div>
+      <div class="sp-card bronze"><div class="sp-logo">Wayne Hardware</div><div class="sp-meta">BP Tee 1</div></div>
+      <div class="sp-card bronze"><div class="sp-logo">+ 56 more</div><div class="sp-meta">View all rookie sponsors →</div></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="sp-cta">
+    <div>
+      <h2>Become a 2027 Sponsor</h2>
+      <p>Reach 10,000 kids and 25,000+ family members across 12 leagues in three counties. Every dollar stays local and directly funds equipment, field improvements, scholarships, and the Scott Memorial Scholarship Fund. Tax-deductible.</p>
+      <a href="mailto:jeffbennett.d27@gmail.com?subject=D27 Sponsorship Inquiry" class="btn">Request Sponsor Packet</a>
+    </div>
+    <div class="ben">
+      <h4>What you get</h4>
+      <ul>
+        <li>Logo on team jerseys & district website</li>
+        <li>Field signage at chartered complexes</li>
+        <li>Scoreboard / PA-announcement rotation</li>
+        <li>Tournament naming opportunities</li>
+        <li>Plaque + recognition at championship banquet</li>
+        <li>Tax-deductible (501(c)(3) member leagues)</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="pitch-count.html">Pitch Count</a></li><li><a href="standings.html">Standings</a></li></ul></div>
+      <div><h5>Resources</h5><ul><li><a href="rules.html">Rules</a></li><li><a href="scholarship.html">Scholarship</a></li><li><a href="all-stars.html">All-Stars</a></li><li><a href="awards.html">Awards</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+</body>
+</html>

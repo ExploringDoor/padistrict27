@@ -36,7 +36,7 @@
       <li><a href="baseball.html">Baseball</a></li>
       <li><a href="softball.html">Softball</a></li>
       <li><a href="schedule.html">Schedule</a></li>
-      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
       <li><a href="champions.html">Champions</a></li>
       <li><a href="rules.html">Rules</a></li>
       <li><a href="about.html">About</a></li>
@@ -108,6 +108,30 @@
     </aside>
   </div>
 </header>
+
+<!-- News & Announcements ticker ------------------------------------- -->
+<section style="background: var(--d27-navy-dark); color: #fff; padding: 18px 0; border-bottom: 4px solid var(--d27-gold);">
+  <div class="container" style="display:flex; gap:18px; align-items:center; flex-wrap:wrap;">
+    <span style="background: var(--d27-gold); color: var(--d27-navy); padding: 4px 12px; border-radius: 4px; font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; white-space:nowrap;">📰 District News</span>
+    <div style="flex:1; display:flex; gap:24px; overflow-x:auto; font-size: 14px; min-width: 0;">
+      <a href="all-stars.html" style="color:#fff; text-decoration:none; white-space:nowrap;"><b style="color:var(--d27-gold);">★ Today:</b> 2026 All-Star rosters announced — 9 division teams →</a>
+      <a href="awards.html" style="color:#fff; text-decoration:none; white-space:nowrap;"><b style="color:var(--d27-gold);">May 1:</b> Player &amp; Coach of the Year unveiled →</a>
+      <a href="volunteer.html" style="color:#fff; text-decoration:none; white-space:nowrap;"><b style="color:var(--d27-gold);">Apr 28:</b> Bob Jones SF needs 4 scorekeepers →</a>
+      <a href="standings.html" style="color:#fff; text-decoration:none; white-space:nowrap;"><b style="color:var(--d27-gold);">Apr 26:</b> Standings updated through Week 3 →</a>
+      <a href="sponsors.html" style="color:#fff; text-decoration:none; white-space:nowrap;"><b style="color:var(--d27-gold);">Apr 22:</b> Wawa renews as Champion sponsor (14th yr) →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Sitewide Search bar --------------------------------------------- -->
+<section style="background: linear-gradient(90deg, var(--d27-sub), #fff); padding: 14px 0; border-bottom: 1px solid var(--line);">
+  <div class="container" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+    <span style="font-family: var(--font-display); font-size: 13px; color: var(--muted); letter-spacing:.06em; text-transform:uppercase; white-space:nowrap;">🔍 Search D27</span>
+    <input type="text" id="d27-search" placeholder="Players, teams, coaches, fields, tournaments..." style="flex:1; padding: 10px 14px; border:1px solid var(--line); border-radius: 6px; font: inherit; font-size: 14px; min-width: 240px;" oninput="d27Search(this.value)" />
+    <span style="font-size: 12px; color: var(--muted);">e.g. "Luke DiSanto" · "Bob Jones" · "field of dreams"</span>
+    <div id="d27-search-results" style="width: 100%; display: none; background: #fff; border:1px solid var(--line); border-radius:8px; padding: 12px; margin-top: 6px; box-shadow: 0 8px 24px rgba(0,0,0,.08);"></div>
+  </div>
+</section>
 
 <!-- Field status board (live) --------------------------------------- -->
 <!--
@@ -425,6 +449,67 @@
   </div>
 </section>
 
+<!-- News & Announcements -->
+<section class="section" style="background: var(--surface);">
+  <div class="container">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 22px; flex-wrap:wrap; gap:10px; padding-bottom: 12px; border-bottom: 2px solid var(--line);">
+      <div>
+        <span style="color: var(--d27-red); font-family: var(--font-display); letter-spacing:.14em; font-size:13px; font-weight:600;">DISTRICT 27 NEWS</span>
+        <h2 style="font-family: var(--font-display); margin: 4px 0 0; font-size: 32px;">Latest Announcements</h2>
+      </div>
+      <a href="#" style="color: var(--d27-navy); font-weight: 600; font-size: 14px; text-decoration: none;">View archive →</a>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap: 18px;">
+      <article style="background:#fff; border:1px solid var(--line); border-radius: 8px; overflow:hidden;">
+        <div style="background: linear-gradient(135deg, var(--d27-navy), var(--d27-navy-dark)); height: 200px; display:flex; align-items:flex-end; padding: 18px; position: relative;">
+          <span style="position:absolute; top: 14px; left: 14px; background: var(--d27-gold); color: var(--d27-navy); padding:3px 10px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing:.04em; text-transform:uppercase;">Featured</span>
+          <h3 style="color:#fff; font-family: var(--font-display); margin: 0; font-size: 24px; max-width: 80%;">2026 D27 All-Star rosters announced — 9 division teams, 116 players</h3>
+        </div>
+        <div style="padding: 18px;">
+          <div style="color: var(--muted); font-size: 12px; letter-spacing:.06em; text-transform:uppercase; margin-bottom: 8px;">May 4 · DA Jeff Bennett</div>
+          <p style="margin:0 0 12px; color: var(--d27-ink); line-height: 1.6;">All twelve member leagues have submitted their All-Star selections for the summer tournament path. Berwyn-Paoli returns as 12U defending champ. Methacton sweeps three age divisions for the first time since 2019. Section 8 opens July 6 in Springfield.</p>
+          <a href="all-stars.html" style="color: var(--d27-navy); font-weight: 600; text-decoration: none;">Read full announcement →</a>
+        </div>
+      </article>
+
+      <article style="background:#fff; border:1px solid var(--line); border-radius: 8px; padding: 18px;">
+        <span style="background: rgba(218,41,28,.1); color: var(--d27-red); padding:3px 10px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing:.04em; text-transform:uppercase; display:inline-block; margin-bottom:10px;">Awards</span>
+        <h3 style="font-family: var(--font-display); margin: 0 0 8px; font-size: 18px;">Player &amp; Coach of the Year unveiled at District banquet</h3>
+        <div style="color: var(--muted); font-size: 12px; margin-bottom: 8px;">May 1</div>
+        <p style="margin:0 0 12px; color: var(--d27-ink); font-size: 14px; line-height: 1.55;">Luke DiSanto (BP) and Tom Caldwell (BP) headline the 2026 honor list. Pottstown 12U claims its third Sportsmanship Award.</p>
+        <a href="awards.html" style="color: var(--d27-navy); font-weight: 600; font-size: 13px; text-decoration: none;">See all winners →</a>
+      </article>
+
+      <article style="background:#fff; border:1px solid var(--line); border-radius: 8px; padding: 18px;">
+        <span style="background: rgba(201,162,39,.18); color: #B45309; padding:3px 10px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing:.04em; text-transform:uppercase; display:inline-block; margin-bottom:10px;">Volunteers</span>
+        <h3 style="font-family: var(--font-display); margin: 0 0 8px; font-size: 18px;">Bob Jones SF needs 4 scorekeepers on June 24</h3>
+        <div style="color: var(--muted); font-size: 12px; margin-bottom: 8px;">Apr 28</div>
+        <p style="margin:0 0 12px; color: var(--d27-ink); font-size: 14px; line-height: 1.55;">High-school students earn verified volunteer hours. GameChanger or paper book — we'll train. ~4 hours, lunch covered.</p>
+        <a href="volunteer.html" style="color: var(--d27-navy); font-weight: 600; font-size: 13px; text-decoration: none;">Sign up →</a>
+      </article>
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 18px;">
+      <a href="standings.html" style="background:#fff; border:1px solid var(--line); border-radius: 6px; padding: 12px 14px; text-decoration: none; color: var(--d27-ink);">
+        <div style="color: var(--muted); font-size:11px; letter-spacing:.06em; text-transform:uppercase;">Apr 26</div>
+        <div style="font-weight:700; margin-top:2px;">Week 3 standings published →</div>
+      </a>
+      <a href="sponsors.html" style="background:#fff; border:1px solid var(--line); border-radius: 6px; padding: 12px 14px; text-decoration: none; color: var(--d27-ink);">
+        <div style="color: var(--muted); font-size:11px; letter-spacing:.06em; text-transform:uppercase;">Apr 22</div>
+        <div style="font-weight:700; margin-top:2px;">Wawa renews Champion sponsorship →</div>
+      </a>
+      <a href="pitch-count.html" style="background:#fff; border:1px solid var(--line); border-radius: 6px; padding: 12px 14px; text-decoration: none; color: var(--d27-ink);">
+        <div style="color: var(--muted); font-size:11px; letter-spacing:.06em; text-transform:uppercase;">Apr 18</div>
+        <div style="font-weight:700; margin-top:2px;">Pitch-count compliance dashboard live →</div>
+      </a>
+      <a href="scholarship.html" style="background:#fff; border:1px solid var(--line); border-radius: 6px; padding: 12px 14px; text-decoration: none; color: var(--d27-ink);">
+        <div style="color: var(--muted); font-size:11px; letter-spacing:.06em; text-transform:uppercase;">Apr 14</div>
+        <div style="font-weight:700; margin-top:2px;">Scott Scholarship now accepting →</div>
+      </a>
+    </div>
+  </div>
+</section>
 
 <!-- Recent champions ------------------------------------------------- -->
 <section class="section" style="background: var(--d27-sub);">
@@ -665,6 +750,45 @@
 </footer>
 
 <script>
+  // ─ Sitewide Search (demo) ──────────────────────────────────────────
+  const D27_SEARCH_INDEX = [
+    { t: 'Luke DiSanto', s: 'Player · #1 SS/P · Berwyn-Paoli 12U Red · .412 BA', u: 'player.html', icon: '👤' },
+    { t: 'Tom Caldwell', s: 'Coach · Berwyn-Paoli 12U Red · 2026 Coach of the Year', u: 'captain.html', icon: '🎓' },
+    { t: 'Miles Hartley', s: 'Player · #2 P/SS · Methacton Gold · .378 BA', u: 'all-stars.html', icon: '👤' },
+    { t: 'Jaxon Ruiz', s: 'Player · #1 SS · Chester Valley Maroon · .402 BA', u: 'chester-valley.html', icon: '👤' },
+    { t: 'Berwyn-Paoli LL', s: 'League · 642 players · 48 teams · Field of Dreams', u: 'league-detail.html', icon: '🏟️' },
+    { t: 'Methacton LL', s: 'League · 582 players · 42 teams · Ricketts Complex', u: 'methacton.html', icon: '🏟️' },
+    { t: 'Chester Valley LL', s: 'League · 448 players · 32 teams · CV Complex', u: 'chester-valley.html', icon: '🏟️' },
+    { t: 'Bob Jones Tournament 2026', s: 'Tournament · 12U · 16 teams · Jun 14–28', u: 'tournament.html', icon: '🏆' },
+    { t: 'Pappy Patton Tournament', s: 'Tournament · 10U · BB-10', u: 'baseball.html', icon: '🏆' },
+    { t: 'Field of Dreams', s: 'Field · BP home · 4 fields · open', u: 'fields.html', icon: '📍' },
+    { t: 'Monument Avenue', s: 'Field · Marple Newtown home · wet · AM inspect', u: 'fields.html', icon: '📍' },
+    { t: 'Ricketts Sports Complex', s: 'Field · Methacton home · 4 fields · open', u: 'fields.html', icon: '📍' },
+    { t: 'Pitch Count Compliance', s: 'Operations · Auto-tracked Little League pitch limits', u: 'pitch-count.html', icon: '⚾' },
+    { t: 'Coach Certification', s: 'Operations · 237 coaches tracked · 5 lapsed', u: 'coaches.html', icon: '🎓' },
+    { t: 'District Standings', s: 'Standings · all 12 leagues · all divisions', u: 'standings.html', icon: '📈' },
+    { t: 'All-Star Teams', s: '2026 D27 All-Star roster announcements', u: 'all-stars.html', icon: '⭐' },
+    { t: 'Awards & Honors', s: 'Player/Coach of the Year, Sportsmanship, Volunteer awards', u: 'awards.html', icon: '🏆' },
+    { t: 'Sponsors', s: '87 active sponsors · $214K raised · become a 2027 sponsor', u: 'sponsors.html', icon: '💼' },
+    { t: 'Volunteer Sign-up', s: 'Open roles · scorekeepers · field crew · umpires', u: 'volunteer.html', icon: '🙋' },
+    { t: 'Scott Memorial Scholarship', s: '$214K awarded since 2008 · apply by Jun 1', u: 'scholarship.html', icon: '🎓' },
+    { t: 'Umpire Portal', s: 'Operations · 42 active umpires · availability + assignments', u: 'umpires.html', icon: '🧑‍⚖️' },
+    { t: 'Master Schedule', s: 'All games across all leagues and tournaments', u: 'schedule.html', icon: '📅' },
+    { t: 'Champions Archive', s: 'Past D27 tournament winners 2008–present', u: 'champions.html', icon: '🏆' },
+    { t: 'Rules & Guidelines', s: 'D27 tournament rules · LL rulebook · pitch limits', u: 'rules.html', icon: '📖' },
+    { t: 'Jeff Bennett', s: 'D27 District Administrator', u: 'about.html', icon: '👤' },
+    { t: 'About D27', s: 'History · leadership · field directory', u: 'about.html', icon: 'ℹ️' },
+  ];
+  function d27Search(q) {
+    const out = document.getElementById('d27-search-results');
+    if (!q || q.length < 2) { out.style.display = 'none'; return; }
+    const ql = q.toLowerCase();
+    const hits = D27_SEARCH_INDEX.filter(r => (r.t + ' ' + r.s).toLowerCase().includes(ql)).slice(0, 8);
+    if (!hits.length) { out.innerHTML = '<div style="color:var(--muted); font-size:13px; padding: 8px;">No matches. Try a player name, team, league, or tournament.</div>'; out.style.display = 'block'; return; }
+    out.innerHTML = hits.map(r => '<a href="' + r.u + '" style="display:flex; gap:10px; align-items:center; padding: 8px 10px; border-radius:5px; text-decoration:none; color:var(--d27-ink);" onmouseenter="this.style.background=\'var(--d27-sub)\';" onmouseleave="this.style.background=\'transparent\';"><span style="font-size:18px;">' + r.icon + '</span><span><b style="color:var(--d27-navy);">' + r.t + '</b><br><span style="color:var(--muted); font-size:12px;">' + r.s + '</span></span></a>').join('');
+    out.style.display = 'block';
+  }
+
   // ─ Age Eligibility Calculator ──────────────────────────────────────
   // Little League "age" is the player's age on August 31 of the season
   // year (all LL divisions use this cutoff since 2018). Returns the

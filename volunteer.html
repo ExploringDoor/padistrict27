@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Volunteer · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .vl-hero { background: linear-gradient(180deg, var(--d27-navy), var(--d27-navy-dark)); color:#fff; padding: 56px 0 36px; border-bottom: 4px solid var(--d27-red); }
+  .vl-hero h1 { font-family: var(--font-display); font-size: clamp(34px, 5vw, 54px); margin: 0; letter-spacing: -.01em; }
+  .vl-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .vl-hero p { color: rgba(255,255,255,.78); max-width: 60ch; margin: 14px 0 0; }
+
+  .vl-cols { display:grid; grid-template-columns: 1fr 380px; gap: 28px; padding-top: 28px; }
+  @media (max-width: 980px){ .vl-cols { grid-template-columns: 1fr; } }
+
+  .vl-roles { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+  @media (max-width: 600px){ .vl-roles { grid-template-columns: 1fr; } }
+
+  .vl-role { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--d27-navy); border-radius: 6px; padding: 16px 18px; }
+  .vl-role.urgent { border-left-color: var(--d27-red); background: linear-gradient(90deg, rgba(218,41,28,.04), transparent); }
+  .vl-role h3 { margin: 0 0 4px; font-family: var(--font-display); color: var(--d27-navy); font-size: 17px; }
+  .vl-role .when { color: var(--muted); font-size: 12px; margin-bottom: 8px; }
+  .vl-role p { margin: 0 0 12px; font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .vl-role .pill { display:inline-block; padding: 3px 8px; background: var(--d27-sub); border-radius: 3px; font-size: 11px; font-weight: 700; color: var(--d27-navy); margin-right: 6px; }
+  .vl-role.urgent .pill.need { background: #FEE2E2; color: var(--d27-red); }
+
+  .vl-form { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 22px; }
+  .vl-form h2 { font-family: var(--font-display); margin: 0 0 6px; color: var(--d27-navy); }
+  .vl-form .sub { color: var(--muted); font-size: 13px; margin: 0 0 16px; }
+  .vl-form label { display: block; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin: 12px 0 4px; }
+  .vl-form input, .vl-form select, .vl-form textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 5px; font: inherit; font-size: 14px; }
+  .vl-form .checkboxes { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; margin-top: 4px; }
+  .vl-form .checkboxes label { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--d27-ink); margin: 0; }
+  .vl-form button { background: var(--d27-red); color: #fff; border: none; padding: 12px 22px; border-radius: 5px; font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; margin-top: 16px; width: 100%; }
+
+  .vl-side { display: flex; flex-direction: column; gap: 16px; }
+  .vl-side .card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; }
+  .vl-side .card h3 { margin: 0 0 8px; font-family: var(--font-display); color: var(--d27-navy); font-size: 16px; letter-spacing: .04em; text-transform: uppercase; }
+  .vl-side .card p { margin: 0 0 8px; font-size: 13px; color: var(--muted); line-height: 1.55; }
+  .vl-side .stat { font-family: var(--font-display); font-size: 36px; color: var(--d27-red); font-weight: 700; line-height: 1; }
+  .vl-side .stat-l { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="vl-hero">
+  <div class="container">
+    <div class="eyebrow">JOIN THE D27 TEAM</div>
+    <h1>Volunteer With Us</h1>
+    <p>Little League runs on volunteers. Every D27 game has a scorekeeper, a snack-bar shift, a field crew. Coach a team, ump a game, or just help out for a Saturday — every hour counts.</p>
+  </div>
+</header>
+
+<main class="container">
+
+  <div class="vl-cols">
+    <div>
+
+      <h2 style="font-family: var(--font-display); color: var(--d27-navy); margin: 0 0 6px; font-size: 26px;">Open Roles · Spring/Summer 2026</h2>
+      <p style="color: var(--muted); margin: 0 0 18px; font-size: 14px;">Filter by what you're good at. Most roles take 2–4 hours per week.</p>
+
+      <div class="vl-roles">
+        <div class="vl-role urgent">
+          <h3>Tournament Scorekeeper · Bob Jones SF/F</h3>
+          <div class="when">Jun 24 + Jun 28 · 2 dates · ~4 hrs each</div>
+          <p>Need 4 more scorekeepers for SF and Final games. GameChanger or paper book — we'll train. High-school students get verified volunteer hours.</p>
+          <span class="pill need">URGENT · 4 needed</span><span class="pill">All Leagues</span>
+        </div>
+
+        <div class="vl-role urgent">
+          <h3>Field Crew · Saturday Mornings</h3>
+          <div class="when">Saturdays 7–9 AM · ongoing</div>
+          <p>Drag mound, line fields, set up bases. Most leagues need 2–3 people per Saturday morning. Free coffee. We're nice.</p>
+          <span class="pill need">URGENT · 9 needed</span><span class="pill">All Leagues</span>
+        </div>
+
+        <div class="vl-role">
+          <h3>Snack Bar · Weekday Evenings</h3>
+          <div class="when">Mon–Thu 5:30–8 PM · ongoing</div>
+          <p>Hot dogs, pretzels, Gatorade. Tips go to the Scott Scholarship. Your shift = free snacks for your kid.</p>
+          <span class="pill">12 needed</span><span class="pill">All Leagues</span>
+        </div>
+
+        <div class="vl-role">
+          <h3>Umpire · Plate or Bases</h3>
+          <div class="when">Multiple slots weekly · ongoing · paid stipend</div>
+          <p>D27 pays $30–60 per game. Plate-mech clinic provided May. Background check + Safesport required. Real ball-strike calls, real games.</p>
+          <span class="pill">14 spots</span><span class="pill">Stipend</span>
+        </div>
+
+        <div class="vl-role">
+          <h3>Snack-Bar Coordinator · Berwyn-Paoli</h3>
+          <div class="when">Season-long · 6 hrs/week</div>
+          <p>Order inventory, schedule shifts, count drawer at season end. Two-year role — current coordinator stepping down.</p>
+          <span class="pill">1 needed</span><span class="pill">BP</span>
+        </div>
+
+        <div class="vl-role">
+          <h3>Photo / Media Volunteer</h3>
+          <div class="when">Game days · flexible · ~2 hrs</div>
+          <p>Snap photos for the team chat & district website. iPhones welcome. We'll set up dropbox.</p>
+          <span class="pill">8 spots</span><span class="pill">All Leagues</span>
+        </div>
+
+        <div class="vl-role">
+          <h3>Banquet Committee · October</h3>
+          <div class="when">Sept–Oct · 4 evening meetings + day-of</div>
+          <p>Plan the year-end awards banquet. Decorations, MC, raffle, slideshow. Fun group.</p>
+          <span class="pill">5 needed</span><span class="pill">District-wide</span>
+        </div>
+
+        <div class="vl-role">
+          <h3>Tournament Setup Crew · Bob Jones</h3>
+          <div class="when">June 18, 6–9 PM</div>
+          <p>One night, get banners up, scoreboards working, snack bar stocked. Pizza on us.</p>
+          <span class="pill">12 spots</span><span class="pill">One Night</span>
+        </div>
+      </div>
+
+      <div class="vl-form">
+        <h2>Sign Up</h2>
+        <p class="sub">We'll match you with the league(s) that fit your schedule and what you said you're good at. Background check ($25, district covers it) takes 7 days; Safesport is free and online.</p>
+
+        <form onsubmit="event.preventDefault(); alert('Demo — in production, submission emails the league volunteer coordinator and creates a record in the admin Volunteer queue.');">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div><label>First Name</label><input type="text" placeholder="Sarah" /></div>
+            <div><label>Last Name</label><input type="text" placeholder="Chen" /></div>
+          </div>
+          <label>Email</label>
+          <input type="email" placeholder="you@email.com" />
+          <label>Phone</label>
+          <input type="tel" placeholder="(610) 555-1234" />
+          <label>Home League</label>
+          <select>
+            <option>I'll help wherever needed</option>
+            <option>Berwyn-Paoli</option><option>Chester Valley</option><option>Lower Merion</option><option>Lower Perkiomen</option><option>Marple Newtown</option><option>Methacton</option><option>Penn Wood</option><option>Phoenixville</option><option>Pottstown</option><option>Springfield</option><option>Tredyffrin</option><option>Lansdale-Ambler</option>
+          </select>
+
+          <label>What are you interested in? (check all that apply)</label>
+          <div class="checkboxes">
+            <label><input type="checkbox" /> Coaching</label>
+            <label><input type="checkbox" /> Scorekeeping</label>
+            <label><input type="checkbox" /> Umpiring</label>
+            <label><input type="checkbox" /> Field crew</label>
+            <label><input type="checkbox" /> Snack bar</label>
+            <label><input type="checkbox" /> Photography</label>
+            <label><input type="checkbox" /> Fundraising</label>
+            <label><input type="checkbox" /> Banquet planning</label>
+            <label><input type="checkbox" /> First aid / EMT</label>
+            <label><input type="checkbox" /> Carpentry / repair</label>
+          </div>
+
+          <label>Anything else we should know?</label>
+          <textarea rows="3" placeholder="Optional — schedule constraints, prior experience, kid's team, etc."></textarea>
+
+          <label style="display: flex; gap: 8px; align-items: center; text-transform: none; letter-spacing: 0; font-weight: 500; color: var(--d27-ink); margin-top: 14px;">
+            <input type="checkbox" required /> I understand a free background check + Safesport course is required before working with kids.
+          </label>
+
+          <button type="submit">Submit Application →</button>
+        </form>
+      </div>
+
+    </div>
+
+    <aside class="vl-side">
+      <div class="card">
+        <div class="stat">1,847</div>
+        <div class="stat-l">Volunteers Across D27</div>
+      </div>
+      <div class="card">
+        <div class="stat">22,000</div>
+        <div class="stat-l">Volunteer Hours · 2025 Season</div>
+      </div>
+      <div class="card">
+        <h3>Why volunteer?</h3>
+        <p>It's the only reason this whole thing works. Twelve leagues, 10,000 kids — the parents and neighbors who show up are the real engine. Most volunteers find a role and stay 5+ years.</p>
+      </div>
+      <div class="card">
+        <h3>What we'll do</h3>
+        <p>You sign up, we match you with your league's coordinator within 48 hours. They'll walk you through background check + Safesport. Most volunteers are on a field within two weeks.</p>
+      </div>
+      <div class="card">
+        <h3>Coaching specifically</h3>
+        <p>Want to coach? Hit "Coaching" on the form, we'll route you to your league president. They run tryout-style assessments mid-March each year.</p>
+      </div>
+    </aside>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="pitch-count.html">Pitch Count</a></li><li><a href="standings.html">Standings</a></li></ul></div>
+      <div><h5>Resources</h5><ul><li><a href="rules.html">Rules</a></li><li><a href="scholarship.html">Scholarship</a></li><li><a href="all-stars.html">All-Stars</a></li><li><a href="awards.html">Awards</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Pitch Count Compliance · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .pc-hero { background: linear-gradient(180deg, var(--d27-navy), var(--d27-navy-dark)); color:#fff; padding: 56px 0 36px; border-bottom: 4px solid var(--d27-gold); }
+  .pc-hero h1 { font-family: var(--font-display); font-size: clamp(34px, 5vw, 54px); margin: 0; letter-spacing: -.01em; }
+  .pc-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .pc-hero p { color: rgba(255,255,255,.78); max-width: 60ch; margin: 14px 0 0; }
+  .pc-hero .gc { display:inline-block; background: rgba(218,41,28,.18); color:#FCA5A5; padding:6px 12px; border-radius:4px; font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:700; margin-top:14px; }
+
+  .pc-rules { display:grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: -28px 0 28px; position: relative; z-index: 2; }
+  @media (max-width:720px){ .pc-rules { grid-template-columns:repeat(2,1fr);} }
+  .pc-rule { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px; box-shadow:0 4px 14px rgba(0,0,0,.05); }
+  .pc-rule .age { font-family:var(--font-display); color:var(--d27-gold); font-size:13px; letter-spacing:.06em; font-weight:700; }
+  .pc-rule .max { font-family:var(--font-display); font-size:30px; line-height:1; color:var(--d27-navy); font-weight:700; margin: 4px 0 4px; }
+  .pc-rule .lbl { color:var(--muted); font-size:11px; letter-spacing:.06em; text-transform:uppercase; }
+  .pc-rule ul { margin:8px 0 0; padding-left:16px; font-size:11px; color:var(--muted); }
+  .pc-rule li { margin-bottom: 2px; }
+
+  .pc-card { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding: 22px; margin-bottom:18px; }
+  .pc-card h2 { font-family:var(--font-display); margin:0 0 14px; color:var(--d27-navy); font-size:22px; }
+
+  .pc-search { display:flex; gap:8px; margin-bottom:14px; }
+  .pc-search input { flex:1; padding:10px 12px; border:1px solid var(--line); border-radius:5px; font-size:14px; font-family:inherit; }
+  .pc-search button { background:var(--d27-navy); color:#fff; border:none; padding:10px 18px; border-radius:5px; font-weight:700; cursor:pointer; }
+
+  .pc-pitcher { display:flex; gap:14px; align-items:center; padding:16px; border:1px solid var(--line); border-radius:8px; margin-bottom: 12px; transition: all .15s; }
+  .pc-pitcher:hover { border-color: var(--d27-navy); box-shadow:0 4px 14px rgba(0,0,0,.06); }
+  .pc-pitcher .av { width: 48px; height: 48px; border-radius: 50%; display:flex; align-items:center; justify-content:center; font-family: var(--font-display); font-weight: 700; font-size: 16px; color:#fff; flex-shrink:0; }
+  .pc-pitcher .info { flex: 1; }
+  .pc-pitcher .nm { font-weight: 700; font-size: 16px; }
+  .pc-pitcher .sub { color: var(--muted); font-size: 12px; }
+  .pc-status { display:flex; flex-direction:column; align-items:flex-end; gap: 4px; }
+  .pc-status .badge { padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  .pc-status .badge.ok { background: #ECFDF5; color:#059669; }
+  .pc-status .badge.warn { background:#FEF3C7; color:#B45309; }
+  .pc-status .badge.block { background:#FEE2E2; color:var(--d27-red); }
+  .pc-status .when { font-size:11px; color: var(--muted); }
+
+  .pc-chart { display: grid; grid-template-columns: 1fr 220px; gap:18px; align-items:center; padding:14px 0; border-top: 1px dashed var(--line); margin-top:8px; }
+  .pc-bar { width: 100%; height: 14px; background: var(--d27-sub); border-radius: 999px; overflow:hidden; position: relative; }
+  .pc-bar .fill { height:100%; background: linear-gradient(90deg, #10B981, #F59E0B 70%, #DC2626 95%); border-radius:999px; transition: width .4s; }
+  .pc-bar .max { position:absolute; right:0; top:-2px; bottom:-2px; width:2px; background:var(--d27-red); }
+
+  .pc-history { font-size:12px; color:var(--muted); }
+  .pc-history .row { display:flex; justify-content:space-between; padding:3px 0; }
+  .pc-history .row b { color: var(--d27-ink); }
+
+  .pc-cols { display:grid; grid-template-columns: 1fr 380px; gap: 24px; }
+  @media (max-width: 980px){ .pc-cols { grid-template-columns: 1fr; } }
+  .pc-side .pc-card h3 { margin:0 0 10px; font-family:var(--font-display); color:var(--d27-navy); font-size:15px; letter-spacing:.04em; text-transform:uppercase; }
+  .pc-side p { margin: 0 0 8px; font-size: 13px; color:var(--muted); line-height: 1.55; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="pc-hero">
+  <div class="container">
+    <div class="eyebrow">D27 OPERATIONS</div>
+    <h1>Pitch Count Compliance</h1>
+    <p>Auto-tracks every pitcher across the district against Little League's age-based daily and rest-day rules. Captains and admins see who's eligible to pitch, who needs another day off, and who's about to hit their cap — before the first pitch.</p>
+    <span class="gc">Real GameChanger gap · LL pitch rules baked in</span>
+  </div>
+</header>
+
+<main class="container" style="padding: 0 0 64px;">
+
+  <div class="pc-rules">
+    <div class="pc-rule">
+      <div class="age">Ages 7–8</div>
+      <div class="max">50</div>
+      <div class="lbl">Pitches / Day Max</div>
+      <ul><li>1-20: no rest</li><li>21-35: 1 day</li><li>36-50: 2 days</li></ul>
+    </div>
+    <div class="pc-rule">
+      <div class="age">Ages 9–10</div>
+      <div class="max">75</div>
+      <div class="lbl">Pitches / Day Max</div>
+      <ul><li>1-20: no rest</li><li>36-50: 2 days</li><li>51-75: 3 days</li></ul>
+    </div>
+    <div class="pc-rule">
+      <div class="age">Ages 11–12</div>
+      <div class="max">85</div>
+      <div class="lbl">Pitches / Day Max</div>
+      <ul><li>1-20: no rest</li><li>51-65: 3 days</li><li>66-85: 4 days</li></ul>
+    </div>
+    <div class="pc-rule">
+      <div class="age">Ages 13–16</div>
+      <div class="max">95</div>
+      <div class="lbl">Pitches / Day Max</div>
+      <ul><li>1-30: no rest</li><li>61-75: 3 days</li><li>76-95: 4 days</li></ul>
+    </div>
+  </div>
+
+  <div class="pc-cols">
+    <div>
+
+      <div class="pc-card">
+        <h2>Who's Eligible to Pitch · Bob Jones SF · Jun 24</h2>
+        <div class="pc-search">
+          <input type="text" placeholder="Search pitcher by name, team, jersey..." />
+          <button onclick="alert('Demo search')">Search</button>
+        </div>
+
+        <!-- Eligible -->
+        <div class="pc-pitcher">
+          <div class="av" style="background: var(--d27-navy);">LD</div>
+          <div class="info">
+            <div class="nm">Luke DiSanto · #1 · BP Red 12U</div>
+            <div class="sub">Last appearance: Jun 19 · 38 pitches · 2 days rest required</div>
+            <div class="pc-chart">
+              <div>
+                <div class="pc-bar"><div class="fill" style="width: 0%"></div><div class="max"></div></div>
+                <div style="font-size:11px; color:var(--muted); margin-top:4px;">0 / 85 pitches today · 5 days since last outing</div>
+              </div>
+              <div class="pc-history">
+                <div class="row"><span>Jun 19 SF</span><b>38 P</b></div>
+                <div class="row"><span>Jun 14 R1</span><b>22 P</b></div>
+                <div class="row"><span>Jun 10 reg</span><b>56 P</b></div>
+              </div>
+            </div>
+          </div>
+          <div class="pc-status"><span class="badge ok">✓ Eligible · Full Game</span><span class="when">Can throw all 85</span></div>
+        </div>
+
+        <!-- Limited -->
+        <div class="pc-pitcher">
+          <div class="av" style="background: var(--d27-red);">JR</div>
+          <div class="info">
+            <div class="nm">Jack Ryan · #14 · BP Red 12U</div>
+            <div class="sub">Last appearance: Jun 21 QF · 41 pitches · 2 days rest used</div>
+            <div class="pc-chart">
+              <div>
+                <div class="pc-bar"><div class="fill" style="width: 48%"></div><div class="max"></div></div>
+                <div style="font-size:11px; color:var(--muted); margin-top:4px;">41 cap if used today · would lock for next 3 days</div>
+              </div>
+              <div class="pc-history">
+                <div class="row"><span>Jun 21 QF</span><b>41 P</b></div>
+                <div class="row"><span>Jun 17 reg</span><b>72 P</b></div>
+                <div class="row"><span>Jun 12 reg</span><b>14 P</b></div>
+              </div>
+            </div>
+          </div>
+          <div class="pc-status"><span class="badge warn">⚠ Limited · Use Caution</span><span class="when">Recommend ≤ 30 pitches</span></div>
+        </div>
+
+        <!-- Blocked -->
+        <div class="pc-pitcher">
+          <div class="av" style="background:#7C3AED;">MH</div>
+          <div class="info">
+            <div class="nm">Max Hollis · #22 · BP Red 12U</div>
+            <div class="sub">Last appearance: Jun 23 · 78 pitches · 4 days rest required</div>
+            <div class="pc-chart">
+              <div>
+                <div class="pc-bar"><div class="fill" style="width: 92%"></div><div class="max"></div></div>
+                <div style="font-size:11px; color:var(--muted); margin-top:4px;">Cleared to pitch again Jun 28</div>
+              </div>
+              <div class="pc-history">
+                <div class="row"><span>Jun 23 reg</span><b>78 P</b></div>
+                <div class="row"><span>Jun 19 SF</span><b>14 P</b></div>
+                <div class="row"><span>Jun 14 R1</span><b>62 P</b></div>
+              </div>
+            </div>
+          </div>
+          <div class="pc-status"><span class="badge block">✕ Ineligible</span><span class="when">Returns Jun 28</span></div>
+        </div>
+
+        <!-- Eligible -->
+        <div class="pc-pitcher">
+          <div class="av" style="background:#059669;">AP</div>
+          <div class="info">
+            <div class="nm">Alex Park · #7 · BP Red 12U</div>
+            <div class="sub">Last appearance: Jun 17 · 54 pitches · 3 days rest used</div>
+            <div class="pc-chart">
+              <div>
+                <div class="pc-bar"><div class="fill" style="width: 0%"></div><div class="max"></div></div>
+                <div style="font-size:11px; color:var(--muted); margin-top:4px;">0 / 85 pitches today · 7 days since last outing</div>
+              </div>
+              <div class="pc-history">
+                <div class="row"><span>Jun 17 reg</span><b>54 P</b></div>
+                <div class="row"><span>Jun 10 reg</span><b>33 P</b></div>
+                <div class="row"><span>Jun 5 reg</span><b>0 P</b></div>
+              </div>
+            </div>
+          </div>
+          <div class="pc-status"><span class="badge ok">✓ Eligible · Full Game</span><span class="when">Fully rested</span></div>
+        </div>
+
+        <!-- Eligible -->
+        <div class="pc-pitcher">
+          <div class="av" style="background:#B45309;">EM</div>
+          <div class="info">
+            <div class="nm">Ethan Morales · #18 · BP Red 12U</div>
+            <div class="sub">Last appearance: Jun 14 R1 · 28 pitches · cleared</div>
+            <div class="pc-chart">
+              <div>
+                <div class="pc-bar"><div class="fill" style="width: 0%"></div><div class="max"></div></div>
+                <div style="font-size:11px; color:var(--muted); margin-top:4px;">0 / 85 pitches today · 10 days since last outing</div>
+              </div>
+              <div class="pc-history">
+                <div class="row"><span>Jun 14 R1</span><b>28 P</b></div>
+                <div class="row"><span>Jun 8 reg</span><b>18 P</b></div>
+                <div class="row"><span>Jun 1 reg</span><b>0 P</b></div>
+              </div>
+            </div>
+          </div>
+          <div class="pc-status"><span class="badge ok">✓ Eligible · Full Game</span><span class="when">Fully rested</span></div>
+        </div>
+
+      </div>
+
+      <div class="pc-card">
+        <h2>District Compliance Snapshot · This Week</h2>
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px;">
+          <div><div style="font-family:var(--font-display); font-size:32px; color:#059669; font-weight:700; line-height:1;">486</div><div style="color:var(--muted); font-size:11px; letter-spacing:.06em; text-transform:uppercase;">Pitcher-Games Logged</div></div>
+          <div><div style="font-family:var(--font-display); font-size:32px; color:var(--d27-navy); font-weight:700; line-height:1;">100%</div><div style="color:var(--muted); font-size:11px; letter-spacing:.06em; text-transform:uppercase;">In Compliance</div></div>
+          <div><div style="font-family:var(--font-display); font-size:32px; color:#B45309; font-weight:700; line-height:1;">8</div><div style="color:var(--muted); font-size:11px; letter-spacing:.06em; text-transform:uppercase;">Warnings Issued</div></div>
+          <div><div style="font-family:var(--font-display); font-size:32px; color:var(--d27-red); font-weight:700; line-height:1;">0</div><div style="color:var(--muted); font-size:11px; letter-spacing:.06em; text-transform:uppercase;">Violations</div></div>
+        </div>
+        <p style="margin-top:14px; color:var(--muted); font-size:13px; line-height:1.55;">Real-time aggregation across all 12 leagues. If a captain tries to log a pitcher who isn't eligible, the score-entry screen blocks submission and routes to the admin for resolution. Replaces the manual paper Pitch Affidavit at tournament check-in.</p>
+      </div>
+    </div>
+
+    <aside style="display:flex; flex-direction:column; gap:18px;">
+      <div class="pc-card pc-side">
+        <h3>Why this matters</h3>
+        <p>Little League International requires districts to enforce these limits. Manual tracking in spreadsheets misses cross-team appearances during All-Stars. <b>Arm injury prevention</b> for kids is the #1 reason these rules exist.</p>
+      </div>
+      <div class="pc-card pc-side">
+        <h3>Auto-Affidavit</h3>
+        <p>System generates the LL Pitch Affidavit form automatically before each tournament game. Plate ump signs digitally. No more lost paperwork at check-in.</p>
+      </div>
+      <div class="pc-card pc-side">
+        <h3>Captain View</h3>
+        <p>Coach Tom sees a green/yellow/red light per pitcher when building tomorrow's lineup. No more "wait, did Jack throw 41 or 51?" texts at 11 PM.</p>
+      </div>
+      <div class="pc-card pc-side">
+        <h3>Parent Notifications</h3>
+        <p>Optional: parents get a weekly digest of their kid's pitch counts and arm-rest status.</p>
+      </div>
+    </aside>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="pitch-count.html">Pitch Count</a></li><li><a href="standings.html">Standings</a></li></ul></div>
+      <div><h5>Resources</h5><ul><li><a href="rules.html">Rules</a></li><li><a href="scholarship.html">Scholarship</a></li><li><a href="all-stars.html">All-Stars</a></li><li><a href="awards.html">Awards</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+</body>
+</html>

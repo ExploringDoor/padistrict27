@@ -419,7 +419,7 @@
       <li><a href="baseball.html">Baseball</a></li>
       <li><a href="softball.html">Softball</a></li>
       <li><a href="schedule.html">Schedule</a></li>
-      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
       <li><a href="champions.html">Champions</a></li>
     </ul>
   </div>
@@ -623,6 +623,81 @@
         <p>Graduating D27 player? Grab the packet and get your application in well before Sep 8. Questions go to Suzanne directly.</p>
       </div>
       <a href="mailto:SBattaglia@yahoo.com?subject=D27 Scholarship — 2026 Application" class="btn-apply">Contact Suzanne →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Donate / Apply -------------------------------------------------- -->
+<section style="padding: 60px 0; background: var(--d27-paper);">
+  <div class="container" style="display:grid; grid-template-columns: 1fr 1fr; gap: 28px;">
+    <!-- Donate -->
+    <div style="background: linear-gradient(135deg, var(--d27-navy), var(--d27-navy-dark)); color: #fff; padding: 32px; border-radius: 10px;">
+      <span style="color: var(--d27-gold); font-family: var(--font-display); letter-spacing:.14em; font-size:13px; font-weight:600;">SUPPORT THE FUND</span>
+      <h2 style="font-family: var(--font-display); margin: 4px 0 12px; font-size: 30px;">Donate</h2>
+      <p style="color: rgba(255,255,255,.78); margin: 0 0 18px; line-height:1.6;">100% of donations go directly to scholarships — D27 covers all administrative costs. Tax-deductible (501(c)(3) member league sponsorship).</p>
+
+      <form onsubmit="event.preventDefault(); alert('Demo only — production redirects to Stripe Checkout. No real card processing here.');">
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px;">
+          <button type="button" onclick="document.getElementById('don-amt').value=25" style="background: rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18); color:#fff; padding: 12px; border-radius: 5px; font-family: var(--font-display); font-size: 16px; font-weight:700; cursor:pointer;">$25</button>
+          <button type="button" onclick="document.getElementById('don-amt').value=50" style="background: rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18); color:#fff; padding: 12px; border-radius: 5px; font-family: var(--font-display); font-size: 16px; font-weight:700; cursor:pointer;">$50</button>
+          <button type="button" onclick="document.getElementById('don-amt').value=100" style="background: var(--d27-gold); border: none; color:var(--d27-navy); padding: 12px; border-radius: 5px; font-family: var(--font-display); font-size: 16px; font-weight:700; cursor:pointer;">$100</button>
+          <button type="button" onclick="document.getElementById('don-amt').value=250" style="background: rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18); color:#fff; padding: 12px; border-radius: 5px; font-family: var(--font-display); font-size: 16px; font-weight:700; cursor:pointer;">$250</button>
+        </div>
+        <input id="don-amt" type="number" placeholder="Custom amount ($)" min="5" style="width:100%; padding: 11px 14px; border:1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.08); color:#fff; border-radius: 5px; font: inherit; font-size: 16px; margin-bottom: 10px;" />
+
+        <label style="display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,.85); font-size: 14px; padding: 4px 0;"><input type="checkbox" /> Make this a monthly recurring donation</label>
+        <label style="display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,.85); font-size: 14px; padding: 4px 0;"><input type="checkbox" checked /> Anonymous (don't list me on the donor wall)</label>
+        <label style="display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,.85); font-size: 14px; padding: 4px 0;"><input type="checkbox" /> Dedicate this gift in honor / memory of someone</label>
+
+        <button type="submit" style="background: var(--d27-gold); color: var(--d27-navy); border: none; padding: 14px 24px; border-radius: 5px; font-family: var(--font-display); font-size: 15px; font-weight: 700; letter-spacing:.06em; text-transform:uppercase; cursor: pointer; margin-top: 14px; width: 100%;">Donate Now →</button>
+        <p style="color: rgba(255,255,255,.5); font-size: 11px; margin: 10px 0 0; text-align: center;">Secure checkout via Stripe. Receipt emailed for tax records.</p>
+      </form>
+    </div>
+
+    <!-- Apply -->
+    <div style="background: var(--surface); border:1px solid var(--line); padding: 32px; border-radius: 10px;">
+      <span style="color: var(--d27-red); font-family: var(--font-display); letter-spacing:.14em; font-size:13px; font-weight:600;">APPLY FOR ASSISTANCE</span>
+      <h2 style="font-family: var(--font-display); margin: 4px 0 12px; font-size: 30px; color: var(--d27-navy);">Scholarship Application</h2>
+      <p style="margin: 0 0 18px; color: var(--muted); line-height:1.6;">Need-based assistance for any D27 family — registration fees, equipment, uniforms, or travel costs. Confidential. Reviewed within 2 weeks. No family pays for need.</p>
+
+      <form onsubmit="event.preventDefault(); alert('Demo only — production submission emails Suzanne Battaglia (Scholarship Chair) and creates a confidential record in admin queue.');">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div>
+            <label style="display:block; font-size: 11px; letter-spacing:.06em; color: var(--muted); text-transform:uppercase; margin-bottom: 4px; font-weight:700;">Parent Name</label>
+            <input type="text" style="width:100%; padding: 9px 12px; border:1px solid var(--line); border-radius: 5px; font: inherit; font-size: 14px;" />
+          </div>
+          <div>
+            <label style="display:block; font-size: 11px; letter-spacing:.06em; color: var(--muted); text-transform:uppercase; margin-bottom: 4px; font-weight:700;">Email</label>
+            <input type="email" style="width:100%; padding: 9px 12px; border:1px solid var(--line); border-radius: 5px; font: inherit; font-size: 14px;" />
+          </div>
+        </div>
+
+        <label style="display:block; font-size: 11px; letter-spacing:.06em; color: var(--muted); text-transform:uppercase; margin-bottom: 4px; font-weight:700; margin-top: 12px;">League</label>
+        <select style="width:100%; padding: 9px 12px; border:1px solid var(--line); border-radius: 5px; font: inherit; font-size: 14px;">
+          <option>Select your home D27 league</option>
+          <option>Berwyn-Paoli</option><option>Chester Valley</option><option>Lower Merion</option><option>Lower Perkiomen</option><option>Marple Newtown</option><option>Methacton</option><option>Penn Wood</option><option>Phoenixville</option><option>Pottstown</option><option>Springfield</option><option>Tredyffrin</option><option>Lansdale-Ambler</option>
+        </select>
+
+        <label style="display:block; font-size: 11px; letter-spacing:.06em; color: var(--muted); text-transform:uppercase; margin-bottom: 4px; font-weight:700; margin-top: 12px;">Number of Children Playing</label>
+        <input type="number" min="1" max="6" placeholder="e.g. 2" style="width:100%; padding: 9px 12px; border:1px solid var(--line); border-radius: 5px; font: inherit; font-size: 14px;" />
+
+        <label style="display:block; font-size: 11px; letter-spacing:.06em; color: var(--muted); text-transform:uppercase; margin-bottom: 4px; font-weight:700; margin-top: 12px;">What's needed</label>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+          <label style="display:flex; gap:6px; align-items:center; font-size: 14px;"><input type="checkbox" /> Registration fees</label>
+          <label style="display:flex; gap:6px; align-items:center; font-size: 14px;"><input type="checkbox" /> Equipment (glove/bat/cleats)</label>
+          <label style="display:flex; gap:6px; align-items:center; font-size: 14px;"><input type="checkbox" /> Uniform</label>
+          <label style="display:flex; gap:6px; align-items:center; font-size: 14px;"><input type="checkbox" /> Travel-team fees</label>
+          <label style="display:flex; gap:6px; align-items:center; font-size: 14px;"><input type="checkbox" /> Camp / clinic</label>
+          <label style="display:flex; gap:6px; align-items:center; font-size: 14px;"><input type="checkbox" /> Other (note below)</label>
+        </div>
+
+        <label style="display:block; font-size: 11px; letter-spacing:.06em; color: var(--muted); text-transform:uppercase; margin-bottom: 4px; font-weight:700; margin-top: 12px;">Notes (optional)</label>
+        <textarea rows="3" placeholder="Anything that will help us understand your family's situation. Confidential."  style="width:100%; padding: 9px 12px; border:1px solid var(--line); border-radius: 5px; font: inherit; font-size: 14px; resize: vertical;"></textarea>
+
+        <p style="color:var(--muted); font-size: 12px; margin: 12px 0 0; line-height: 1.55;">All applications are confidential and reviewed by the Scholarship Chair only. Decisions communicated within 2 weeks. No need to provide tax returns or financial statements — we trust you.</p>
+
+        <button type="submit" style="background: var(--d27-red); color: #fff; border: none; padding: 14px 24px; border-radius: 5px; font-family: var(--font-display); font-size: 15px; font-weight: 700; letter-spacing:.06em; text-transform:uppercase; cursor: pointer; margin-top: 14px; width: 100%;">Submit Application →</button>
+      </form>
     </div>
   </div>
 </section>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Awards · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .aw-hero { background: linear-gradient(135deg, var(--d27-navy), #001034); color:#fff; padding: 64px 0 40px; border-bottom: 4px solid var(--d27-gold); position:relative; overflow:hidden; }
+  .aw-hero::before { content:''; position:absolute; inset:0; background: radial-gradient(circle at 70% 30%, rgba(201,162,39,.18), transparent 55%); }
+  .aw-hero h1 { font-family: var(--font-display); font-size: clamp(38px, 5vw, 60px); margin: 0; letter-spacing: -.01em; position:relative; }
+  .aw-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .aw-hero p { color: rgba(255,255,255,.78); max-width: 64ch; margin: 14px 0 0; position:relative; }
+  .aw-hero .trophies { font-size: 36px; letter-spacing: 12px; margin-bottom: 8px; color: var(--d27-gold); }
+
+  .aw-tabs { display:flex; gap:8px; flex-wrap:wrap; margin: 28px 0 18px; border-bottom:2px solid var(--line); }
+  .aw-tab { background:none; border:none; padding:10px 14px; font-family:var(--font-display); font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); cursor:pointer; border-bottom: 3px solid transparent; margin-bottom:-2px; }
+  .aw-tab.active { color:var(--d27-navy); border-bottom-color: var(--d27-gold); }
+
+  .aw-section { margin-bottom: 36px; }
+  .aw-section h2 { font-family:var(--font-display); margin: 0 0 6px; color: var(--d27-navy); font-size: 26px; }
+  .aw-section .desc { color: var(--muted); font-size: 14px; margin: 0 0 16px; max-width: 70ch; }
+
+  .aw-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 14px; }
+  .aw-card { background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--d27-gold); border-radius: 8px; padding: 20px; position:relative; }
+  .aw-card .lvl { color: var(--d27-gold); font-family: var(--font-display); font-size: 11px; letter-spacing: .12em; font-weight: 700; text-transform: uppercase; }
+  .aw-card .ttl { font-family: var(--font-display); margin: 4px 0 8px; color: var(--d27-navy); font-size: 17px; }
+  .aw-card .who { font-weight: 700; font-size: 16px; margin-bottom: 2px; }
+  .aw-card .home { color: var(--muted); font-size: 12px; }
+  .aw-card .stat { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); font-size: 12px; color: var(--muted); }
+  .aw-card .stat b { color: var(--d27-ink); }
+  .aw-card .ribbon { position:absolute; top: 12px; right: 12px; font-size: 24px; }
+
+  .aw-coach { background: linear-gradient(90deg, rgba(201,162,39,.06), rgba(0,45,114,.04)); border: 1px solid rgba(0,45,114,.12); border-left: 5px solid var(--d27-gold); padding: 22px 26px; border-radius: 8px; margin-bottom: 14px; }
+  .aw-coach .who { font-family: var(--font-display); font-size: 24px; color: var(--d27-navy); margin: 0 0 4px; }
+  .aw-coach .role { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+  .aw-coach .body { font-size: 14px; line-height: 1.65; max-width: 70ch; }
+
+  .aw-vol { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 12px; }
+  .aw-vol-card { background:var(--surface); border:1px solid var(--line); border-radius: 6px; padding: 14px 16px; }
+  .aw-vol-card .nm { font-weight: 700; font-size: 15px; color: var(--d27-navy); }
+  .aw-vol-card .role { color: var(--muted); font-size: 12px; }
+  .aw-vol-card .yrs { background: var(--d27-sub); color: var(--d27-navy); padding: 3px 8px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing:.04em; display:inline-block; margin-top: 6px; }
+
+  .aw-archive { background:var(--surface); border:1px solid var(--line); border-radius: 8px; padding: 22px; margin-top: 24px; }
+  .aw-archive h3 { font-family: var(--font-display); margin: 0 0 12px; color: var(--d27-navy); font-size: 20px; }
+  .aw-archive ul { padding-left: 18px; columns: 2; column-gap: 36px; font-size: 13px; line-height: 1.7; color: var(--muted); }
+  @media (max-width: 600px){ .aw-archive ul { columns: 1; } }
+  .aw-archive ul a { color: var(--d27-navy); font-weight: 600; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="aw-hero">
+  <div class="container">
+    <div class="eyebrow">SEASON RECOGNITION · 2026</div>
+    <div class="trophies">🏆 ⚾ 🏆</div>
+    <h1>D27 Awards &amp; Honors</h1>
+    <p>Players, coaches, and volunteers selected by their leagues for excellence on and off the field. Awarded each fall at the District banquet.</p>
+  </div>
+</header>
+
+<main class="container" style="padding: 0 0 64px;">
+
+  <div class="aw-tabs">
+    <button class="aw-tab active">2026 Honorees</button>
+    <button class="aw-tab">Player of the Year</button>
+    <button class="aw-tab">Coach of the Year</button>
+    <button class="aw-tab">Volunteer Recognition</button>
+    <button class="aw-tab">Sportsmanship</button>
+    <button class="aw-tab">Archive</button>
+  </div>
+
+  <!-- Player of Year -->
+  <section class="aw-section">
+    <h2>Player of the Year · By Division</h2>
+    <p class="desc">Selected by league managers for outstanding performance, leadership, and commitment to the game across the regular season.</p>
+    <div class="aw-grid">
+      <div class="aw-card"><span class="ribbon">🏆</span><div class="lvl">12U Majors</div><div class="ttl">Player of the Year</div><div class="who">Luke DiSanto</div><div class="home">Berwyn-Paoli LL · #1 SS/P</div><div class="stat">.412 BA · 3 HR · 14 RBI · 24 K (3-0, 2.14 ERA)</div></div>
+      <div class="aw-card"><span class="ribbon">🏆</span><div class="lvl">12U Majors B</div><div class="ttl">Player of the Year</div><div class="who">Miles Hartley</div><div class="home">Methacton LL · #2 P/SS</div><div class="stat">.378 BA · 31 K · (4-0, 1.87 ERA) · 64% first-pitch K</div></div>
+      <div class="aw-card"><span class="ribbon">🏆</span><div class="lvl">11U Majors</div><div class="ttl">Player of the Year</div><div class="who">Jaxon Ruiz</div><div class="home">Chester Valley · #1 SS</div><div class="stat">.402 BA · 18 SB · 22 RBI · 0 errors at SS</div></div>
+      <div class="aw-card"><span class="ribbon">🏆</span><div class="lvl">10U Pappy Patton</div><div class="ttl">Player of the Year</div><div class="who">Theo Velez</div><div class="home">Methacton LL · #8 P/1B</div><div class="stat">.358 BA · 11 RBI · (3-1, 2.41 ERA) · plate-disc 0.76 BB/K</div></div>
+      <div class="aw-card"><span class="ribbon">🏆</span><div class="lvl">9U</div><div class="ttl">Player of the Year</div><div class="who">Holden Pierce</div><div class="home">Methacton Gold · #15 LF</div><div class="stat">.488 BA · 12 SB · 0 strikeouts in last 28 PA</div></div>
+      <div class="aw-card"><span class="ribbon">🏆</span><div class="lvl">12U Softball</div><div class="ttl">Player of the Year</div><div class="who">Brielle Ortiz</div><div class="home">Marple Newtown · #5 P/SS</div><div class="stat">.498 BA · (5-0, 1.32 ERA) · 51 K in 28 IP</div></div>
+      <div class="aw-card"><span class="ribbon">🏆</span><div class="lvl">10U Softball</div><div class="ttl">Player of the Year</div><div class="who">Cora Whelan</div><div class="home">Penn Wood · #11 C</div><div class="stat">.444 BA · 8 caught stealing · team captain</div></div>
+      <div class="aw-card"><span class="ribbon">🏆</span><div class="lvl">Junior League</div><div class="ttl">Player of the Year</div><div class="who">Tyler Morgan</div><div class="home">Chester Valley · #8 P/1B</div><div class="stat">76-80 mph FB · 38 K in 22 IP · 0.92 WHIP</div></div>
+    </div>
+  </section>
+
+  <!-- Coach of Year -->
+  <section class="aw-section">
+    <h2>Coach of the Year</h2>
+    <p class="desc">Honored for impact on player development, sportsmanship, and contribution beyond wins and losses.</p>
+
+    <div class="aw-coach">
+      <div class="who">Tom Caldwell · BP Red 12U</div>
+      <div class="role">2026 Coach of the Year · 9-1 regular season · Bob Jones Tournament finalist</div>
+      <div class="body">Tom rebuilt the Berwyn-Paoli 12U program from the bottom up over three years — installing year-round skills clinics, partnering with Vetri's culinary nutrition program, and championing the league's first concussion-protocol pilot. His teams have earned three straight Sportsmanship awards. Tom mentors first-year managers across D27 and personally certified 18 new coaches in 2026.</div>
+    </div>
+
+    <div class="aw-coach">
+      <div class="who">Sam Riccardo · Methacton 12U</div>
+      <div class="role">2026 Coach of the Year (B Division) · 9-1 regular season</div>
+      <div class="body">Sam moved Methacton into the top of the standings while running the largest 10U–12U pitch-mechanics clinic in the district. Pulled five young arms back from overuse trends with custom workload plans. His Methacton Gold roster averaged 33 fewer pitches per game than league average — without sacrificing wins.</div>
+    </div>
+  </section>
+
+  <!-- Volunteer -->
+  <section class="aw-section">
+    <h2>Volunteer Service Awards</h2>
+    <p class="desc">10,000 kids don't play without 1,800 volunteer hours per league per season.</p>
+    <div class="aw-vol">
+      <div class="aw-vol-card"><div class="nm">Mike Russo</div><div class="role">Marple Newtown · Field Crew Lead</div><span class="yrs">22 years</span></div>
+      <div class="aw-vol-card"><div class="nm">Carlos Reyes</div><div class="role">Penn Wood · President</div><span class="yrs">16 years</span></div>
+      <div class="aw-vol-card"><div class="nm">Jenny Albright</div><div class="role">Chester Valley · Team Parent Coordinator</div><span class="yrs">11 years</span></div>
+      <div class="aw-vol-card"><div class="nm">Pat Connors</div><div class="role">Berwyn-Paoli · Plate Umpire</div><span class="yrs">9 years · 64 games</span></div>
+      <div class="aw-vol-card"><div class="nm">Don Marsh</div><div class="role">Lower Perkiomen · Tournament Director</div><span class="yrs">18 years</span></div>
+      <div class="aw-vol-card"><div class="nm">Tony Bianchi</div><div class="role">Methacton · Snack Bar Manager</div><span class="yrs">14 years</span></div>
+    </div>
+  </section>
+
+  <!-- Sportsmanship -->
+  <section class="aw-section">
+    <h2>Sportsmanship Award</h2>
+    <p class="desc">The most coveted recognition at D27. Voted by opposing coaches and tournament umpires.</p>
+    <div class="aw-grid">
+      <div class="aw-card" style="border-top-color: var(--d27-red);">
+        <div class="lvl" style="color:var(--d27-red);">2026</div>
+        <div class="ttl">Sportsmanship Team</div>
+        <div class="who">Pottstown 12U</div>
+        <div class="home">3-time honoree (2022, 2024, 2026)</div>
+        <div class="stat">"Class act in every game we played them. Even after losses, dugout led the handshake line." — opposing coach Pat Lynch (CV)</div>
+      </div>
+      <div class="aw-card" style="border-top-color: var(--d27-red);">
+        <div class="lvl" style="color:var(--d27-red);">2026</div>
+        <div class="ttl">Sportsmanship Player</div>
+        <div class="who">Brendan Wright · BP Red 12U</div>
+        <div class="home">Catcher · #11</div>
+        <div class="stat">Voted by 24 opposing coaches across the regular season for consistent professionalism behind the plate.</div>
+      </div>
+      <div class="aw-card" style="border-top-color: var(--d27-red);">
+        <div class="lvl" style="color:var(--d27-red);">2026</div>
+        <div class="ttl">Sportsmanship Coach</div>
+        <div class="who">Brian O'Halloran · Springfield</div>
+        <div class="home">Manager · 11 yrs</div>
+        <div class="stat">Cited for consistently de-escalating heated games and modeling respectful behavior with umpires.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Archive -->
+  <div class="aw-archive">
+    <h3>Past Honorees</h3>
+    <ul>
+      <li><a href="#">2025 Player of the Year — Cole Patel (LM)</a></li>
+      <li><a href="#">2025 Coach of the Year — Mark Henley (LPK)</a></li>
+      <li><a href="#">2025 Sportsmanship Team — Marple Newtown 11U</a></li>
+      <li><a href="#">2024 Player of the Year — Jenna Pirro (CV SB)</a></li>
+      <li><a href="#">2024 Coach of the Year — Carlos Reyes (PW)</a></li>
+      <li><a href="#">2024 Volunteer of the Year — Tony Bianchi (METH)</a></li>
+      <li><a href="#">2023 Player of the Year — Aaron Kim (BP)</a></li>
+      <li><a href="#">2023 Coach of the Year — Linda Marsh (LPK)</a></li>
+      <li><a href="#">2022 Player of the Year — Brock Saunders (CV)</a></li>
+      <li><a href="#">2022 Sportsmanship Team — Penn Wood 10U</a></li>
+      <li><a href="#">View full archive 2008–present →</a></li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="pitch-count.html">Pitch Count</a></li><li><a href="standings.html">Standings</a></li></ul></div>
+      <div><h5>Resources</h5><ul><li><a href="rules.html">Rules</a></li><li><a href="scholarship.html">Scholarship</a></li><li><a href="all-stars.html">All-Stars</a></li><li><a href="awards.html">Awards</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.aw-tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.aw-tab').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+}));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>All-Star Teams · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .as-hero { background: linear-gradient(135deg, var(--d27-navy), #001034); color:#fff; padding: 64px 0 40px; border-bottom: 4px solid var(--d27-gold); position:relative; overflow:hidden; }
+  .as-hero::before { content:''; position:absolute; inset:0; background: radial-gradient(circle at 80% 20%, rgba(201,162,39,.18), transparent 50%); }
+  .as-hero h1 { font-family: var(--font-display); font-size: clamp(38px, 5.5vw, 60px); margin: 0; letter-spacing: -.01em; position:relative; }
+  .as-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .as-hero p { color: rgba(255,255,255,.78); max-width: 64ch; margin: 14px 0 0; position:relative; }
+  .as-hero .stars { font-size: 20px; letter-spacing: 4px; color: var(--d27-gold); margin-bottom:8px; }
+
+  .as-tabs { display:flex; gap:8px; flex-wrap:wrap; margin: 24px 0 18px; border-bottom:2px solid var(--line); padding-bottom:0; }
+  .as-tab { background:none; border:none; padding:10px 14px; font-family:var(--font-display); font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); cursor:pointer; border-bottom: 3px solid transparent; margin-bottom:-2px; }
+  .as-tab.active { color:var(--d27-navy); border-bottom-color: var(--d27-red); }
+
+  .as-team { background:var(--surface); border:1px solid var(--line); border-radius:8px; overflow:hidden; margin-bottom:18px; }
+  .as-team-head { background: linear-gradient(90deg, var(--d27-navy), var(--d27-navy-dark)); color:#fff; padding:18px 22px; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; }
+  .as-team-head h3 { font-family:var(--font-display); margin:0; font-size:22px; }
+  .as-team-head .sub { color: rgba(255,255,255,.7); font-size: 12px; letter-spacing:.06em; text-transform:uppercase; margin-top:2px; }
+  .as-team-head .right { display:flex; gap:10px; align-items:center; }
+  .as-chip { background: rgba(201,162,39,.18); border:1px solid rgba(201,162,39,.4); color: var(--d27-gold); padding: 5px 12px; border-radius:4px; font-size: 11px; font-weight: 700; letter-spacing:.06em; text-transform:uppercase; }
+
+  .as-roster { display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1px; background: var(--line); }
+  .as-player { background: var(--surface); padding: 12px 14px; display:flex; gap:10px; align-items:center; }
+  .as-player .num { font-family:var(--font-display); font-weight:700; font-size:22px; color:var(--d27-navy); width:28px; text-align:center; }
+  .as-player .nm { font-weight:700; font-size: 14px; }
+  .as-player .home { color:var(--muted); font-size: 11px; }
+  .as-player .pos { display:inline-block; font-size:10px; font-weight:700; padding:2px 6px; border-radius:3px; background:var(--d27-sub); color:var(--muted); margin-left:6px; }
+
+  .as-coach-row { display:flex; gap:10px; padding: 12px 22px; border-top: 1px dashed var(--line); flex-wrap:wrap; align-items:center; }
+  .as-coach-row strong { color: var(--d27-navy); font-family:var(--font-display); font-size:13px; letter-spacing:.06em; text-transform:uppercase; }
+
+  .as-elig { background: linear-gradient(90deg, rgba(201,162,39,.06), rgba(0,45,114,.04)); border: 1px solid rgba(0,45,114,.12); border-left: 4px solid var(--d27-gold); padding: 14px 18px; border-radius: 6px; margin-bottom: 24px; }
+  .as-elig h4 { margin: 0 0 4px; font-family: var(--font-display); color: var(--d27-navy); font-size: 15px; }
+  .as-elig p { margin:0; font-size:13px; color:var(--muted); line-height:1.55; }
+
+  .as-bracket-tease { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:22px; }
+  .as-bracket-tease h2 { margin:0 0 8px; font-family:var(--font-display); color:var(--d27-navy); }
+  .as-tour { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:12px; margin-top:14px; }
+  .as-stage { padding:12px 14px; background:var(--d27-sub); border-radius:6px; }
+  .as-stage .lvl { font-family:var(--font-display); font-size:11px; font-weight:700; color:var(--d27-red); letter-spacing:.08em; text-transform:uppercase; }
+  .as-stage .nm { font-weight:700; font-size:14px; margin-top:2px; }
+  .as-stage .when { color:var(--muted); font-size:12px; margin-top:4px; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="as-hero">
+  <div class="container">
+    <div class="eyebrow">SUMMER 2026</div>
+    <div class="stars">★ ★ ★ ★ ★</div>
+    <h1>D27 All-Star Tournament Teams</h1>
+    <p>Selected from each chartered league, our All-Star teams represent District 27 in Little League's regional tournament path — Section 8 → State → Mid-Atlantic Region → Williamsport. Rosters confirmed June 1.</p>
+  </div>
+</header>
+
+<main class="container" style="padding: 28px 0 64px;">
+
+  <div class="as-elig">
+    <h4>Eligibility & Residency</h4>
+    <p>Players must reside within their league's chartered boundary as of June 1 and be aged 8–16 (per LL age cutoff Aug 31). Each league may field one team per division. Tournament rules: re-entry not allowed, mandatory play, full pitch-count enforcement (see <a href="pitch-count.html" style="color:var(--d27-navy); font-weight:600;">Pitch Count</a>). All players must have valid residency documentation on file.</p>
+  </div>
+
+  <div class="as-tabs">
+    <button class="as-tab active">Baseball 12U Majors</button>
+    <button class="as-tab">Baseball 11U</button>
+    <button class="as-tab">Baseball 10U</button>
+    <button class="as-tab">Baseball 9U</button>
+    <button class="as-tab">Baseball Intermediate (50/70)</button>
+    <button class="as-tab">Junior League</button>
+    <button class="as-tab">Senior League</button>
+    <button class="as-tab">Softball 12U</button>
+    <button class="as-tab">Softball 10U</button>
+  </div>
+
+  <!-- Sample team 1 -->
+  <div class="as-team">
+    <div class="as-team-head">
+      <div><h3>Berwyn-Paoli 12U All-Stars</h3><div class="sub">Manager: Tom Caldwell · Coaches: Joel Park, Mike Hollis</div></div>
+      <div class="right"><span class="as-chip">★ Defending Section Champ</span><span class="as-chip" style="background:rgba(255,255,255,.12); color:#fff; border-color:rgba(255,255,255,.3);">14 Players</span></div>
+    </div>
+    <div class="as-roster">
+      <div class="as-player"><div class="num">1</div><div><div class="nm">Luke DiSanto<span class="pos">SS/P</span></div><div class="home">BP Red · age 12</div></div></div>
+      <div class="as-player"><div class="num">3</div><div><div class="nm">Cole Ramirez<span class="pos">P/1B</span></div><div class="home">BP Red · age 12</div></div></div>
+      <div class="as-player"><div class="num">7</div><div><div class="nm">Alex Park<span class="pos">CF</span></div><div class="home">BP Blue · age 12</div></div></div>
+      <div class="as-player"><div class="num">9</div><div><div class="nm">Marco Russo<span class="pos">3B</span></div><div class="home">BP Red · age 12</div></div></div>
+      <div class="as-player"><div class="num">10</div><div><div class="nm">Devin Choi<span class="pos">2B</span></div><div class="home">BP Blue · age 11</div></div></div>
+      <div class="as-player"><div class="num">11</div><div><div class="nm">Brendan Wright<span class="pos">C</span></div><div class="home">BP Red · age 12</div></div></div>
+      <div class="as-player"><div class="num">12</div><div><div class="nm">Owen Kowalski<span class="pos">LF/P</span></div><div class="home">BP White · age 12</div></div></div>
+      <div class="as-player"><div class="num">14</div><div><div class="nm">Jack Ryan<span class="pos">P/3B</span></div><div class="home">BP Red · age 12</div></div></div>
+      <div class="as-player"><div class="num">17</div><div><div class="nm">Tate Connors<span class="pos">RF</span></div><div class="home">BP Blue · age 11</div></div></div>
+      <div class="as-player"><div class="num">18</div><div><div class="nm">Ethan Morales<span class="pos">P/CF</span></div><div class="home">BP Red · age 12</div></div></div>
+      <div class="as-player"><div class="num">22</div><div><div class="nm">Max Hollis<span class="pos">P/1B</span></div><div class="home">BP Red · age 12</div></div></div>
+      <div class="as-player"><div class="num">24</div><div><div class="nm">Ben Tran<span class="pos">SS/P</span></div><div class="home">BP White · age 12</div></div></div>
+      <div class="as-player"><div class="num">27</div><div><div class="nm">Ryan O'Connor<span class="pos">C</span></div><div class="home">BP Blue · age 12</div></div></div>
+      <div class="as-player"><div class="num">31</div><div><div class="nm">Sam Patel<span class="pos">UTIL</span></div><div class="home">BP Red · age 11</div></div></div>
+    </div>
+    <div class="as-coach-row">
+      <strong>Practice:</strong> Mon/Wed/Fri 6PM · Field of Dreams F1 &nbsp; <strong>Section opener:</strong> July 6 vs Section 7 champion
+    </div>
+  </div>
+
+  <!-- Sample team 2 -->
+  <div class="as-team">
+    <div class="as-team-head">
+      <div><h3>Methacton 12U All-Stars</h3><div class="sub">Manager: Sam Riccardo · Coaches: David Hartley, Tony Bianchi</div></div>
+      <div class="right"><span class="as-chip" style="background:rgba(255,255,255,.12); color:#fff; border-color:rgba(255,255,255,.3);">13 Players</span></div>
+    </div>
+    <div class="as-roster">
+      <div class="as-player"><div class="num">2</div><div><div class="nm">Miles Hartley<span class="pos">P/SS</span></div><div class="home">Methacton Gold · age 12</div></div></div>
+      <div class="as-player"><div class="num">4</div><div><div class="nm">Ben Kowalski<span class="pos">CF</span></div><div class="home">Methacton Black · age 12</div></div></div>
+      <div class="as-player"><div class="num">5</div><div><div class="nm">Caleb Bianchi<span class="pos">2B</span></div><div class="home">Methacton Gold · age 12</div></div></div>
+      <div class="as-player"><div class="num">6</div><div><div class="nm">Jaxon Pollard<span class="pos">3B</span></div><div class="home">Methacton Black · age 11</div></div></div>
+      <div class="as-player"><div class="num">8</div><div><div class="nm">Theo Velez<span class="pos">P/1B</span></div><div class="home">Methacton Gold · age 12</div></div></div>
+      <div class="as-player"><div class="num">11</div><div><div class="nm">Wyatt Doyle<span class="pos">C</span></div><div class="home">Methacton White · age 12</div></div></div>
+      <div class="as-player"><div class="num">13</div><div><div class="nm">Reece Mahar<span class="pos">RF/P</span></div><div class="home">Methacton Black · age 12</div></div></div>
+      <div class="as-player"><div class="num">15</div><div><div class="nm">Holden Pierce<span class="pos">LF</span></div><div class="home">Methacton Gold · age 11</div></div></div>
+      <div class="as-player"><div class="num">19</div><div><div class="nm">Anders Folks<span class="pos">SS</span></div><div class="home">Methacton White · age 12</div></div></div>
+      <div class="as-player"><div class="num">20</div><div><div class="nm">Ezra Quinn<span class="pos">P/CF</span></div><div class="home">Methacton Gold · age 12</div></div></div>
+      <div class="as-player"><div class="num">21</div><div><div class="nm">Mason Tatu<span class="pos">UTIL</span></div><div class="home">Methacton Black · age 12</div></div></div>
+      <div class="as-player"><div class="num">23</div><div><div class="nm">Henry Lavin<span class="pos">2B/SS</span></div><div class="home">Methacton White · age 11</div></div></div>
+      <div class="as-player"><div class="num">28</div><div><div class="nm">Dom Calabrese<span class="pos">UTIL</span></div><div class="home">Methacton Gold · age 12</div></div></div>
+    </div>
+    <div class="as-coach-row">
+      <strong>Practice:</strong> Tue/Thu/Sat 9AM · Ricketts Sports Complex &nbsp; <strong>Section opener:</strong> July 6 at D27 winner
+    </div>
+  </div>
+
+  <div class="as-team">
+    <div class="as-team-head">
+      <div><h3>Chester Valley 12U All-Stars</h3><div class="sub">Manager: Pat Lynch · Coaches: Jaxon Ruiz Sr., Beck Flynn Sr.</div></div>
+      <div class="right"><span class="as-chip" style="background:rgba(255,255,255,.12); color:#fff; border-color:rgba(255,255,255,.3);">12 Players</span></div>
+    </div>
+    <div class="as-roster">
+      <div class="as-player"><div class="num">1</div><div><div class="nm">Jaxon Ruiz<span class="pos">SS/P</span></div><div class="home">CV Maroon · age 12</div></div></div>
+      <div class="as-player"><div class="num">4</div><div><div class="nm">Sam Roberts<span class="pos">3B</span></div><div class="home">CV Gold · age 12</div></div></div>
+      <div class="as-player"><div class="num">7</div><div><div class="nm">Beckett Flynn<span class="pos">CF/P</span></div><div class="home">CV Maroon · age 12</div></div></div>
+      <div class="as-player"><div class="num">8</div><div><div class="nm">Tyler Morgan<span class="pos">P/1B</span></div><div class="home">CV Black · age 12</div></div></div>
+      <div class="as-player"><div class="num">10</div><div><div class="nm">Eli Goss<span class="pos">C</span></div><div class="home">CV Gold · age 12</div></div></div>
+      <div class="as-player"><div class="num">12</div><div><div class="nm">Marc DiCello<span class="pos">2B</span></div><div class="home">CV Maroon · age 11</div></div></div>
+      <div class="as-player"><div class="num">14</div><div><div class="nm">Quinn Albright<span class="pos">LF</span></div><div class="home">CV Black · age 12</div></div></div>
+      <div class="as-player"><div class="num">16</div><div><div class="nm">Henry Cole<span class="pos">P/SS</span></div><div class="home">CV Gold · age 12</div></div></div>
+      <div class="as-player"><div class="num">19</div><div><div class="nm">Aiden Park<span class="pos">RF</span></div><div class="home">CV Maroon · age 12</div></div></div>
+      <div class="as-player"><div class="num">22</div><div><div class="nm">Noah Garth<span class="pos">UTIL</span></div><div class="home">CV Black · age 12</div></div></div>
+      <div class="as-player"><div class="num">25</div><div><div class="nm">Xander Lee<span class="pos">P/3B</span></div><div class="home">CV Gold · age 12</div></div></div>
+      <div class="as-player"><div class="num">29</div><div><div class="nm">Drew Marlon<span class="pos">UTIL</span></div><div class="home">CV Maroon · age 11</div></div></div>
+    </div>
+    <div class="as-coach-row">
+      <strong>Practice:</strong> Mon/Wed/Sat 5:30PM · Chester Valley Senior Diamond &nbsp; <strong>Section opener:</strong> July 6
+    </div>
+  </div>
+
+  <div class="as-bracket-tease">
+    <h2>The Tournament Path</h2>
+    <p style="color:var(--muted); margin:0;">Summer All-Star teams advance through this gauntlet. D27 sends one champion per age division to Sections.</p>
+    <div class="as-tour">
+      <div class="as-stage"><div class="lvl">June 28</div><div class="nm">D27 Tournament</div><div class="when">Round-robin then bracket · all 12 leagues</div></div>
+      <div class="as-stage"><div class="lvl">July 6–13</div><div class="nm">Section 8</div><div class="when">D27 + D24 + D31 · Springfield host</div></div>
+      <div class="as-stage"><div class="lvl">July 16–22</div><div class="nm">PA State</div><div class="when">8 section champs · Williamsport site</div></div>
+      <div class="as-stage"><div class="lvl">July 27–Aug 5</div><div class="nm">Mid-Atlantic Region</div><div class="when">PA · NY · NJ · DE · DC · MD · Bristol, CT</div></div>
+      <div class="as-stage"><div class="lvl">Aug 13–24</div><div class="nm">Little League World Series</div><div class="when">South Williamsport, PA · ESPN broadcast</div></div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="pitch-count.html">Pitch Count</a></li><li><a href="standings.html">Standings</a></li></ul></div>
+      <div><h5>Resources</h5><ul><li><a href="rules.html">Rules</a></li><li><a href="scholarship.html">Scholarship</a></li><li><a href="all-stars.html">All-Stars</a></li><li><a href="awards.html">Awards</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.as-tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.as-tab').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+}));
+</script>
+
+</body>
+</html>

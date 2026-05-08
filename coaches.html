@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Coach Certification · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .cc-hero { background: linear-gradient(180deg, var(--d27-navy), var(--d27-navy-dark)); color:#fff; padding: 56px 0 36px; border-bottom: 4px solid var(--d27-gold); }
+  .cc-hero h1 { font-family: var(--font-display); font-size: clamp(34px, 5vw, 54px); margin: 0; letter-spacing: -.01em; }
+  .cc-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .cc-hero p { color: rgba(255,255,255,.78); max-width: 60ch; margin: 14px 0 0; }
+
+  .cc-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin: -28px 0 28px; position:relative; z-index:2; }
+  @media (max-width:720px){.cc-stats{grid-template-columns:repeat(2,1fr);}}
+  .cc-stat { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:18px; box-shadow:0 4px 14px rgba(0,0,0,.06); }
+  .cc-stat .n { font-family:var(--font-display); font-size:36px; font-weight:700; line-height:1; }
+  .cc-stat .l { color:var(--muted); font-size:11px; letter-spacing:.08em; text-transform:uppercase; margin-top:4px; display:block; }
+  .cc-stat.green .n { color:#059669; } .cc-stat.warn .n { color:#B45309; } .cc-stat.red .n { color:var(--d27-red); } .cc-stat.navy .n { color:var(--d27-navy); }
+
+  .cc-card { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:22px; margin-bottom:18px; }
+  .cc-card h2 { font-family:var(--font-display); margin:0 0 14px; color:var(--d27-navy); font-size:22px; }
+
+  .cc-banner { background: linear-gradient(90deg, rgba(218,41,28,.06), rgba(201,162,39,.04)); border:1px solid rgba(218,41,28,.18); border-left: 4px solid var(--d27-red); border-radius:6px; padding:14px 18px; margin-bottom:18px; }
+  .cc-banner h4 { margin:0 0 4px; font-family:var(--font-display); color:var(--d27-red); }
+  .cc-banner p { margin:0; font-size:13px; color:var(--muted); }
+
+  .cc-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .cc-table th { background: var(--d27-navy); color:#fff; padding: 10px 12px; text-align:left; font-family:var(--font-display); letter-spacing:.04em; font-size:12px; text-transform:uppercase; }
+  .cc-table th:first-child { border-radius: 6px 0 0 0; }
+  .cc-table th:last-child { border-radius: 0 6px 0 0; }
+  .cc-table td { padding: 11px 12px; border-bottom: 1px solid var(--line); }
+  .cc-table tr:hover td { background: rgba(0,45,114,.02); }
+  .cc-table .nm { font-weight:700; color: var(--d27-ink); }
+  .cc-table .nm small { display:block; color:var(--muted); font-weight:500; font-size:11px; }
+  .cc-cell { display:flex; flex-direction:column; gap:1px; align-items:flex-start; }
+  .cc-pill { font-size:10px; font-weight:700; padding:2px 8px; border-radius:3px; letter-spacing:.04em; text-transform:uppercase; }
+  .cc-pill.ok { background:#ECFDF5; color:#059669; }
+  .cc-pill.warn { background:#FEF3C7; color:#B45309; }
+  .cc-pill.expired { background:#FEE2E2; color:var(--d27-red); }
+  .cc-pill.missing { background:var(--d27-sub); color:var(--muted); }
+  .cc-cell .when { font-size:10px; color:var(--muted); margin-top:2px; }
+
+  .cc-cols { display: grid; grid-template-columns: 1fr 320px; gap:24px; }
+  @media (max-width:980px){ .cc-cols { grid-template-columns:1fr; } }
+  .cc-side h3 { margin: 0 0 10px; font-family: var(--font-display); color:var(--d27-navy); font-size: 15px; letter-spacing:.04em; text-transform:uppercase; }
+  .cc-side .cc-card p { font-size: 13px; color: var(--muted); margin: 0 0 8px; line-height: 1.55; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="cc-hero">
+  <div class="container">
+    <div class="eyebrow">D27 OPERATIONS · COMPLIANCE</div>
+    <h1>Coach Certification Status</h1>
+    <p>District-wide tracking of every required certification for managers, coaches, and team parents — replacing 12 separate spreadsheets with one source of truth. Auto-flag 30 days before lapse.</p>
+  </div>
+</header>
+
+<main class="container" style="padding: 0 0 64px;">
+
+  <div class="cc-stats">
+    <div class="cc-stat green"><div class="n">214</div><span class="l">Coaches Fully Certified</span></div>
+    <div class="cc-stat warn"><div class="n">18</div><span class="l">Expiring &lt; 30 Days</span></div>
+    <div class="cc-stat red"><div class="n">5</div><span class="l">Lapsed · Action Required</span></div>
+    <div class="cc-stat navy"><div class="n">237</div><span class="l">Total Active Coaches</span></div>
+  </div>
+
+  <div class="cc-cols">
+    <div>
+
+      <div class="cc-banner">
+        <h4>5 coaches lapsed — they cannot enter dugout until renewed</h4>
+        <p>Background check or Safesport expired. Auto-emailed yesterday. Mass remind →</p>
+      </div>
+
+      <div class="cc-card">
+        <h2>Coaches & Volunteers</h2>
+        <p style="color:var(--muted); font-size:13px; margin:0 0 14px;">Filter: <a href="#" style="color:var(--d27-navy); font-weight:600;">All Leagues</a> · <a href="#" style="color:var(--d27-navy); font-weight:600;">Lapsed Only</a> · <a href="#" style="color:var(--d27-navy); font-weight:600;">Expiring Soon</a> · <a href="#" style="color:var(--d27-navy); font-weight:600;">By Role</a></p>
+        <div style="overflow-x:auto;">
+        <table class="cc-table">
+          <thead>
+            <tr><th>Coach</th><th>Role · League</th><th>Background</th><th>Safesport</th><th>Concussion</th><th>Heads Up</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="nm">Tom Caldwell <small>BP Red 12U Manager</small></div></td>
+              <td>Manager · BP</td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Cleared</span><span class="when">exp 2027-03</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-02</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-04</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-04</span></div></td>
+              <td><span class="cc-pill ok">Eligible</span></td>
+            </tr>
+            <tr>
+              <td><div class="nm">Joel Park <small>BP Red 12U Coach</small></div></td>
+              <td>Coach · BP</td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Cleared</span><span class="when">exp 2026-11</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill warn">Expires 14d</span><span class="when">exp 2026-05-18</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-01</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-01</span></div></td>
+              <td><span class="cc-pill warn">Action Soon</span></td>
+            </tr>
+            <tr>
+              <td><div class="nm">Sam Riccardo <small>Methacton 12U Manager</small></div></td>
+              <td>Manager · Methacton</td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Cleared</span><span class="when">exp 2027-08</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-06</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-06</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-06</span></div></td>
+              <td><span class="cc-pill ok">Eligible</span></td>
+            </tr>
+            <tr>
+              <td><div class="nm">Pat Lynch <small>CV Maroon Manager</small></div></td>
+              <td>Manager · Chester Valley</td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Cleared</span><span class="when">exp 2027-04</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-04</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-04</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-04</span></div></td>
+              <td><span class="cc-pill ok">Eligible</span></td>
+            </tr>
+            <tr>
+              <td><div class="nm">Mike Hollis <small>BP Red 12U Coach</small></div></td>
+              <td>Coach · BP</td>
+              <td><div class="cc-cell"><span class="cc-pill expired">Lapsed 22d</span><span class="when">exp 2026-04-12</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-02</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-03</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-03</span></div></td>
+              <td><span class="cc-pill expired">Suspended</span></td>
+            </tr>
+            <tr>
+              <td><div class="nm">Carlos Reyes <small>Penn Wood Manager</small></div></td>
+              <td>Manager · Penn Wood</td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Cleared</span><span class="when">exp 2027-09</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill warn">Expires 27d</span><span class="when">exp 2026-05-31</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-05</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-05</span></div></td>
+              <td><span class="cc-pill warn">Action Soon</span></td>
+            </tr>
+            <tr>
+              <td><div class="nm">David Hartley <small>Methacton 12U Coach</small></div></td>
+              <td>Coach · Methacton</td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Cleared</span><span class="when">exp 2027-07</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-06</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-08</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-08</span></div></td>
+              <td><span class="cc-pill ok">Eligible</span></td>
+            </tr>
+            <tr>
+              <td><div class="nm">Brian O'Halloran <small>Springfield Manager</small></div></td>
+              <td>Manager · Springfield</td>
+              <td><div class="cc-cell"><span class="cc-pill expired">Lapsed 8d</span><span class="when">exp 2026-04-26</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-01</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-01</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-01</span></div></td>
+              <td><span class="cc-pill expired">Suspended</span></td>
+            </tr>
+            <tr>
+              <td><div class="nm">Jenny Albright <small>CV Maroon Team Parent</small></div></td>
+              <td>Team Parent · CV</td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Cleared</span><span class="when">exp 2027-03</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill ok">Done</span><span class="when">exp 2027-03</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill missing">N/A</span><span class="when">role exempt</span></div></td>
+              <td><div class="cc-cell"><span class="cc-pill missing">N/A</span><span class="when">role exempt</span></div></td>
+              <td><span class="cc-pill ok">Eligible</span></td>
+            </tr>
+            <tr>
+              <td><div class="nm">+228 more</div></td>
+              <td colspan="6" style="color:var(--muted);">Click any column header to sort. Filter by league, status, or expiration window.</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+
+      <div class="cc-card">
+        <h2>Required Certifications · Quick Reference</h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:14px; font-size:13px; color:var(--muted);">
+          <div><b style="color:var(--d27-navy); display:block; margin-bottom:4px; font-family:var(--font-display);">Background Check</b>JDP / NCSI nationwide. Required annually for any adult in dugout or with player access.</div>
+          <div><b style="color:var(--d27-navy); display:block; margin-bottom:4px; font-family:var(--font-display);">Safesport / Abuse Awareness</b>Free online module. ~30 min. Required annually per LL Reg I(c).</div>
+          <div><b style="color:var(--d27-navy); display:block; margin-bottom:4px; font-family:var(--font-display);">Concussion Awareness</b>PA Safety in Youth Sports Act. Required for all coaches before season.</div>
+          <div><b style="color:var(--d27-navy); display:block; margin-bottom:4px; font-family:var(--font-display);">CDC Heads Up</b>Companion concussion training. CDC-issued certificate, 3-year cycle.</div>
+          <div><b style="color:var(--d27-navy); display:block; margin-bottom:4px; font-family:var(--font-display);">First Aid / CPR</b>Recommended; required for tournament dugouts. 2-year cycle.</div>
+          <div><b style="color:var(--d27-navy); display:block; margin-bottom:4px; font-family:var(--font-display);">Coaching Education</b>Optional unless tournament — Diamond Leader / ABCA module.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <aside class="cc-side" style="display:flex; flex-direction:column; gap:18px;">
+      <div class="cc-card">
+        <h3>Quick Actions</h3>
+        <button onclick="alert('Demo — emails reminders to all 18 coaches expiring &lt; 30 days')" style="background:var(--d27-navy); color:#fff; border:none; padding:10px; border-radius:5px; font-weight:700; cursor:pointer; width:100%; font-size:13px;">📣 Remind 18 Expiring</button>
+        <button onclick="alert('Demo — generates LL roster eligibility PDF for tournament check-in')" style="background:var(--surface); border:1px solid var(--d27-navy); color:var(--d27-navy); padding:10px; border-radius:5px; font-weight:700; cursor:pointer; width:100%; font-size:13px; margin-top:8px;">📄 Tournament Eligibility PDF</button>
+        <button onclick="alert('Demo — bulk import certs from JDP/NCSI export')" style="background:var(--surface); border:1px solid var(--line); color:var(--muted); padding:10px; border-radius:5px; font-weight:700; cursor:pointer; width:100%; font-size:13px; margin-top:8px;">⤓ Import JDP Export</button>
+      </div>
+      <div class="cc-card">
+        <h3>Why this matters</h3>
+        <p>Little League International audits chartered districts annually. A single uncleared coach in the dugout during a sanctioned game can void insurance, force forfeit, and trigger LL revocation. Spreadsheet tracking misses lapses.</p>
+      </div>
+      <div class="cc-card">
+        <h3>League Submission</h3>
+        <p>Each league president sees only their own coaches. They submit cert renewals here; D27 admin sees aggregate compliance and audit-ready reports.</p>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="pitch-count.html">Pitch Count</a></li><li><a href="standings.html">Standings</a></li></ul></div>
+      <div><h5>Resources</h5><ul><li><a href="rules.html">Rules</a></li><li><a href="scholarship.html">Scholarship</a></li><li><a href="all-stars.html">All-Stars</a></li><li><a href="awards.html">Awards</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+</body>
+</html>

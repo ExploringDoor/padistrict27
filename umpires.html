@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Umpire Portal · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .u-hero { background: linear-gradient(180deg, var(--d27-navy), var(--d27-navy-dark)); color:#fff; padding: 56px 0 36px; border-bottom: 4px solid var(--d27-gold); }
+  .u-hero h1 { font-family: var(--font-display); font-size: clamp(34px, 5vw, 54px); margin: 0; letter-spacing: -.01em; }
+  .u-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .u-hero p { color: rgba(255,255,255,.78); max-width: 60ch; margin: 14px 0 0; }
+
+  .u-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin: -28px 0 28px; position:relative; z-index:2; }
+  @media (max-width:720px){.u-stats{grid-template-columns:repeat(2,1fr);}}
+  .u-stat { background: var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px; box-shadow:0 4px 14px rgba(0,0,0,.05); }
+  .u-stat .n { font-family:var(--font-display); font-size:34px; line-height:1; font-weight:700; color: var(--d27-navy); }
+  .u-stat .l { color:var(--muted); font-size:11px; letter-spacing:.08em; text-transform:uppercase; margin-top:4px; display:block; }
+
+  .u-cols { display:grid; grid-template-columns: 1fr 380px; gap:24px; }
+  @media (max-width: 980px){ .u-cols { grid-template-columns: 1fr; } }
+
+  .u-card { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:20px; margin-bottom:18px; }
+  .u-card h2 { font-family:var(--font-display); margin:0 0 12px; color:var(--d27-navy); font-size:22px; }
+  .u-card h3 { font-family:var(--font-display); margin: 18px 0 10px; color:var(--d27-navy); font-size:16px; letter-spacing:.04em; text-transform:uppercase; }
+
+  .u-cal { display:grid; grid-template-columns: repeat(7, 1fr); gap:6px; margin-top:8px; }
+  .u-cal .head { font-size:11px; color:var(--muted); text-align:center; padding:4px 0; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+  .u-cal .day { aspect-ratio: 1.1; border:1px solid var(--line); border-radius:5px; padding:6px; cursor:pointer; transition: all .15s; background: var(--surface); position:relative; }
+  .u-cal .day:hover { border-color:var(--d27-navy); }
+  .u-cal .day .d { font-family:var(--font-display); font-weight:600; font-size:14px; color:var(--d27-ink); }
+  .u-cal .day .g { font-size:10px; color:var(--muted); margin-top:2px; }
+  .u-cal .day.avail { background: rgba(16,185,129,.08); border-color: rgba(16,185,129,.4); }
+  .u-cal .day.avail .d { color:#059669; }
+  .u-cal .day.assigned { background: rgba(0,45,114,.06); border-color: rgba(0,45,114,.5); }
+  .u-cal .day.assigned::after { content: '⚾'; position:absolute; bottom:4px; right:5px; font-size:11px; }
+  .u-cal .day.unavail { background:#FEE2E2; border-color:rgba(218,41,28,.4); opacity:.7; }
+  .u-cal .day.unavail .d { color:var(--d27-red); text-decoration: line-through; }
+  .u-cal .day.muted { background: var(--d27-sub); opacity:.5; }
+
+  .u-leg { display:flex; gap:14px; flex-wrap:wrap; margin-top:14px; font-size:12px; color:var(--muted); }
+  .u-leg span::before { content:''; display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:6px; vertical-align:middle; }
+  .u-leg .a::before { background: rgba(16,185,129,.4); }
+  .u-leg .b::before { background: rgba(0,45,114,.5); }
+  .u-leg .c::before { background: rgba(218,41,28,.4); }
+
+  .u-list { display:flex; flex-direction:column; gap:10px; }
+  .u-row { display:flex; align-items:center; gap:12px; padding:10px 12px; border:1px solid var(--line); border-radius:6px; background:var(--surface); }
+  .u-row .av { width:38px; height:38px; border-radius:50%; background:var(--d27-navy); color:#fff; display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:14px; }
+  .u-row .meta { flex:1; }
+  .u-row .meta .nm { font-weight:700; }
+  .u-row .meta .sub { font-size:12px; color:var(--muted); }
+  .u-row .chip { font-size:11px; padding:3px 8px; border-radius:4px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
+  .u-row .chip.cert3 { background:#EDE9FE; color:#6D28D9; }
+  .u-row .chip.cert2 { background:#DBEAFE; color:#1E40AF; }
+  .u-row .chip.cert1 { background:#F3F4F6; color:var(--muted); }
+
+  .u-game { display:grid; grid-template-columns: 90px 1fr auto; gap:14px; align-items:center; padding:12px; border:1px solid var(--line); border-radius:6px; margin-bottom:8px; }
+  .u-game .when { font-family:var(--font-display); }
+  .u-game .when .d { font-size:18px; font-weight:700; color:var(--d27-navy); }
+  .u-game .when .t { font-size:12px; color:var(--muted); }
+  .u-game .who .mu { font-weight:700; }
+  .u-game .who .meta { font-size:12px; color:var(--muted); }
+  .u-game .ump { display:flex; gap:6px; align-items:center; }
+  .u-game .ump-pill { background: rgba(0,45,114,.06); border:1px solid rgba(0,45,114,.18); border-radius:999px; padding:4px 10px; font-size:11px; font-weight:600; color:var(--d27-navy); }
+  .u-game .ump-pill.empty { background:#FEE2E2; color:var(--d27-red); border-color:rgba(218,41,28,.3); }
+
+  .u-banner { background: linear-gradient(90deg, rgba(218,41,28,.06), rgba(201,162,39,.04)); border:1px solid rgba(218,41,28,.18); border-left: 4px solid var(--d27-red); border-radius:6px; padding:14px 18px; margin-bottom:16px; }
+  .u-banner h4 { margin:0 0 4px; font-family:var(--font-display); color:var(--d27-red); font-size: 15px; }
+  .u-banner p { margin:0; font-size:13px; color:var(--muted); }
+
+  .u-side .u-card { padding:16px; }
+  .u-side .u-card h3 { margin-top: 0; }
+  .u-tip { padding:12px; background:var(--d27-sub); border-radius:6px; font-size:13px; line-height:1.5; }
+  .u-btn { background:var(--d27-navy); color:#fff; border:none; padding:10px 16px; border-radius:5px; font-weight:700; cursor:pointer; width:100%; font-size:13px; letter-spacing:.04em; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="u-hero">
+  <div class="container">
+    <div class="eyebrow">D27 OPERATIONS</div>
+    <h1>Umpire Portal</h1>
+    <p>Availability calendar, assignment board, and certification roster for D27's volunteer umpire pool. Replace the group-text scramble with a real scheduling system.</p>
+  </div>
+</header>
+
+<main class="container" style="padding: 0 0 64px;">
+
+  <div class="u-stats">
+    <div class="u-stat"><div class="n">42</div><span class="l">Active Umpires</span></div>
+    <div class="u-stat"><div class="n">28</div><span class="l">Available This Wk</span></div>
+    <div class="u-stat"><div class="n">14</div><span class="l">Games Need Coverage</span></div>
+    <div class="u-stat"><div class="n">3</div><span class="l">Certified Plate · Bases · Tournament</span></div>
+  </div>
+
+  <div class="u-cols">
+    <div>
+
+      <div class="u-banner">
+        <h4>3 games still need a plate umpire this Saturday (Jun 21)</h4>
+        <p>Auto-assignment couldn't find certified umps. Send broadcast or post to D27 ump board to fill.</p>
+      </div>
+
+      <div class="u-card">
+        <h2>Availability · June 2026</h2>
+        <p style="color:var(--muted); margin:0 0 12px; font-size:13px;">Click any day to toggle your status. Assignments show as ⚾.</p>
+        <div class="u-cal">
+          <div class="head">Sun</div><div class="head">Mon</div><div class="head">Tue</div><div class="head">Wed</div><div class="head">Thu</div><div class="head">Fri</div><div class="head">Sat</div>
+          <div class="day muted"><div class="d">31</div></div>
+          <div class="day"><div class="d">1</div></div>
+          <div class="day avail"><div class="d">2</div><div class="g">avail</div></div>
+          <div class="day avail"><div class="d">3</div><div class="g">avail</div></div>
+          <div class="day assigned"><div class="d">4</div><div class="g">BB-12 SF</div></div>
+          <div class="day"><div class="d">5</div></div>
+          <div class="day assigned"><div class="d">6</div><div class="g">2 games</div></div>
+          <div class="day unavail"><div class="d">7</div><div class="g">vacation</div></div>
+          <div class="day unavail"><div class="d">8</div><div class="g">vacation</div></div>
+          <div class="day unavail"><div class="d">9</div><div class="g">vacation</div></div>
+          <div class="day unavail"><div class="d">10</div><div class="g">vacation</div></div>
+          <div class="day unavail"><div class="d">11</div><div class="g">vacation</div></div>
+          <div class="day"><div class="d">12</div></div>
+          <div class="day avail"><div class="d">13</div><div class="g">avail</div></div>
+          <div class="day"><div class="d">14</div></div>
+          <div class="day avail"><div class="d">15</div><div class="g">avail</div></div>
+          <div class="day avail"><div class="d">16</div><div class="g">avail</div></div>
+          <div class="day assigned"><div class="d">17</div><div class="g">SB-12</div></div>
+          <div class="day"><div class="d">18</div></div>
+          <div class="day assigned"><div class="d">19</div><div class="g">BJ QF</div></div>
+          <div class="day assigned"><div class="d">20</div><div class="g">BJ SF</div></div>
+          <div class="day assigned"><div class="d">21</div><div class="g">BJ Final</div></div>
+          <div class="day avail"><div class="d">22</div><div class="g">avail</div></div>
+          <div class="day"><div class="d">23</div></div>
+          <div class="day avail"><div class="d">24</div><div class="g">avail</div></div>
+          <div class="day"><div class="d">25</div></div>
+          <div class="day"><div class="d">26</div></div>
+          <div class="day avail"><div class="d">27</div><div class="g">avail</div></div>
+          <div class="day avail"><div class="d">28</div><div class="g">avail</div></div>
+          <div class="day"><div class="d">29</div></div>
+          <div class="day"><div class="d">30</div></div>
+        </div>
+        <div class="u-leg">
+          <span class="a">Available</span><span class="b">Assigned</span><span class="c">Blocked</span>
+        </div>
+      </div>
+
+      <div class="u-card">
+        <h2>Saturday's Assignments · Jun 21</h2>
+
+        <div class="u-game">
+          <div class="when"><div class="d">10:00</div><div class="t">AM</div></div>
+          <div class="who"><div class="mu">BB-10 (Pappy Patton) · QF1</div><div class="meta">Penn Wood vs. Lower Merion · Penn Wood F1</div></div>
+          <div class="ump"><span class="ump-pill">Plate · Torres</span><span class="ump-pill">Bases · Rivera</span></div>
+        </div>
+
+        <div class="u-game">
+          <div class="when"><div class="d">12:30</div><div class="t">PM</div></div>
+          <div class="who"><div class="mu">SB-12 · QF2</div><div class="meta">Methacton vs. Marple · Ricketts SB</div></div>
+          <div class="ump"><span class="ump-pill">Plate · Connors</span><span class="ump-pill">Bases · Torres</span></div>
+        </div>
+
+        <div class="u-game">
+          <div class="when"><div class="d">3:00</div><div class="t">PM</div></div>
+          <div class="who"><div class="mu">BB-12 (Bob Jones) · QF3</div><div class="meta">Berwyn-Paoli vs. Pottstown · Field of Dreams</div></div>
+          <div class="ump"><span class="ump-pill">Plate · Marsh</span><span class="ump-pill empty">Bases · NEEDED</span></div>
+        </div>
+
+        <div class="u-game">
+          <div class="when"><div class="d">5:30</div><div class="t">PM</div></div>
+          <div class="who"><div class="mu">BB-12 (Bob Jones) · QF4</div><div class="meta">Chester Valley vs. Lower Perk · Lower Merion F3</div></div>
+          <div class="ump"><span class="ump-pill empty">Plate · NEEDED</span><span class="ump-pill empty">Bases · NEEDED</span></div>
+        </div>
+      </div>
+
+      <div class="u-card">
+        <h2>Active Umpire Roster</h2>
+
+        <div class="u-list">
+          <div class="u-row"><div class="av">RT</div><div class="meta"><div class="nm">Ricky Torres</div><div class="sub">Marple Newtown · 12 yrs · 87 games</div></div><span class="chip cert3">Plate · Bases · Tourney</span></div>
+          <div class="u-row"><div class="av">JR</div><div class="meta"><div class="nm">Joel Rivera</div><div class="sub">Penn Wood · 6 yrs · 41 games</div></div><span class="chip cert2">Plate · Bases</span></div>
+          <div class="u-row"><div class="av">DM</div><div class="meta"><div class="nm">Don Marsh</div><div class="sub">Lower Perkiomen · 18 yrs · 142 games</div></div><span class="chip cert3">Plate · Bases · Tourney</span></div>
+          <div class="u-row"><div class="av">PC</div><div class="meta"><div class="nm">Pat Connors</div><div class="sub">Berwyn-Paoli · 9 yrs · 64 games</div></div><span class="chip cert3">Plate · Bases · Tourney</span></div>
+          <div class="u-row"><div class="av">SS</div><div class="meta"><div class="nm">Steve Sokol</div><div class="sub">Methacton · 4 yrs · 22 games</div></div><span class="chip cert2">Plate · Bases</span></div>
+          <div class="u-row"><div class="av">BR</div><div class="meta"><div class="nm">Brian Reilly</div><div class="sub">Chester Valley · 2 yrs · 11 games</div></div><span class="chip cert1">Bases</span></div>
+          <div class="u-row"><div class="av">+36</div><div class="meta"><div class="nm">36 more umpires</div><div class="sub">Filter by league, certification, or availability →</div></div><span class="chip cert1">View All</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <aside class="u-side">
+      <div class="u-card">
+        <h3>Quick Actions</h3>
+        <button class="u-btn" onclick="alert('Demo — broadcasts to all certified plate umps available Saturday')">📣 Broadcast: Need Plate Saturday</button>
+        <button class="u-btn" style="background:var(--d27-red); margin-top:8px;" onclick="alert('Demo — runs auto-assignment based on availability + certification + travel distance')">⚙ Auto-Assign Open Games</button>
+        <button class="u-btn" style="background:var(--surface); color:var(--d27-navy); border:1px solid var(--d27-navy); margin-top:8px;" onclick="alert('Demo — exports next 30 days of assignments as PDF')">📄 Export Schedule PDF</button>
+      </div>
+
+      <div class="u-card">
+        <h3>This Season</h3>
+        <div class="u-tip"><b>314</b> games scheduled · <b>289</b> covered (92%) · <b>25</b> open · <b>6</b> tournament-cert needed for Bob Jones SF/F</div>
+      </div>
+
+      <div class="u-card">
+        <h3>Pay & Volunteer Hours</h3>
+        <div class="u-tip">Track per-game stipends, mileage reimbursement, and volunteer-hours credit for high-school students working summer ball.</div>
+      </div>
+
+      <div class="u-card">
+        <h3>Cert Tracker</h3>
+        <div class="u-tip">Background check expiration · Safesport renewal · Concussion module · Plate-mech clinic attendance. Auto-flag 30 days before lapse.</div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="pitch-count.html">Pitch Count</a></li><li><a href="standings.html">Standings</a></li></ul></div>
+      <div><h5>Resources</h5><ul><li><a href="rules.html">Rules</a></li><li><a href="scholarship.html">Scholarship</a></li><li><a href="all-stars.html">All-Stars</a></li><li><a href="awards.html">Awards</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.u-cal .day').forEach(d => {
+  if (d.classList.contains('muted')) return;
+  d.addEventListener('click', () => {
+    if (d.classList.contains('assigned')) return;
+    if (d.classList.contains('avail')) { d.classList.remove('avail'); d.classList.add('unavail'); d.querySelector('.g')?.remove(); const g = document.createElement('div'); g.className='g'; g.textContent='blocked'; d.appendChild(g); }
+    else if (d.classList.contains('unavail')) { d.classList.remove('unavail'); d.querySelector('.g')?.remove(); }
+    else { d.classList.add('avail'); const g = document.createElement('div'); g.className='g'; g.textContent='avail'; d.appendChild(g); }
+  });
+});
+</script>
+
+</body>
+</html>
