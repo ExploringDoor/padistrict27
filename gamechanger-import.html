@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>GameChanger PDF Import · D27 Phase 1 Mock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  body { background: var(--d27-paper); }
+  .gc-banner { background: var(--d27-gold); color: var(--d27-navy); padding: 8px 0; text-align: center; font-family: var(--font-display); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
+  .gc-banner a { color: var(--d27-navy); }
+
+  .gc-shell { max-width: 1080px; margin: 32px auto; padding: 0 20px; }
+  .gc-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 14px; }
+  .gc-head h1 { font-family: var(--font-display); margin: 0; color: var(--d27-navy); font-size: 28px; }
+  .gc-head .stamp { font-family: var(--font-display); font-size: 11px; color: var(--muted); letter-spacing: .12em; text-transform: uppercase; }
+
+  .gc-stage { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 28px; margin-bottom: 18px; display: none; }
+  .gc-stage.active { display: block; animation: fadeIn .3s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .gc-stage h2 { font-family: var(--font-display); margin: 0 0 4px; color: var(--d27-navy); font-size: 22px; }
+  .gc-stage .lead { color: var(--muted); margin: 0 0 18px; font-size: 14px; line-height: 1.6; }
+
+  /* Drop zone */
+  .gc-drop { border: 3px dashed var(--d27-line); border-radius: 12px; padding: 60px 24px; text-align: center; transition: all .2s; cursor: pointer; background: rgba(0,45,114,.02); }
+  .gc-drop:hover, .gc-drop.dragover { border-color: var(--d27-navy); background: rgba(0,45,114,.04); transform: scale(1.005); }
+  .gc-drop .ico { font-size: 56px; margin-bottom: 12px; }
+  .gc-drop h3 { font-family: var(--font-display); margin: 0 0 6px; color: var(--d27-navy); font-size: 22px; }
+  .gc-drop p { margin: 0; color: var(--muted); font-size: 13px; }
+  .gc-drop .or { color: var(--muted); font-size: 12px; margin: 14px 0 6px; }
+  .gc-drop .file-btn { background: var(--d27-navy); color: #fff; border: none; padding: 10px 22px; border-radius: 5px; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+
+  /* Processing */
+  .gc-processing { padding: 40px 0; }
+  .gc-spinner { width: 64px; height: 64px; border: 4px solid var(--d27-line); border-top-color: var(--d27-navy); border-radius: 50%; margin: 0 auto 18px; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .gc-log { background: #0F172A; color: #F1F5F9; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 18px; border-radius: 8px; margin: 18px 0; line-height: 1.7; max-height: 260px; overflow-y: auto; }
+  .gc-log .ok { color: #34D399; }
+  .gc-log .info { color: #60A5FA; }
+  .gc-log .warn { color: #FCD34D; }
+  .gc-log .err { color: #F87171; }
+  .gc-log .ts { color: #64748B; }
+
+  /* Review */
+  .gc-review { display: grid; grid-template-columns: 1.4fr 1fr; gap: 22px; }
+  @media (max-width: 880px) { .gc-review { grid-template-columns: 1fr; } }
+
+  .gc-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; margin-bottom: 14px; }
+  .gc-card h4 { font-family: var(--font-display); margin: 0 0 10px; color: var(--d27-navy); font-size: 14px; letter-spacing: .04em; text-transform: uppercase; }
+
+  .gc-line { display: grid; grid-template-columns: 90px 1fr 70px 70px; gap: 10px; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: 13px; }
+  .gc-line:last-child { border-bottom: 0; }
+  .gc-line.head { font-family: var(--font-display); color: var(--muted); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; }
+  .gc-line .nm { font-weight: 700; }
+  .gc-line .right { text-align: right; }
+  .gc-line .dim { color: var(--muted); }
+
+  .gc-pitcher { display: grid; grid-template-columns: 30px 1fr 60px 70px; gap: 10px; padding: 6px 0; font-size: 13px; }
+  .gc-pitcher.head { font-family: var(--font-display); color: var(--muted); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; }
+
+  .gc-flag { background: linear-gradient(90deg, rgba(245,158,11,.08), transparent); border: 1px solid rgba(245,158,11,.3); border-left: 4px solid #F59E0B; padding: 12px 16px; border-radius: 6px; margin-bottom: 10px; font-size: 13px; }
+  .gc-flag b { color: #B45309; font-family: var(--font-display); }
+  .gc-flag.ok { background: linear-gradient(90deg, rgba(16,185,129,.05), transparent); border-color: rgba(16,185,129,.25); border-left-color: #10B981; }
+  .gc-flag.ok b { color: #059669; }
+
+  .gc-actions { display: flex; gap: 10px; flex-wrap: wrap; padding-top: 14px; border-top: 1px solid var(--line); margin-top: 14px; }
+  .gc-btn { background: var(--d27-navy); color: #fff; border: none; padding: 10px 18px; border-radius: 5px; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+  .gc-btn.ghost { background: var(--surface); color: var(--d27-navy); border: 1px solid var(--d27-navy); }
+  .gc-btn.success { background: #10B981; }
+
+  .gc-tech { background: linear-gradient(90deg, rgba(0,45,114,.04), transparent); border: 1px solid rgba(0,45,114,.12); border-left: 4px solid var(--d27-navy); padding: 14px 18px; border-radius: 6px; font-size: 13px; color: var(--muted); line-height: 1.65; margin-top: 14px; }
+  .gc-tech b { color: var(--d27-navy); font-family: var(--font-display); }
+  .gc-tech code { background: rgba(0,45,114,.08); padding: 1px 6px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--d27-navy); }
+</style>
+</head>
+<body>
+
+<div class="gc-banner">
+  PHASE 1 PRODUCTION MOCK · GameChanger PDF → published box score in 30 seconds · <a href="roadmap.html">Back to Roadmap</a>
+</div>
+
+<div class="gc-shell">
+
+  <div class="gc-head">
+    <div>
+      <h1>GameChanger Import</h1>
+      <p class="stamp">CAPTAIN PORTAL · TOM CALDWELL · BP RED 12U</p>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <span style="color: var(--muted); font-size: 13px;">Other entry methods:</span>
+      <button class="gc-btn ghost" onclick="alert('Demo — switches to live scoring console')">⚾ Live Scoring</button>
+      <button class="gc-btn ghost" onclick="alert('Demo — manual box score form')">📝 Manual Entry</button>
+    </div>
+  </div>
+
+  <!-- Stage 1: Upload -->
+  <div class="gc-stage active" id="stage-1">
+    <h2>Upload GameChanger PDF</h2>
+    <p class="lead">Drop the GameChanger PDF you exported after the game. We'll parse the box score, pitch counts, and stats — then ask you to confirm before publishing to D27.</p>
+
+    <div class="gc-drop" id="drop" onclick="processFile()">
+      <div class="ico">📄</div>
+      <h3>Drop your PDF here</h3>
+      <p>or paste a GameChanger share link</p>
+      <div class="or">— or —</div>
+      <button class="file-btn" onclick="event.stopPropagation(); processFile()">Browse Files</button>
+    </div>
+
+    <div class="gc-tech">
+      <b>What happens next:</b> PDF uploaded to Firebase Storage · OCR via <code>pdf.js</code> + <code>Vision API</code> · structured data extracted (lineup, plays, pitchers, scores) · cross-checked against pitch-count rules · diff'd against opponent's submission for discrepancies · routed to admin <a href="admin.html#disputes" style="color: var(--d27-navy); font-weight: 600;">Score Discrepancy Inbox</a> if mismatch.
+    </div>
+  </div>
+
+  <!-- Stage 2: Processing -->
+  <div class="gc-stage" id="stage-2">
+    <h2>Parsing PDF...</h2>
+    <p class="lead">Just a moment — extracting box score and validating against rules.</p>
+
+    <div class="gc-processing">
+      <div class="gc-spinner"></div>
+      <div style="text-align: center;">
+        <div style="font-family: var(--font-display); color: var(--d27-navy); font-size: 18px;" id="proc-step">Extracting plays...</div>
+        <div style="color: var(--muted); font-size: 13px; margin-top: 4px;" id="proc-sub">Pitch 47 of 89</div>
+      </div>
+    </div>
+
+    <div class="gc-log" id="log"></div>
+  </div>
+
+  <!-- Stage 3: Review -->
+  <div class="gc-stage" id="stage-3">
+    <h2>Review &amp; Publish</h2>
+    <p class="lead">We extracted everything from the PDF. Confirm the box score below — or edit any field. Then publish to D27.</p>
+
+    <div class="gc-flag ok">
+      <b>✓ Parsed clean</b> — 89 pitches, 7 innings, 18 plays, 0 errors detected. Pitch counts validated against LL 12U rules. Auto-affidavit ready.
+    </div>
+
+    <div class="gc-flag">
+      <b>⚠ One flag for your review</b> — Jack Ryan (#14) threw 41 pitches today. He last pitched 2 days ago for 38 P. Per LL rule, that requires 2 days rest — exactly met. Logging as compliant. <a href="pitch-count.html" style="color: var(--d27-navy); font-weight: 600;">View pitch count log →</a>
+    </div>
+
+    <div class="gc-review">
+      <div>
+        <div class="gc-card">
+          <h4>Final Score</h4>
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 14px 0;">
+            <div style="text-align: center; flex: 1;">
+              <div style="font-family: var(--font-display); font-size: 14px; color: var(--muted); letter-spacing: .04em;">BP RED 12U</div>
+              <div style="font-family: var(--font-display); font-size: 38px; font-weight: 700; color: var(--d27-navy);">12</div>
+              <div style="font-size: 12px; color: var(--muted);">winner</div>
+            </div>
+            <div style="font-family: var(--font-display); color: var(--muted); font-size: 18px;">vs</div>
+            <div style="text-align: center; flex: 1;">
+              <div style="font-family: var(--font-display); font-size: 14px; color: var(--muted); letter-spacing: .04em;">POTTSTOWN</div>
+              <div style="font-family: var(--font-display); font-size: 38px; font-weight: 700; color: var(--d27-red);">2</div>
+              <div style="font-size: 12px; color: var(--muted);">mercy rule · top 5</div>
+            </div>
+          </div>
+          <div style="text-align: center; color: var(--muted); font-size: 12px;">Bob Jones Tournament · QF1 · Jun 14 · Field of Dreams · Plate ump: Connors</div>
+        </div>
+
+        <div class="gc-card">
+          <h4>Top Performers · BP</h4>
+          <div class="gc-line head"><span>Player</span><span>Pos</span><span class="right">AB</span><span class="right">Stats</span></div>
+          <div class="gc-line"><span class="nm">Luke DiSanto</span><span class="dim">SS</span><span class="right">4</span><span class="right">3-4 · HR · 5 RBI</span></div>
+          <div class="gc-line"><span class="nm">Cole Ramirez</span><span class="dim">1B</span><span class="right">3</span><span class="right">2-3 · 2B · 3 RBI</span></div>
+          <div class="gc-line"><span class="nm">Brendan Wright</span><span class="dim">C</span><span class="right">3</span><span class="right">2-3 · BB · CS-2</span></div>
+        </div>
+
+        <div class="gc-card">
+          <h4>Pitch Count Log</h4>
+          <div class="gc-pitcher head"><span>#</span><span>Pitcher</span><span class="right">Pitches</span><span class="right">Rest Req</span></div>
+          <div class="gc-pitcher"><span>1</span><span class="nm">Luke DiSanto</span><span class="right">42</span><span class="right" style="color:#059669;">2 days</span></div>
+          <div class="gc-pitcher"><span>14</span><span class="nm">Jack Ryan</span><span class="right">41</span><span class="right" style="color:#B45309;">2 days</span></div>
+          <div class="gc-pitcher"><span>22</span><span class="nm">Max Hollis</span><span class="right">6</span><span class="right" style="color:#059669;">0 days</span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="gc-card">
+          <h4>What gets published</h4>
+          <ul style="font-size: 13px; line-height: 1.85; padding-left: 18px; margin: 0;">
+            <li>Final score on <b>tournament.html</b> bracket</li>
+            <li>Box score on <b>game-final.html</b></li>
+            <li>Stats roll up to <a href="stats.html" style="color: var(--d27-navy); font-weight: 600;">district leaderboards</a></li>
+            <li>Pitch counts to <a href="pitch-count.html" style="color: var(--d27-navy); font-weight: 600;">eligibility tracker</a></li>
+            <li>Win added to BP <a href="standings.html" style="color: var(--d27-navy); font-weight: 600;">standings</a></li>
+            <li>Auto-broadcast to BP team chat &amp; parents</li>
+            <li>Auto-affidavit PDF generated for tournament</li>
+            <li>Audit log entry under <code style="background: rgba(0,45,114,.08); padding: 1px 4px; border-radius: 2px; font-family: 'JetBrains Mono', monospace; font-size: 11px;">games/r1m1.publish</code></li>
+          </ul>
+
+          <div class="gc-actions">
+            <button class="gc-btn success" onclick="alert('Demo — In production this fires the Cloud Function `onScoreSubmit` which writes to Firestore, sends notifications, generates the affidavit PDF, and posts to the bracket.')">✓ Publish to D27</button>
+            <button class="gc-btn ghost" onclick="alert('Demo — opens box-score editor')">Edit First</button>
+            <button class="gc-btn ghost" onclick="window.location.reload()">↺ Re-upload</button>
+          </div>
+        </div>
+
+        <div class="gc-card" style="background: linear-gradient(90deg, rgba(218,41,28,.04), transparent); border-color: rgba(218,41,28,.18); border-left: 4px solid var(--d27-red);">
+          <h4>Cross-Check vs Opponent</h4>
+          <p style="font-size: 13px; color: var(--muted); margin: 0;">Pottstown captain submitted: <b style="color: var(--d27-navy);">BP 12 · POT 2 (mercy)</b> — matches your submission. ✓ No discrepancy. Both submissions auto-published.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 4: Done -->
+  <div class="gc-stage" id="stage-4">
+    <h2 style="color: #059669;">✓ Published</h2>
+    <p class="lead">QF1 final is live across the district. Parents and the bracket updated in real time.</p>
+
+    <div class="gc-card">
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+        <div style="display: flex; gap: 10px; align-items: center; padding: 10px; background: rgba(16,185,129,.06); border-radius: 6px;">
+          <span style="font-size: 20px;">📊</span>
+          <div><b style="font-size: 13px;">Stats updated</b><br><span style="color: var(--muted); font-size: 12px;">Luke DiSanto now leads 12U in RBI</span></div>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center; padding: 10px; background: rgba(16,185,129,.06); border-radius: 6px;">
+          <span style="font-size: 20px;">🏆</span>
+          <div><b style="font-size: 13px;">Bracket advances</b><br><span style="color: var(--muted); font-size: 12px;">BP → SF vs Methacton</span></div>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center; padding: 10px; background: rgba(16,185,129,.06); border-radius: 6px;">
+          <span style="font-size: 20px;">📣</span>
+          <div><b style="font-size: 13px;">240 parents notified</b><br><span style="color: var(--muted); font-size: 12px;">Push + email · 0 SMS opt-outs</span></div>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center; padding: 10px; background: rgba(16,185,129,.06); border-radius: 6px;">
+          <span style="font-size: 20px;">📄</span>
+          <div><b style="font-size: 13px;">Affidavit generated</b><br><span style="color: var(--muted); font-size: 12px;">Download · auto-emailed to umpire</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gc-actions" style="border-top: 0;">
+      <a class="gc-btn" href="game-final.html">View Box Score →</a>
+      <a class="gc-btn ghost" href="captain.html">Back to Captain Portal</a>
+      <button class="gc-btn ghost" onclick="document.querySelectorAll('.gc-stage').forEach(s=>s.classList.remove('active')); document.getElementById('stage-1').classList.add('active');">↺ Import Another Game</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const LOG_LINES = [
+  ['info', 'Uploading PDF to Firebase Storage...'],
+  ['ok', 'Uploaded · 247KB · path: /games/2026-06-14_BP_POT.pdf'],
+  ['info', 'Triggering Cloud Function: parseGameChangerPDF...'],
+  ['info', 'OCR pass via pdf.js + Vision API...'],
+  ['ok', 'Extracted: 7 innings · 18 plays · 89 pitches'],
+  ['info', 'Mapping plays to D27 schema...'],
+  ['ok', 'Lineup matched (14 players, BP roster)'],
+  ['ok', 'Pitcher records mapped: DiSanto/Ryan/Hollis'],
+  ['info', 'Validating against LL 12U pitch-count rules...'],
+  ['warn', 'Jack Ryan #14: 41 pitches today, prior 38 P · 2 days ago. Rest required: 2 days. Status: COMPLIANT (exactly met).'],
+  ['ok', 'No violations. All pitchers eligible for next outing per rules.'],
+  ['info', 'Cross-checking vs opponent submission...'],
+  ['ok', 'Pottstown captain submitted matching score (12-2 mercy). No discrepancy.'],
+  ['info', 'Generating LL pitch affidavit PDF...'],
+  ['ok', 'Affidavit ready for plate umpire signature.'],
+  ['ok', 'Ready for review.']
+];
+let logIdx = 0;
+function ts() { return new Date().toTimeString().slice(0,8); }
+function processFile() {
+  document.querySelectorAll('.gc-stage').forEach(s => s.classList.remove('active'));
+  document.getElementById('stage-2').classList.add('active');
+  const log = document.getElementById('log');
+  log.innerHTML = '';
+  logIdx = 0;
+  function next() {
+    if (logIdx >= LOG_LINES.length) { setTimeout(showReview, 500); return; }
+    const [cls, msg] = LOG_LINES[logIdx++];
+    log.innerHTML += `<div><span class="ts">${ts()}</span> <span class="${cls}">${msg}</span></div>`;
+    log.scrollTop = log.scrollHeight;
+    setTimeout(next, 220);
+  }
+  next();
+  // update procStep
+  setTimeout(() => { document.getElementById('proc-step').textContent = 'Validating pitch counts...'; document.getElementById('proc-sub').textContent = 'Cross-checking against LL rules'; }, 1500);
+  setTimeout(() => { document.getElementById('proc-step').textContent = 'Cross-checking opponent...'; document.getElementById('proc-sub').textContent = 'Reading Pottstown submission'; }, 2800);
+}
+function showReview() {
+  document.querySelectorAll('.gc-stage').forEach(s => s.classList.remove('active'));
+  document.getElementById('stage-3').classList.add('active');
+}
+// Wire up the review's publish button to advance to stage 4
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.querySelectorAll('#stage-3 .gc-btn.success').forEach(b => {
+      const orig = b.onclick;
+      b.onclick = (e) => {
+        if (orig) orig.call(b, e);
+        setTimeout(() => {
+          document.querySelectorAll('.gc-stage').forEach(s => s.classList.remove('active'));
+          document.getElementById('stage-4').classList.add('active');
+        }, 400);
+      };
+    });
+  }, 100);
+});
+</script>
+
+</body>
+</html>

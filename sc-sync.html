@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Sports Connect Sync · D27 Phase 1 Mock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  body { background: var(--d27-paper); }
+  .sc-banner { background: var(--d27-gold); color: var(--d27-navy); padding: 8px 0; text-align: center; font-family: var(--font-display); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
+  .sc-banner a { color: var(--d27-navy); }
+
+  .sc-shell { max-width: 1100px; margin: 32px auto; padding: 0 20px; }
+  .sc-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; flex-wrap: wrap; gap: 14px; }
+  .sc-head h1 { font-family: var(--font-display); margin: 0; color: var(--d27-navy); font-size: 28px; }
+  .sc-head .stamp { font-family: var(--font-display); font-size: 11px; color: var(--muted); letter-spacing: .12em; text-transform: uppercase; }
+
+  .sc-status-bar { background: linear-gradient(90deg, rgba(16,185,129,.06), rgba(0,45,114,.04)); border: 1px solid rgba(16,185,129,.18); border-left: 4px solid #10B981; padding: 14px 18px; border-radius: 6px; margin-bottom: 18px; display: flex; justify-content: space-between; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .sc-status-bar .left { display: flex; gap: 12px; align-items: center; }
+  .sc-status-bar .pulse { width: 10px; height: 10px; border-radius: 50%; background: #10B981; box-shadow: 0 0 0 0 rgba(16,185,129,.6); animation: scPulse 1.6s infinite; }
+  @keyframes scPulse { 70% { box-shadow: 0 0 0 10px rgba(16,185,129,0); } 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); } }
+  .sc-status-bar h3 { margin: 0 0 2px; font-family: var(--font-display); color: #047857; font-size: 14px; letter-spacing: .04em; text-transform: uppercase; }
+  .sc-status-bar p { margin: 0; font-size: 13px; color: var(--muted); }
+  .sc-status-bar .stat { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--d27-navy); }
+
+  .sc-cols { display: grid; grid-template-columns: 1.4fr 1fr; gap: 22px; }
+  @media (max-width: 980px) { .sc-cols { grid-template-columns: 1fr; } }
+
+  .sc-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 22px; margin-bottom: 16px; }
+  .sc-card h2 { font-family: var(--font-display); margin: 0 0 14px; color: var(--d27-navy); font-size: 22px; }
+  .sc-card h3 { font-family: var(--font-display); margin: 0 0 8px; color: var(--d27-navy); font-size: 14px; letter-spacing: .04em; text-transform: uppercase; }
+
+  .sc-leagues { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .sc-league { display: grid; grid-template-columns: 30px 1fr auto auto auto; gap: 10px; align-items: center; padding: 12px 14px; border: 1px solid var(--line); border-radius: 6px; transition: all .15s; }
+  .sc-league:hover { border-color: var(--d27-navy); }
+  .sc-league.synced { background: linear-gradient(90deg, rgba(16,185,129,.04), transparent); border-left: 3px solid #10B981; }
+  .sc-league.diff { background: linear-gradient(90deg, rgba(245,158,11,.04), transparent); border-left: 3px solid #F59E0B; }
+  .sc-league.error { background: linear-gradient(90deg, rgba(218,41,28,.04), transparent); border-left: 3px solid var(--d27-red); }
+  .sc-league .ico { font-size: 16px; }
+  .sc-league .nm { font-weight: 700; }
+  .sc-league .meta { color: var(--muted); font-size: 11px; }
+  .sc-league .last-sync { color: var(--muted); font-size: 12px; font-family: 'JetBrains Mono', monospace; }
+  .sc-league .count { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--d27-navy); }
+  .sc-league .badge { font-size: 10px; padding: 3px 8px; border-radius: 3px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .sc-league.synced .badge { background: #ECFDF5; color: #059669; }
+  .sc-league.diff .badge { background: #FEF3C7; color: #B45309; cursor: pointer; }
+  .sc-league.error .badge { background: #FEE2E2; color: var(--d27-red); cursor: pointer; }
+
+  .sc-diff { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px; }
+  .sc-diff h3 { font-family: var(--font-display); margin: 0 0 12px; color: var(--d27-navy); font-size: 16px; }
+  .sc-diff-row { display: grid; grid-template-columns: 80px 1fr; gap: 10px; padding: 8px 12px; border-radius: 4px; font-size: 13px; margin-bottom: 4px; font-family: 'JetBrains Mono', monospace; }
+  .sc-diff-row.add { background: rgba(16,185,129,.06); }
+  .sc-diff-row.add .lbl { color: #047857; font-weight: 700; }
+  .sc-diff-row.del { background: rgba(218,41,28,.06); }
+  .sc-diff-row.del .lbl { color: var(--d27-red); font-weight: 700; }
+  .sc-diff-row.mod { background: rgba(245,158,11,.06); }
+  .sc-diff-row.mod .lbl { color: #B45309; font-weight: 700; }
+
+  .sc-tech { background: linear-gradient(90deg, rgba(0,45,114,.04), transparent); border: 1px solid rgba(0,45,114,.12); border-left: 4px solid var(--d27-navy); padding: 14px 18px; border-radius: 6px; font-size: 13px; color: var(--muted); line-height: 1.65; margin-top: 16px; }
+  .sc-tech b { color: var(--d27-navy); font-family: var(--font-display); }
+  .sc-tech code { background: rgba(0,45,114,.08); padding: 1px 6px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--d27-navy); }
+
+  .sc-side .stat-block { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; margin-bottom: 12px; }
+  .sc-side .stat-block .lbl { color: var(--muted); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; }
+  .sc-side .stat-block .num { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--d27-navy); margin-top: 4px; line-height: 1; }
+  .sc-side .stat-block .meta { color: var(--muted); font-size: 12px; margin-top: 4px; }
+  .sc-side .stat-block.green .num { color: #059669; }
+  .sc-side .stat-block.warn .num { color: #B45309; }
+
+  .sc-btn { background: var(--d27-navy); color: #fff; border: none; padding: 10px 18px; border-radius: 5px; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+  .sc-btn.ghost { background: var(--surface); color: var(--d27-navy); border: 1px solid var(--d27-navy); }
+
+  .sc-cron-bar { background: var(--d27-navy); color: #fff; padding: 14px 20px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .sc-cron-bar .left { display: flex; gap: 12px; align-items: center; }
+  .sc-cron-bar h4 { font-family: var(--font-display); margin: 0; color: var(--d27-gold); font-size: 14px; letter-spacing: .06em; text-transform: uppercase; }
+  .sc-cron-bar p { margin: 0; font-size: 12px; color: rgba(255,255,255,.7); }
+</style>
+</head>
+<body>
+
+<div class="sc-banner">
+  PHASE 1 PRODUCTION MOCK · Sports Connect ↔ D27 nightly bridge · <a href="roadmap.html">Back to Roadmap</a>
+</div>
+
+<div class="sc-shell">
+
+  <div class="sc-head">
+    <div>
+      <h1>Sports Connect Roster Sync</h1>
+      <p class="stamp">D27 ADMIN · JEFF BENNETT · INTEGRATION CONSOLE</p>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="sc-btn ghost" onclick="alert('Demo — view sync history')">📋 History</button>
+      <button class="sc-btn" onclick="alert('Demo — runs full district sync now (vs nightly auto)')">↻ Sync All Now</button>
+    </div>
+  </div>
+
+  <!-- Status -->
+  <div class="sc-status-bar">
+    <div class="left">
+      <div class="pulse"></div>
+      <div>
+        <h3>✓ All Systems Operational</h3>
+        <p>Last full sync · 2:34 AM today · 11 of 12 leagues clean · 1 needs review</p>
+      </div>
+    </div>
+    <div style="display: flex; gap: 24px; align-items: center;">
+      <div><div style="font-size: 11px; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; font-weight: 700;">Players Synced</div><div class="stat">9,847</div></div>
+      <div><div style="font-size: 11px; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; font-weight: 700;">Coaches</div><div class="stat">237</div></div>
+      <div><div style="font-size: 11px; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; font-weight: 700;">Teams</div><div class="stat">512</div></div>
+    </div>
+  </div>
+
+  <div class="sc-cols">
+    <div>
+
+      <div class="sc-card">
+        <h2>Sync Status by League</h2>
+        <div class="sc-leagues">
+
+          <div class="sc-league synced">
+            <div class="ico">🏟</div>
+            <div><div class="nm">Berwyn-Paoli LL</div><div class="meta">SC Charter ID 38022 · last full sync</div></div>
+            <div class="count">642</div>
+            <div class="last-sync">02:34:18</div>
+            <span class="badge">✓ Synced</span>
+          </div>
+
+          <div class="sc-league synced">
+            <div class="ico">🏟</div>
+            <div><div class="nm">Methacton LL</div><div class="meta">SC Charter ID 41204 · last full sync</div></div>
+            <div class="count">582</div>
+            <div class="last-sync">02:34:42</div>
+            <span class="badge">✓ Synced</span>
+          </div>
+
+          <div class="sc-league synced">
+            <div class="ico">🏟</div>
+            <div><div class="nm">Chester Valley LL</div><div class="meta">SC Charter ID 39847 · last full sync</div></div>
+            <div class="count">448</div>
+            <div class="last-sync">02:35:01</div>
+            <span class="badge">✓ Synced</span>
+          </div>
+
+          <div class="sc-league synced">
+            <div class="ico">🏟</div>
+            <div><div class="nm">Lower Merion LL</div><div class="meta">SC Charter ID 38127 · last full sync</div></div>
+            <div class="count">512</div>
+            <div class="last-sync">02:35:18</div>
+            <span class="badge">✓ Synced</span>
+          </div>
+
+          <div class="sc-league synced">
+            <div class="ico">🏟</div>
+            <div><div class="nm">Lower Perkiomen LL</div><div class="meta">SC Charter ID 40028</div></div>
+            <div class="count">487</div>
+            <div class="last-sync">02:35:34</div>
+            <span class="badge">✓ Synced</span>
+          </div>
+
+          <div class="sc-league diff">
+            <div class="ico">🏟</div>
+            <div><div class="nm">Marple Newtown LL</div><div class="meta">SC Charter ID 38844 · 7 changes detected · review</div></div>
+            <div class="count">534</div>
+            <div class="last-sync">02:35:51</div>
+            <span class="badge" onclick="alert('Demo — opens diff drawer')">⚠ 7 Changes</span>
+          </div>
+
+          <div class="sc-league synced">
+            <div class="ico">🏟</div>
+            <div><div class="nm">Penn Wood LL</div><div class="meta">SC Charter ID 41892</div></div>
+            <div class="count">298</div>
+            <div class="last-sync">02:36:08</div>
+            <span class="badge">✓ Synced</span>
+          </div>
+
+          <div class="sc-league synced">
+            <div class="ico">🏟</div>
+            <div><div class="nm">Phoenixville LL</div><div class="meta">SC Charter ID 39102</div></div>
+            <div class="count">421</div>
+            <div class="last-sync">02:36:24</div>
+            <span class="badge">✓ Synced</span>
+          </div>
+
+          <div class="sc-league synced">
+            <div class="ico">🏟</div>
+            <div><div class="nm">Pottstown LL</div><div class="meta">SC Charter ID 40411</div></div>
+            <div class="count">387</div>
+            <div class="last-sync">02:36:39</div>
+            <span class="badge">✓ Synced</span>
+          </div>
+
+          <div class="sc-league synced">
+            <div class="ico">🏟</div>
+            <div><div class="nm">Springfield LL</div><div class="meta">SC Charter ID 38661</div></div>
+            <div class="count">418</div>
+            <div class="last-sync">02:36:55</div>
+            <span class="badge">✓ Synced</span>
+          </div>
+
+          <div class="sc-league synced">
+            <div class="ico">🏟</div>
+            <div><div class="nm">Tredyffrin LL</div><div class="meta">SC Charter ID 39528</div></div>
+            <div class="count">602</div>
+            <div class="last-sync">02:37:12</div>
+            <span class="badge">✓ Synced</span>
+          </div>
+
+          <div class="sc-league synced">
+            <div class="ico">🏟</div>
+            <div><div class="nm">Lansdale-Ambler LL</div><div class="meta">SC Charter ID 41077</div></div>
+            <div class="count">516</div>
+            <div class="last-sync">02:37:28</div>
+            <span class="badge">✓ Synced</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sc-diff">
+        <h3>⚠ Pending Review · Marple Newtown LL · 7 changes</h3>
+        <p style="color: var(--muted); font-size: 13px; margin: 0 0 12px;">SC export contains roster changes since last sync. <b>Apply them after league president approval.</b></p>
+
+        <div class="sc-diff-row add">
+          <span class="lbl">+ ADD</span>
+          <span><b>Player:</b> Mason Rivera · DOB 2014-11-22 · MN 12U Major (boundary verified)</span>
+        </div>
+        <div class="sc-diff-row add">
+          <span class="lbl">+ ADD</span>
+          <span><b>Player:</b> Lila Brennan · DOB 2017-03-04 · MN 10U Softball (new family)</span>
+        </div>
+        <div class="sc-diff-row mod">
+          <span class="lbl">~ MOD</span>
+          <span><b>Player:</b> Jacob Pollard · DOB updated 2014-08-14 → 2014-08-04 (parent correction)</span>
+        </div>
+        <div class="sc-diff-row mod">
+          <span class="lbl">~ MOD</span>
+          <span><b>Player:</b> Sofia Russo · contact email updated</span>
+        </div>
+        <div class="sc-diff-row mod">
+          <span class="lbl">~ MOD</span>
+          <span><b>Coach:</b> Mike Russo · added "Concussion Renewed 2026-04-22"</span>
+        </div>
+        <div class="sc-diff-row del">
+          <span class="lbl">– DEL</span>
+          <span><b>Player:</b> Tyler Hahn · withdrew · refund processed in SC · pulled from MN 11U roster</span>
+        </div>
+        <div class="sc-diff-row del">
+          <span class="lbl">– DEL</span>
+          <span><b>Player:</b> Aurora Lee · transferred to Lower Merion LL · boundary changed</span>
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap;">
+          <button class="sc-btn" onclick="alert('Demo — Cloud Function applies all 7 changes, writes to Firestore, fires notifications, logs audit entry')">✓ Apply All 7</button>
+          <button class="sc-btn ghost" onclick="alert('Demo — opens per-row review with cherry-pick')">Review Individually</button>
+          <button class="sc-btn ghost" onclick="alert('Demo — emails Carlos Reyes (MN President) for sign-off')">Email MN President</button>
+        </div>
+      </div>
+
+      <div class="sc-tech">
+        <b>What's running:</b> Nightly cron (<code>2:30 AM ET</code>) → Cloud Function <code>syncSportsConnect</code> → fetches each league's roster JSON via <code>SC API v3 /charter/&lt;id&gt;/roster</code> → diffs against current Firestore state → writes <code>sync_diffs/&lt;league&gt;</code> document → routes to admin if changes exist → on apply, mirrors changes to <code>players/</code>, <code>teams/</code>, <code>coaches/</code> collections → triggers downstream updates (cert tracker, pitch-count log, RSVP lists).
+      </div>
+    </div>
+
+    <aside class="sc-side">
+      <div class="stat-block green">
+        <div class="lbl">Auto-resolved tonight</div>
+        <div class="num">147</div>
+        <div class="meta">No human review needed · 99.4% match rate</div>
+      </div>
+
+      <div class="stat-block warn">
+        <div class="lbl">Need Admin Review</div>
+        <div class="num">7</div>
+        <div class="meta">All Marple Newtown · awaiting sign-off</div>
+      </div>
+
+      <div class="stat-block">
+        <div class="lbl">Last 30 Days</div>
+        <div class="num">2,840</div>
+        <div class="meta">Diffs processed · 99.7% auto · 0.3% reviewed</div>
+      </div>
+
+      <div class="stat-block">
+        <div class="lbl">SC API Health</div>
+        <div class="num green" style="color: #059669;">200ms</div>
+        <div class="meta">P95 latency · 99.99% uptime · last 30d</div>
+      </div>
+
+      <div class="sc-cron-bar">
+        <div class="left">
+          <span style="font-size: 18px;">⏰</span>
+          <div>
+            <h4>Next Sync</h4>
+            <p>Tonight 2:30 AM ET · automated</p>
+          </div>
+        </div>
+        <button style="background: var(--d27-gold); color: var(--d27-navy); border: none; padding: 8px 14px; border-radius: 4px; font-family: var(--font-display); font-weight: 700; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; cursor: pointer;" onclick="alert('Demo — opens schedule editor')">⚙ Schedule</button>
+      </div>
+
+      <div class="sc-card" style="margin-top: 14px;">
+        <h3>Why This Matters</h3>
+        <p style="margin: 0; font-size: 13px; color: var(--muted); line-height: 1.6;">Sports Connect is mandatory per Little League International. Today, league presidents export rosters from SC and email them to D27 quarterly. With this bridge, rosters stay in sync automatically · zero double-entry · zero stale data.</p>
+      </div>
+    </aside>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Future Roadmap · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .rm-hero { background: linear-gradient(135deg, var(--d27-navy), #001034); color:#fff; padding: 64px 0 48px; border-bottom: 4px solid var(--d27-gold); position: relative; overflow: hidden; }
+  .rm-hero::before { content:''; position:absolute; right:-100px; top:-50px; width:520px; height:520px; background: radial-gradient(circle, rgba(201,162,39,.18), transparent 60%); }
+  .rm-hero h1 { font-family: var(--font-display); font-size: clamp(38px, 5vw, 60px); margin: 0; position: relative; }
+  .rm-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .rm-hero p { color: rgba(255,255,255,.78); max-width: 64ch; margin: 14px 0 0; position: relative; }
+
+  .rm-cta { background: linear-gradient(90deg, rgba(201,162,39,.06), rgba(0,45,114,.04)); border: 1px solid rgba(0,45,114,.12); border-left: 4px solid var(--d27-gold); padding: 18px 22px; border-radius: 6px; margin: 24px 0; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+  .rm-cta .ico { font-size: 32px; }
+  .rm-cta h3 { margin: 0 0 4px; font-family: var(--font-display); color: var(--d27-navy); }
+  .rm-cta p { margin: 0; font-size: 13px; color: var(--muted); }
+  .rm-cta a { background: var(--d27-navy); color: #fff; padding: 10px 18px; border-radius: 5px; text-decoration: none; font-weight: 700; font-size: 13px; margin-left: auto; }
+
+  /* Phase navigation */
+  .rm-phases { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 24px 0 36px; }
+  @media (max-width: 880px) { .rm-phases { grid-template-columns: repeat(2, 1fr); } }
+  .rm-phase-pill { background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--d27-gold); border-radius: 8px; padding: 18px; text-decoration: none; color: var(--d27-ink); display: block; transition: all .15s; cursor: pointer; }
+  .rm-phase-pill:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,.08); }
+  .rm-phase-pill.live { border-top-color: #10B981; background: linear-gradient(180deg, rgba(16,185,129,.04), transparent); }
+  .rm-phase-pill.next { border-top-color: var(--d27-red); }
+  .rm-phase-pill.future { border-top-color: var(--d27-gold); opacity: .9; }
+  .rm-phase-pill.long { border-top-color: var(--d27-navy); }
+  .rm-phase-pill .lvl { font-family: var(--font-display); font-size: 11px; letter-spacing: .12em; font-weight: 700; }
+  .rm-phase-pill.live .lvl { color: #10B981; }
+  .rm-phase-pill.next .lvl { color: var(--d27-red); }
+  .rm-phase-pill.future .lvl { color: var(--d27-gold); }
+  .rm-phase-pill.long .lvl { color: var(--d27-navy); }
+  .rm-phase-pill h3 { font-family: var(--font-display); margin: 4px 0 4px; font-size: 18px; color: var(--d27-navy); }
+  .rm-phase-pill .when { color: var(--muted); font-size: 12px; }
+  .rm-phase-pill .progress { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 11px; }
+  .rm-phase-pill .progress .bar { flex: 1; height: 5px; background: var(--d27-sub); border-radius: 999px; overflow: hidden; }
+  .rm-phase-pill .progress .fill { height: 100%; border-radius: 999px; }
+  .rm-phase-pill.live .progress .fill { background: #10B981; }
+  .rm-phase-pill.next .progress .fill { background: var(--d27-red); }
+  .rm-phase-pill.future .progress .fill { background: var(--d27-gold); }
+  .rm-phase-pill.long .progress .fill { background: var(--d27-navy); }
+
+  /* Phase sections */
+  .rm-section { margin-bottom: 40px; padding-top: 24px; }
+  .rm-section-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .rm-section-head h2 { font-family: var(--font-display); margin: 0; color: var(--d27-navy); font-size: 30px; letter-spacing: -.01em; }
+  .rm-section-head .lvl { background: var(--d27-gold); color: var(--d27-navy); font-family: var(--font-display); font-size: 12px; padding: 4px 12px; border-radius: 4px; letter-spacing: .08em; font-weight: 700; text-transform: uppercase; }
+  .rm-section.live .lvl { background: #10B981; color: #fff; }
+  .rm-section.next .lvl { background: var(--d27-red); color: #fff; }
+  .rm-section.long .lvl { background: var(--d27-navy); color: #fff; }
+  .rm-section-head .when { color: var(--muted); font-size: 13px; }
+  .rm-section .blurb { color: var(--muted); font-size: 14px; line-height: 1.65; max-width: 70ch; margin: 0 0 18px; }
+
+  .rm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 980px) { .rm-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .rm-grid { grid-template-columns: 1fr; } }
+
+  .rm-item { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; position: relative; }
+  .rm-item.done { background: linear-gradient(180deg, rgba(16,185,129,.04), transparent); border-color: rgba(16,185,129,.18); }
+  .rm-item.done::after { content: '✓'; position: absolute; top: 12px; right: 14px; color: #10B981; font-weight: 700; font-size: 18px; }
+
+  .rm-item h4 { font-family: var(--font-display); margin: 0 0 4px; color: var(--d27-navy); font-size: 16px; }
+  .rm-item .tag { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 3px; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+  .rm-item .tag.foundation { background: #FEE2E2; color: var(--d27-red); }
+  .rm-item .tag.integration { background: #DBEAFE; color: #1E40AF; }
+  .rm-item .tag.mobile { background: #EDE9FE; color: #6D28D9; }
+  .rm-item .tag.live { background: #FEF3C7; color: #B45309; }
+  .rm-item .tag.safety { background: #FEE2E2; color: var(--d27-red); }
+  .rm-item .tag.dev { background: #ECFDF5; color: #059669; }
+  .rm-item .tag.comms { background: #DBEAFE; color: #1E40AF; }
+  .rm-item .tag.revenue { background: #FEF3C7; color: #B45309; }
+  .rm-item .tag.platform { background: #EDE9FE; color: #6D28D9; }
+  .rm-item p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+
+  .rm-money { background: linear-gradient(135deg, var(--d27-navy), var(--d27-navy-dark)); color: #fff; padding: 36px; border-radius: 10px; margin: 36px 0 28px; }
+  .rm-money h2 { color: var(--d27-gold); font-family: var(--font-display); margin: 0 0 14px; font-size: 26px; }
+  .rm-money p { color: rgba(255,255,255,.85); margin: 0 0 12px; line-height: 1.65; }
+  .rm-money .num { color: var(--d27-gold); font-family: var(--font-display); font-weight: 700; font-size: 22px; }
+  .rm-money table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+  .rm-money th { color: var(--d27-gold); font-family: var(--font-display); padding: 10px 12px; text-align: left; border-bottom: 2px solid var(--d27-gold); letter-spacing:.06em; text-transform: uppercase; font-size: 12px; }
+  .rm-money td { padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,.1); font-size: 13px; }
+  .rm-money td.right { text-align: right; }
+
+  .rm-decision { background: linear-gradient(135deg, var(--d27-gold), #B45309); color: var(--d27-navy); padding: 36px; border-radius: 10px; margin: 36px 0; }
+  .rm-decision h2 { font-family: var(--font-display); margin: 0 0 10px; color: var(--d27-navy); font-size: 28px; }
+  .rm-decision p { margin: 0 0 16px; line-height: 1.6; font-size: 14px; }
+  .rm-decision .opts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 800px) { .rm-decision .opts { grid-template-columns: 1fr; } }
+  .rm-decision .opt { background: rgba(0,45,114,.08); border: 2px solid var(--d27-navy); padding: 16px; border-radius: 6px; }
+  .rm-decision .opt b { font-family: var(--font-display); font-size: 14px; letter-spacing: .04em; text-transform: uppercase; display: block; margin-bottom: 4px; color: var(--d27-navy); }
+  .rm-decision .opt p { margin: 0; font-size: 12px; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="rm-hero">
+  <div class="container">
+    <div class="eyebrow">PRODUCTION ROADMAP · UPDATED MAY 2026</div>
+    <h1>The Future of D27</h1>
+    <p>You've seen the demo. Here's where it goes if District 27 says yes. Four phases, five years. Each phase ships fully working before the next one starts.</p>
+  </div>
+</header>
+
+<main class="container" style="padding: 32px 0 64px;">
+
+  <div class="rm-cta">
+    <div class="ico">📋</div>
+    <div>
+      <h3>Read the 1-page proposal</h3>
+      <p>The case for Phase 1 written for Jeff &amp; Jason — printable, share-ready, includes budget &amp; timeline.</p>
+    </div>
+    <a href="proposal.html">Open Proposal →</a>
+  </div>
+
+  <!-- Quick phase pills -->
+  <div class="rm-phases">
+    <a class="rm-phase-pill live" href="#phase-0">
+      <div class="lvl">PHASE 0 · NOW</div>
+      <h3>Demo Site</h3>
+      <div class="when">Live since Apr 2026</div>
+      <div class="progress"><div class="bar"><div class="fill" style="width:100%;"></div></div><span>100%</span></div>
+    </a>
+    <a class="rm-phase-pill next" href="#phase-1">
+      <div class="lvl">PHASE 1 · NEXT</div>
+      <h3>Real Launch</h3>
+      <div class="when">6 weeks · pending greenlight</div>
+      <div class="progress"><div class="bar"><div class="fill" style="width:0%;"></div></div><span>0%</span></div>
+    </a>
+    <a class="rm-phase-pill future" href="#phase-2">
+      <div class="lvl">PHASE 2</div>
+      <h3>Mobile + Live</h3>
+      <div class="when">Months 2–4</div>
+      <div class="progress"><div class="bar"><div class="fill" style="width:0%;"></div></div><span>0%</span></div>
+    </a>
+    <a class="rm-phase-pill long" href="#phase-3">
+      <div class="lvl">PHASE 3+</div>
+      <h3>Platform Play</h3>
+      <div class="when">Year 2+</div>
+      <div class="progress"><div class="bar"><div class="fill" style="width:0%;"></div></div><span>0%</span></div>
+    </a>
+  </div>
+
+  <!-- PHASE 0 — DONE -->
+  <section class="rm-section live" id="phase-0">
+    <div class="rm-section-head">
+      <h2>Phase 0 · Demo Site</h2>
+      <span class="lvl">✓ LIVE</span>
+      <span class="when">Built April 2026 · 14 days · 36 pages</span>
+    </div>
+    <p class="blurb">The pitch demo. Public-facing brochure showing what's possible. All 36 pages live, fully linked, mobile-responsive. No backend — every interaction is mocked. The job here is to convince Jeff to greenlight Phase 1.</p>
+
+    <div class="rm-grid">
+      <div class="rm-item done"><span class="tag dev">Public site</span><h4>13 main pages</h4><p>Home, brackets, schedule, leagues, champions, rules, scholarship, about + 3 league showcases.</p></div>
+      <div class="rm-item done"><span class="tag dev">Portals</span><h4>4 sign-in roles</h4><p>Admin · President · Captain · Player/Parent. Demo-only, no auth.</p></div>
+      <div class="rm-item done"><span class="tag dev">Operations</span><h4>5 ops pages</h4><p>Field Status · Umpires · Pitch Count · Coach Cert · All-Stars.</p></div>
+      <div class="rm-item done"><span class="tag dev">Community</span><h4>5 community pages</h4><p>Photos · Equipment · Volunteer · Tryouts · Awards.</p></div>
+      <div class="rm-item done"><span class="tag dev">League tools</span><h4>4 admin tools</h4><p>Treasury · Snack Bar · Standings · Stats Leaderboards.</p></div>
+      <div class="rm-item done"><span class="tag dev">Revenue</span><h4>Sponsor + Store</h4><p>3-tier sponsor wall · 12-product swag store · scholarship donate flow.</p></div>
+      <div class="rm-item done"><span class="tag dev">AI features</span><h4>AI Tournament Generator</h4><p>Admin types prompt → bracket built with conflict detection.</p></div>
+      <div class="rm-item done"><span class="tag dev">Search</span><h4>Sitewide search</h4><p>26-entry index · players, teams, leagues, fields, tournaments.</p></div>
+      <div class="rm-item done"><span class="tag dev">Engagement</span><h4>Bracket hover + Scout</h4><p>Glow + preview popup · "since you won" Scout panel · AI win probability.</p></div>
+    </div>
+  </section>
+
+  <!-- PHASE 1 -->
+  <section class="rm-section next" id="phase-1">
+    <div class="rm-section-head">
+      <h2>Phase 1 · Real Launch</h2>
+      <span class="lvl">⏱ NEXT · 6 WEEKS</span>
+      <span class="when">Pending Jeff's greenlight · soft-launch July 15</span>
+    </div>
+    <p class="blurb">The 8 backend deliverables that turn the demo into a working district platform. After Phase 1, one league + one tournament are live end-to-end on production. Demo data is replaced with real D27 data.</p>
+
+    <div class="rm-grid">
+      <div class="rm-item"><span class="tag foundation">Foundation</span><h4>Authentication &amp; roles</h4><p>Firebase Auth · magic-link login · Admin/President/Captain/Player role detection. <a href="auth.html" style="color: var(--d27-navy); font-weight: 600;">Preview →</a></p></div>
+      <div class="rm-item"><span class="tag foundation">Foundation</span><h4>Database migration</h4><p>Firestore schemas: leagues, teams, rosters, games, pitch counts, comms. All hardcoded HTML data → JSON.</p></div>
+      <div class="rm-item"><span class="tag integration">Integration</span><h4>Sports Connect bridge</h4><p>Nightly roster sync from SC (LL-mandated registration). <a href="sc-sync.html" style="color: var(--d27-navy); font-weight: 600;">Preview →</a></p></div>
+      <div class="rm-item"><span class="tag integration">Integration</span><h4>GameChanger PDF import</h4><p>Captain drag-drops post-game PDF · system parses + publishes box score. <a href="gamechanger-import.html" style="color: var(--d27-navy); font-weight: 600;">Preview →</a></p></div>
+      <div class="rm-item"><span class="tag foundation">Foundation</span><h4>Stripe Connect</h4><p>Registration · donations · sponsor invoices · store · auto-split. <a href="registration.html" style="color: var(--d27-navy); font-weight: 600;">Preview →</a></p></div>
+      <div class="rm-item"><span class="tag foundation">Foundation</span><h4>Email + SMS broadcasting</h4><p>SendGrid + Twilio · rainouts, RSVP reminders, cert lapse alerts.</p></div>
+      <div class="rm-item"><span class="tag integration">Integration</span><h4>JDP / Safesport / Concussion API</h4><p>Auto-mark coaches cleared/expired (currently manual). 30-day pre-lapse alerts.</p></div>
+      <div class="rm-item"><span class="tag foundation">Foundation</span><h4>ICS calendar feeds</h4><p>Subscribe links → live Google/Apple/Outlook updates with rainout sync.</p></div>
+    </div>
+  </section>
+
+  <!-- PHASE 2 -->
+  <section class="rm-section" id="phase-2">
+    <div class="rm-section-head">
+      <h2>Phase 2 · Mobile + Live Game</h2>
+      <span class="lvl">📱 MONTHS 2–4</span>
+      <span class="when">After Phase 1 stable</span>
+    </div>
+    <p class="blurb">Take the platform mobile and turn live games into real-time experiences. After Phase 2, parents can score from a phone offline, all 12 leagues are running, and parents at home can watch the bracket update pitch-by-pitch.</p>
+
+    <div class="rm-grid">
+      <div class="rm-item"><span class="tag mobile">Mobile</span><h4>PWA installable</h4><p>Add to home screen on iOS/Android. Service worker for offline mode.</p></div>
+      <div class="rm-item"><span class="tag mobile">Mobile</span><h4>Push notifications</h4><p>Firebase Cloud Messaging. Game alerts, score updates, rainouts in 30 seconds.</p></div>
+      <div class="rm-item"><span class="tag mobile">Mobile</span><h4>Captain offline mode</h4><p>Score a remote-field game with no wifi. Auto-sync when back online.</p></div>
+      <div class="rm-item"><span class="tag live">Live</span><h4>Real-time scoring</h4><p>WebSocket. LIVE badges update every pitch. <a href="live-scoring.html" style="color: var(--d27-navy); font-weight: 600;">Preview →</a></p></div>
+      <div class="rm-item"><span class="tag live">Live</span><h4>Embeddable scoreboards</h4><p>Widgets for league sites that want bracket data on their own pages.</p></div>
+      <div class="rm-item"><span class="tag safety">Safety</span><h4>Concussion incident reporting</h4><p>PA Safety in Youth Sports Act-compliant. Required by state law.</p></div>
+      <div class="rm-item"><span class="tag safety">Safety</span><h4>Heat-index + lightning alerts</h4><p>Auto-suspend play threshold notifications. Insurance-mandated.</p></div>
+      <div class="rm-item"><span class="tag safety">Safety</span><h4>EAP per field · QR code</h4><p>Emergency Action Plan accessible from dugout via QR code.</p></div>
+      <div class="rm-item"><span class="tag safety">Safety</span><h4>Injury log</h4><p>Track every field incident · insurance + LL HQ reporting.</p></div>
+    </div>
+  </section>
+
+  <!-- PHASE 3 -->
+  <section class="rm-section" id="phase-3">
+    <div class="rm-section-head">
+      <h2>Phase 3 · Player Development &amp; Depth</h2>
+      <span class="lvl" style="background: var(--d27-gold); color: var(--d27-navy);">🏆 MONTHS 4–8</span>
+      <span class="when">First full season on production</span>
+    </div>
+    <p class="blurb">Compete head-on with GameChanger and TeamSnap on the things they do — plus the things they don't. After Phase 3, D27 doesn't just track games — it actively makes players better.</p>
+
+    <div class="rm-grid">
+      <div class="rm-item"><span class="tag dev">Player Dev</span><h4>Skill assessment tools</h4><p>Exit velo, pitch velo, sprint times. Pairs with HitTrax/Rapsodo if leagues have them.</p></div>
+      <div class="rm-item"><span class="tag dev">Player Dev</span><h4>Practice plan library</h4><p>Vetted drill library. Coaches share what works. Diamond Leader integration.</p></div>
+      <div class="rm-item"><span class="tag dev">Player Dev</span><h4>Video review</h4><p>Captain uploads at-bats; player + parent review with timestamped notes.</p></div>
+      <div class="rm-item"><span class="tag dev">Player Dev</span><h4>YoY progression tracker</h4><p>See a player from 8U → 16U. Charts, milestones, narratives.</p></div>
+      <div class="rm-item"><span class="tag live">Live</span><h4>AI game recaps</h4><p>Auto-generated post-game summaries from box scores. Reads like a beat writer.</p></div>
+      <div class="rm-item"><span class="tag live">Live</span><h4>Audio broadcast streams</h4><p>HS broadcast students do PA. Cheap to spin up, big community win.</p></div>
+      <div class="rm-item"><span class="tag live">Live</span><h4>Video streaming</h4><p>GameChanger Live or YouTube Live integration on game pages.</p></div>
+      <div class="rm-item"><span class="tag comms">Comms</span><h4>Newsletter builder</h4><p>Monthly D27 digest, Mailchimp-style. Auto-pulls game results &amp; scholarship news.</p></div>
+      <div class="rm-item"><span class="tag comms">Comms</span><h4>Spanish translation</h4><p>Penn Wood, Pottstown have Latino populations. Increase reach.</p></div>
+      <div class="rm-item"><span class="tag comms">Comms</span><h4>Coaches' clinic archive</h4><p>Video library of past D27 clinics. Replay + transcript.</p></div>
+      <div class="rm-item"><span class="tag revenue">Revenue</span><h4>Sponsor analytics dashboard</h4><p>Show Wawa/MLH their ROI. Justifies $5K renewals.</p></div>
+      <div class="rm-item"><span class="tag revenue">Revenue</span><h4>Tournament hosting fees</h4><p>Online entry fee for outside leagues entering D27 invitationals. ~$3.2K/yr.</p></div>
+      <div class="rm-item"><span class="tag revenue">Revenue</span><h4>Auction + raffle tools</h4><p>Banquet auctions go online. League fundraising landing pages.</p></div>
+      <div class="rm-item"><span class="tag revenue">Revenue</span><h4>Donor recognition wall</h4><p>Public acknowledgment of major Scholarship donors.</p></div>
+      <div class="rm-item"><span class="tag integration">Integration</span><h4>Boundary verification</h4><p>Maps API confirms residency for All-Stars eligibility.</p></div>
+    </div>
+  </section>
+
+  <!-- PHASE 4 -->
+  <section class="rm-section long" id="phase-4">
+    <div class="rm-section-head">
+      <h2>Phase 4 · Multi-District Platform</h2>
+      <span class="lvl">🌐 YEAR 2+</span>
+      <span class="when">If D27 succeeds, this becomes a business</span>
+    </div>
+    <p class="blurb">Once D27 is running smoothly, the question becomes: <strong>can other districts use it too?</strong> Phase 4 is white-labeling the platform, building native apps, and integrating with the broader baseball ecosystem. This is where it stops being a pet project and starts being a real product.</p>
+
+    <div class="rm-grid">
+      <div class="rm-item"><span class="tag platform">Platform</span><h4>White-label districts</h4><p>Sell the stack to D24, D31, etc. ~$2–4K/season × 100 districts in PA/NJ/MD = real recurring.</p></div>
+      <div class="rm-item"><span class="tag platform">Platform</span><h4>60-min new district onboarding</h4><p>Charter ID, league import, theme — automated.</p></div>
+      <div class="rm-item"><span class="tag platform">Platform</span><h4>Cross-district tournaments</h4><p>Section 8 host pulls bracket data from all participating districts.</p></div>
+      <div class="rm-item"><span class="tag mobile">Mobile</span><h4>iOS app (App Store)</h4><p>TestFlight beta → public release. Wraps PWA initially.</p></div>
+      <div class="rm-item"><span class="tag mobile">Mobile</span><h4>Android app (Play Store)</h4><p>Same as iOS — wraps PWA, then native for performance.</p></div>
+      <div class="rm-item"><span class="tag mobile">Mobile</span><h4>Apple Watch / WearOS</h4><p>Live game alerts on wrist. Score subs, rainouts.</p></div>
+      <div class="rm-item"><span class="tag integration">Integration</span><h4>Daktronics scoreboards</h4><p>Push from D27 to physical scoreboards on field.</p></div>
+      <div class="rm-item"><span class="tag integration">Integration</span><h4>HitTrax / Rapsodo</h4><p>Pull skill assessment data into player profiles automatically.</p></div>
+      <div class="rm-item"><span class="tag integration">Integration</span><h4>PerfectGame profiles</h4><p>Junior League players' showcase data linked to D27 profiles.</p></div>
+      <div class="rm-item"><span class="tag integration">Integration</span><h4>MaxPreps continuity</h4><p>Junior/Senior League → high school transition tracking.</p></div>
+      <div class="rm-item"><span class="tag dev">Analytics</span><h4>At-risk player flagging</h4><p>Kids missing games or with declining stats — flag to coach for outreach.</p></div>
+      <div class="rm-item"><span class="tag dev">Analytics</span><h4>Quality Charter auto-scorecard</h4><p>Track all 23 LL HQ metrics. Auto-submit annual report.</p></div>
+      <div class="rm-item"><span class="tag revenue">Revenue</span><h4>Estate + planned giving</h4><p>Scott Scholarship endowment growth path. Major-donor cultivation.</p></div>
+      <div class="rm-item"><span class="tag revenue">Revenue</span><h4>Premium captain features</h4><p>Optional upgrade for advanced scoring, video review, etc.</p></div>
+      <div class="rm-item"><span class="tag platform">Platform</span><h4>Public API</h4><p>Local newspapers, MaxPreps, GameChanger pull D27 data programmatically.</p></div>
+    </div>
+  </section>
+
+  <!-- Money -->
+  <div class="rm-money">
+    <h2>The Real Numbers</h2>
+    <p>Phase 1 launch cost: <span class="num">$0</span> in development (Adam Miller in-house) and roughly <span class="num">$1,400/year</span> in third-party services. For comparison, the 12 D27 leagues already pay <span class="num">$4,800/year</span> for Sports Connect — and SC is registration-only.</p>
+
+    <table>
+      <thead><tr><th>Phase</th><th>Timeline</th><th>Dev Cost</th><th class="right">Annual Ops</th></tr></thead>
+      <tbody>
+        <tr><td>Phase 0 (Demo)</td><td>Live</td><td>$0</td><td class="right">$0</td></tr>
+        <tr><td>Phase 1 (Launch)</td><td>6 weeks</td><td>$0</td><td class="right">~$1,400</td></tr>
+        <tr><td>Phase 2 (Mobile + Live)</td><td>+2 months</td><td>$0</td><td class="right">~$2,200</td></tr>
+        <tr><td>Phase 3 (Player Dev + Revenue)</td><td>+4 months</td><td>$0</td><td class="right">~$3,400</td></tr>
+        <tr><td>Phase 4 (Multi-District)</td><td>Year 2+</td><td>Reinvested from licensing</td><td class="right">Self-funded</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Decision -->
+  <div class="rm-decision">
+    <h2>Three Paths Forward</h2>
+    <p>Pick one. We pivot based on Jeff &amp; Jason's call.</p>
+    <div class="opts">
+      <div class="opt"><b>Option A · Greenlight Phase 1</b><p>Recommended. 6-week build, soft-launch July 15 with one league + Bob Jones live on production. <strong>$0 dev · ~$1,400/yr</strong></p></div>
+      <div class="opt"><b>Option B · Pilot League Only</b><p>Pick Berwyn-Paoli. Run them end-to-end Spring 2027. Other 11 stay on demo. <strong>$0 dev · ~$400/yr</strong></p></div>
+      <div class="opt"><b>Option C · Phase 0 Continuation</b><p>Keep demo as public brochure. No backend. Refine quarterly. <strong>$0 / yr</strong></p></div>
+    </div>
+  </div>
+
+  <div class="rm-cta">
+    <div class="ico">📋</div>
+    <div>
+      <h3>Ready to make the call?</h3>
+      <p>Print the proposal · share with the D27 board · or dive into the Phase 1 mock screens to see what each integration will look like.</p>
+    </div>
+    <a href="proposal.html">Open Proposal →</a>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Roadmap</h5><ul><li><a href="proposal.html">Proposal (Print)</a></li><li><a href="roadmap.html">Future Roadmap</a></li><li><a href="auth.html">Auth Mock</a></li><li><a href="live-scoring.html">Live Scoring</a></li></ul></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="standings.html">Standings</a></li><li><a href="stats.html">Stats Leaders</a></li><li><a href="pitch-count.html">Pitch Count</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+</body>
+</html>

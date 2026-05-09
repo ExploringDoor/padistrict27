@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>D27 Production Proposal · For Jeff Bennett</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --d27-navy: #002D72; --d27-navy-dark: #001B47; --d27-red: #DA291C; --d27-gold: #C9A227;
+    --d27-ink: #0F172A; --d27-muted: #64748B; --d27-line: #E5E7EB; --d27-paper: #F7F8FA; --d27-sub: #F1F3F6;
+    --font-display: 'Oswald', sans-serif; --font-body: 'Manrope', sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: var(--font-body); margin: 0; color: var(--d27-ink); background: var(--d27-paper); -webkit-font-smoothing: antialiased; }
+
+  .pp-toolbar { background: var(--d27-navy); color: #fff; padding: 10px 18px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 50; }
+  .pp-toolbar a { color: var(--d27-gold); text-decoration: none; font-size: 13px; font-weight: 600; }
+  .pp-toolbar .right { margin-left: auto; display: flex; gap: 10px; }
+  .pp-toolbar button { background: var(--d27-gold); color: var(--d27-navy); border: none; padding: 8px 14px; border-radius: 4px; font-family: var(--font-display); font-weight: 700; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
+
+  .doc { max-width: 8.5in; margin: 24px auto; background: #fff; padding: 0.7in 0.8in; box-shadow: 0 4px 24px rgba(0,0,0,.08); }
+
+  .doc h1 { font-family: var(--font-display); font-size: 32px; margin: 0 0 4px; color: var(--d27-navy); letter-spacing: -.01em; }
+  .doc h2 { font-family: var(--font-display); font-size: 17px; color: var(--d27-navy); margin: 28px 0 8px; padding-bottom: 4px; border-bottom: 2px solid var(--d27-gold); letter-spacing: .04em; text-transform: uppercase; }
+  .doc h3 { font-family: var(--font-display); font-size: 14px; color: var(--d27-red); margin: 14px 0 6px; letter-spacing: .04em; text-transform: uppercase; }
+  .doc p, .doc li { font-size: 12.5px; line-height: 1.55; color: var(--d27-ink); }
+  .doc strong { color: var(--d27-navy); }
+  .doc .meta { color: var(--d27-muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; font-family: var(--font-display); }
+  .doc .lead { font-size: 14px; color: var(--d27-muted); margin: 6px 0 18px; max-width: 60ch; line-height: 1.6; }
+
+  .doc-head { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 16px; border-bottom: 4px solid var(--d27-navy); margin-bottom: 18px; }
+  .doc-crest { width: 64px; height: 64px; border-radius: 50%; background: var(--d27-navy); color: var(--d27-gold); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 20px; box-shadow: 0 0 0 3px var(--d27-gold); }
+
+  .doc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 8px 0 4px; }
+  .doc-card { background: var(--d27-sub); padding: 12px 14px; border-radius: 6px; border-left: 3px solid var(--d27-navy); }
+  .doc-card.gold { border-left-color: var(--d27-gold); }
+  .doc-card.red { border-left-color: var(--d27-red); }
+  .doc-card .num { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--d27-navy); }
+  .doc-card .lbl { font-size: 11px; color: var(--d27-muted); letter-spacing: .06em; text-transform: uppercase; font-weight: 700; }
+
+  .phases { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 12px 0 4px; }
+  .phase { background: #fff; border: 1px solid var(--d27-line); border-top: 3px solid var(--d27-gold); padding: 10px 12px; border-radius: 4px; }
+  .phase .lvl { font-family: var(--font-display); font-size: 11px; color: var(--d27-red); letter-spacing: .06em; font-weight: 700; }
+  .phase .nm { font-weight: 700; font-size: 13px; margin: 2px 0; color: var(--d27-navy); }
+  .phase .when { color: var(--d27-muted); font-size: 11px; }
+
+  .doc table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
+  .doc th { background: var(--d27-navy); color: #fff; padding: 8px 10px; text-align: left; font-family: var(--font-display); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+  .doc td { padding: 8px 10px; border-bottom: 1px solid var(--d27-line); }
+  .doc td.right { text-align: right; }
+
+  .ask { background: linear-gradient(135deg, var(--d27-navy), var(--d27-navy-dark)); color: #fff; padding: 22px 26px; border-radius: 8px; margin-top: 22px; }
+  .ask h2 { color: var(--d27-gold); border-bottom: 2px solid var(--d27-gold); margin-top: 0; }
+  .ask p { color: rgba(255,255,255,.85); }
+  .ask .options { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 10px; }
+  .ask .opt { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); padding: 10px 14px; border-radius: 5px; }
+  .ask .opt b { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .04em; }
+
+  .doc-foot { margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--d27-line); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 11px; color: var(--d27-muted); }
+
+  ul.tight { padding-left: 18px; margin: 4px 0; }
+  ul.tight li { margin-bottom: 4px; }
+
+  @media print {
+    .pp-toolbar { display: none; }
+    body { background: #fff; }
+    .doc { box-shadow: none; margin: 0; padding: 0.6in; max-width: none; }
+    @page { margin: 0.5in; size: letter; }
+  }
+</style>
+</head>
+<body>
+
+<div class="pp-toolbar">
+  <a href="index.html">← Back to D27 Demo</a>
+  <span style="opacity: .7;">·</span>
+  <span style="font-size: 13px;">Production Proposal · v1.0 · Confidential</span>
+  <div class="right">
+    <button onclick="window.print()">🖨 Print / Save PDF</button>
+    <a href="roadmap.html" style="background: rgba(255,255,255,.12); color: #fff; padding: 8px 14px; border-radius: 4px; font-family: var(--font-display); font-weight: 700; font-size: 12px; letter-spacing: .06em; text-transform: uppercase;">View Live Roadmap →</a>
+  </div>
+</div>
+
+<article class="doc">
+
+  <header class="doc-head">
+    <div>
+      <div class="meta">CONFIDENTIAL · PROPOSAL FOR PA DISTRICT 27 LL · MAY 2026</div>
+      <h1>From Demo to Production</h1>
+      <p class="lead">A 1-page summary of what it takes to turn padistrict27.vercel.app into the operational backbone of D27 — and what it costs.</p>
+    </div>
+    <div class="doc-crest">D27</div>
+  </header>
+
+  <h2>The Opportunity</h2>
+  <p>The demo at <strong>padistrict27.vercel.app</strong> shows 36 pages — portals, brackets, schedules, scholarship, sponsors, store, and operations tools that don't exist anywhere else in Little League. Built in 14 days at zero cost. <strong>Jeff: it works as a demo. To run D27 on it, we need eight specific Phase-1 features wired to real systems.</strong> This document defines those features, the timeline, and the budget.</p>
+
+  <h2>What's at stake</h2>
+  <div class="doc-grid">
+    <div class="doc-card"><div class="num">10,000</div><div class="lbl">Players reached annually</div></div>
+    <div class="doc-card gold"><div class="num">$214K</div><div class="lbl">Avg. annual sponsor spend</div></div>
+    <div class="doc-card red"><div class="num">22,000</div><div class="lbl">Volunteer hours / season</div></div>
+    <div class="doc-card"><div class="num">12</div><div class="lbl">Member leagues unified</div></div>
+  </div>
+  <p style="margin-top: 8px;">D27 currently operates on email chains, group texts, paper pitch affidavits, and a PDF-list website. <strong>Production migration replaces all of it.</strong></p>
+
+  <h2>Phase 1 — Launch Scope (8 deliverables)</h2>
+  <ul class="tight">
+    <li><strong>1. Authentication &amp; roles</strong> — Firebase Auth · magic-link login · role detection (Admin / President / Captain / Player).</li>
+    <li><strong>2. Database migration</strong> — Firestore · all 12 leagues · rosters · games · pitch counts · communications.</li>
+    <li><strong>3. Sports Connect bridge</strong> — nightly roster sync from SC (LL-mandated registration system).</li>
+    <li><strong>4. GameChanger PDF import</strong> — captains drag-drop PDF after game; system parses + publishes.</li>
+    <li><strong>5. Stripe Connect</strong> — registration fees · donations · sponsor invoices · swag store · per-league split.</li>
+    <li><strong>6. Email + SMS broadcasting</strong> — SendGrid + Twilio · rainouts, RSVP reminders, cert lapse alerts.</li>
+    <li><strong>7. JDP / Safesport / Concussion API</strong> — auto-mark coaches cleared/expired (currently manual).</li>
+    <li><strong>8. ICS calendar feeds</strong> — subscribe links auto-update Google / Apple / Outlook calendars.</li>
+  </ul>
+
+  <h2>Timeline</h2>
+  <div class="phases">
+    <div class="phase"><div class="lvl">Phase 1</div><div class="nm">Real Launch</div><div class="when">Weeks 1–6</div></div>
+    <div class="phase"><div class="lvl">Phase 2</div><div class="nm">Mobile + Live</div><div class="when">Weeks 7–14</div></div>
+    <div class="phase"><div class="lvl">Phase 3</div><div class="nm">Player Dev</div><div class="when">Months 4–6</div></div>
+    <div class="phase"><div class="lvl">Phase 4</div><div class="nm">Multi-District</div><div class="when">Year 2+</div></div>
+  </div>
+  <p style="margin-top: 8px;">If we kick off June 1, <strong>D27 is live with one tournament + one league using the production system by July 15.</strong> Full district migration by October. Spring 2027 registration opens on the new system Nov 15.</p>
+
+  <h2>Budget</h2>
+  <table>
+    <thead><tr><th>Line Item</th><th>One-Time</th><th class="right">Recurring</th></tr></thead>
+    <tbody>
+      <tr><td>Phase 1 development</td><td>$0 (in-house · Adam Miller)</td><td class="right">—</td></tr>
+      <tr><td>Vercel Pro hosting</td><td>—</td><td class="right">$240 / yr</td></tr>
+      <tr><td>Firebase Blaze (Auth · DB · Storage)</td><td>—</td><td class="right">~$60 / mo</td></tr>
+      <tr><td>SendGrid (50K emails / mo)</td><td>—</td><td class="right">$20 / mo</td></tr>
+      <tr><td>Twilio (1K SMS / mo)</td><td>—</td><td class="right">$15 / mo</td></tr>
+      <tr><td>Stripe transaction fees</td><td>—</td><td class="right">2.9% + $0.30 (offset by registration)</td></tr>
+      <tr><td>Domain · padistrict27.org</td><td>—</td><td class="right">$15 / yr</td></tr>
+      <tr style="background: rgba(0,45,114,.04);"><td><strong>Total Year 1</strong></td><td>$0</td><td class="right"><strong>~$1,400 / year</strong></td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top: 8px;">For comparison: <strong>Sports Connect Premium runs ~$400/league/year × 12 = $4,800/yr</strong> and only covers registration. <strong>D27's all-in cost is ⅓ of SC alone</strong> — and includes everything beyond it.</p>
+
+  <h2>Revenue Offsets</h2>
+  <ul class="tight">
+    <li><strong>Swag store</strong> — projected ~$8K/yr profit at 5% adoption · 50% to leagues / 50% to scholarship.</li>
+    <li><strong>Tournament hosting fees</strong> — $400 × 8 outside teams / yr = $3,200 currently mailed in by check.</li>
+    <li><strong>Sponsor analytics retention</strong> — current 12% sponsor churn drops to ~5% with ROI dashboards.</li>
+    <li><strong>Scholarship donations</strong> — projected 3× lift with on-site donate button (currently $214K total since 2008).</li>
+  </ul>
+
+  <h2>Why Now</h2>
+  <p>Sports Connect is registration-only. GameChanger doesn't talk across teams. TeamSnap doesn't handle districts. <strong>No platform exists for what a district administrator actually does.</strong> D27 has the chance to be first — and to set the template for the other 511 LL districts.</p>
+
+  <div class="ask">
+    <h2 style="font-size: 16px;">The Ask</h2>
+    <p>Three paths forward. Pick one:</p>
+    <div class="options">
+      <div class="opt"><b>Option A · Phase 1 Launch (Recommended)</b><br>Greenlight 6-week build → live July 15 with one league + Bob Jones tournament on production. Full migration by season's end. Cost: <b>$0 dev</b> · ~$1,400/yr ops.</div>
+      <div class="opt"><b>Option B · Pilot League Only</b><br>Pick one league (BP suggested). Run them end-to-end on production for Spring 2027. Other 11 leagues stay on demo. Cost: <b>$0 dev</b> · ~$400/yr ops for one league.</div>
+      <div class="opt"><b>Option C · Phase 0 Continuation</b><br>Keep the demo as a public-facing brochure. Refine quarterly. No backend, no Phase 1. Cost: <b>$0 / yr</b>.</div>
+    </div>
+    <p style="margin-top: 14px;"><strong>Recommendation: Option A.</strong> The 6-week build cost is zero (Adam Miller, in-house). Operating cost is ⅓ of what 12 leagues already pay for Sports Connect. Risk is contained — fall back to demo at any time. Upside: D27 becomes the platform other districts call about.</p>
+  </div>
+
+  <footer class="doc-foot">
+    <div>Prepared by Adam Miller · adam.miller.22@gmail.com · padistrict27.vercel.app</div>
+    <div>D27 · One Team. One Little League.</div>
+  </footer>
+
+</article>
+
+</body>
+</html>

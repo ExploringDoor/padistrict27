@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Spring 2027 Registration · D27 Phase 1 Mock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  body { background: var(--d27-paper); }
+  .rg-banner { background: var(--d27-gold); color: var(--d27-navy); padding: 8px 0; text-align: center; font-family: var(--font-display); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
+  .rg-banner a { color: var(--d27-navy); }
+
+  .rg-shell { max-width: 1080px; margin: 36px auto; padding: 0 20px; display: grid; grid-template-columns: 1.6fr 1fr; gap: 24px; }
+  @media (max-width: 880px) { .rg-shell { grid-template-columns: 1fr; } }
+
+  .rg-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 28px; }
+  .rg-card h1 { font-family: var(--font-display); margin: 0 0 4px; color: var(--d27-navy); font-size: 26px; }
+  .rg-card .lead { color: var(--muted); margin: 0 0 20px; font-size: 14px; line-height: 1.6; }
+
+  .rg-step { padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .rg-step:last-child { border-bottom: 0; }
+  .rg-step h3 { font-family: var(--font-display); margin: 0 0 10px; color: var(--d27-navy); font-size: 14px; letter-spacing: .06em; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+  .rg-step h3 .stepnum { width: 24px; height: 24px; border-radius: 50%; background: var(--d27-gold); color: var(--d27-navy); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+
+  .rg-input, .rg-select { width: 100%; padding: 11px 14px; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 14px; background: var(--surface); }
+  .rg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .rg-kid { background: rgba(0,45,114,.03); border: 1px solid rgba(0,45,114,.1); border-radius: 8px; padding: 16px; margin-bottom: 10px; position: relative; }
+  .rg-kid h4 { font-family: var(--font-display); margin: 0 0 12px; color: var(--d27-navy); font-size: 16px; }
+  .rg-kid .who { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+  .rg-kid .who .av { width: 40px; height: 40px; border-radius: 50%; background: var(--d27-navy); color: var(--d27-gold); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 13px; }
+  .rg-kid .who .nm { font-weight: 700; }
+  .rg-kid .who .meta { color: var(--muted); font-size: 12px; }
+  .rg-kid .div-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+  .rg-kid .div-opt { padding: 10px 12px; border: 2px solid var(--line); border-radius: 6px; cursor: pointer; transition: all .15s; }
+  .rg-kid .div-opt:hover { border-color: var(--d27-navy); background: rgba(0,45,114,.04); }
+  .rg-kid .div-opt.selected { border-color: var(--d27-navy); background: rgba(0,45,114,.04); }
+  .rg-kid .div-opt .nm { font-family: var(--font-display); font-weight: 700; color: var(--d27-navy); font-size: 14px; }
+  .rg-kid .div-opt .meta { color: var(--muted); font-size: 11px; }
+  .rg-kid .div-opt .price { font-family: var(--font-display); color: var(--d27-red); font-weight: 700; }
+
+  .rg-side { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 22px; height: fit-content; position: sticky; top: 20px; }
+  .rg-side h3 { font-family: var(--font-display); margin: 0 0 12px; color: var(--d27-navy); }
+  .rg-line { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--line); font-size: 14px; }
+  .rg-line.discount { color: #059669; }
+  .rg-total { display: flex; justify-content: space-between; padding: 14px 0 0; margin-top: 8px; border-top: 2px solid var(--d27-navy); }
+  .rg-total .lbl { font-family: var(--font-display); font-size: 14px; color: var(--d27-navy); letter-spacing: .04em; text-transform: uppercase; }
+  .rg-total .amt { font-family: var(--font-display); font-size: 28px; color: var(--d27-navy); font-weight: 700; }
+
+  .rg-btn { background: var(--d27-navy); color: #fff; border: none; padding: 14px; border-radius: 6px; font-family: var(--font-display); font-weight: 700; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; width: 100%; margin-top: 14px; }
+  .rg-btn-stripe { background: linear-gradient(90deg, #635BFF, #635BFF); display: flex; align-items: center; justify-content: center; gap: 10px; }
+
+  .rg-toggle-card { background: linear-gradient(90deg, rgba(218,41,28,.04), transparent); border: 1px solid rgba(218,41,28,.18); border-left: 4px solid var(--d27-red); padding: 12px 14px; border-radius: 6px; margin: 10px 0; display: flex; gap: 12px; align-items: center; }
+  .rg-toggle-card label { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; cursor: pointer; }
+  .rg-toggle-card input { margin-top: 3px; }
+
+  .rg-tech { background: linear-gradient(90deg, rgba(99,91,255,.04), transparent); border: 1px solid rgba(99,91,255,.18); border-left: 4px solid #635BFF; padding: 14px 18px; border-radius: 6px; font-size: 13px; color: var(--muted); line-height: 1.65; margin-top: 18px; }
+  .rg-tech b { color: var(--d27-navy); font-family: var(--font-display); }
+  .rg-tech code { background: rgba(99,91,255,.08); padding: 1px 6px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #4F46E5; }
+
+  .rg-payment { background: var(--d27-paper); border-radius: 8px; padding: 16px; margin-top: 12px; }
+  .rg-payment .stripe-look { display: flex; gap: 8px; align-items: center; padding: 12px; border: 1px solid var(--line); background: var(--surface); border-radius: 5px; font-size: 14px; cursor: text; }
+  .rg-payment .stripe-look::before { content: '💳'; }
+  .rg-payment .stripe-look::after { content: ''; flex: 1; }
+  .rg-payment .stripe-look .placeholder { color: var(--muted); }
+
+  .rg-progress { display: flex; gap: 4px; margin-bottom: 22px; }
+  .rg-progress .seg { flex: 1; height: 4px; background: var(--line); border-radius: 2px; }
+  .rg-progress .seg.done { background: #10B981; }
+  .rg-progress .seg.active { background: var(--d27-gold); }
+</style>
+</head>
+<body>
+
+<div class="rg-banner">
+  PHASE 1 PRODUCTION MOCK · Real Stripe checkout integration · <a href="roadmap.html">Back to Roadmap</a>
+</div>
+
+<div class="rg-shell">
+
+  <div>
+    <div class="rg-card">
+      <h1>Spring 2027 Registration · Berwyn-Paoli</h1>
+      <p class="lead">Registration runs Nov 15 → Feb 28. Early-bird discount through Dec 31. Multi-child &amp; volunteer-bond credits applied automatically. Scholarship requests handled discreetly via the <a href="scholarship.html" style="color: var(--d27-navy); font-weight: 600;">Scholarship Fund</a>.</p>
+
+      <div class="rg-progress">
+        <div class="seg done"></div>
+        <div class="seg done"></div>
+        <div class="seg active"></div>
+        <div class="seg"></div>
+      </div>
+
+      <div class="rg-step">
+        <h3><span class="stepnum">1</span>Parent Information</h3>
+        <div class="rg-row">
+          <input class="rg-input" type="text" placeholder="First name" value="Mark" />
+          <input class="rg-input" type="text" placeholder="Last name" value="Caldwell" />
+        </div>
+        <div class="rg-row" style="margin-top: 8px;">
+          <input class="rg-input" type="email" placeholder="Email" value="mark.caldwell@gmail.com" />
+          <input class="rg-input" type="tel" placeholder="Phone" value="(610) 555-0142" />
+        </div>
+      </div>
+
+      <div class="rg-step">
+        <h3><span class="stepnum">2</span>Children Registering</h3>
+
+        <div class="rg-kid">
+          <h4>Child #1</h4>
+          <div class="who">
+            <div class="av">LC</div>
+            <div><div class="nm">Luke Caldwell</div><div class="meta">DOB Sep 2013 · LL age 12 · returning player</div></div>
+          </div>
+
+          <div style="font-family: var(--font-display); font-size: 11px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px;">Eligible Divisions</div>
+          <div class="div-options">
+            <div class="div-opt selected"><div class="nm">12U Major</div><div class="meta">10-game season + tournaments</div><div class="price">$295</div></div>
+            <div class="div-opt"><div class="nm">Intermediate (50/70)</div><div class="meta">12-game · age 13 must opt up</div><div class="price">$345</div></div>
+          </div>
+        </div>
+
+        <div class="rg-kid">
+          <h4>Child #2</h4>
+          <div class="who">
+            <div class="av">EC</div>
+            <div><div class="nm">Ella Caldwell</div><div class="meta">DOB Mar 2017 · LL age 9 · new player</div></div>
+          </div>
+
+          <div style="font-family: var(--font-display); font-size: 11px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px;">Eligible Divisions</div>
+          <div class="div-options">
+            <div class="div-opt selected"><div class="nm">10U Softball Minor</div><div class="meta">8-game · weeknights + Sat</div><div class="price">$220</div></div>
+            <div class="div-opt"><div class="nm">10U Coach Pitch</div><div class="meta">6-game · Saturdays only</div><div class="price">$185</div></div>
+          </div>
+        </div>
+
+        <button onclick="alert('Demo — adds another kid form')" style="background: var(--surface); border: 1px dashed var(--line); padding: 10px 14px; border-radius: 6px; color: var(--d27-navy); font-weight: 700; font-size: 13px; cursor: pointer; width: 100%;">+ Add Another Child</button>
+      </div>
+
+      <div class="rg-step">
+        <h3><span class="stepnum">3</span>Optional</h3>
+
+        <div class="rg-toggle-card">
+          <label><input type="checkbox" /> <span><b>Volunteer Bond ($100)</b> — refunded after one volunteer shift completed. Skip if you'd rather not commit.</span></label>
+        </div>
+
+        <div class="rg-toggle-card" style="background: linear-gradient(90deg, rgba(201,162,39,.04), transparent); border-color: rgba(201,162,39,.18); border-left-color: var(--d27-gold);">
+          <label><input type="checkbox" checked /> <span><b>Round up to support the Scholarship Fund</b> — adds $5. 100% goes to families who can't afford fees.</span></label>
+        </div>
+
+        <div class="rg-toggle-card" style="background: linear-gradient(90deg, rgba(16,185,129,.04), transparent); border-color: rgba(16,185,129,.18); border-left-color: #10B981;">
+          <label><input type="checkbox" /> <span><b>Need scholarship assistance?</b> — confidential, no questions asked. Routes to Suzanne Battaglia (Scholarship Chair).</span></label>
+        </div>
+      </div>
+
+      <div class="rg-step">
+        <h3><span class="stepnum">4</span>Payment</h3>
+        <div class="rg-payment">
+          <div class="stripe-look">
+            <span class="placeholder">4242 4242 4242 4242</span>
+            <span class="placeholder" style="font-family: 'JetBrains Mono', monospace;">12/27 · 123</span>
+          </div>
+          <p style="margin: 10px 0 0; font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px;">🔒 Secure checkout via Stripe · 256-bit encryption · receipt emailed instantly</p>
+        </div>
+      </div>
+
+      <div class="rg-tech">
+        <b>What's running:</b> <code>Stripe Connect</code> with destination charges → 2 line items posted to Berwyn-Paoli's Stripe account · 3% to D27 platform fee · $5 round-up auto-routed to Scholarship Fund's connected account · webhook to <code>onPaymentSuccess</code> creates <code>registrations/</code> document, fires <code>registrationConfirmed</code> email, adds to Sports Connect via API.
+      </div>
+    </div>
+  </div>
+
+  <aside class="rg-side">
+    <h3>Order Summary</h3>
+
+    <div class="rg-line"><span>Luke · 12U Major · BP</span><span>$295.00</span></div>
+    <div class="rg-line"><span>Ella · 10U SB Minor · BP</span><span>$220.00</span></div>
+    <div class="rg-line discount"><span>Multi-child discount (10%)</span><span>-$22.00</span></div>
+    <div class="rg-line discount"><span>Early-bird (Dec 31 deadline)</span><span>-$25.00</span></div>
+    <div class="rg-line"><span>Scholarship Fund round-up</span><span>+$5.00</span></div>
+
+    <div class="rg-total">
+      <span class="lbl">Total</span>
+      <span class="amt">$473.00</span>
+    </div>
+
+    <button class="rg-btn rg-btn-stripe" onclick="alert('Demo — In production this redirects to Stripe Checkout, processes payment, and creates registrations in Firebase + Sports Connect.')">⚡ Pay with Stripe</button>
+
+    <p style="font-size: 11px; color: var(--muted); margin: 12px 0 0; text-align: center;">By clicking pay, you agree to the <a href="rules.html" style="color: var(--d27-navy);">D27 Code of Conduct</a> &amp; <a href="#" style="color: var(--d27-navy);">privacy policy</a>.</p>
+
+    <div style="background: rgba(16,185,129,.06); border: 1px solid rgba(16,185,129,.2); padding: 10px 14px; border-radius: 6px; margin-top: 14px; font-size: 12px; color: #047857;">
+      ✓ <b>Refund-friendly</b> — full refund within 14 days of registration · pro-rated through opening day.
+    </div>
+  </aside>
+
+</div>
+
+</body>
+</html>

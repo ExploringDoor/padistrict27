@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Auth Flow · D27 Phase 1 Mock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  body { background: linear-gradient(180deg, #001034 0%, var(--d27-navy) 100%); min-height: 100vh; color: #fff; }
+
+  .au-banner { background: var(--d27-gold); color: var(--d27-navy); padding: 8px 0; text-align: center; font-family: var(--font-display); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
+  .au-banner a { color: var(--d27-navy); text-decoration: underline; }
+
+  .au-shell { max-width: 480px; margin: 60px auto; padding: 0 20px; }
+  .au-card { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 14px; padding: 38px; backdrop-filter: blur(10px); position: relative; }
+
+  .au-crest { width: 64px; height: 64px; border-radius: 50%; background: var(--d27-navy); border: 3px solid var(--d27-gold); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--d27-gold); margin: 0 auto 18px; }
+
+  .au-card h1 { font-family: var(--font-display); font-size: 28px; margin: 0; text-align: center; letter-spacing: -.01em; }
+  .au-card .sub { color: rgba(255,255,255,.7); text-align: center; font-size: 13px; margin: 4px 0 24px; }
+
+  .au-step { display: none; }
+  .au-step.active { display: block; animation: fadeIn .3s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .au-input { width: 100%; padding: 14px 16px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); color: #fff; border-radius: 8px; font: inherit; font-size: 15px; }
+  .au-input:focus { outline: 2px solid var(--d27-gold); border-color: var(--d27-gold); }
+  .au-input::placeholder { color: rgba(255,255,255,.4); }
+  .au-label { display: block; font-family: var(--font-display); font-size: 11px; color: var(--d27-gold); letter-spacing: .12em; text-transform: uppercase; margin: 16px 0 6px; }
+  .au-btn { width: 100%; padding: 14px 16px; background: var(--d27-gold); color: var(--d27-navy); border: none; border-radius: 8px; font-family: var(--font-display); font-weight: 700; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; margin-top: 16px; transition: transform .15s; }
+  .au-btn:hover:not(:disabled) { transform: translateY(-1px); }
+  .au-btn:disabled { opacity: .6; cursor: wait; }
+  .au-btn.ghost { background: rgba(255,255,255,.08); color: #fff; border: 1px solid rgba(255,255,255,.18); }
+
+  .au-status { padding: 14px; background: rgba(0,0,0,.25); border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #93C5FD; margin-top: 16px; line-height: 1.6; }
+  .au-status .ok { color: #10B981; }
+  .au-status .warn { color: var(--d27-gold); }
+
+  .au-footnote { text-align: center; color: rgba(255,255,255,.5); font-size: 12px; margin-top: 18px; }
+  .au-footnote a { color: var(--d27-gold); }
+
+  /* Step 2 — code */
+  .au-code-input { display: flex; gap: 8px; justify-content: center; margin: 14px 0; }
+  .au-code-input input { width: 48px; height: 60px; text-align: center; font-family: var(--font-display); font-size: 28px; font-weight: 700; }
+
+  /* Step 3 — role */
+  .au-role { display: flex; gap: 14px; padding: 14px; border: 1px solid rgba(255,255,255,.18); border-radius: 8px; cursor: pointer; margin-bottom: 8px; transition: all .15s; align-items: center; }
+  .au-role:hover { background: rgba(255,255,255,.08); border-color: var(--d27-gold); }
+  .au-role .ico { width: 36px; height: 36px; border-radius: 50%; background: var(--d27-gold); color: var(--d27-navy); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .au-role .body { flex: 1; }
+  .au-role .nm { font-family: var(--font-display); font-size: 14px; letter-spacing: .04em; }
+  .au-role .meta { color: rgba(255,255,255,.6); font-size: 11px; margin-top: 1px; }
+  .au-role .arrow { color: var(--d27-gold); font-size: 20px; }
+
+  /* Step 4 — done */
+  .au-done .check { width: 70px; height: 70px; border-radius: 50%; background: rgba(16,185,129,.15); border: 3px solid #10B981; display: flex; align-items: center; justify-content: center; font-size: 36px; color: #10B981; margin: 0 auto 14px; }
+
+  .au-stepper { display: flex; gap: 4px; margin-bottom: 24px; }
+  .au-stepper .dot { flex: 1; height: 3px; background: rgba(255,255,255,.12); border-radius: 2px; transition: background .3s; }
+  .au-stepper .dot.done { background: var(--d27-gold); }
+  .au-stepper .dot.active { background: var(--d27-gold); animation: pulse 1.5s infinite; }
+  @keyframes pulse { 50% { opacity: .5; } }
+
+  .au-tech { background: rgba(0,0,0,.3); border: 1px solid rgba(255,255,255,.12); border-radius: 8px; padding: 14px 18px; max-width: 720px; margin: 32px auto; font-size: 13px; color: rgba(255,255,255,.85); line-height: 1.65; }
+  .au-tech h3 { color: var(--d27-gold); font-family: var(--font-display); margin: 0 0 8px; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; }
+  .au-tech code { background: rgba(255,255,255,.08); padding: 1px 6px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--d27-gold); }
+</style>
+</head>
+<body>
+
+<div class="au-banner">
+  PHASE 1 PRODUCTION MOCK · This is what real auth looks like · <a href="roadmap.html">Back to Roadmap</a>
+</div>
+
+<div class="au-shell">
+
+  <div class="au-card">
+    <div class="au-crest">D27</div>
+    <h1>Sign in to D27</h1>
+    <p class="sub">One account · works for all 12 leagues</p>
+
+    <div class="au-stepper">
+      <div class="dot active" id="dot-1"></div>
+      <div class="dot" id="dot-2"></div>
+      <div class="dot" id="dot-3"></div>
+      <div class="dot" id="dot-4"></div>
+    </div>
+
+    <!-- Step 1: Email -->
+    <div class="au-step active" id="step-1">
+      <label class="au-label">Email</label>
+      <input id="email" class="au-input" type="email" placeholder="you@email.com" value="tom.caldwell@berwynpaoli.org" />
+      <button class="au-btn" onclick="sendCode()">Send Magic Link →</button>
+      <p class="au-footnote">No password. We'll email a 6-digit code.</p>
+    </div>
+
+    <!-- Step 2: Code -->
+    <div class="au-step" id="step-2">
+      <label class="au-label">Enter the 6-digit code</label>
+      <p class="sub" style="margin: 0;">Sent to <b id="email-show">tom.caldwell@berwynpaoli.org</b></p>
+
+      <div class="au-code-input">
+        <input class="au-input" maxlength="1" value="4" />
+        <input class="au-input" maxlength="1" value="9" />
+        <input class="au-input" maxlength="1" value="2" />
+        <input class="au-input" maxlength="1" value="7" />
+        <input class="au-input" maxlength="1" value="8" />
+        <input class="au-input" maxlength="1" value="3" />
+      </div>
+
+      <div class="au-status">
+        <span class="ok">→ Magic-link request received</span><br>
+        <span class="ok">→ Code generated: 492783</span><br>
+        <span class="ok">→ Email queued via SendGrid</span><br>
+        <span class="warn">→ Awaiting verification...</span>
+      </div>
+
+      <button class="au-btn" onclick="verifyCode()">Verify →</button>
+      <button class="au-btn ghost" onclick="goStep(1)">← Use a different email</button>
+    </div>
+
+    <!-- Step 3: Role detected -->
+    <div class="au-step" id="step-3">
+      <p class="sub">Welcome back, <b>Tom Caldwell</b>. We found <b>2 roles</b> for your account:</p>
+
+      <div class="au-role" onclick="pickRole('captain')">
+        <div class="ico">🧢</div>
+        <div class="body"><div class="nm">CAPTAIN</div><div class="meta">Berwyn-Paoli Red 12U · Manager · 9-1 record</div></div>
+        <div class="arrow">→</div>
+      </div>
+      <div class="au-role" onclick="pickRole('player')">
+        <div class="ico">⚾</div>
+        <div class="body"><div class="nm">PARENT</div><div class="meta">Luke Caldwell · #1 SS/P · Berwyn-Paoli Red 12U</div></div>
+        <div class="arrow">→</div>
+      </div>
+
+      <div class="au-status">
+        <span class="ok">→ Identity verified · Firebase Auth UID: <code style="background:rgba(0,0,0,.3); padding:1px 4px; border-radius:2px;">d27_aB4kP9w...</code></span><br>
+        <span class="ok">→ Custom claims fetched (2 roles)</span><br>
+        <span class="ok">→ ID token issued (1h expiry, auto-refresh)</span>
+      </div>
+    </div>
+
+    <!-- Step 4: Success -->
+    <div class="au-step au-done" id="step-4">
+      <div class="check">✓</div>
+      <h1 style="font-size: 22px;">Signed in</h1>
+      <p class="sub">Routing you to your <b id="role-name">Captain Portal</b>...</p>
+
+      <div class="au-status">
+        <span class="ok">→ Session cookie set (HTTP-only, secure, sameSite=Lax)</span><br>
+        <span class="ok">→ Audit log: <code style="background:rgba(0,0,0,.3); padding:1px 4px; border-radius:2px;">login.success · 2026-05-04T17:42:11Z</code></span><br>
+        <span class="ok">→ Routing to <code style="background:rgba(0,0,0,.3); padding:1px 4px; border-radius:2px;" id="route-target">/captain</code></span>
+      </div>
+
+      <button class="au-btn" onclick="goPortal()">Continue →</button>
+    </div>
+  </div>
+
+  <div class="au-tech">
+    <h3>What's running under the hood</h3>
+    <p>Real Phase 1 implementation: <code>Firebase Auth</code> magic-link · <code>SendGrid</code> for code delivery · <code>Firestore</code> for role lookup · <code>custom claims</code> for multi-role support · session cookie with auto-refresh · audit log to <code>audit_events</code> collection.</p>
+    <p>No passwords stored. No SSO required. Same email = same account across <a href="captain.html" style="color:var(--d27-gold);">Captain</a>, <a href="player.html" style="color:var(--d27-gold);">Player</a>, <a href="president.html" style="color:var(--d27-gold);">President</a>, and <a href="admin.html" style="color:var(--d27-gold);">Admin</a> portals.</p>
+  </div>
+
+</div>
+
+<script>
+function goStep(n) {
+  document.querySelectorAll('.au-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-' + n).classList.add('active');
+  for (let i = 1; i <= 4; i++) {
+    const dot = document.getElementById('dot-' + i);
+    dot.classList.remove('active', 'done');
+    if (i < n) dot.classList.add('done');
+    if (i === n) dot.classList.add('active');
+  }
+}
+function sendCode() {
+  document.getElementById('email-show').textContent = document.getElementById('email').value;
+  goStep(2);
+}
+function verifyCode() { goStep(3); }
+let chosenRole = 'captain';
+function pickRole(r) {
+  chosenRole = r;
+  document.getElementById('role-name').textContent = r === 'captain' ? 'Captain Portal' : 'Parent Portal';
+  document.getElementById('route-target').textContent = '/' + r;
+  goStep(4);
+}
+function goPortal() { window.location.href = chosenRole + '.html'; }
+</script>
+
+</body>
+</html>
