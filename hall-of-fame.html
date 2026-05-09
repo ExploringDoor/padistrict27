@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Hall of Fame · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  body { background: linear-gradient(180deg, #001034, var(--d27-navy-dark)); color: #fff; min-height: 100vh; }
+
+  .hof-hero { padding: 80px 0 56px; text-align: center; position: relative; overflow: hidden; border-bottom: 4px solid var(--d27-gold); }
+  .hof-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 30%, rgba(201,162,39,.18), transparent 60%); }
+  .hof-hero .stars { font-size: 28px; letter-spacing: 14px; color: var(--d27-gold); margin-bottom: 14px; position: relative; }
+  .hof-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; position: relative; }
+  .hof-hero h1 { font-family: 'Crimson Pro', serif; font-size: clamp(48px, 7vw, 84px); margin: 8px 0; font-weight: 600; letter-spacing: -.02em; position: relative; }
+  .hof-hero .est { font-family: var(--font-display); color: rgba(255,255,255,.6); letter-spacing: .14em; font-size: 12px; position: relative; }
+  .hof-hero p { color: rgba(255,255,255,.78); max-width: 620px; margin: 18px auto 0; line-height: 1.7; font-size: 15px; position: relative; }
+
+  .hof-tabs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 32px 0 24px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,.12); }
+  .hof-tab { background: none; border: none; padding: 10px 18px; font-family: var(--font-display); font-size: 14px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: rgba(255,255,255,.6); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -13px; }
+  .hof-tab.active { color: var(--d27-gold); border-bottom-color: var(--d27-gold); }
+
+  .hof-class-head { text-align: center; margin: 32px 0 22px; }
+  .hof-class-head h2 { font-family: 'Crimson Pro', serif; font-size: 36px; margin: 0; font-weight: 600; }
+  .hof-class-head .sub { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .12em; font-size: 12px; text-transform: uppercase; margin-top: 4px; }
+
+  .hof-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+
+  .hof-card { background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); border: 1px solid rgba(255,255,255,.14); border-radius: 10px; padding: 22px; position: relative; overflow: hidden; transition: transform .2s, box-shadow .2s; }
+  .hof-card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,.4); border-color: var(--d27-gold); }
+  .hof-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--d27-gold); }
+
+  .hof-card .av { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--d27-navy), #001034); border: 2px solid var(--d27-gold); display: flex; align-items: center; justify-content: center; font-family: 'Crimson Pro', serif; font-weight: 600; font-size: 28px; color: var(--d27-gold); margin: 0 auto 14px; box-shadow: 0 0 0 4px rgba(201,162,39,.18); }
+
+  .hof-card h3 { font-family: 'Crimson Pro', serif; margin: 0; text-align: center; font-size: 22px; font-weight: 600; }
+  .hof-card .role { color: var(--d27-gold); font-family: var(--font-display); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; text-align: center; margin: 4px 0 10px; }
+  .hof-card .desc { font-family: 'Crimson Pro', serif; font-style: italic; font-size: 14px; line-height: 1.65; color: rgba(255,255,255,.85); text-align: center; min-height: 60px; }
+  .hof-card .stats { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.1); font-size: 12px; color: rgba(255,255,255,.7); display: grid; grid-template-columns: 1fr 1fr; gap: 4px 8px; }
+  .hof-card .stats b { color: var(--d27-gold); font-family: var(--font-display); }
+  .hof-card .yr { position: absolute; top: 14px; right: 16px; font-family: var(--font-display); color: var(--d27-gold); font-size: 11px; letter-spacing: .08em; }
+
+  .hof-banner { background: linear-gradient(90deg, rgba(201,162,39,.06), rgba(0,45,114,.04)); border: 1px solid rgba(201,162,39,.2); border-left: 4px solid var(--d27-gold); padding: 22px 28px; border-radius: 8px; margin: 36px 0; display: grid; grid-template-columns: 60px 1fr auto; gap: 18px; align-items: center; }
+  @media (max-width: 700px) { .hof-banner { grid-template-columns: 1fr; text-align: center; } }
+  .hof-banner .ico { font-size: 36px; }
+  .hof-banner h3 { font-family: 'Crimson Pro', serif; margin: 0 0 4px; font-size: 22px; color: var(--d27-gold); }
+  .hof-banner p { margin: 0; color: rgba(255,255,255,.78); font-size: 13px; }
+  .hof-banner a { background: var(--d27-gold); color: var(--d27-navy); padding: 10px 18px; border-radius: 5px; text-decoration: none; font-family: var(--font-display); font-weight: 700; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+
+  /* Inductee categories */
+  .hof-cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 24px 0 36px; }
+  @media (max-width: 700px) { .hof-cats { grid-template-columns: repeat(2, 1fr); } }
+  .hof-cat { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 8px; padding: 16px; text-align: center; }
+  .hof-cat .ico { font-size: 28px; }
+  .hof-cat .num { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--d27-gold); margin: 4px 0; }
+  .hof-cat .lbl { color: rgba(255,255,255,.7); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; }
+
+  .hof-criteria { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 8px; padding: 24px 28px; margin: 36px 0; }
+  .hof-criteria h2 { font-family: 'Crimson Pro', serif; margin: 0 0 12px; color: var(--d27-gold); font-size: 26px; font-weight: 600; }
+  .hof-criteria ul { padding-left: 18px; line-height: 1.85; color: rgba(255,255,255,.85); font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hof-hero">
+  <div class="container">
+    <div class="eyebrow">PA DISTRICT 27 LITTLE LEAGUE</div>
+    <div class="stars">★ ★ ★ ★ ★</div>
+    <h1>Hall of Fame</h1>
+    <div class="est">EST. 1955 · INDUCTING SINCE 1990</div>
+    <p>The men, women, players, coaches, and volunteers who built District 27 into what it is. New class inducted each fall at the District banquet — honoring excellence on the field and dedication beyond it.</p>
+  </div>
+</header>
+
+<main class="container" style="padding: 36px 0 64px;">
+
+  <div class="hof-cats">
+    <div class="hof-cat"><div class="ico">⚾</div><div class="num">38</div><div class="lbl">Players</div></div>
+    <div class="hof-cat"><div class="ico">🎓</div><div class="num">22</div><div class="lbl">Coaches/Managers</div></div>
+    <div class="hof-cat"><div class="ico">🤝</div><div class="num">19</div><div class="lbl">Volunteers</div></div>
+    <div class="hof-cat"><div class="ico">🏆</div><div class="num">8</div><div class="lbl">Pioneers / Founders</div></div>
+  </div>
+
+  <div class="hof-tabs">
+    <button class="hof-tab active">Class of 2026</button>
+    <button class="hof-tab">Class of 2025</button>
+    <button class="hof-tab">Class of 2024</button>
+    <button class="hof-tab">All Time</button>
+    <button class="hof-tab">Players</button>
+    <button class="hof-tab">Coaches</button>
+    <button class="hof-tab">Volunteers</button>
+    <button class="hof-tab">Pioneers</button>
+  </div>
+
+  <!-- Class of 2026 -->
+  <div class="hof-class-head">
+    <h2>Class of 2026</h2>
+    <div class="sub">★ ★ ★ ★ Inducted October 17, 2026 · Drexelbrook ★ ★ ★ ★</div>
+  </div>
+
+  <div class="hof-grid">
+
+    <div class="hof-card">
+      <span class="yr">2026</span>
+      <div class="av">JS</div>
+      <h3>James "Jim" Sutton</h3>
+      <div class="role">Pioneer · 1955-1989</div>
+      <div class="desc">"He didn't found a league. He built a district. Jim's hands stained six fields and his pen wrote the bylaws we still use."</div>
+      <div class="stats">
+        <span>Founded</span><b>3 leagues</b>
+        <span>Years</span><b>34</b>
+        <span>Fields built</span><b>6</b>
+        <span>Era</span><b>1955-1989</b>
+      </div>
+    </div>
+
+    <div class="hof-card">
+      <span class="yr">2026</span>
+      <div class="av">MR</div>
+      <h3>Mike Russo</h3>
+      <div class="role">Volunteer · 22 years</div>
+      <div class="desc">"For 22 years, every Saturday morning at 6 AM, Marple Newtown's fields were ready because of Mike. The drag, the lines, the lights."</div>
+      <div class="stats">
+        <span>League</span><b>Marple Newtown</b>
+        <span>Saturdays</span><b>~1,200</b>
+        <span>Hours</span><b>14,000+</b>
+        <span>Award</span><b>D27 LSA '24</b>
+      </div>
+    </div>
+
+    <div class="hof-card">
+      <span class="yr">2026</span>
+      <div class="av">CP</div>
+      <h3>Cole Patel</h3>
+      <div class="role">Player · LM 2018-2024</div>
+      <div class="desc">"Williamsport-bound. .487 career, 4 D27 championships, 2 Section 8 titles, and the kind of leadership that turns teammates into family."</div>
+      <div class="stats">
+        <span>Career BA</span><b>.487</b>
+        <span>D27 titles</span><b>4</b>
+        <span>Section 8</span><b>2</b>
+        <span>LLWS</span><b>2024</b>
+      </div>
+    </div>
+
+    <div class="hof-card">
+      <span class="yr">2026</span>
+      <div class="av">LM</div>
+      <h3>Linda Marsh</h3>
+      <div class="role">Coach · LPK 2008-2025</div>
+      <div class="desc">"Coach Linda turned Lower Perkiomen softball into a powerhouse. 17 years, 5 division titles, and 200+ kids who learned what excellence costs."</div>
+      <div class="stats">
+        <span>Years</span><b>17</b>
+        <span>Titles</span><b>5</b>
+        <span>Players coached</span><b>200+</b>
+        <span>Award</span><b>2023 COY</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- Class of 2025 -->
+  <div class="hof-class-head" style="margin-top: 48px;">
+    <h2>Class of 2025</h2>
+    <div class="sub">★ ★ ★ Inducted October 18, 2025 · Drexelbrook ★ ★ ★</div>
+  </div>
+
+  <div class="hof-grid">
+
+    <div class="hof-card">
+      <span class="yr">2025</span>
+      <div class="av">RA</div>
+      <h3>Robert "Bob" Anderson</h3>
+      <div class="role">Pioneer · 1960-1992</div>
+      <div class="desc">"Berwyn-Paoli's third president, but its first true champion. Built Field of Dreams from a cornfield. Mentored four future presidents."</div>
+      <div class="stats">
+        <span>League</span><b>BP</b>
+        <span>Years</span><b>32</b>
+        <span>Stadium</span><b>Field of Dreams</b>
+        <span>Mentor to</span><b>4 presidents</b>
+      </div>
+    </div>
+
+    <div class="hof-card">
+      <span class="yr">2025</span>
+      <div class="av">JP</div>
+      <h3>Jenna Pirro</h3>
+      <div class="role">Player · CV 2017-2023</div>
+      <div class="desc">"Greatest D27 softball player of her generation. .518 career BA. UVA commit. Plays for the women's national team."</div>
+      <div class="stats">
+        <span>Career BA</span><b>.518</b>
+        <span>D27 SB MVP</span><b>3x</b>
+        <span>College</span><b>UVA</b>
+        <span>Now</span><b>USA Softball</b>
+      </div>
+    </div>
+
+    <div class="hof-card">
+      <span class="yr">2025</span>
+      <div class="av">MH</div>
+      <h3>Mark Henley</h3>
+      <div class="role">Coach · LPK 2010-Present</div>
+      <div class="desc">"Mark turned Lower Perk Cubs into a tournament-team factory. Demanded excellence, gave second chances, and built character along with batting averages."</div>
+      <div class="stats">
+        <span>Years</span><b>15</b>
+        <span>Tournaments won</span><b>11</b>
+        <span>Players → HS</span><b>62</b>
+        <span>D27 COY</span><b>2025</b>
+      </div>
+    </div>
+
+    <div class="hof-card">
+      <span class="yr">2025</span>
+      <div class="av">DW</div>
+      <h3>Dr. Diane Winters</h3>
+      <div class="role">Volunteer · 1995-2025</div>
+      <div class="desc">"Pediatrician on the field for 30 years. Concussion protocols, injury prevention, and the safety reputation D27 still rides on."</div>
+      <div class="stats">
+        <span>Years</span><b>30</b>
+        <span>Concussions caught</span><b>140+</b>
+        <span>Saved careers</span><b>countless</b>
+        <span>Spec</span><b>Pediatric Sport</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- Class of 2024 -->
+  <div class="hof-class-head" style="margin-top: 48px;">
+    <h2>Class of 2024</h2>
+    <div class="sub">★ ★ ★ Inducted October 19, 2024 ★ ★ ★</div>
+  </div>
+
+  <div class="hof-grid">
+
+    <div class="hof-card">
+      <span class="yr">2024</span>
+      <div class="av">VS</div>
+      <h3>Laura &amp; Van Scott</h3>
+      <div class="role">Pioneers · Scholarship Founders</div>
+      <div class="desc">"Quietly funded scholarships for 18 years before passing. The Scott Memorial Scholarship Fund honors them with $214K awarded since."</div>
+      <div class="stats">
+        <span>Years</span><b>18</b>
+        <span>Awarded</span><b>$214K</b>
+        <span>Families helped</span><b>~340</b>
+        <span>Inducted</span><b>Posthumous</b>
+      </div>
+    </div>
+
+    <div class="hof-card">
+      <span class="yr">2024</span>
+      <div class="av">BS</div>
+      <h3>Brock Saunders</h3>
+      <div class="role">Player · CV 2014-2020</div>
+      <div class="desc">"D27's first-ever Senior League state champion pitcher. Phillies draft pick. Came back to coach 12U for two summers — that's the kind of kid he was."</div>
+      <div class="stats">
+        <span>Career K/9</span><b>14.2</b>
+        <span>State titles</span><b>1</b>
+        <span>Drafted</span><b>2020</b>
+        <span>Came back to coach</span><b>2 yrs</b>
+      </div>
+    </div>
+
+    <div class="hof-card">
+      <span class="yr">2024</span>
+      <div class="av">TB</div>
+      <h3>Tony Bianchi</h3>
+      <div class="role">Volunteer · METH 1996-Present</div>
+      <div class="desc">"Methacton's snack bar manager for 28 years. Sold $1.4M worth of hot dogs and Gatorade. All of it went back to fields and uniforms."</div>
+      <div class="stats">
+        <span>Years</span><b>28</b>
+        <span>Snack bar revenue</span><b>$1.4M</b>
+        <span>Hot dogs sold</span><b>~280K</b>
+        <span>Hours</span><b>9,000+</b>
+      </div>
+    </div>
+
+    <div class="hof-card">
+      <span class="yr">2024</span>
+      <div class="av">AK</div>
+      <h3>Aaron Kim</h3>
+      <div class="role">Player · BP 2015-2021</div>
+      <div class="desc">"Best switch-hitter in D27 history. Yale baseball captain. The kid who proved the BP development model works."</div>
+      <div class="stats">
+        <span>Career BA</span><b>.467</b>
+        <span>POY</span><b>2x</b>
+        <span>College</span><b>Yale</b>
+        <span>Captain</span><b>2024</b>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Banner -->
+  <div class="hof-banner">
+    <div class="ico">📮</div>
+    <div>
+      <h3>Nominate for the Class of 2027</h3>
+      <p>Eligible: any D27 player (5 yr post-LL eligibility), coach (10+ years), volunteer (15+ years), or pioneer. Nominations open Jan 1, due Aug 31. Inductee class announced at the October banquet.</p>
+    </div>
+    <a href="#" onclick="event.preventDefault(); alert('Demo — opens nomination form: nominee, category, years served, supporting statement, references.');">Nominate →</a>
+  </div>
+
+  <!-- Criteria -->
+  <div class="hof-criteria">
+    <h2>Selection Criteria</h2>
+    <ul>
+      <li><b style="color: var(--d27-gold);">Players</b> — Excellence on field (D27 + post-LL career) · 5 years post-eligibility (no current youth players) · sportsmanship-by-default standard</li>
+      <li><b style="color: var(--d27-gold);">Coaches/Managers</b> — Minimum 10 years actively coaching at a D27 league · documented player development impact · clean disciplinary record</li>
+      <li><b style="color: var(--d27-gold);">Volunteers</b> — 15+ years of service · field crew, board members, scorekeepers, snack bar coordinators, all welcome · proven district-wide impact</li>
+      <li><b style="color: var(--d27-gold);">Pioneers</b> — Founding-era contribution · league/charter foundation · institutional knowledge transferred · usually inducted posthumously</li>
+    </ul>
+    <p style="color: rgba(255,255,255,.7); margin: 14px 0 0; font-size: 13px;">Selection committee: Jeff Bennett (DA · chair), Jason Saylor (ADA), 12 league presidents, 3 elected at-large members. Voting confidential. New class capped at 4 inductees per year to preserve standard.</p>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Heritage</h5><ul><li><a href="hall-of-fame.html">Hall of Fame</a></li><li><a href="champions.html">Champions Archive</a></li><li><a href="awards.html">Awards</a></li><li><a href="about.html#history">History</a></li></ul></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="standings.html">Standings</a></li><li><a href="stats.html">Stats Leaders</a></li><li><a href="all-stars.html">All-Stars</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.hof-tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.hof-tab').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+}));
+</script>
+
+</body>
+</html>

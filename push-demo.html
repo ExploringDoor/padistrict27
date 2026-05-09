@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Mobile Notifications · D27 Phase 2 Mock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  body { background: linear-gradient(135deg, #001034, var(--d27-navy) 60%, #1F2937); min-height: 100vh; color: #fff; }
+
+  .pn-banner { background: var(--d27-gold); color: var(--d27-navy); padding: 8px 0; text-align: center; font-family: var(--font-display); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
+  .pn-banner a { color: var(--d27-navy); }
+
+  .pn-shell { max-width: 1100px; margin: 36px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: center; }
+  @media (max-width: 880px) { .pn-shell { grid-template-columns: 1fr; gap: 24px; } }
+
+  .pn-copy h1 { font-family: var(--font-display); font-size: clamp(34px, 5vw, 52px); margin: 0 0 14px; letter-spacing: -.01em; }
+  .pn-copy .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .pn-copy p { color: rgba(255,255,255,.78); margin: 0 0 14px; line-height: 1.65; font-size: 15px; }
+
+  .pn-controls { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 10px; padding: 18px; margin-top: 18px; }
+  .pn-controls h3 { font-family: var(--font-display); margin: 0 0 12px; color: var(--d27-gold); font-size: 14px; letter-spacing: .06em; text-transform: uppercase; }
+  .pn-controls button { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); color: #fff; padding: 10px 14px; border-radius: 6px; font-family: var(--font-display); font-weight: 700; font-size: 13px; cursor: pointer; margin: 4px; transition: all .15s; }
+  .pn-controls button:hover { background: rgba(255,255,255,.16); border-color: var(--d27-gold); }
+
+  /* Phone */
+  .pn-phone-wrap { display: flex; justify-content: center; align-items: center; }
+  .pn-phone {
+    width: 320px;
+    height: 660px;
+    background: #000;
+    border-radius: 44px;
+    box-shadow: 0 40px 80px rgba(0,0,0,.5), 0 0 0 8px #1c1c1e, 0 0 0 10px #2a2a2c;
+    padding: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .pn-phone .notch {
+    position: absolute;
+    top: 14px; left: 50%;
+    transform: translateX(-50%);
+    width: 110px; height: 28px;
+    background: #000;
+    border-radius: 0 0 16px 16px;
+    z-index: 10;
+  }
+  .pn-screen {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #1F2937, #000);
+    border-radius: 30px;
+    overflow: hidden;
+    position: relative;
+    padding-top: 50px;
+  }
+  .pn-time {
+    position: absolute;
+    top: 16px; left: 24px;
+    color: #fff;
+    font-family: -apple-system, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    z-index: 5;
+  }
+  .pn-status {
+    position: absolute;
+    top: 16px; right: 24px;
+    color: #fff;
+    font-size: 13px;
+    z-index: 5;
+  }
+  .pn-lockscreen {
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 80px;
+  }
+  .pn-lockscreen::-webkit-scrollbar { display: none; }
+
+  .pn-day {
+    text-align: center;
+    color: #fff;
+    font-family: -apple-system, sans-serif;
+    margin: 24px 0 8px;
+  }
+  .pn-day .date { font-size: 20px; opacity: .9; }
+  .pn-day .clock { font-size: 64px; font-weight: 200; letter-spacing: -2px; line-height: 1; }
+
+  .pn-card {
+    background: rgba(50,50,50,.85);
+    backdrop-filter: blur(20px);
+    border-radius: 14px;
+    padding: 12px;
+    color: #fff;
+    font-family: -apple-system, sans-serif;
+    animation: slideIn .4s cubic-bezier(.34,1.56,.64,1);
+    transform-origin: top center;
+    position: relative;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-20px) scale(.92); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .pn-card .head {
+    display: flex; gap: 8px; align-items: center; margin-bottom: 4px;
+    font-size: 11px; opacity: .7;
+  }
+  .pn-card .ico {
+    width: 18px; height: 18px;
+    border-radius: 4px;
+    background: var(--d27-navy);
+    color: var(--d27-gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 9px;
+  }
+  .pn-card .src { flex: 1; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+  .pn-card .when { opacity: .6; }
+  .pn-card .title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .pn-card .body { font-size: 13px; opacity: .9; line-height: 1.4; }
+
+  .pn-card.live { background: rgba(220,38,38,.85); }
+  .pn-card.live .ico { background: #fff; color: var(--d27-red); }
+
+  .pn-card.score { background: rgba(16,185,129,.85); }
+  .pn-card.score .ico { background: #fff; color: #059669; }
+
+  .pn-card.alert { background: rgba(245,158,11,.85); }
+  .pn-card.alert .ico { background: #fff; color: #B45309; }
+
+  .pn-card.chat { background: rgba(99,91,255,.85); }
+  .pn-card.chat .ico { background: #fff; color: #4F46E5; }
+
+  .pn-stats {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .pn-stat {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .pn-stat .num { font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--d27-gold); line-height: 1; }
+  .pn-stat .lbl { color: rgba(255,255,255,.7); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; margin-top: 4px; }
+
+  .pn-tech { background: rgba(0,0,0,.3); border: 1px solid rgba(255,255,255,.1); border-radius: 8px; padding: 14px 18px; margin-top: 14px; font-size: 13px; color: rgba(255,255,255,.85); line-height: 1.65; }
+  .pn-tech b { color: var(--d27-gold); font-family: var(--font-display); }
+  .pn-tech code { background: rgba(255,255,255,.08); padding: 1px 6px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--d27-gold); }
+</style>
+</head>
+<body>
+
+<div class="pn-banner">
+  PHASE 2 PRODUCTION MOCK · Real-time push notifications to parents · <a href="roadmap.html">Back to Roadmap</a>
+</div>
+
+<div class="pn-shell">
+
+  <div class="pn-copy">
+    <div class="eyebrow">PHASE 2 · MOBILE NOTIFICATIONS</div>
+    <h1>Parents stay in the loop — without checking the site</h1>
+    <p>The 80% of D27 traffic that comes from phones doesn't want to refresh a browser. They want to feel a buzz when something happens. Phase 2 wires Firebase Cloud Messaging into every D27 event — rainouts, score updates, RSVP nudges, lineup posts, scholarship deadlines.</p>
+    <p>One opt-in per family. Granular controls per event type. Quiet hours respected. Auto-falls back to email if push is disabled.</p>
+
+    <div class="pn-stats">
+      <div class="pn-stat"><div class="num">240</div><div class="lbl">Push subscribers · BP alone</div></div>
+      <div class="pn-stat"><div class="num">94%</div><div class="lbl">Opt-in rate w/ parent invite</div></div>
+      <div class="pn-stat"><div class="num">&lt; 2s</div><div class="lbl">From event → phone buzz</div></div>
+      <div class="pn-stat"><div class="num">$0</div><div class="lbl">Per notification (FCM free)</div></div>
+    </div>
+
+    <div class="pn-controls">
+      <h3>Try It · Send a Test Notification</h3>
+      <button onclick="sendNotif('live')">⚾ Live Game Update</button>
+      <button onclick="sendNotif('score')">🏆 Final Score</button>
+      <button onclick="sendNotif('alert')">⚠ Rainout Alert</button>
+      <button onclick="sendNotif('chat')">💬 Team Chat</button>
+      <button onclick="sendNotif('rsvp')">📅 RSVP Reminder</button>
+      <button onclick="clearAll()" style="background: rgba(255,255,255,.04); margin-left: 8px;">Clear</button>
+    </div>
+
+    <div class="pn-tech">
+      <b>What's running:</b> <code>Firebase Cloud Messaging</code> · APNS for iOS · FCM for Android · web push for desktops · auto-fallback to <code>SendGrid</code> email if push fails · subscription managed in <code>users/&lt;uid&gt;/notification_settings</code> · audit log per delivery · TCPA opt-out compliance for SMS fallback.
+    </div>
+  </div>
+
+  <div class="pn-phone-wrap">
+    <div class="pn-phone">
+      <div class="notch"></div>
+      <div class="pn-screen">
+        <div class="pn-time">5:42 PM</div>
+        <div class="pn-status">📶 5G &nbsp;100%</div>
+
+        <div class="pn-lockscreen" id="lockscreen">
+          <div class="pn-day">
+            <div class="date">Wednesday, June 24</div>
+            <div class="clock">5:42</div>
+          </div>
+
+          <div class="pn-card score">
+            <div class="head">
+              <div class="ico">D27</div>
+              <div class="src">D27 · BP RED 12U</div>
+              <div class="when">2m ago</div>
+            </div>
+            <div class="title">🏆 BP wins QF1 · 12-2</div>
+            <div class="body">Mercy rule, top 5. Luke 3-for-4, HR, 5 RBI. Up next: SF vs Methacton, Wed 5:30 PM.</div>
+          </div>
+
+          <div class="pn-card live">
+            <div class="head">
+              <div class="ico">D27</div>
+              <div class="src">D27 · LIVE</div>
+              <div class="when">8m ago</div>
+            </div>
+            <div class="title">⚾ Top 5th · BP 4 · METH 3</div>
+            <div class="body">DiSanto on 1st, 1 out. Cole Ramirez at the plate.</div>
+          </div>
+
+          <div class="pn-card alert">
+            <div class="head">
+              <div class="ico">D27</div>
+              <div class="src">D27 · ALERT</div>
+              <div class="when">14m ago</div>
+            </div>
+            <div class="title">⚠ Heat Index 95° at Field of Dreams</div>
+            <div class="body">Tonight's BP Tee-ball game starts at 6 PM. Bring extra water + hats. Game on as scheduled.</div>
+          </div>
+
+          <div class="pn-card chat">
+            <div class="head">
+              <div class="ico">BP</div>
+              <div class="src">BP RED 12U · TEAM CHAT</div>
+              <div class="when">22m ago</div>
+            </div>
+            <div class="title">Coach Tom: Lineup posted for SF</div>
+            <div class="body">Big game tomorrow. Pre-game @ 5:00, first pitch @ 5:30. Wear our white jerseys.</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const TEMPLATES = {
+  live: {
+    cls: 'live',
+    src: 'D27 · LIVE',
+    title: '⚾ T6 · BP 5 · METH 3',
+    body: 'Cole Ramirez doubles, runner scores. 2 out, runners on 1st & 2nd.'
+  },
+  score: {
+    cls: 'score',
+    src: 'D27 · BP RED 12U',
+    title: '🏆 BP wins SF · 8-3',
+    body: 'BP advances to championship! Bob Jones Final · Sat Jun 28 · 6 PM · Lower Merion F3.'
+  },
+  alert: {
+    cls: 'alert',
+    src: 'D27 · ALERT',
+    title: '🌧 Tonight\'s Game Postponed',
+    body: 'BP Red 11U vs Tredyffrin · Wed 6:00 PM · Field of Dreams · POSTPONED to Fri Jun 26 same time.'
+  },
+  chat: {
+    cls: 'chat',
+    src: 'BP RED 12U · TEAM CHAT',
+    title: 'Sarah (Mom of #11): Snack day reminder',
+    body: 'Reminder — Friday I have snacks for the team. Pretzels, water, oranges. See you all there.'
+  },
+  rsvp: {
+    cls: 'chat',
+    src: 'D27 · RSVP DUE',
+    title: '📅 RSVP needed · Sat practice',
+    body: '2 days until BP Red 12U practice · Sat 9 AM · Field of Dreams F1. You haven\'t responded yet.'
+  }
+};
+function ts() { return new Date().toTimeString().slice(0,5); }
+function sendNotif(type) {
+  const tpl = TEMPLATES[type];
+  if (!tpl) return;
+  const card = document.createElement('div');
+  card.className = 'pn-card ' + tpl.cls;
+  card.innerHTML = `
+    <div class="head">
+      <div class="ico">D27</div>
+      <div class="src">${tpl.src}</div>
+      <div class="when">just now</div>
+    </div>
+    <div class="title">${tpl.title}</div>
+    <div class="body">${tpl.body}</div>
+  `;
+  const ls = document.getElementById('lockscreen');
+  // Insert after the .pn-day element (so newest is first)
+  const day = ls.querySelector('.pn-day');
+  ls.insertBefore(card, day.nextSibling);
+  ls.scrollTop = 0;
+}
+function clearAll() {
+  const ls = document.getElementById('lockscreen');
+  ls.querySelectorAll('.pn-card').forEach(c => c.remove());
+}
+</script>
+
+</body>
+</html>

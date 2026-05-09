@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Newsletter Builder · D27 Phase 3 Mock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  body { background: var(--d27-paper); }
+  .nl-banner { background: var(--d27-gold); color: var(--d27-navy); padding: 8px 0; text-align: center; font-family: var(--font-display); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
+  .nl-banner a { color: var(--d27-navy); }
+
+  .nl-shell { max-width: 1280px; margin: 24px auto; padding: 0 20px; display: grid; grid-template-columns: 280px 1fr 380px; gap: 22px; }
+  @media (max-width: 1100px) { .nl-shell { grid-template-columns: 1fr; } }
+
+  .nl-head { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+  .nl-head h1 { font-family: var(--font-display); margin: 0; color: var(--d27-navy); font-size: 26px; }
+  .nl-head .stamp { font-family: var(--font-display); font-size: 11px; color: var(--muted); letter-spacing: .12em; text-transform: uppercase; }
+
+  /* Sidebar - blocks library */
+  .nl-side { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; height: fit-content; }
+  .nl-side h3 { font-family: var(--font-display); margin: 0 0 12px; color: var(--d27-navy); font-size: 14px; letter-spacing: .04em; text-transform: uppercase; }
+
+  .nl-block-btn { width: 100%; padding: 10px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; text-align: left; cursor: pointer; margin-bottom: 6px; transition: all .15s; display: flex; gap: 10px; align-items: center; font-size: 13px; }
+  .nl-block-btn:hover { border-color: var(--d27-navy); background: rgba(0,45,114,.02); }
+  .nl-block-btn .ico { width: 28px; height: 28px; border-radius: 6px; background: var(--d27-sub); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .nl-block-btn .nm { font-weight: 700; color: var(--d27-navy); }
+  .nl-block-btn .meta { color: var(--muted); font-size: 11px; }
+
+  .nl-auto-banner { background: linear-gradient(135deg, var(--d27-navy), var(--d27-navy-dark)); color: #fff; padding: 18px; border-radius: 8px; margin-top: 14px; }
+  .nl-auto-banner h4 { font-family: var(--font-display); margin: 0 0 6px; color: var(--d27-gold); font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
+  .nl-auto-banner p { margin: 0 0 10px; font-size: 12px; color: rgba(255,255,255,.78); line-height: 1.55; }
+  .nl-auto-banner button { background: var(--d27-gold); color: var(--d27-navy); border: none; padding: 8px 14px; border-radius: 4px; font-family: var(--font-display); font-weight: 700; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; width: 100%; }
+
+  /* Email preview */
+  .nl-preview-wrap { display: flex; flex-direction: column; align-items: center; }
+  .nl-preview { background: #fff; border: 1px solid var(--line); border-radius: 8px; max-width: 600px; width: 100%; overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,.06); }
+
+  .nl-email-meta { background: var(--d27-sub); padding: 12px 16px; font-size: 12px; color: var(--muted); border-bottom: 1px solid var(--line); }
+  .nl-email-meta b { color: var(--d27-navy); font-family: var(--font-display); }
+
+  .nl-email-head { background: linear-gradient(135deg, var(--d27-navy), var(--d27-navy-dark)); color: #fff; padding: 28px 24px; text-align: center; }
+  .nl-email-head .crest { width: 56px; height: 56px; border-radius: 50%; background: var(--d27-gold); color: var(--d27-navy); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 14px; margin: 0 auto 10px; }
+  .nl-email-head h2 { font-family: var(--font-display); margin: 0; font-size: 28px; letter-spacing: .04em; }
+  .nl-email-head .issue { color: var(--d27-gold); font-family: var(--font-display); font-size: 11px; letter-spacing: .14em; margin-top: 6px; }
+
+  .nl-block { padding: 22px 24px; border-bottom: 1px solid var(--line); }
+  .nl-block:last-child { border-bottom: 0; }
+  .nl-block:hover { background: rgba(0,45,114,.02); position: relative; }
+  .nl-block:hover::after { content: '✏ Edit'; position: absolute; top: 12px; right: 14px; background: var(--d27-navy); color: #fff; padding: 3px 9px; border-radius: 3px; font-size: 11px; font-family: var(--font-display); letter-spacing: .04em; }
+  .nl-block h3 { font-family: var(--font-display); color: var(--d27-navy); margin: 0 0 8px; font-size: 18px; letter-spacing: .02em; }
+  .nl-block p { font-size: 14px; line-height: 1.65; margin: 0 0 10px; color: var(--d27-ink); }
+  .nl-block a { color: var(--d27-navy); font-weight: 600; }
+
+  .nl-news { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 580px) { .nl-news { grid-template-columns: 1fr; } }
+  .nl-news .item { background: var(--d27-paper); padding: 12px; border-radius: 5px; }
+  .nl-news .item .lbl { font-family: var(--font-display); font-size: 10px; color: var(--d27-red); letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
+  .nl-news .item h4 { font-family: var(--font-display); color: var(--d27-navy); margin: 4px 0; font-size: 14px; }
+  .nl-news .item p { font-size: 12px; line-height: 1.5; margin: 0 0 6px; color: var(--muted); }
+
+  .nl-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .nl-table th { background: var(--d27-navy); color: #fff; padding: 8px 10px; text-align: left; font-family: var(--font-display); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; }
+  .nl-table td { padding: 8px 10px; border-bottom: 1px solid var(--line); }
+
+  .nl-cta-block { background: linear-gradient(135deg, rgba(201,162,39,.1), rgba(0,45,114,.05)); border-left: 4px solid var(--d27-gold); padding: 18px 22px; }
+  .nl-cta-block h3 { color: var(--d27-navy); }
+  .nl-cta-block .btn { background: var(--d27-navy); color: #fff; padding: 10px 18px; border-radius: 5px; text-decoration: none; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; display: inline-block; margin-top: 10px; }
+
+  .nl-foot { padding: 22px 24px; background: var(--d27-sub); text-align: center; font-size: 12px; color: var(--muted); }
+
+  /* Right rail - settings */
+  .nl-settings { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px; height: fit-content; }
+  .nl-settings h3 { font-family: var(--font-display); margin: 0 0 14px; color: var(--d27-navy); font-size: 16px; }
+  .nl-row { padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  .nl-row:last-child { border-bottom: 0; }
+  .nl-label { font-family: var(--font-display); font-size: 11px; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+  .nl-input, .nl-select { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 5px; font: inherit; font-size: 13px; }
+
+  .nl-stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .nl-stat { background: var(--d27-paper); border-radius: 6px; padding: 10px 12px; }
+  .nl-stat .num { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--d27-navy); }
+  .nl-stat .lbl { font-size: 10px; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; font-weight: 700; }
+
+  .nl-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+  .nl-btn { background: var(--d27-navy); color: #fff; border: none; padding: 11px 16px; border-radius: 5px; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+  .nl-btn.gold { background: var(--d27-gold); color: var(--d27-navy); }
+  .nl-btn.ghost { background: var(--surface); color: var(--d27-navy); border: 1px solid var(--d27-navy); }
+
+  .nl-ai-banner { background: linear-gradient(135deg, rgba(201,162,39,.08), rgba(218,41,28,.04)); border: 1px solid rgba(201,162,39,.3); border-left: 4px solid var(--d27-gold); padding: 12px 16px; border-radius: 6px; margin-bottom: 12px; }
+  .nl-ai-banner b { color: var(--d27-navy); font-family: var(--font-display); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .nl-ai-banner p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<div class="nl-banner">
+  PHASE 3 PRODUCTION MOCK · Auto-built newsletter from D27 data · <a href="roadmap.html">Back to Roadmap</a>
+</div>
+
+<div class="nl-shell">
+
+  <!-- Sidebar: Block Library -->
+  <aside class="nl-side">
+    <div class="nl-head" style="margin-bottom: 14px;">
+      <div>
+        <div style="font-family: var(--font-display); font-size: 11px; color: var(--d27-red); letter-spacing: .08em; text-transform: uppercase;">D27 ADMIN</div>
+        <h1 style="font-size: 18px;">Newsletter Builder</h1>
+      </div>
+    </div>
+
+    <div class="nl-ai-banner">
+      <b>✨ Auto-Built from Data</b>
+      <p>Standings, top performers, news, sponsor reminders — all auto-pulled from D27 systems. Drag to add, edit inline, send.</p>
+    </div>
+
+    <h3>Available Blocks</h3>
+
+    <button class="nl-block-btn" onclick="alert('Demo — block added to canvas')">
+      <div class="ico">📰</div>
+      <div><div class="nm">News Roundup</div><div class="meta">Top 4 stories</div></div>
+    </button>
+
+    <button class="nl-block-btn" onclick="alert('Demo — block added')">
+      <div class="ico">🏆</div>
+      <div><div class="nm">Tournament Results</div><div class="meta">Last 7 days</div></div>
+    </button>
+
+    <button class="nl-block-btn" onclick="alert('Demo — block added')">
+      <div class="ico">📊</div>
+      <div><div class="nm">Player Spotlights</div><div class="meta">Stats leaders</div></div>
+    </button>
+
+    <button class="nl-block-btn" onclick="alert('Demo — block added')">
+      <div class="ico">📅</div>
+      <div><div class="nm">This Week's Schedule</div><div class="meta">Auto-pulled</div></div>
+    </button>
+
+    <button class="nl-block-btn" onclick="alert('Demo — block added')">
+      <div class="ico">⚾</div>
+      <div><div class="nm">Pitch Count Watch</div><div class="meta">Top pitchers</div></div>
+    </button>
+
+    <button class="nl-block-btn" onclick="alert('Demo — block added')">
+      <div class="ico">🙋</div>
+      <div><div class="nm">Volunteer Needs</div><div class="meta">Open shifts</div></div>
+    </button>
+
+    <button class="nl-block-btn" onclick="alert('Demo — block added')">
+      <div class="ico">💰</div>
+      <div><div class="nm">Sponsor Highlight</div><div class="meta">Rotating</div></div>
+    </button>
+
+    <button class="nl-block-btn" onclick="alert('Demo — block added')">
+      <div class="ico">🎓</div>
+      <div><div class="nm">Scholarship Update</div><div class="meta">Donor wall</div></div>
+    </button>
+
+    <button class="nl-block-btn" onclick="alert('Demo — block added')">
+      <div class="ico">📸</div>
+      <div><div class="nm">Photo Gallery</div><div class="meta">Top 6 from week</div></div>
+    </button>
+
+    <button class="nl-block-btn" onclick="alert('Demo — block added')">
+      <div class="ico">📬</div>
+      <div><div class="nm">Letter from DA</div><div class="meta">Editorial</div></div>
+    </button>
+
+    <div class="nl-auto-banner">
+      <h4>📥 Auto-Generate</h4>
+      <p>One click: pulls last week's data and assembles a 6-block newsletter. Edit anything before sending.</p>
+      <button onclick="alert('Demo — generates draft from current data in &lt;5s')">✨ Auto-build</button>
+    </div>
+  </aside>
+
+  <!-- Email Preview -->
+  <div class="nl-preview-wrap">
+    <div style="margin-bottom: 14px; color: var(--muted); font-size: 13px; font-family: var(--font-display); letter-spacing: .06em; text-transform: uppercase;">📧 Live Preview · 600px width</div>
+
+    <div class="nl-preview">
+
+      <div class="nl-email-meta">
+        <b>From:</b> jeffbennett.d27@gmail.com &nbsp; <b>To:</b> 25,400 D27 family contacts &nbsp; <b>Subject:</b> 🏆 Bob Jones champs · player of the week · this week's schedule
+      </div>
+
+      <div class="nl-email-head">
+        <div class="crest">D27</div>
+        <h2>D27 WEEKLY</h2>
+        <div class="issue">ISSUE #167 · MAY 4, 2026</div>
+      </div>
+
+      <div class="nl-block nl-cta-block">
+        <h3>🏆 Bob Jones Champion Crowned</h3>
+        <p>Berwyn-Paoli Red 12U swept the Bob Jones Tournament without dropping a game — their first title since 2014. Coach Tom Caldwell's three-year rebuild paid off in front of 800 parents at Lower Merion F3. Final: <b>BP 12 · Pottstown 2 (mercy)</b>.</p>
+        <a href="game-final.html" class="btn">View Box Score →</a>
+      </div>
+
+      <div class="nl-block">
+        <h3>📊 Player of the Week</h3>
+        <p><b>Luke DiSanto</b> · Berwyn-Paoli Red 12U · #1 SS/P</p>
+        <p>Weekend: 5-for-7 · 2 HR · 9 RBI · 5 IP · 0 ER · 11 K · 2-0 record. Now leads the district in RBI and is 3 K from the 12U single-season record.</p>
+        <a href="player.html">See full profile →</a>
+      </div>
+
+      <div class="nl-block">
+        <h3>📰 District News This Week</h3>
+        <div class="nl-news">
+          <div class="item">
+            <div class="lbl">Awards</div>
+            <h4>2026 Honor List Announced</h4>
+            <p>Tom Caldwell named Coach of the Year. Class of '26 Hall of Fame inductees announced.</p>
+            <a href="awards.html" style="font-size: 12px;">→ See list</a>
+          </div>
+          <div class="item">
+            <div class="lbl">Sponsors</div>
+            <h4>Wawa Renews — 14th Year</h4>
+            <p>Champion-tier renewal locks in $5,000 for 2027. Title sponsorship discussions in progress.</p>
+            <a href="sponsors.html" style="font-size: 12px;">→ Read more</a>
+          </div>
+          <div class="item">
+            <div class="lbl">Volunteers</div>
+            <h4>SF Scorekeepers Needed</h4>
+            <p>4 open spots for Bob Jones SF June 24. HS students earn verified hours.</p>
+            <a href="volunteer.html" style="font-size: 12px;">→ Sign up</a>
+          </div>
+          <div class="item">
+            <div class="lbl">Compliance</div>
+            <h4>3 Coaches Need Cert Renewal</h4>
+            <p>Background check + Safesport renewals due by May 31 to stay on field.</p>
+            <a href="coaches.html" style="font-size: 12px;">→ Check status</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="nl-block">
+        <h3>📅 This Week's Top Games</h3>
+        <table class="nl-table">
+          <thead><tr><th>When</th><th>Game</th><th>Field</th></tr></thead>
+          <tbody>
+            <tr><td>Wed Jun 18 · 5:30P</td><td><b>BP Red vs Methacton</b> · Bob Jones SF1</td><td>Monument Ave 1</td></tr>
+            <tr><td>Wed Jun 18 · 7:30P</td><td><b>CV Maroon vs Lower Perk</b> · Bob Jones SF2</td><td>Monument Ave 1</td></tr>
+            <tr><td>Sat Jun 21 · 6:00P</td><td><b>Bob Jones Championship</b></td><td>Lower Merion F3</td></tr>
+            <tr><td>Tue Jun 24 · 5:00P</td><td>METH 11U vs LPK · Pappy Patton</td><td>Ricketts WSP</td></tr>
+            <tr><td>Sun Jun 29 · 1:00P</td><td>D27 All-Star Tryouts begin</td><td>10 fields district-wide</td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top: 12px;"><a href="schedule.html">→ View full master schedule</a> · <a href="#">→ Subscribe to calendar</a></p>
+      </div>
+
+      <div class="nl-block nl-cta-block" style="background: linear-gradient(135deg, rgba(218,41,28,.08), rgba(201,162,39,.04)); border-left-color: var(--d27-red);">
+        <h3>🎓 Scott Scholarship · 2026 Drive</h3>
+        <p>We've raised $18,200 toward our $25,000 fall goal. Two families fully covered this season. Every dollar = real cleats, real registration fees, real kids on real fields.</p>
+        <a href="scholarship.html" class="btn">Donate →</a>
+      </div>
+
+      <div class="nl-block">
+        <h3>📬 From DA Jeff Bennett</h3>
+        <p style="font-style: italic;">"Last week's banquet might be the proudest I've been since taking this role. Inducting Mike Russo into the Hall of Fame, watching Cole Patel's family beam as we honored him as Player of the Decade, hearing Sam Riccardo announce that Methacton's coach education program is going district-wide next year. We're not just running a baseball district. We're building something. Thank you for being part of it."</p>
+        <p style="margin-bottom: 0;">— Jeff</p>
+      </div>
+
+      <div class="nl-foot">
+        <p style="margin: 0 0 8px;"><b>PA District 27 Little League</b></p>
+        <p style="margin: 0;">jeffbennett.d27@gmail.com · padistrict27.vercel.app</p>
+        <p style="margin: 12px 0 0; font-size: 11px;"><a href="#" style="color: var(--muted);">Update preferences</a> · <a href="#" style="color: var(--muted);">Unsubscribe</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right rail: Settings -->
+  <aside class="nl-settings">
+    <h3>Send Settings</h3>
+
+    <div class="nl-row">
+      <div class="nl-label">Audience</div>
+      <select class="nl-select">
+        <option>All D27 families · 25,400</option>
+        <option>By league: Berwyn-Paoli · 1,840</option>
+        <option>By league: Methacton · 1,650</option>
+        <option>Captains only · 248</option>
+        <option>Sponsors only · 87</option>
+        <option>Coaches only · 237</option>
+      </select>
+    </div>
+
+    <div class="nl-row">
+      <div class="nl-label">Subject</div>
+      <input type="text" class="nl-input" value="🏆 Bob Jones champs · player of the week · this week's schedule" />
+    </div>
+
+    <div class="nl-row">
+      <div class="nl-label">Preview Text</div>
+      <input type="text" class="nl-input" value="BP wins it all · Luke DiSanto's record run · cert reminders · Sat schedule" />
+    </div>
+
+    <div class="nl-row">
+      <div class="nl-label">Send Time</div>
+      <select class="nl-select">
+        <option>Now</option>
+        <option>Tonight 6:00 PM</option>
+        <option>Tomorrow 9:00 AM (best engagement)</option>
+        <option>Schedule custom...</option>
+      </select>
+    </div>
+
+    <div class="nl-row">
+      <div class="nl-label">Last Send Stats</div>
+      <div class="nl-stat-row">
+        <div class="nl-stat"><div class="num">68%</div><div class="lbl">Open Rate</div></div>
+        <div class="nl-stat"><div class="num">14%</div><div class="lbl">Click Rate</div></div>
+        <div class="nl-stat"><div class="num">0.4%</div><div class="lbl">Unsubscribe</div></div>
+        <div class="nl-stat"><div class="num">~2x</div><div class="lbl">Industry avg.</div></div>
+      </div>
+    </div>
+
+    <div class="nl-actions">
+      <button class="nl-btn gold" onclick="alert('Demo — sends test to your email')">📧 Send Test to Me</button>
+      <button class="nl-btn ghost" onclick="alert('Demo — saves draft')">💾 Save Draft</button>
+      <button class="nl-btn" onclick="alert('Demo — schedules send via SendGrid · 25,400 recipients · est 38 min delivery')">⚡ Send Now → 25,400 families</button>
+    </div>
+
+    <div class="nl-row" style="margin-top: 14px;">
+      <div class="nl-label">Past 6 Issues</div>
+      <ul style="font-size: 12px; line-height: 1.85; padding-left: 16px; margin: 0; color: var(--muted);">
+        <li><a href="#" style="color: var(--d27-navy);">#166 · Apr 27</a> · 67% open</li>
+        <li><a href="#" style="color: var(--d27-navy);">#165 · Apr 20</a> · 71% open</li>
+        <li><a href="#" style="color: var(--d27-navy);">#164 · Apr 13</a> · 65% open</li>
+        <li><a href="#" style="color: var(--d27-navy);">#163 · Apr 6</a> · 69% open</li>
+        <li><a href="#" style="color: var(--d27-navy);">#162 · Opening Day</a> · 84% open</li>
+        <li><a href="#" style="color: var(--d27-navy);">#161 · Mar 23</a> · 62% open</li>
+      </ul>
+    </div>
+  </aside>
+
+</div>
+
+</body>
+</html>

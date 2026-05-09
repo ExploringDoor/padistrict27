@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Safety &amp; Emergency Action · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .sf-hero { background: linear-gradient(135deg, var(--d27-red), #7F1D1D); color: #fff; padding: 64px 0 40px; border-bottom: 4px solid var(--d27-gold); }
+  .sf-hero h1 { font-family: var(--font-display); font-size: clamp(38px, 5vw, 60px); margin: 0; letter-spacing: -.01em; }
+  .sf-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .sf-hero p { color: rgba(255,255,255,.85); max-width: 64ch; margin: 14px 0 0; font-size: 15px; line-height: 1.65; }
+
+  .sf-emergency { background: var(--d27-red); color: #fff; padding: 14px 0; border-bottom: 4px solid #7F1D1D; }
+  .sf-emergency .container { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .sf-emergency h3 { font-family: var(--font-display); margin: 0; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; }
+  .sf-emergency a { background: #fff; color: var(--d27-red); padding: 8px 16px; border-radius: 5px; font-weight: 700; text-decoration: none; font-family: var(--font-display); font-size: 14px; letter-spacing: .04em; }
+
+  .sf-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 28px 0 22px; border-bottom: 2px solid var(--line); }
+  .sf-tab { background: none; border: none; padding: 10px 14px; font-family: var(--font-display); font-size: 14px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; }
+  .sf-tab.active { color: var(--d27-navy); border-bottom-color: var(--d27-red); }
+
+  .sf-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 22px; margin-bottom: 18px; }
+  .sf-card h2 { font-family: var(--font-display); margin: 0 0 6px; color: var(--d27-navy); font-size: 22px; }
+  .sf-card .lead { color: var(--muted); font-size: 14px; margin: 0 0 18px; line-height: 1.6; }
+  .sf-card h3 { font-family: var(--font-display); margin: 18px 0 8px; color: var(--d27-navy); font-size: 14px; letter-spacing: .04em; text-transform: uppercase; }
+
+  /* EAP cards per field */
+  .sf-fields { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  @media (max-width: 760px) { .sf-fields { grid-template-columns: 1fr; } }
+
+  .sf-field { background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--d27-red); border-radius: 8px; padding: 20px; }
+  .sf-field h3 { font-family: var(--font-display); margin: 0 0 4px; color: var(--d27-navy); font-size: 18px; }
+  .sf-field .where { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+
+  .sf-eap-row { display: grid; grid-template-columns: 100px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--line); font-size: 13px; }
+  .sf-eap-row:last-child { border-bottom: 0; }
+  .sf-eap-row .lbl { font-family: var(--font-display); color: var(--d27-red); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; }
+  .sf-eap-row .val { font-weight: 500; }
+  .sf-eap-row .val a { color: var(--d27-navy); font-weight: 600; }
+
+  .sf-qr-row { display: flex; gap: 14px; align-items: center; padding-top: 14px; margin-top: 14px; border-top: 1px solid var(--line); }
+  .sf-qr { width: 64px; height: 64px; background: #000; flex-shrink: 0; border-radius: 4px; padding: 4px; display: grid; grid-template-columns: repeat(8, 1fr); gap: 1px; }
+  .sf-qr div { background: #fff; }
+  .sf-qr div.b { background: #000; }
+  .sf-qr-text { font-size: 12px; color: var(--muted); }
+  .sf-qr-text b { color: var(--d27-navy); font-family: var(--font-display); display: block; margin-bottom: 2px; }
+
+  /* Protocols */
+  .sf-protocol { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--d27-red); padding: 16px 20px; border-radius: 6px; margin-bottom: 14px; }
+  .sf-protocol h4 { font-family: var(--font-display); margin: 0 0 6px; color: var(--d27-red); font-size: 14px; letter-spacing: .06em; text-transform: uppercase; display: flex; gap: 8px; align-items: center; }
+  .sf-protocol p { margin: 0 0 8px; font-size: 13.5px; line-height: 1.65; }
+  .sf-protocol ol { padding-left: 18px; margin: 8px 0 0; line-height: 1.85; font-size: 13.5px; }
+  .sf-protocol .severity { background: #FEE2E2; color: var(--d27-red); padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin-left: 8px; }
+
+  /* Live conditions */
+  .sf-conditions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+  @media (max-width: 700px) { .sf-conditions { grid-template-columns: repeat(2, 1fr); } }
+  .sf-cond { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; text-align: center; border-top: 4px solid #10B981; }
+  .sf-cond.warn { border-top-color: #F59E0B; }
+  .sf-cond.danger { border-top-color: var(--d27-red); }
+  .sf-cond .ico { font-size: 28px; }
+  .sf-cond .num { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--d27-navy); margin: 4px 0 0; line-height: 1; }
+  .sf-cond .lbl { color: var(--muted); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; }
+  .sf-cond .status { font-size: 12px; margin-top: 4px; font-weight: 600; }
+  .sf-cond .status.ok { color: #059669; }
+  .sf-cond .status.warn { color: #B45309; }
+  .sf-cond .status.danger { color: var(--d27-red); }
+
+  .sf-incidents { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 22px; }
+  .sf-incidents-row { display: grid; grid-template-columns: 80px 1fr auto; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13px; align-items: center; }
+  .sf-incidents-row:last-child { border-bottom: 0; }
+  .sf-incidents-row .when { font-family: var(--font-display); color: var(--muted); font-size: 12px; }
+  .sf-incidents-row .what b { color: var(--d27-navy); }
+  .sf-incidents-row .meta { color: var(--muted); font-size: 11px; margin-top: 2px; }
+  .sf-incidents-row .badge { font-size: 11px; padding: 3px 9px; border-radius: 3px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .sf-incidents-row .badge.closed { background: #ECFDF5; color: #059669; }
+  .sf-incidents-row .badge.open { background: #FEF3C7; color: #B45309; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="sf-hero">
+  <div class="container">
+    <div class="eyebrow">D27 SAFETY · COMPLIANCE</div>
+    <h1>Safety &amp; Emergency Action</h1>
+    <p>Per-field Emergency Action Plans, real-time weather monitoring, concussion protocols, injury logs, and the full LL Quality Charter safety standard. PA-compliant. Insurance-ready.</p>
+  </div>
+</header>
+
+<div class="sf-emergency">
+  <div class="container">
+    <h3>🚨 In an emergency · Call 911 first · Then notify D27</h3>
+    <a href="tel:911">📞 Call 911</a>
+    <a href="tel:6105550127">📞 Jeff Bennett (DA)</a>
+    <a href="#" onclick="event.preventDefault(); alert('Demo — auto-broadcasts incident to all on-site coaches and admin');">⚡ Broadcast Incident</a>
+  </div>
+</div>
+
+<main class="container" style="padding: 24px 0 64px;">
+
+  <div class="sf-tabs">
+    <button class="sf-tab active">Live Conditions</button>
+    <button class="sf-tab">Field EAPs (18)</button>
+    <button class="sf-tab">Protocols</button>
+    <button class="sf-tab">Incident Log</button>
+    <button class="sf-tab">Coach Training</button>
+    <button class="sf-tab">First Aid Kit Audits</button>
+  </div>
+
+  <!-- Live conditions -->
+  <div class="sf-card">
+    <h2>Live Field Conditions · Right Now</h2>
+    <p class="lead">Auto-pulled from NOAA + per-field weather stations. Heat index, lightning detection, air quality. When thresholds exceeded, all on-site captains and umpires get alerted in real time.</p>
+
+    <div class="sf-conditions">
+      <div class="sf-cond"><div class="ico">🌤</div><div class="num">72°F</div><div class="lbl">Air Temperature</div><div class="status ok">Comfortable</div></div>
+      <div class="sf-cond warn"><div class="ico">☀</div><div class="num">88</div><div class="lbl">Heat Index (WBGT)</div><div class="status warn">Caution · breaks every 30m</div></div>
+      <div class="sf-cond"><div class="ico">⚡</div><div class="num">12mi</div><div class="lbl">Lightning Distance</div><div class="status ok">No threat</div></div>
+      <div class="sf-cond"><div class="ico">💨</div><div class="num">42</div><div class="lbl">AQI · Pollen</div><div class="status ok">Good</div></div>
+    </div>
+
+    <p style="margin: 0; font-size: 13px; color: var(--muted);">Thresholds: <b style="color:#B45309;">85+ heat index</b> = mandatory hydration breaks · <b style="color:var(--d27-red);">90+ heat index</b> or <b style="color:var(--d27-red);">lightning &lt; 8mi</b> = automatic suspension. <a href="fields.html" style="color:var(--d27-navy); font-weight: 600;">View Field Status →</a></p>
+  </div>
+
+  <!-- Field EAPs -->
+  <h2 style="font-family: var(--font-display); color: var(--d27-navy); font-size: 26px; margin: 28px 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--line);">Field Emergency Action Plans</h2>
+  <p style="color: var(--muted); margin: 0 0 18px; font-size: 14px; max-width: 70ch; line-height: 1.6;">Every D27 field has a posted EAP. Coaches scan the QR code in the dugout to access nearest hospital, AED location, evacuation route, and medical contacts in case of injury.</p>
+
+  <div class="sf-fields">
+
+    <div class="sf-field">
+      <h3>Field of Dreams</h3>
+      <div class="where">Berwyn-Paoli LL · 1100 Cassatt Rd, Berwyn, PA 19312</div>
+
+      <div class="sf-eap-row"><div class="lbl">Address for 911</div><div class="val">1100 Cassatt Road, Berwyn, PA 19312 · entrance off South Cassatt</div></div>
+      <div class="sf-eap-row"><div class="lbl">Nearest ER</div><div class="val">Paoli Hospital · 4.2 mi · 17 min · <a href="#">map</a></div></div>
+      <div class="sf-eap-row"><div class="lbl">AED Location</div><div class="val">Mounted on snack-bar wall, exterior · facing field 1</div></div>
+      <div class="sf-eap-row"><div class="lbl">First Aid</div><div class="val">Inside snack bar · backup in dugout chest behind home plate</div></div>
+      <div class="sf-eap-row"><div class="lbl">Evac Route</div><div class="val">Exit gate north of parking lot · meet at flagpole</div></div>
+      <div class="sf-eap-row"><div class="lbl">Field Contact</div><div class="val">Mike Russo · BP Field Crew · (610) 555-0188</div></div>
+
+      <div class="sf-qr-row">
+        <div class="sf-qr">
+          <div></div><div class="b"></div><div class="b"></div><div></div><div class="b"></div><div></div><div class="b"></div><div class="b"></div>
+          <div class="b"></div><div></div><div class="b"></div><div class="b"></div><div></div><div class="b"></div><div></div><div></div>
+          <div></div><div class="b"></div><div></div><div class="b"></div><div class="b"></div><div></div><div class="b"></div><div></div>
+          <div class="b"></div><div></div><div class="b"></div><div></div><div></div><div class="b"></div><div></div><div class="b"></div>
+          <div></div><div class="b"></div><div></div><div class="b"></div><div class="b"></div><div></div><div class="b"></div><div></div>
+          <div class="b"></div><div></div><div class="b"></div><div class="b"></div><div></div><div class="b"></div><div></div><div class="b"></div>
+          <div></div><div class="b"></div><div></div><div></div><div class="b"></div><div></div><div class="b"></div><div></div>
+          <div class="b"></div><div></div><div class="b"></div><div class="b"></div><div></div><div></div><div class="b"></div><div></div>
+        </div>
+        <div class="sf-qr-text"><b>Scan posted dugout QR</b>Opens this EAP on phone instantly · works offline</div>
+      </div>
+    </div>
+
+    <div class="sf-field">
+      <h3>Ricketts Sports Complex</h3>
+      <div class="where">Methacton LL · 1000 W Indian Creek Rd, Worcester, PA 19490</div>
+
+      <div class="sf-eap-row"><div class="lbl">Address for 911</div><div class="val">1000 W Indian Creek Road, Worcester, PA 19490 · main entrance off Methacton Rd</div></div>
+      <div class="sf-eap-row"><div class="lbl">Nearest ER</div><div class="val">Einstein-Montgomery · 2.8 mi · 9 min · <a href="#">map</a></div></div>
+      <div class="sf-eap-row"><div class="lbl">AED Location</div><div class="val">Inside concession building · also inside maintenance shed near F2</div></div>
+      <div class="sf-eap-row"><div class="lbl">First Aid</div><div class="val">Concession building + each dugout chest</div></div>
+      <div class="sf-eap-row"><div class="lbl">Evac Route</div><div class="val">South parking lot · meet at scoreboard</div></div>
+      <div class="sf-eap-row"><div class="lbl">Field Contact</div><div class="val">Sam Riccardo · METH President · (610) 555-0212</div></div>
+
+      <div class="sf-qr-row">
+        <div class="sf-qr">
+          <div class="b"></div><div></div><div class="b"></div><div></div><div></div><div class="b"></div><div></div><div class="b"></div>
+          <div></div><div class="b"></div><div></div><div class="b"></div><div class="b"></div><div></div><div class="b"></div><div></div>
+          <div class="b"></div><div></div><div class="b"></div><div></div><div></div><div class="b"></div><div></div><div class="b"></div>
+          <div></div><div class="b"></div><div></div><div class="b"></div><div></div><div></div><div class="b"></div><div></div>
+          <div class="b"></div><div></div><div class="b"></div><div></div><div class="b"></div><div></div><div></div><div class="b"></div>
+          <div></div><div class="b"></div><div></div><div class="b"></div><div></div><div class="b"></div><div></div><div></div>
+          <div class="b"></div><div></div><div></div><div class="b"></div><div></div><div></div><div class="b"></div><div></div>
+          <div></div><div class="b"></div><div class="b"></div><div></div><div class="b"></div><div></div><div></div><div class="b"></div>
+        </div>
+        <div class="sf-qr-text"><b>Scan posted dugout QR</b>Opens this EAP on phone · works offline</div>
+      </div>
+    </div>
+
+    <div class="sf-field">
+      <h3>Monument Avenue</h3>
+      <div class="where">Marple Newtown LL · 5 Monument Rd, Broomall, PA 19008</div>
+
+      <div class="sf-eap-row"><div class="lbl">Address for 911</div><div class="val">5 Monument Road, Broomall, PA 19008</div></div>
+      <div class="sf-eap-row"><div class="lbl">Nearest ER</div><div class="val">Riddle Hospital · 3.4 mi · 11 min · <a href="#">map</a></div></div>
+      <div class="sf-eap-row"><div class="lbl">AED Location</div><div class="val">Snack bar east wall · facing field 1</div></div>
+      <div class="sf-eap-row"><div class="lbl">First Aid</div><div class="val">Snack bar · 2 dugout chests</div></div>
+      <div class="sf-eap-row"><div class="lbl">Evac Route</div><div class="val">East gate to parking · meet at sign</div></div>
+      <div class="sf-eap-row"><div class="lbl">Field Contact</div><div class="val">Mike Russo · MN Field Crew · (610) 555-0188</div></div>
+    </div>
+
+    <div class="sf-field">
+      <h3>Chester Valley Complex</h3>
+      <div class="where">Chester Valley LL · 100 Whitford Hills Dr, Exton, PA 19341</div>
+
+      <div class="sf-eap-row"><div class="lbl">Address for 911</div><div class="val">100 Whitford Hills Drive, Exton, PA 19341</div></div>
+      <div class="sf-eap-row"><div class="lbl">Nearest ER</div><div class="val">Brandywine Hospital · 5.2 mi · 14 min · <a href="#">map</a></div></div>
+      <div class="sf-eap-row"><div class="lbl">AED Location</div><div class="val">Snack bar interior · also in pressbox</div></div>
+      <div class="sf-eap-row"><div class="lbl">First Aid</div><div class="val">Snack bar + senior dugout chest</div></div>
+      <div class="sf-eap-row"><div class="lbl">Evac Route</div><div class="val">Main entrance · meet at flagpole</div></div>
+      <div class="sf-eap-row"><div class="lbl">Field Contact</div><div class="val">Pat Lynch · CV President · (484) 555-0309</div></div>
+    </div>
+
+  </div>
+
+  <p style="text-align: center; margin: 18px 0; color: var(--muted); font-size: 13px;">+ 14 more field EAPs · all 18 D27 complexes covered · <a href="fields.html" style="color: var(--d27-navy); font-weight: 600;">View all fields</a></p>
+
+  <!-- Protocols -->
+  <h2 style="font-family: var(--font-display); color: var(--d27-navy); font-size: 26px; margin: 36px 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--line);">Required Protocols</h2>
+
+  <div class="sf-protocol">
+    <h4>🧠 Concussion Protocol <span class="severity">PA Mandate</span></h4>
+    <p>Per the <b>PA Safety in Youth Sports Act</b>: Any player suspected of a concussion must be removed from play immediately and may not return until cleared by a medical professional. All D27 coaches certified annually.</p>
+    <ol>
+      <li>Remove player from play immediately. No return-to-play that day.</li>
+      <li>Notify parent / guardian. Document on D27 Incident Log within 24 hours.</li>
+      <li>Player needs written medical clearance before returning to any practice or game.</li>
+      <li>Submit return-to-play form to league president and D27 Safety Officer.</li>
+    </ol>
+  </div>
+
+  <div class="sf-protocol">
+    <h4>☀ Heat Illness Protocol <span class="severity">LL Required</span></h4>
+    <p>Heat-index thresholds (WBGT, not just air temp) determine play status. D27 fields auto-monitor.</p>
+    <ol>
+      <li><b>Below 82°F WBGT:</b> normal play.</li>
+      <li><b>82–87°F:</b> 5-minute hydration break each inning.</li>
+      <li><b>88–90°F:</b> mandatory 10-minute break every 30 min · pitchers limited to 50% normal pitch count.</li>
+      <li><b>Above 90°F:</b> game suspended · automatic notification to all D27 captains.</li>
+    </ol>
+  </div>
+
+  <div class="sf-protocol">
+    <h4>⚡ Lightning &amp; Severe Weather <span class="severity">LL Required</span></h4>
+    <p>D27 uses real-time NOAA + per-field detectors. Trigger: lightning within 10 miles. Status auto-broadcast.</p>
+    <ol>
+      <li>Lightning &lt; 10 miles: notify umpires, captains, and parents · move toward shelter.</li>
+      <li>Lightning &lt; 8 miles: <b>game suspended</b>. All players, coaches, fans to indoor shelter or vehicles.</li>
+      <li>Resume only after <b>30 consecutive minutes</b> of no lightning within 8 miles.</li>
+      <li>Cancellation/postponement notice auto-sent district-wide via push + SMS + email.</li>
+    </ol>
+  </div>
+
+  <div class="sf-protocol">
+    <h4>🩹 Bleeding / Open Wound Protocol</h4>
+    <p>Per LL rule, any player with bleeding wounds must leave play, be treated, and have all blood-stained items replaced before returning.</p>
+    <ol>
+      <li>Player exits field immediately.</li>
+      <li>Treat with First Aid. Use gloves (in dugout kit).</li>
+      <li>Replace any blood-stained jerseys / equipment.</li>
+      <li>Return only after bleeding fully stopped + dressing applied.</li>
+    </ol>
+  </div>
+
+  <div class="sf-protocol">
+    <h4>👮 Suspected Abuse Reporting <span class="severity">PA Mandated Reporter</span></h4>
+    <p>All D27 coaches and managers are <b>mandated reporters</b> under PA Child Protective Services Law. Suspected abuse must be reported within 24 hours.</p>
+    <ol>
+      <li>Call PA ChildLine: <b>1-800-932-0313</b> (24 hours).</li>
+      <li>Notify D27 Safety Officer privately within 24 hours.</li>
+      <li>Document factually only. No investigation by D27.</li>
+      <li>Confidentiality preserved. Anonymous reporting accepted.</li>
+    </ol>
+  </div>
+
+  <!-- Incident Log -->
+  <h2 style="font-family: var(--font-display); color: var(--d27-navy); font-size: 26px; margin: 36px 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--line);">Recent Incident Log</h2>
+  <p style="color: var(--muted); margin: 0 0 14px; font-size: 14px;">All incidents logged within 24 hours · district-wide insurance reporting · LL HQ quarterly submission.</p>
+
+  <div class="sf-incidents">
+    <div class="sf-incidents-row">
+      <div class="when">Apr 28</div>
+      <div class="what"><b>Heat-related break, BP Red 11U vs Tredyffrin</b><div class="meta">Heat index 89°F · 3 mandatory water breaks logged · all players cleared · no medical event</div></div>
+      <span class="badge closed">✓ Closed</span>
+    </div>
+    <div class="sf-incidents-row">
+      <div class="when">Apr 22</div>
+      <div class="what"><b>Foul ball impact, BP Tee-ball</b><div class="meta">Player struck mid-shin by foul ball during tee · ice + observation · cleared by parent · no ER</div></div>
+      <span class="badge closed">✓ Closed</span>
+    </div>
+    <div class="sf-incidents-row">
+      <div class="when">Apr 16</div>
+      <div class="what"><b>Suspected concussion, METH 12U vs LM</b><div class="meta">Diving catch · player removed from play · taken to ER · cleared · 7-day return protocol</div></div>
+      <span class="badge closed">✓ Closed · RTP cleared</span>
+    </div>
+    <div class="sf-incidents-row">
+      <div class="when">Apr 12</div>
+      <div class="what"><b>Lightning suspension, 4 fields district-wide</b><div class="meta">12 games postponed · auto-broadcast to 1,840 contacts · resumed Apr 14 · no incidents</div></div>
+      <span class="badge closed">✓ Closed</span>
+    </div>
+    <div class="sf-incidents-row">
+      <div class="when">Apr 9</div>
+      <div class="what"><b>Sliding injury, PVL 11U</b><div class="meta">Wrist sprain · ice on-site · ER follow-up next day · 14-day return protocol</div></div>
+      <span class="badge open">⏳ Active RTP</span>
+    </div>
+  </div>
+
+  <p style="text-align: center; margin: 18px 0; color: var(--muted); font-size: 13px;">Full log available to league presidents + D27 admin · <a href="login.html" style="color: var(--d27-navy); font-weight: 600;">Sign in</a> to view all 47 incidents YTD</p>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Compliance</h5><ul><li><a href="safety.html">Safety + EAP</a></li><li><a href="coaches.html">Coach Certification</a></li><li><a href="pitch-count.html">Pitch Count</a></li><li><a href="rules.html">Rules</a></li></ul></div>
+      <div><h5>Operations</h5><ul><li><a href="fields.html">Field Status</a></li><li><a href="standings.html">Standings</a></li><li><a href="umpires.html">Umpires</a></li><li><a href="all-stars.html">All-Stars</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.sf-tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.sf-tab').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+}));
+</script>
+
+</body>
+</html>

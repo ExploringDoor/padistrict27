@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Sponsor ROI Dashboard · Wawa · D27 Phase 3 Mock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  body { background: var(--d27-paper); }
+  .sr-banner { background: var(--d27-gold); color: var(--d27-navy); padding: 8px 0; text-align: center; font-family: var(--font-display); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
+  .sr-banner a { color: var(--d27-navy); }
+
+  .sr-shell { max-width: 1200px; margin: 28px auto; padding: 0 20px; }
+
+  .sr-head { background: linear-gradient(135deg, #C8102E, #8B0000); color: #fff; padding: 32px; border-radius: 12px; margin-bottom: 22px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+  .sr-head .logo { width: 88px; height: 88px; border-radius: 12px; background: #fff; color: #C8102E; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 28px; font-weight: 700; flex-shrink: 0; box-shadow: 0 4px 14px rgba(0,0,0,.2); }
+  .sr-head h1 { font-family: var(--font-display); margin: 0 0 4px; font-size: 28px; }
+  .sr-head .sub { color: rgba(255,255,255,.85); font-size: 14px; }
+  .sr-head .right { margin-left: auto; text-align: right; }
+  .sr-head .tier { background: var(--d27-gold); color: var(--d27-navy); font-family: var(--font-display); font-size: 12px; padding: 4px 12px; border-radius: 4px; letter-spacing: .08em; font-weight: 700; text-transform: uppercase; display: inline-block; margin-bottom: 6px; }
+  .sr-head .yrs { color: rgba(255,255,255,.85); font-size: 13px; }
+
+  .sr-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 22px; }
+  @media (max-width: 880px) { .sr-summary { grid-template-columns: repeat(2, 1fr); } }
+  .sr-stat { background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--d27-navy); border-radius: 8px; padding: 18px; }
+  .sr-stat.gold { border-top-color: var(--d27-gold); }
+  .sr-stat.green { border-top-color: #10B981; }
+  .sr-stat.red { border-top-color: var(--d27-red); }
+  .sr-stat .lbl { color: var(--muted); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; }
+  .sr-stat .num { font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--d27-navy); margin-top: 4px; line-height: 1; }
+  .sr-stat .delta { font-size: 12px; color: #059669; margin-top: 4px; font-weight: 600; }
+  .sr-stat.gold .num { color: var(--d27-gold); }
+  .sr-stat.green .num { color: #10B981; }
+  .sr-stat.red .num { color: var(--d27-red); }
+
+  .sr-cols { display: grid; grid-template-columns: 1.5fr 1fr; gap: 22px; margin-bottom: 22px; }
+  @media (max-width: 980px) { .sr-cols { grid-template-columns: 1fr; } }
+
+  .sr-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 22px; margin-bottom: 18px; }
+  .sr-card h2 { font-family: var(--font-display); margin: 0 0 14px; color: var(--d27-navy); font-size: 22px; }
+  .sr-card h3 { font-family: var(--font-display); margin: 18px 0 8px; color: var(--d27-navy); font-size: 14px; letter-spacing: .04em; text-transform: uppercase; }
+
+  .sr-chart { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; height: 160px; align-items: flex-end; padding: 12px 0; }
+  .sr-chart .bar { background: linear-gradient(180deg, #C8102E, #8B0000); border-radius: 3px 3px 0 0; position: relative; transition: opacity .15s; }
+  .sr-chart .bar:hover { opacity: .85; }
+  .sr-chart .bar:hover::after { content: attr(data-val); position: absolute; top: -22px; left: 50%; transform: translateX(-50%); background: var(--d27-navy); color: #fff; padding: 3px 8px; border-radius: 3px; font-size: 11px; font-family: var(--font-display); white-space: nowrap; }
+  .sr-chart-labels { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; font-family: var(--font-display); font-size: 11px; color: var(--muted); text-align: center; padding-top: 8px; border-top: 1px solid var(--line); }
+
+  .sr-place { display: grid; grid-template-columns: 36px 1fr auto; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--line); align-items: center; }
+  .sr-place:last-child { border-bottom: 0; }
+  .sr-place .ico { width: 32px; height: 32px; border-radius: 6px; background: var(--d27-sub); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+  .sr-place .nm { font-weight: 700; font-size: 13px; }
+  .sr-place .meta { color: var(--muted); font-size: 11px; }
+  .sr-place .impressions { font-family: var(--font-display); font-weight: 700; color: var(--d27-navy); font-size: 14px; }
+
+  .sr-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .sr-table th { background: var(--d27-navy); color: #fff; padding: 9px 10px; text-align: left; font-family: var(--font-display); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+  .sr-table th.right, .sr-table td.right { text-align: right; }
+  .sr-table td { padding: 10px; border-bottom: 1px solid var(--line); }
+  .sr-table .pos { color: #059669; font-weight: 700; }
+
+  .sr-quote { background: linear-gradient(90deg, rgba(200,16,46,.06), rgba(0,45,114,.04)); border: 1px solid rgba(200,16,46,.18); border-left: 4px solid #C8102E; padding: 16px 22px; border-radius: 6px; margin: 14px 0; font-style: italic; font-size: 14px; line-height: 1.65; }
+  .sr-quote .by { font-style: normal; color: var(--muted); font-size: 12px; margin-top: 8px; }
+
+  .sr-renew { background: linear-gradient(135deg, var(--d27-navy), var(--d27-navy-dark)); color: #fff; padding: 26px; border-radius: 10px; margin: 22px 0; }
+  .sr-renew h2 { color: var(--d27-gold); font-family: var(--font-display); margin: 0 0 8px; font-size: 22px; }
+  .sr-renew p { margin: 0 0 12px; color: rgba(255,255,255,.85); line-height: 1.6; }
+  .sr-renew .options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+  @media (max-width: 700px) { .sr-renew .options { grid-template-columns: 1fr; } }
+  .sr-renew .opt { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); padding: 12px 14px; border-radius: 6px; }
+  .sr-renew .opt b { font-family: var(--font-display); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--d27-gold); display: block; margin-bottom: 2px; }
+  .sr-renew .opt .nm { font-weight: 700; font-size: 16px; margin: 4px 0; }
+  .sr-renew .opt .price { font-family: var(--font-display); color: var(--d27-gold); font-size: 22px; font-weight: 700; }
+  .sr-renew button { background: var(--d27-gold); color: var(--d27-navy); border: none; padding: 12px 24px; border-radius: 5px; font-family: var(--font-display); font-weight: 700; font-size: 14px; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; margin-top: 14px; }
+
+  .sr-impact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+  @media (max-width: 700px) { .sr-impact-grid { grid-template-columns: 1fr 1fr; } }
+  .sr-impact-card { background: var(--d27-paper); padding: 14px; border-radius: 6px; text-align: center; }
+  .sr-impact-card .ico { font-size: 28px; }
+  .sr-impact-card .num { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--d27-navy); margin: 4px 0; line-height: 1; }
+  .sr-impact-card .lbl { color: var(--muted); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="sr-banner">
+  PHASE 3 PRODUCTION MOCK · What Wawa sees when they log into D27 · <a href="roadmap.html">Back to Roadmap</a>
+</div>
+
+<div class="sr-shell">
+
+  <header class="sr-head">
+    <div class="logo">W</div>
+    <div>
+      <h1>Wawa · 2026 Sponsor Dashboard</h1>
+      <div class="sub">Sponsor ID: D27-WAWA-2026 · Account contact: Dave Petrillo</div>
+    </div>
+    <div class="right">
+      <span class="tier">★ CHAMPION TIER · $5,000</span>
+      <div class="yrs">14th consecutive year · since 2012</div>
+    </div>
+  </header>
+
+  <div class="sr-summary">
+    <div class="sr-stat green"><div class="lbl">Total Impressions YTD</div><div class="num">1.2M</div><div class="delta">+18% vs 2025</div></div>
+    <div class="sr-stat"><div class="lbl">Click-throughs</div><div class="num">8,420</div><div class="delta">7.0% CTR</div></div>
+    <div class="sr-stat gold"><div class="lbl">Cost per impression</div><div class="num">$0.0042</div><div class="delta">~⅛ Facebook ads</div></div>
+    <div class="sr-stat red"><div class="lbl">Brand sentiment</div><div class="num">+87</div><div class="delta">NPS · top quartile</div></div>
+  </div>
+
+  <div class="sr-cols">
+
+    <div>
+      <div class="sr-card">
+        <h2>Impressions Over Time</h2>
+        <div class="sr-chart">
+          <div class="bar" style="height: 38%;" data-val="Mar · 62K"></div>
+          <div class="bar" style="height: 48%;" data-val="Apr · 84K"></div>
+          <div class="bar" style="height: 64%;" data-val="May · 112K"></div>
+          <div class="bar" style="height: 78%;" data-val="Jun · 138K"></div>
+          <div class="bar" style="height: 92%;" data-val="Jun BJ · 162K"></div>
+          <div class="bar" style="height: 88%;" data-val="Jul AS · 154K"></div>
+          <div class="bar" style="height: 64%;" data-val="Jul Sec · 112K"></div>
+          <div class="bar" style="height: 56%;" data-val="Aug · 98K"></div>
+          <div class="bar" style="height: 32%;" data-val="Sep · 56K"></div>
+          <div class="bar" style="height: 48%;" data-val="Oct Banq · 84K"></div>
+          <div class="bar" style="height: 24%;" data-val="Nov Reg · 42K"></div>
+          <div class="bar" style="height: 36%;" data-val="Dec EB · 62K"></div>
+        </div>
+        <div class="sr-chart-labels">
+          <div>Mar</div><div>Apr</div><div>May</div><div>Jun</div><div>Jun</div><div>Jul</div><div>Jul</div><div>Aug</div><div>Sep</div><div>Oct</div><div>Nov</div><div>Dec</div>
+        </div>
+
+        <h3>Top-Performing Placements</h3>
+        <div class="sr-place">
+          <div class="ico">🏆</div>
+          <div><div class="nm">Bob Jones Tournament Bracket Banner</div><div class="meta">Embedded · 19 days · all visitors of <a href="tournament.html" style="color: var(--d27-navy);">tournament.html</a></div></div>
+          <div class="impressions">412K</div>
+        </div>
+        <div class="sr-place">
+          <div class="ico">⚾</div>
+          <div><div class="nm">Live Game Sidebar (during games)</div><div class="meta">Logo + tagline next to live scoreboard</div></div>
+          <div class="impressions">218K</div>
+        </div>
+        <div class="sr-place">
+          <div class="ico">📅</div>
+          <div><div class="nm">Master Schedule Header</div><div class="meta">Top of <a href="schedule.html" style="color: var(--d27-navy);">schedule.html</a> · seasonal</div></div>
+          <div class="impressions">186K</div>
+        </div>
+        <div class="sr-place">
+          <div class="ico">📰</div>
+          <div><div class="nm">Homepage News Ticker</div><div class="meta">Inline mention · "Wawa renews as Champion Sponsor"</div></div>
+          <div class="impressions">94K</div>
+        </div>
+        <div class="sr-place">
+          <div class="ico">👕</div>
+          <div><div class="nm">Jersey Patch · 642 BP players</div><div class="meta">Physical impression · 80 game days</div></div>
+          <div class="impressions">~310K</div>
+        </div>
+      </div>
+
+      <div class="sr-card">
+        <h2>Where Your $5,000 Went</h2>
+        <table class="sr-table">
+          <thead><tr><th>Beneficiary</th><th>Amount</th><th>Use</th><th class="right">% of Sponsorship</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Berwyn-Paoli LL</strong></td><td>$2,000</td><td>Field maintenance + uniforms</td><td class="right pos">40%</td></tr>
+            <tr><td><strong>Methacton LL</strong></td><td>$1,000</td><td>Tournament entry fees</td><td class="right pos">20%</td></tr>
+            <tr><td><strong>Chester Valley LL</strong></td><td>$1,000</td><td>Equipment + clinic supplies</td><td class="right pos">20%</td></tr>
+            <tr><td><strong>Scott Memorial Scholarship</strong></td><td>$500</td><td>2 family registration grants</td><td class="right pos">10%</td></tr>
+            <tr><td><strong>D27 Tournament Operations</strong></td><td>$500</td><td>Umpire stipends + Bob Jones</td><td class="right pos">10%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sr-card">
+        <h2>Community Stories</h2>
+
+        <div class="sr-quote">
+          "When my 9-year-old got her first Wawa-sponsored jersey on Opening Day, you'd have thought it was the Phillies. She wore it to school the next day. Wawa runs deep here — this sponsorship matters."
+          <div class="by">— Carlos Reyes, Penn Wood LL Volunteer of the Year, parent of 3 D27 players</div>
+        </div>
+
+        <div class="sr-quote">
+          "We funded the Bob Jones tournament's championship trophy with this year's contribution. Sixteen 12U teams, 160 kids, six weekends of competition — and a Wawa logo on every game broadcast."
+          <div class="by">— Jeff Bennett, D27 District Administrator</div>
+        </div>
+      </div>
+    </div>
+
+    <aside>
+      <div class="sr-card">
+        <h2>Real Impact</h2>
+        <div class="sr-impact-grid">
+          <div class="sr-impact-card"><div class="ico">⚾</div><div class="num">10K</div><div class="lbl">Players reached</div></div>
+          <div class="sr-impact-card"><div class="ico">👨‍👩‍👧</div><div class="num">25K</div><div class="lbl">Family members</div></div>
+          <div class="sr-impact-card"><div class="ico">🌳</div><div class="num">18</div><div class="lbl">Fields impacted</div></div>
+          <div class="sr-impact-card"><div class="ico">🎓</div><div class="num">2</div><div class="lbl">Scholarships funded</div></div>
+          <div class="sr-impact-card"><div class="ico">🏆</div><div class="num">17</div><div class="lbl">Tournaments</div></div>
+          <div class="sr-impact-card"><div class="ico">📅</div><div class="num">3,400</div><div class="lbl">Games played</div></div>
+        </div>
+      </div>
+
+      <div class="sr-card">
+        <h2>Versus Other Marketing</h2>
+        <table class="sr-table">
+          <thead><tr><th>Channel</th><th class="right">CPM</th></tr></thead>
+          <tbody>
+            <tr><td><strong>D27 Champion Tier</strong></td><td class="right pos">$4.20</td></tr>
+            <tr><td>Local radio (KYW)</td><td class="right">$28.50</td></tr>
+            <tr><td>Inquirer print</td><td class="right">$32.00</td></tr>
+            <tr><td>Facebook · 5-mile</td><td class="right">$14.20</td></tr>
+            <tr><td>Phila Phillies game ad</td><td class="right">$185.00</td></tr>
+          </tbody>
+        </table>
+        <p style="margin: 10px 0 0; font-size: 12px; color: var(--muted);">Local + family-targeted + community goodwill. Hard to beat.</p>
+      </div>
+
+      <div class="sr-card">
+        <h2>Account Status</h2>
+        <ul style="font-size: 13px; line-height: 1.85; padding: 0; list-style: none; margin: 0;">
+          <li style="padding: 6px 0; border-bottom: 1px dashed var(--line); display: flex; justify-content: space-between;"><span>Tax-deductible</span><b style="color: #059669;">✓ 501(c)(3)</b></li>
+          <li style="padding: 6px 0; border-bottom: 1px dashed var(--line); display: flex; justify-content: space-between;"><span>Receipt issued</span><b>Apr 22, 2026</b></li>
+          <li style="padding: 6px 0; border-bottom: 1px dashed var(--line); display: flex; justify-content: space-between;"><span>EIN</span><b>23-1234567</b></li>
+          <li style="padding: 6px 0; border-bottom: 1px dashed var(--line); display: flex; justify-content: space-between;"><span>Renewal date</span><b>Mar 1, 2027</b></li>
+          <li style="padding: 6px 0; display: flex; justify-content: space-between;"><span>Account manager</span><b>D. Petrillo</b></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Renewal -->
+  <div class="sr-renew">
+    <h2>Renew for 2027</h2>
+    <p>Lock in 2027 sponsorship by Sept 30 for early-bird benefits. Same tier or upgrade.</p>
+
+    <div class="options">
+      <div class="opt">
+        <b>Hold Champion</b>
+        <div class="nm">Champion Tier</div>
+        <div class="price">$5,000</div>
+        <div style="font-size: 12px; color: rgba(255,255,255,.7); margin-top: 4px;">All 2026 benefits · 14% CPM improvement projected w/ new live broadcast features</div>
+      </div>
+      <div class="opt" style="background: rgba(201,162,39,.12); border-color: var(--d27-gold);">
+        <b>Upgrade · Title Sponsor</b>
+        <div class="nm">"Wawa Bob Jones Tournament"</div>
+        <div class="price">$15,000</div>
+        <div style="font-size: 12px; color: rgba(255,255,255,.7); margin-top: 4px;">Tournament naming · 600K+ projected impressions · championship trophy bears name</div>
+      </div>
+      <div class="opt">
+        <b>Add · Live Broadcast Sponsor</b>
+        <div class="nm">"Brought to you by Wawa"</div>
+        <div class="price">+$2,500</div>
+        <div style="font-size: 12px; color: rgba(255,255,255,.7); margin-top: 4px;">Audio + video stream sponsorship · ~150K weekend impressions</div>
+      </div>
+    </div>
+
+    <button onclick="alert('Demo — opens Stripe-Connect renewal flow with prorated billing')">Renew Now →</button>
+  </div>
+
+  <p style="text-align: center; color: var(--muted); font-size: 12px; margin-top: 14px;">Dashboard auto-emailed quarterly · custom reports available · contact <a href="mailto:jeffbennett.d27@gmail.com" style="color: var(--d27-navy); font-weight: 600;">D27 Sponsor Relations</a></p>
+
+</div>
+
+</body>
+</html>

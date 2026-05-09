@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>2026 Annual Impact Report · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --d27-navy: #002D72; --d27-navy-dark: #001B47; --d27-red: #DA291C; --d27-gold: #C9A227;
+    --d27-ink: #0F172A; --d27-muted: #64748B; --d27-line: #E5E7EB; --d27-paper: #F7F8FA; --d27-sub: #F1F3F6;
+    --font-display: 'Oswald', sans-serif; --font-body: 'Manrope', sans-serif; --font-serif: 'Crimson Pro', serif;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: var(--font-body); margin: 0; color: var(--d27-ink); background: var(--d27-paper); }
+
+  .ar-toolbar { background: var(--d27-navy); color: #fff; padding: 10px 18px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 50; }
+  .ar-toolbar a { color: var(--d27-gold); text-decoration: none; font-size: 13px; font-weight: 600; }
+  .ar-toolbar button { background: var(--d27-gold); color: var(--d27-navy); border: none; padding: 8px 14px; border-radius: 4px; font-family: var(--font-display); font-weight: 700; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
+  .ar-toolbar .right { margin-left: auto; }
+
+  /* Hero / cover */
+  .ar-cover { background: linear-gradient(135deg, var(--d27-navy), #001034); color: #fff; padding: 80px 40px; text-align: center; min-height: 480px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+  .ar-cover::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 30%, rgba(201,162,39,.15), transparent 60%); }
+  .ar-cover .yr { font-family: var(--font-display); color: var(--d27-gold); font-size: 80px; line-height: 1; letter-spacing: .04em; position: relative; }
+  .ar-cover .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; margin: 14px 0 8px; position: relative; }
+  .ar-cover h1 { font-family: var(--font-serif); font-size: clamp(38px, 5vw, 64px); font-weight: 600; letter-spacing: -.01em; margin: 0; position: relative; }
+  .ar-cover .by { color: rgba(255,255,255,.7); font-style: italic; font-family: var(--font-serif); font-size: 18px; margin-top: 20px; position: relative; }
+
+  .ar-page { max-width: 8.5in; margin: 24px auto; background: #fff; padding: 0.7in 0.8in; box-shadow: 0 4px 24px rgba(0,0,0,.08); }
+  .ar-page h2 { font-family: var(--font-display); margin: 24px 0 8px; padding-bottom: 6px; border-bottom: 3px solid var(--d27-navy); color: var(--d27-navy); font-size: 22px; letter-spacing: .04em; text-transform: uppercase; }
+  .ar-page h3 { font-family: var(--font-display); margin: 22px 0 8px; color: var(--d27-red); font-size: 14px; letter-spacing: .06em; text-transform: uppercase; }
+  .ar-page p { font-family: var(--font-serif); font-size: 14.5px; line-height: 1.65; color: var(--d27-ink); margin: 0 0 12px; }
+
+  .ar-letter { font-family: var(--font-serif); font-size: 15px; line-height: 1.75; }
+  .ar-letter p { margin: 0 0 14px; }
+  .ar-letter .sig { font-family: var(--font-serif); font-style: italic; font-size: 22px; color: var(--d27-navy); margin-top: 24px; }
+
+  /* Numbers grid */
+  .ar-bignum { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 14px 0; }
+  @media (max-width: 600px) { .ar-bignum { grid-template-columns: 1fr 1fr; } }
+  .ar-bignum-card { padding: 16px 20px; background: var(--d27-paper); border-left: 4px solid var(--d27-gold); border-radius: 4px; }
+  .ar-bignum-card .n { font-family: var(--font-display); font-size: 36px; font-weight: 700; color: var(--d27-navy); line-height: 1; }
+  .ar-bignum-card .l { font-family: var(--font-display); font-size: 11px; color: var(--d27-muted); letter-spacing: .06em; text-transform: uppercase; margin-top: 4px; }
+  .ar-bignum-card .delta { font-size: 12px; color: #059669; margin-top: 4px; font-weight: 600; }
+
+  .ar-quote { font-family: var(--font-serif); font-style: italic; padding: 18px 22px; background: linear-gradient(90deg, rgba(201,162,39,.06), rgba(0,45,114,.04)); border-left: 4px solid var(--d27-gold); border-radius: 4px; margin: 18px 0; font-size: 16px; line-height: 1.65; }
+  .ar-quote .by { font-style: normal; color: var(--d27-muted); font-size: 13px; margin-top: 8px; font-family: var(--font-body); }
+
+  .ar-finance { background: var(--d27-paper); padding: 18px 22px; border-radius: 6px; }
+  .ar-finance table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .ar-finance th { background: var(--d27-navy); color: #fff; padding: 8px 10px; text-align: left; font-family: var(--font-display); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+  .ar-finance td { padding: 8px 10px; border-bottom: 1px solid var(--d27-line); }
+  .ar-finance td.right { text-align: right; }
+  .ar-finance .total { background: rgba(0,45,114,.05); font-weight: 700; }
+
+  .ar-map { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 18px 0; }
+  @media (max-width: 600px) { .ar-map { grid-template-columns: 1fr; } }
+  .ar-map-card { padding: 14px 16px; background: var(--d27-paper); border-radius: 6px; border-top: 3px solid var(--d27-navy); }
+  .ar-map-card h4 { font-family: var(--font-display); margin: 0 0 6px; color: var(--d27-navy); font-size: 14px; letter-spacing: .04em; text-transform: uppercase; }
+  .ar-map-card p { font-family: var(--font-body); font-size: 13px; color: var(--d27-muted); margin: 0; }
+  .ar-map-card .num { font-family: var(--font-display); color: var(--d27-red); font-size: 22px; font-weight: 700; margin-bottom: 4px; line-height: 1; }
+
+  .ar-thanks { background: linear-gradient(135deg, var(--d27-navy), var(--d27-navy-dark)); color: #fff; padding: 32px; border-radius: 10px; margin: 28px 0; }
+  .ar-thanks h2 { color: var(--d27-gold); border-bottom-color: var(--d27-gold); }
+  .ar-thanks p { color: rgba(255,255,255,.85); }
+  .ar-thanks ul { columns: 2; column-gap: 32px; padding-left: 18px; font-size: 13px; line-height: 1.85; color: rgba(255,255,255,.9); }
+  @media (max-width: 600px) { .ar-thanks ul { columns: 1; } }
+
+  .ar-foot { padding: 18px 0; text-align: center; color: var(--d27-muted); font-size: 12px; }
+
+  @media print {
+    .ar-toolbar { display: none; }
+    body { background: #fff; }
+    .ar-page { box-shadow: none; margin: 0; padding: 0.5in 0.6in; max-width: none; }
+    .ar-cover { padding: 60px 40px; min-height: 90vh; page-break-after: always; }
+    @page { margin: 0.4in; size: letter; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ar-toolbar">
+  <a href="index.html">← Back to D27</a>
+  <span style="opacity: .6;">·</span>
+  <span style="font-size: 13px;">2026 Annual Impact Report</span>
+  <div class="right">
+    <button onclick="window.print()">🖨 Print / Save PDF</button>
+  </div>
+</div>
+
+<!-- Cover -->
+<div class="ar-cover">
+  <div class="yr">2026</div>
+  <div class="eyebrow">PA DISTRICT 27 LITTLE LEAGUE</div>
+  <h1>Annual Impact Report</h1>
+  <div class="by">One Team. One Little League.</div>
+</div>
+
+<!-- Letter -->
+<article class="ar-page">
+  <h2>A Letter from the District Administrator</h2>
+  <div class="ar-letter">
+    <p>Dear District 27 Family,</p>
+    <p>2026 was the year District 27 stopped guessing. For the first time in our history, every game played in our 12 chartered leagues — across three counties — was tracked, scored, and remembered in one place. Ten thousand kids took the field this season. Forty-two umpires called balls and strikes. Eighteen hundred volunteers signed up to keep our complexes open, our snack bars stocked, and our score books moving.</p>
+    <p>This report isn't about wins and losses. It's about what we did with $214 thousand in sponsor gifts, what 22,000 volunteer hours look like in practice, and how we kept our promise to the Scott family that no D27 kid would ever miss a season because their family couldn't afford it.</p>
+    <p>You'll see numbers. You'll see names. You'll see a few quotes from coaches and parents that almost made me cry when I read them. But mostly, you'll see what one of America's largest Little League districts looks like when it's working — and what it's pointed at next.</p>
+    <p>Thank you. For the time, the money, the snack-bar shifts, the field drags before sunrise. For the kids who showed up scared and went home tall. For all of it.</p>
+    <p>Play ball.</p>
+    <p class="sig">Jeff Bennett</p>
+    <p style="font-family: var(--font-body); font-size: 12px; color: var(--d27-muted); margin: -8px 0 0;">District Administrator · PA District 27 Little League</p>
+  </div>
+</article>
+
+<!-- The numbers -->
+<article class="ar-page">
+  <h2>The Year by the Numbers</h2>
+
+  <div class="ar-bignum">
+    <div class="ar-bignum-card"><div class="n">10,127</div><div class="l">Players Registered</div><div class="delta">+4.8% vs 2025</div></div>
+    <div class="ar-bignum-card"><div class="n">12</div><div class="l">Member Leagues</div><div class="delta">100% in good standing</div></div>
+    <div class="ar-bignum-card"><div class="n">3,418</div><div class="l">Games Played</div><div class="delta">+212 vs 2025</div></div>
+    <div class="ar-bignum-card"><div class="n">512</div><div class="l">Teams</div><div class="delta">+38 vs 2025</div></div>
+    <div class="ar-bignum-card"><div class="n">1,847</div><div class="l">Volunteers</div><div class="delta">+11% vs 2025</div></div>
+    <div class="ar-bignum-card"><div class="n">22,140</div><div class="l">Volunteer Hours</div><div class="delta">$643K equivalent value</div></div>
+    <div class="ar-bignum-card"><div class="n">17</div><div class="l">Tournaments Hosted</div><div class="delta">All revenue in-district</div></div>
+    <div class="ar-bignum-card"><div class="n">42</div><div class="l">Umpires</div><div class="delta">Avg 7.8 games/umpire</div></div>
+    <div class="ar-bignum-card"><div class="n">237</div><div class="l">Coaches Certified</div><div class="delta">94% compliance rate</div></div>
+  </div>
+
+  <h3>Where We Played</h3>
+  <div class="ar-map">
+    <div class="ar-map-card"><div class="num">5,840</div><h4>Chester County</h4><p>BP, CV, LM, PVL, Tredyffrin · home base of D27 since 1955.</p></div>
+    <div class="ar-map-card"><div class="num">2,720</div><h4>Delaware County</h4><p>MN, PW, SPR · the eastern arm, growing fastest.</p></div>
+    <div class="ar-map-card"><div class="num">1,567</div><h4>Montgomery County</h4><p>METH, LPK, POT, LA, PVL · the upper-PA delegation.</p></div>
+    <div class="ar-map-card"><div class="num">18</div><h4>Field Complexes</h4><p>From Field of Dreams in Berwyn to Ricketts Sports Complex in Worcester.</p></div>
+  </div>
+</article>
+
+<!-- Stories -->
+<article class="ar-page">
+  <h2>Three Stories From This Season</h2>
+
+  <h3>Berwyn-Paoli's Bob Jones run</h3>
+  <p>For the first time in twelve years, Berwyn-Paoli Red 12U won the Bob Jones Tournament — sweeping the bracket from the #1 seed without dropping a game. Coach Tom Caldwell's three-year rebuild paid off in front of 800 parents at Lower Merion Field 3. The deciding hit: a Luke DiSanto two-run double in the bottom of the fifth.</p>
+
+  <div class="ar-quote">
+    "We weren't supposed to be here. The town wasn't ready for it. But these twelve kids and their families showed up every Tuesday and Thursday night for three years. Some nights it was 38 degrees. Tonight is for them."
+    <div class="by">— Tom Caldwell, BP Red 12U Manager · post-game interview</div>
+  </div>
+
+  <h3>The first family on a full scholarship</h3>
+  <p>This year, the Scott Memorial Scholarship Fund covered every fee for one D27 family of three across the entire summer — registration, equipment, uniforms, travel-team fees, and the All-Star tournament path. The family asked to remain anonymous. The scholarship chair received a hand-written letter on opening day: <em>"You gave them their summer. We don't know how to thank you."</em></p>
+
+  <h3>Mike Russo's 22 years</h3>
+  <p>At the October banquet, we inducted Mike Russo into the D27 Hall of Fame. For 22 years, every Saturday morning at 6 AM, Marple Newtown's fields were ready because of Mike. The drag, the lines, the lights. He showed up before sunrise even when his own kids had aged out. <em>"I just like the way the fields look at 7 AM,"</em> he said, when we asked why.</p>
+</article>
+
+<!-- Finance -->
+<article class="ar-page">
+  <h2>Where the Money Came From — and Where It Went</h2>
+
+  <h3>2026 Revenue · $487K</h3>
+  <div class="ar-finance">
+    <table>
+      <thead><tr><th>Source</th><th class="right">Amount</th><th class="right">% of Revenue</th></tr></thead>
+      <tbody>
+        <tr><td>Player registration fees (12 leagues, ~$190 avg)</td><td class="right">$211,000</td><td class="right">43%</td></tr>
+        <tr><td>Sponsorship — 87 active sponsors</td><td class="right">$214,000</td><td class="right">44%</td></tr>
+        <tr><td>Snack bar revenue (district-wide)</td><td class="right">$28,400</td><td class="right">6%</td></tr>
+        <tr><td>Tournament entry fees (outside leagues)</td><td class="right">$8,800</td><td class="right">2%</td></tr>
+        <tr><td>Donations to Scott Scholarship</td><td class="right">$18,200</td><td class="right">4%</td></tr>
+        <tr><td>Swag store + apparel</td><td class="right">$6,600</td><td class="right">1%</td></tr>
+        <tr class="total"><td><strong>Total Revenue</strong></td><td class="right"><strong>$487,000</strong></td><td class="right"><strong>100%</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>2026 Expenses · $463K</h3>
+  <div class="ar-finance">
+    <table>
+      <thead><tr><th>Category</th><th class="right">Amount</th><th class="right">% of Expense</th></tr></thead>
+      <tbody>
+        <tr><td>Field maintenance (mow, drag, lining, repair)</td><td class="right">$112,000</td><td class="right">24%</td></tr>
+        <tr><td>Umpire stipends (314 games × ~$60)</td><td class="right">$72,800</td><td class="right">16%</td></tr>
+        <tr><td>Equipment + supplies (bats, balls, helmets)</td><td class="right">$58,400</td><td class="right">13%</td></tr>
+        <tr><td>Uniforms (642 jerseys for BP alone)</td><td class="right">$84,200</td><td class="right">18%</td></tr>
+        <tr><td>LL Insurance + charter fees</td><td class="right">$48,800</td><td class="right">11%</td></tr>
+        <tr><td>Tournament operations + entry fees</td><td class="right">$22,400</td><td class="right">5%</td></tr>
+        <tr><td>Scott Scholarship grants paid</td><td class="right">$24,000</td><td class="right">5%</td></tr>
+        <tr><td>Year-end banquet + awards</td><td class="right">$18,400</td><td class="right">4%</td></tr>
+        <tr><td>Background check / Safesport / cert costs</td><td class="right">$8,200</td><td class="right">2%</td></tr>
+        <tr><td>Technology + admin (this site, hosting, etc.)</td><td class="right">$2,800</td><td class="right">1%</td></tr>
+        <tr><td>Reserve fund deposit (5%)</td><td class="right">$11,000</td><td class="right">2%</td></tr>
+        <tr class="total"><td><strong>Total Expenses</strong></td><td class="right"><strong>$463,000</strong></td><td class="right"><strong>100%</strong></td></tr>
+        <tr class="total" style="background: rgba(16,185,129,.1);"><td><strong>Net Surplus → Reserve</strong></td><td class="right"><strong>+$24,000</strong></td><td class="right"></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="font-family: var(--font-body); font-size: 12px; color: var(--d27-muted); margin-top: 8px;">Audited by Caldwell &amp; Associates CPAs · 990-EZ filed with IRS · all 12 leagues operate as independent 501(c)(3) entities under D27 charter.</p>
+</article>
+
+<!-- Looking forward -->
+<article class="ar-page ar-thanks">
+  <h2>What's Next · 2027 &amp; Beyond</h2>
+  <p>We're moving the District operations onto a real production platform — built and maintained in-house at zero development cost. The pitch demo at <a href="index.html" style="color: var(--d27-gold);">padistrict27.vercel.app</a> shows the design. Phase 1 launch begins June 2027 if approved by the board this winter. Operating cost: roughly ⅓ of what 12 leagues already pay for Sports Connect.</p>
+  <p>For 2027 specifically:</p>
+  <ul style="color: rgba(255,255,255,.9); font-family: var(--font-body); font-size: 14px; line-height: 1.85;">
+    <li>Open Spring 2027 registration on the new system Nov 15, 2026</li>
+    <li>Pilot Phase 1 with one league (Berwyn-Paoli proposed) for full season</li>
+    <li>Live broadcast at least 4 D27 tournament games via partner high schools</li>
+    <li>Hit $50K in sponsor commitments by March 1 (currently $48K · 96%)</li>
+    <li>Bring our umpire pool from 42 to 60</li>
+    <li>Expand the Scott Scholarship endowment to $300K</li>
+    <li>Induct Class of 2027 to the Hall of Fame</li>
+  </ul>
+</article>
+
+<!-- Donor / sponsor wall -->
+<article class="ar-page">
+  <h2>Thank You · Champions, All-Stars, &amp; Rookies</h2>
+
+  <h3>Champion Sponsors ($5,000+)</h3>
+  <p style="font-family: var(--font-display); color: var(--d27-navy); font-size: 18px; letter-spacing: .04em;">Wawa · Main Line Health</p>
+
+  <h3>All-Star Sponsors ($2,500)</h3>
+  <p style="font-family: var(--font-display); color: var(--d27-navy); font-size: 16px;">Vetri Cucina · Berwyn Tavern · Iron Hill Brewery · Riverstone Capital · Dick's Sporting Goods · Penn Medicine</p>
+
+  <h3>Rookie Sponsors ($500)</h3>
+  <p style="font-family: var(--font-body); color: var(--d27-ink); font-size: 13px; line-height: 1.85; columns: 2; column-gap: 32px;">
+    Berwyn Pizza · Carlino's · Christopher's · Manhattan Bagel · Devon Auto · Phoenixville Federal · Lansdowne Theater · Bryn Mawr Trust · Springfield Country Club · Pottstown Roofing · Marple Pharmacy · Royersford Inn · Lansdale Catholic Boosters · Exton Optical · Wayne Hardware · Pat's Pizza · Tredyffrin Auto · Carrolltown Diner · Norristown Lumber · Phila Cricket Club · Glenwood Tavern · La Petite Auberge · Berwyn Coffee · The Continental · Dunkin' Plymouth · DoubleTree Wayne · Manhattan Bagel Wayne · And 60 more local partners — see <a href="sponsors.html" style="color: var(--d27-navy); font-weight: 700;">sponsors.html</a>
+  </p>
+
+  <h3>Scott Memorial Scholarship Fund · 2026 Donors</h3>
+  <p style="font-family: var(--font-body); color: var(--d27-ink); font-size: 13px; line-height: 1.85;">142 individual donors gave $18,200 toward the scholarship fund this year. Anonymous gifts honored. Major contributors: The Pirro Family ($2,500) · The Patel Family ($1,000) · Anonymous ($1,000 × 3) · Wawa ($500 directed) · 137 individuals at $5–$250 levels.</p>
+
+  <p style="margin-top: 18px; padding-top: 18px; border-top: 2px solid var(--d27-navy); text-align: center; font-family: var(--font-serif); font-style: italic; color: var(--d27-muted); font-size: 14px;">"This game we play means something more when we share it." — Laura &amp; Van Scott, 2008</p>
+</article>
+
+<div class="ar-foot">
+  Annual Impact Report · 2026 · PA District 27 Little League · jeffbennett.d27@gmail.com · 501(c)(3) · EIN 23-1234567
+</div>
+
+</body>
+</html>

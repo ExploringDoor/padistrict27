@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Bracket Challenge · D27 Bob Jones 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  body { background: linear-gradient(180deg, var(--d27-navy-dark), var(--d27-navy)); color: #fff; min-height: 100vh; }
+
+  .bc-hero { padding: 56px 0 36px; text-align: center; border-bottom: 4px solid var(--d27-gold); position: relative; overflow: hidden; }
+  .bc-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 30%, rgba(218,41,28,.15), transparent 60%); }
+  .bc-hero h1 { font-family: var(--font-display); font-size: clamp(38px, 5.5vw, 64px); margin: 0; position: relative; }
+  .bc-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; position: relative; }
+  .bc-hero p { color: rgba(255,255,255,.78); max-width: 620px; margin: 14px auto 0; position: relative; line-height: 1.6; }
+  .bc-hero .deadline { display: inline-block; background: rgba(218,41,28,.18); border: 1px solid rgba(218,41,28,.4); color: #FCA5A5; padding: 8px 16px; border-radius: 4px; font-family: var(--font-display); letter-spacing: .06em; text-transform: uppercase; font-size: 12px; margin-top: 18px; position: relative; }
+
+  .bc-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 24px 0 32px; }
+  @media (max-width: 720px) { .bc-stats { grid-template-columns: repeat(2, 1fr); } }
+  .bc-stat { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-top: 3px solid var(--d27-gold); border-radius: 8px; padding: 18px; }
+  .bc-stat .num { font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--d27-gold); line-height: 1; }
+  .bc-stat .lbl { color: rgba(255,255,255,.7); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; margin-top: 4px; }
+
+  .bc-cols { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; }
+  @media (max-width: 980px) { .bc-cols { grid-template-columns: 1fr; } }
+
+  .bc-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 10px; padding: 22px; margin-bottom: 16px; }
+  .bc-card h2 { font-family: var(--font-display); margin: 0 0 14px; color: var(--d27-gold); font-size: 20px; letter-spacing: .04em; text-transform: uppercase; }
+
+  /* Bracket */
+  .bc-bracket { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .bc-round { display: flex; flex-direction: column; }
+  .bc-round h3 { font-family: var(--font-display); margin: 0 0 8px; text-align: center; font-size: 11px; letter-spacing: .06em; color: var(--d27-gold); text-transform: uppercase; }
+  .bc-match { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 6px; margin-bottom: 6px; padding: 6px; cursor: pointer; transition: all .15s; }
+  .bc-match:hover { border-color: var(--d27-gold); }
+  .bc-match.r2 { margin-top: 36px; }
+  .bc-match.r3 { margin-top: 78px; }
+  .bc-match.r4 { margin-top: 162px; }
+
+  .bc-pick { padding: 6px 8px; font-size: 11px; border-radius: 4px; cursor: pointer; transition: all .15s; display: flex; justify-content: space-between; align-items: center; gap: 4px; }
+  .bc-pick:hover { background: rgba(255,255,255,.08); }
+  .bc-pick.locked { opacity: .4; pointer-events: none; }
+  .bc-pick.selected { background: linear-gradient(90deg, rgba(201,162,39,.25), rgba(201,162,39,.1)); color: #fff; border: 1px solid var(--d27-gold); }
+  .bc-pick.correct { background: linear-gradient(90deg, rgba(16,185,129,.25), rgba(16,185,129,.1)); border: 1px solid #10B981; }
+  .bc-pick.wrong { background: linear-gradient(90deg, rgba(218,41,28,.2), rgba(218,41,28,.06)); border: 1px solid rgba(218,41,28,.5); text-decoration: line-through; opacity: .55; }
+  .bc-pick .seed { font-family: var(--font-display); color: var(--d27-gold); font-size: 9px; opacity: .85; }
+  .bc-pick .nm { font-weight: 600; flex: 1; margin: 0 4px; font-size: 10px; }
+
+  /* Leaderboard */
+  .bc-lb { font-size: 13px; }
+  .bc-lb-row { display: grid; grid-template-columns: 24px 32px 1fr auto auto; gap: 8px; align-items: center; padding: 8px 4px; border-bottom: 1px dashed rgba(255,255,255,.1); }
+  .bc-lb-row:last-child { border-bottom: 0; }
+  .bc-lb-row.me { background: linear-gradient(90deg, rgba(201,162,39,.1), transparent); border-left: 3px solid var(--d27-gold); padding-left: 8px; }
+  .bc-lb-row .rank { font-family: var(--font-display); font-weight: 700; color: var(--d27-gold); }
+  .bc-lb-row .av { width: 28px; height: 28px; border-radius: 50%; background: var(--d27-navy); color: var(--d27-gold); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 11px; }
+  .bc-lb-row .nm { font-weight: 700; }
+  .bc-lb-row .meta { color: rgba(255,255,255,.6); font-size: 11px; }
+  .bc-lb-row .pts { font-family: var(--font-display); font-weight: 700; color: var(--d27-gold); font-size: 16px; }
+  .bc-lb-row .max { font-size: 11px; color: rgba(255,255,255,.5); }
+
+  .bc-prize { background: linear-gradient(135deg, rgba(218,41,28,.1), rgba(201,162,39,.06)); border: 1px solid rgba(218,41,28,.3); border-radius: 10px; padding: 18px 22px; }
+  .bc-prize h3 { font-family: var(--font-display); color: var(--d27-gold); margin: 0 0 8px; font-size: 16px; letter-spacing: .06em; text-transform: uppercase; }
+  .bc-prize ul { padding-left: 18px; margin: 0; line-height: 1.85; font-size: 13px; color: rgba(255,255,255,.85); }
+  .bc-prize ul b { color: var(--d27-gold); font-family: var(--font-display); }
+
+  .bc-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .bc-btn { background: var(--d27-gold); color: var(--d27-navy); border: none; padding: 10px 18px; border-radius: 5px; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+  .bc-btn.ghost { background: transparent; color: var(--d27-gold); border: 1px solid var(--d27-gold); }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Demo · Proposal for D27</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="bc-hero">
+  <div class="container">
+    <div class="eyebrow">D27 BOB JONES TOURNAMENT 2026 · BRACKET CHALLENGE</div>
+    <h1>Pick the Whole Bracket</h1>
+    <p>Free to play. Pick all 15 games of the Bob Jones Tournament before first pitch on June 14. Closest to perfect wins prizes — and bragging rights at the snack bar all summer.</p>
+    <div class="deadline">⏰ DEADLINE · JUNE 14, 9:30 AM · 2 days &amp; 6 hours left</div>
+  </div>
+</header>
+
+<main class="container" style="padding: 24px 0 48px;">
+
+  <div class="bc-stats">
+    <div class="bc-stat"><div class="num">847</div><div class="lbl">Brackets Submitted</div></div>
+    <div class="bc-stat"><div class="num">$2,640</div><div class="lbl">Raised for Scholarship</div></div>
+    <div class="bc-stat"><div class="num">12</div><div class="lbl">Leagues Competing</div></div>
+    <div class="bc-stat"><div class="num">$500</div><div class="lbl">Top Prize Pool</div></div>
+  </div>
+
+  <div class="bc-cols">
+
+    <div>
+      <div class="bc-card">
+        <h2>Your Bracket · Tap to Pick Winners</h2>
+
+        <div class="bc-bracket">
+          <!-- Round 1 -->
+          <div class="bc-round">
+            <h3>Round of 16</h3>
+            <div class="bc-match">
+              <div class="bc-pick correct"><span class="seed">#1</span><span class="nm">Berwyn-Paoli</span></div>
+              <div class="bc-pick wrong"><span class="seed">#16</span><span class="nm">Pottstown</span></div>
+            </div>
+            <div class="bc-match">
+              <div class="bc-pick correct"><span class="seed">#8</span><span class="nm">Springfield</span></div>
+              <div class="bc-pick wrong"><span class="seed">#9</span><span class="nm">Norristown</span></div>
+            </div>
+            <div class="bc-match">
+              <div class="bc-pick correct"><span class="seed">#4</span><span class="nm">Methacton</span></div>
+              <div class="bc-pick wrong"><span class="seed">#13</span><span class="nm">Tredyffrin</span></div>
+            </div>
+            <div class="bc-match">
+              <div class="bc-pick wrong"><span class="seed">#5</span><span class="nm">Penn Wood</span></div>
+              <div class="bc-pick correct"><span class="seed">#12</span><span class="nm">Phoenixville</span></div>
+            </div>
+            <div class="bc-match">
+              <div class="bc-pick correct"><span class="seed">#2</span><span class="nm">Chester Valley</span></div>
+              <div class="bc-pick wrong"><span class="seed">#15</span><span class="nm">Lansdale-A</span></div>
+            </div>
+            <div class="bc-match">
+              <div class="bc-pick correct"><span class="seed">#7</span><span class="nm">Lower Perk</span></div>
+              <div class="bc-pick wrong"><span class="seed">#10</span><span class="nm">Marple N</span></div>
+            </div>
+            <div class="bc-match">
+              <div class="bc-pick correct"><span class="seed">#3</span><span class="nm">Lower Merion</span></div>
+              <div class="bc-pick wrong"><span class="seed">#14</span><span class="nm">Tredyffrin</span></div>
+            </div>
+            <div class="bc-match">
+              <div class="bc-pick correct"><span class="seed">#6</span><span class="nm">Phoenixville</span></div>
+              <div class="bc-pick wrong"><span class="seed">#11</span><span class="nm">Pottstown</span></div>
+            </div>
+          </div>
+
+          <!-- Round 2 -->
+          <div class="bc-round">
+            <h3>Quarterfinals</h3>
+            <div class="bc-match r2">
+              <div class="bc-pick correct"><span class="seed">#1</span><span class="nm">Berwyn-Paoli</span></div>
+              <div class="bc-pick wrong"><span class="seed">#8</span><span class="nm">Springfield</span></div>
+            </div>
+            <div class="bc-match r2">
+              <div class="bc-pick correct"><span class="seed">#4</span><span class="nm">Methacton</span></div>
+              <div class="bc-pick wrong"><span class="seed">#12</span><span class="nm">Phoenixville</span></div>
+            </div>
+            <div class="bc-match r2">
+              <div class="bc-pick correct"><span class="seed">#2</span><span class="nm">Chester Valley</span></div>
+              <div class="bc-pick wrong"><span class="seed">#7</span><span class="nm">Lower Perk</span></div>
+            </div>
+            <div class="bc-match r2">
+              <div class="bc-pick correct"><span class="seed">#3</span><span class="nm">Lower Merion</span></div>
+              <div class="bc-pick wrong"><span class="seed">#6</span><span class="nm">Phoenixville</span></div>
+            </div>
+          </div>
+
+          <!-- Round 3 -->
+          <div class="bc-round">
+            <h3>Semifinals</h3>
+            <div class="bc-match r3">
+              <div class="bc-pick selected"><span class="seed">#1</span><span class="nm">Berwyn-Paoli</span></div>
+              <div class="bc-pick"><span class="seed">#4</span><span class="nm">Methacton</span></div>
+            </div>
+            <div class="bc-match r3">
+              <div class="bc-pick selected"><span class="seed">#2</span><span class="nm">Chester Valley</span></div>
+              <div class="bc-pick"><span class="seed">#3</span><span class="nm">Lower Merion</span></div>
+            </div>
+          </div>
+
+          <!-- Round 4 -->
+          <div class="bc-round">
+            <h3>Championship</h3>
+            <div class="bc-match r4">
+              <div class="bc-pick selected"><span class="seed">#1</span><span class="nm">Berwyn-Paoli</span></div>
+              <div class="bc-pick"><span class="seed">#2</span><span class="nm">Chester Valley</span></div>
+            </div>
+          </div>
+        </div>
+
+        <p style="font-size: 12px; color: rgba(255,255,255,.6); margin: 14px 0 0;">8 of 8 R1 picks correct · 4 of 4 QF picks correct · SF + Championship pending. Live updates as games finish.</p>
+
+        <div class="bc-actions">
+          <button class="bc-btn" onclick="alert('Demo — Save bracket and lock until first pitch')">💾 Save My Picks</button>
+          <button class="bc-btn ghost" onclick="alert('Demo — share to social with image card')">📤 Share Bracket</button>
+          <a class="bc-btn ghost" href="tournament.html">View Live Bracket →</a>
+        </div>
+      </div>
+
+      <div class="bc-card">
+        <h2>How Scoring Works</h2>
+        <p style="margin: 0 0 8px; font-size: 14px; color: rgba(255,255,255,.85);">Round 1: 1 point per correct pick · Quarterfinals: 2 points · Semifinals: 4 points · Championship: 8 points · Bonus 5 points if you correctly pick the score within 2 runs. Maximum 47 points.</p>
+        <p style="margin: 0; font-size: 13px; color: rgba(255,255,255,.6);">Tiebreaker: total runs scored across the championship game.</p>
+      </div>
+    </div>
+
+    <aside>
+      <div class="bc-card">
+        <h2>🏆 Live Leaderboard</h2>
+        <div class="bc-lb">
+          <div class="bc-lb-row">
+            <span class="rank">1</span>
+            <span class="av">SP</span>
+            <div><div class="nm">Sarah Patel</div><div class="meta">BP family · pred CV champ</div></div>
+            <span class="pts">26</span>
+            <span class="max">/ 47</span>
+          </div>
+          <div class="bc-lb-row">
+            <span class="rank">2</span>
+            <span class="av">DH</span>
+            <div><div class="nm">David Hartley</div><div class="meta">METH coach · pred BP champ</div></div>
+            <span class="pts">26</span>
+            <span class="max">/ 47</span>
+          </div>
+          <div class="bc-lb-row">
+            <span class="rank">3</span>
+            <span class="av">CR</span>
+            <div><div class="nm">Carlos Reyes</div><div class="meta">PW pres · pred CV champ</div></div>
+            <span class="pts">25</span>
+            <span class="max">/ 47</span>
+          </div>
+          <div class="bc-lb-row me">
+            <span class="rank">4</span>
+            <span class="av">YOU</span>
+            <div><div class="nm">You · @adam_m</div><div class="meta">DN player · pred BP champ</div></div>
+            <span class="pts">24</span>
+            <span class="max">/ 47</span>
+          </div>
+          <div class="bc-lb-row">
+            <span class="rank">5</span>
+            <span class="av">JM</span>
+            <div><div class="nm">Janet Murphy</div><div class="meta">BP pres · pred BP champ</div></div>
+            <span class="pts">24</span>
+            <span class="max">/ 47</span>
+          </div>
+          <div class="bc-lb-row">
+            <span class="rank">6</span>
+            <span class="av">JR</span>
+            <div><div class="nm">Jaxon Ruiz Sr.</div><div class="meta">CV coach · pred CV champ</div></div>
+            <span class="pts">22</span>
+            <span class="max">/ 47</span>
+          </div>
+          <div class="bc-lb-row">
+            <span class="rank">7</span>
+            <span class="av">PL</span>
+            <div><div class="nm">Pat Lynch</div><div class="meta">CV pres · pred CV champ</div></div>
+            <span class="pts">22</span>
+            <span class="max">/ 47</span>
+          </div>
+          <div class="bc-lb-row">
+            <span class="rank">8</span>
+            <span class="av">JB</span>
+            <div><div class="nm">Jeff Bennett</div><div class="meta">D27 DA · pred METH champ</div></div>
+            <span class="pts">20</span>
+            <span class="max">/ 47</span>
+          </div>
+          <div class="bc-lb-row">
+            <span class="rank">+</span>
+            <span class="av">…</span>
+            <div><div class="nm">839 more brackets</div><div class="meta">Showing top 8</div></div>
+            <span class="pts">—</span>
+            <span class="max"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bc-prize">
+        <h3>🎁 Prizes</h3>
+        <ul>
+          <li><b>Grand Prize</b> — $500 D27 swag store credit + dinner-for-4 at Vetri Cucina</li>
+          <li><b>2nd Place</b> — $200 swag credit + 4 free clinic spots</li>
+          <li><b>3rd Place</b> — $100 swag credit</li>
+          <li><b>League Winner</b> (each of 12) — $50 credit · top of your league</li>
+          <li><b>Lucky Random</b> — $50 credit · drawn from all entries</li>
+        </ul>
+        <p style="margin: 12px 0 0; font-size: 12px; color: rgba(255,255,255,.7);">Free to play · optional $5 buy-in benefits the Scott Scholarship. 80% of buy-in pool returned as prize value.</p>
+      </div>
+
+      <div class="bc-card">
+        <h2>Why we do this</h2>
+        <p style="margin: 0; font-size: 13px; color: rgba(255,255,255,.85); line-height: 1.65;">Tournaments get better with parents and coaches engaged. Parent in BP suddenly cares deeply about the Methacton-Chester Valley QF because their bracket needs CV to win. Free, fun, and raises a few thousand for the Scott Scholarship.</p>
+      </div>
+    </aside>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Engagement</h5><ul><li><a href="bracket-challenge.html">Bracket Challenge</a></li><li><a href="hall-of-fame.html">Hall of Fame</a></li><li><a href="annual-report.html">Annual Report</a></li><li><a href="champions.html">Champions</a></li></ul></div>
+      <div><h5>Operations</h5><ul><li><a href="standings.html">Standings</a></li><li><a href="stats.html">Stats</a></li><li><a href="all-stars.html">All-Stars</a></li><li><a href="awards.html">Awards</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="about.html">About</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+</body>
+</html>
