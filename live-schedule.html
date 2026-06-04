@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Tournament Schedules · PA District 27 Little League</title>
+<meta name="description" content="Every PA District 27 tournament game — baseball and softball — in one place. Updated by the District directly." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .ls-hero { background: linear-gradient(180deg, var(--d27-navy), var(--d27-navy-dark)); color: #fff; padding: 48px 0 32px; border-bottom: 4px solid var(--d27-gold); }
+  .ls-hero h1 { font-family: var(--font-display); font-size: clamp(32px, 5vw, 52px); margin: 0; letter-spacing: -.01em; }
+  .ls-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
+  .ls-hero p { color: rgba(255,255,255,.78); max-width: 60ch; margin: 12px 0 0; }
+
+  /* Filter bar */
+  .ls-filters { position: sticky; top: 0; z-index: 30; background: var(--surface); border-bottom: 1px solid var(--line); padding: 12px 0; box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+  .ls-filters .container { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .ls-sport { display: flex; gap: 4px; }
+  .ls-sport button { background: var(--surface); border: 1px solid var(--line); padding: 8px 16px; border-radius: 6px; font-family: var(--font-display); font-weight: 600; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); cursor: pointer; }
+  .ls-sport button.active { background: var(--d27-navy); color: #fff; border-color: var(--d27-navy); }
+  .ls-tourney-select { padding: 9px 12px; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 14px; background: var(--surface); min-width: 220px; }
+  .ls-search { flex: 1; min-width: 180px; padding: 9px 14px; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 14px; }
+  .ls-count { font-size: 13px; color: var(--muted); white-space: nowrap; }
+
+  main { padding: 24px 0 64px; }
+
+  /* Tournament block */
+  .ls-tourney { margin-bottom: 36px; }
+  .ls-tourney-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--d27-navy); flex-wrap: wrap; }
+  .ls-tourney-head h2 { font-family: var(--font-display); margin: 0; color: var(--d27-navy); font-size: 24px; }
+  .ls-tourney-head .sport-tag { font-size: 11px; padding: 3px 10px; border-radius: 4px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  .ls-tourney-head .sport-tag.bb { background: rgba(0,45,114,.1); color: var(--d27-navy); }
+  .ls-tourney-head .sport-tag.sb { background: rgba(218,41,28,.1); color: var(--d27-red); }
+  .ls-tourney-head .meta { color: var(--muted); font-size: 13px; margin-left: auto; }
+
+  /* Date group */
+  .ls-date { font-family: var(--font-display); font-size: 14px; color: var(--d27-red); letter-spacing: .06em; text-transform: uppercase; font-weight: 600; margin: 18px 0 8px; padding-left: 2px; }
+
+  /* Game row */
+  .ls-game { display: grid; grid-template-columns: 70px 1fr 150px; gap: 14px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; }
+  @media (max-width: 640px) { .ls-game { grid-template-columns: 60px 1fr; } .ls-game .ls-field { grid-column: 1 / -1; padding-left: 74px; } }
+  .ls-game .ls-time { text-align: center; }
+  .ls-game .ls-time .t { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--d27-navy); line-height: 1.1; }
+  .ls-game .ls-time .g { font-size: 10px; color: var(--muted); letter-spacing: .04em; }
+  .ls-game .ls-match { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .ls-team { font-weight: 700; font-size: 15px; color: var(--d27-ink); }
+  .ls-team.tbd { color: var(--muted); font-weight: 600; font-style: italic; }
+  .ls-team.win { color: #047857; }
+  .ls-vs { color: var(--muted); font-size: 12px; font-weight: 600; }
+  .ls-score { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--d27-navy); padding: 0 4px; }
+  .ls-final { font-size: 10px; background: #ECFDF5; color: #047857; padding: 2px 7px; border-radius: 3px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .ls-field { font-size: 13px; color: var(--muted); text-align: right; }
+  @media (max-width: 640px) { .ls-field { text-align: left; } }
+
+  .ls-note { background: linear-gradient(90deg, rgba(201,162,39,.06), rgba(0,45,114,.04)); border: 1px solid rgba(0,45,114,.12); border-left: 4px solid var(--d27-gold); border-radius: 6px; padding: 14px 18px; margin-bottom: 24px; font-size: 13px; color: var(--muted); }
+  .ls-note b { color: var(--d27-navy); }
+
+  .ls-empty { text-align: center; color: var(--muted); padding: 48px; font-size: 15px; }
+  .ls-loading { text-align: center; color: var(--muted); padding: 64px; font-family: var(--font-display); letter-spacing: .08em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">⚠ Demo · Sample data only · Real D27 data wires in Phase 1</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="live-schedule.html" aria-current="page">Schedule</a></li>
+      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="ls-hero">
+  <div class="container">
+    <div class="eyebrow">TOURNAMENT SEASON · SUMMER 2026</div>
+    <h1>D27 Tournament Schedules</h1>
+    <p>Every District 27 tournament — Little League International brackets, Special Games, and championships — in one place. Updated by the District directly.</p>
+  </div>
+</header>
+
+<div class="ls-filters">
+  <div class="container">
+    <div class="ls-sport">
+      <button data-sport="all" class="active">All</button>
+      <button data-sport="Baseball">⚾ Baseball</button>
+      <button data-sport="Softball">🥎 Softball</button>
+    </div>
+    <select class="ls-tourney-select" id="tourneySelect"><option value="all">All Tournaments</option></select>
+    <input class="ls-search" id="searchBox" type="text" placeholder="Search team, field, date..." />
+    <span class="ls-count" id="gameCount"></span>
+  </div>
+</div>
+
+<main class="container">
+  <div class="ls-note">
+    <b>This schedule is built directly from the District's tournament files.</b> When a game's score is entered, the matchup automatically flips to show the result — and bracket placeholders (Winner of Game X) resolve to the actual team.
+  </div>
+  <div id="output"><div class="ls-loading">Loading schedules…</div></div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Tournaments</h5><ul><li><a href="baseball.html">Baseball</a></li><li><a href="softball.html">Softball</a></li><li><a href="live-schedule.html">Schedules</a></li><li><a href="champions.html">Champions</a></li></ul></div>
+      <div><h5>Resources</h5><ul><li><a href="rules.html">Rules</a></li><li><a href="leagues.html">Leagues</a></li><li><a href="about.html">About</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+<script>
+let DATA = null;
+let filter = { sport: 'all', tourney: 'all', q: '' };
+
+const isPlaceholder = (t) => !t || /^(WG|LG)-\d+$/i.test(String(t).trim()) || /if necessary/i.test(String(t)) || /^(WG|LG)-/i.test(String(t).trim());
+
+function fmtDate(iso) {
+  if (!iso) return 'Date TBD';
+  const d = new Date(iso + 'T12:00:00');
+  return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+}
+function fmtTime(t) {
+  if (!t) return 'TBD';
+  let [h, m] = t.split(':').map(Number);
+  const ap = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  return `${h}:${String(m).padStart(2,'0')} ${ap}`;
+}
+
+function teamHTML(name, score, otherScore, played) {
+  if (isPlaceholder(name)) return `<span class="ls-team tbd">${name || 'TBD'}</span>`;
+  const win = played && score != null && otherScore != null && score > otherScore;
+  return `<span class="ls-team${win ? ' win' : ''}">${name}</span>`;
+}
+
+function gameHTML(g) {
+  const played = (g.as != null && g.hs != null) && (g.as + g.hs) > 0;
+  let match;
+  if (played) {
+    match = `
+      ${teamHTML(g.away, g.as, g.hs, true)}
+      <span class="ls-score">${g.as}</span><span class="ls-vs">–</span><span class="ls-score">${g.hs}</span>
+      ${teamHTML(g.home, g.hs, g.as, true)}
+      <span class="ls-final">Final</span>`;
+  } else {
+    match = `${teamHTML(g.away)} <span class="ls-vs">vs</span> ${teamHTML(g.home)}`;
+  }
+  return `
+    <div class="ls-game">
+      <div class="ls-time"><div class="t">${fmtTime(g.time)}</div><div class="g">Game ${g.g}</div></div>
+      <div class="ls-match">${match}</div>
+      <div class="ls-field">${g.field || ''}</div>
+    </div>`;
+}
+
+function render() {
+  const out = document.getElementById('output');
+  let tourneys = DATA.tournaments.filter(t =>
+    (filter.sport === 'all' || t.sport === filter.sport) &&
+    (filter.tourney === 'all' || t.key === filter.tourney)
+  );
+  const q = filter.q.toLowerCase().trim();
+  let total = 0;
+  let html = '';
+
+  for (const t of tourneys) {
+    let games = t.games.slice();
+    if (q) {
+      games = games.filter(g =>
+        [g.away, g.home, g.field, g.date, fmtDate(g.date)].some(v => String(v || '').toLowerCase().includes(q))
+      );
+    }
+    if (!games.length) continue;
+    total += games.length;
+
+    // group by date (keep file order within date)
+    const byDate = {};
+    const order = [];
+    for (const g of games) {
+      const k = g.date || 'TBD';
+      if (!byDate[k]) { byDate[k] = []; order.push(k); }
+      byDate[k].push(g);
+    }
+    order.sort((a, b) => (a === 'TBD' ? 1 : b === 'TBD' ? -1 : a.localeCompare(b)));
+
+    html += `<section class="ls-tourney">
+      <div class="ls-tourney-head">
+        <h2>${t.name}</h2>
+        <span class="sport-tag ${t.sport === 'Softball' ? 'sb' : 'bb'}">${t.sport}</span>
+        <span class="meta">${t.games.length} games</span>
+      </div>`;
+    for (const k of order) {
+      html += `<div class="ls-date">${fmtDate(k)}</div>`;
+      byDate[k].sort((a, b) => String(a.time||'').localeCompare(String(b.time||'')));
+      for (const g of byDate[k]) html += gameHTML(g);
+    }
+    html += `</section>`;
+  }
+
+  out.innerHTML = html || `<div class="ls-empty">No games match your filters.</div>`;
+  document.getElementById('gameCount').textContent = total + ' games';
+}
+
+function initFilters() {
+  const sel = document.getElementById('tourneySelect');
+  for (const t of DATA.tournaments) {
+    const o = document.createElement('option');
+    o.value = t.key; o.textContent = t.name;
+    sel.appendChild(o);
+  }
+  sel.addEventListener('change', e => { filter.tourney = e.target.value; render(); });
+  document.querySelectorAll('.ls-sport button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.ls-sport button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    filter.sport = b.dataset.sport;
+    render();
+  }));
+  document.getElementById('searchBox').addEventListener('input', e => { filter.q = e.target.value; render(); });
+}
+
+fetch('data/schedule-data.json')
+  .then(r => r.json())
+  .then(d => { DATA = d; initFilters(); render(); })
+  .catch(() => { document.getElementById('output').innerHTML = '<div class="ls-empty">Could not load schedule data.</div>'; });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2365 @@
+{
+ "generated": "2026-06-04",
+ "tournaments": [
+  {
+   "file": "D27_BB-10_2026_v01.xlsx",
+   "key": "BB-10",
+   "special": false,
+   "sport": "Baseball",
+   "name": "BB-10 (8-9-10)",
+   "games": [
+    {
+     "g": 1,
+     "id": "BB-10-01",
+     "date": "2026-06-26",
+     "time": "18:00",
+     "away": "Berwyn/Paoli",
+     "as": 0,
+     "home": "Lower Perk",
+     "hs": 0,
+     "field": "R/W-Encke Park"
+    },
+    {
+     "g": 2,
+     "id": "BB-10-02",
+     "date": "2026-06-26",
+     "time": "20:00",
+     "away": "Radnor/Wayne",
+     "as": 0,
+     "home": "GVE",
+     "hs": 0,
+     "field": "R/W-Encke Park"
+    },
+    {
+     "g": 3,
+     "id": "BB-10-03",
+     "date": "2026-06-28",
+     "time": "17:00",
+     "away": "Upper Providence",
+     "as": 0,
+     "home": "Lower Merion",
+     "hs": 0,
+     "field": "Lower Merion"
+    },
+    {
+     "g": 4,
+     "id": "BB-10-04",
+     "date": "2026-06-28",
+     "time": "13:00",
+     "away": "Pottsgrove-Pottstown",
+     "as": 0,
+     "home": "Chester Valley",
+     "hs": 0,
+     "field": "CV-Monument Park"
+    },
+    {
+     "g": 5,
+     "id": "BB-10-05",
+     "date": "2026-06-28",
+     "time": "15:00",
+     "away": "WG-1",
+     "as": 0,
+     "home": "Coventry",
+     "hs": 0,
+     "field": "CV-Monument Park"
+    },
+    {
+     "g": 6,
+     "id": "BB-10-06",
+     "date": "2026-06-28",
+     "time": "15:00",
+     "away": "WG-2",
+     "as": 0,
+     "home": "Devon/Strafford",
+     "hs": 0,
+     "field": "GV-King Road"
+    },
+    {
+     "g": 7,
+     "id": "BB-10-07",
+     "date": "2026-06-30",
+     "time": "18:00",
+     "away": "LG-2",
+     "as": 0,
+     "home": "LG-3",
+     "hs": 0,
+     "field": "PT-Novak Park"
+    },
+    {
+     "g": 8,
+     "id": "BB-10-08",
+     "date": "2026-06-30",
+     "time": "20:00",
+     "away": "LG-1",
+     "as": 0,
+     "home": "LG-4",
+     "hs": 0,
+     "field": "PT-Novak Park"
+    },
+    {
+     "g": 9,
+     "id": "BB-10-09",
+     "date": "2026-07-02",
+     "time": "18:00",
+     "away": "WG-7",
+     "as": 0,
+     "home": "LG-5",
+     "hs": 0,
+     "field": "BP-Field of Dreams"
+    },
+    {
+     "g": 10,
+     "id": "BB-10-10",
+     "date": "2026-07-02",
+     "time": "18:00",
+     "away": "WG-8",
+     "as": 0,
+     "home": "LG-6",
+     "hs": 0,
+     "field": "GV-King Road"
+    },
+    {
+     "g": 11,
+     "id": "BB-10-11",
+     "date": "2026-07-02",
+     "time": "20:00",
+     "away": "WG-3",
+     "as": 0,
+     "home": "WG-5",
+     "hs": 0,
+     "field": "UP-MacFarlan Park"
+    },
+    {
+     "g": 12,
+     "id": "BB-10-12",
+     "date": "2026-07-02",
+     "time": "18:00",
+     "away": "WG-6",
+     "as": 0,
+     "home": "WG-4",
+     "hs": 0,
+     "field": "UP-MacFarlan Park"
+    },
+    {
+     "g": 13,
+     "id": "BB-10-13",
+     "date": "2026-07-05",
+     "time": "18:00",
+     "away": "WG-10",
+     "as": 0,
+     "home": "LG-11",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 14,
+     "id": "BB-10-14",
+     "date": "2026-07-05",
+     "time": "20:00",
+     "away": "LG-12",
+     "as": 0,
+     "home": "WG-9",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 15,
+     "id": "BB-10-15",
+     "date": "2026-07-08",
+     "time": "18:00",
+     "away": "WG-11",
+     "as": 0,
+     "home": "WG-12",
+     "hs": 0,
+     "field": "D/S-Clarke Field"
+    },
+    {
+     "g": 16,
+     "id": "BB-10-16",
+     "date": "2026-07-07",
+     "time": "18:00",
+     "away": "WG-13",
+     "as": 0,
+     "home": "WG-14",
+     "hs": 0,
+     "field": "D/S-Clarke Field"
+    },
+    {
+     "g": 17,
+     "id": "BB-10-17",
+     "date": "2026-07-09",
+     "time": "18:00",
+     "away": "WG-16",
+     "as": 0,
+     "home": "LG-15",
+     "hs": 0,
+     "field": "BP-Field of Dreams"
+    },
+    {
+     "g": 18,
+     "id": "BB-10-18",
+     "date": "2026-07-11",
+     "time": "10:00",
+     "away": "WG-15",
+     "as": 0,
+     "home": "WG-17",
+     "hs": 0,
+     "field": "COV-Wampler Complex"
+    },
+    {
+     "g": 19,
+     "id": "BB-10-19",
+     "date": "2026-07-12",
+     "time": "19:00",
+     "away": "WG-18",
+     "as": 0,
+     "home": "If Necessary",
+     "hs": 0,
+     "field": "COV-Wampler Complex"
+    }
+   ],
+   "teams": [
+    {
+     "n": 1,
+     "name": "Berwyn/Paoli",
+     "abbr": "BP",
+     "park": "BP-Field of Dreams"
+    },
+    {
+     "n": 2,
+     "name": "Chester Valley",
+     "abbr": "CV",
+     "park": "CV-Monument Park"
+    },
+    {
+     "n": 3,
+     "name": "Coventry",
+     "abbr": "COV",
+     "park": "COV-Wampler Complex"
+    },
+    {
+     "n": 4,
+     "name": "Devon/Strafford",
+     "abbr": "DS",
+     "park": "D/S-Clarke Field"
+    },
+    {
+     "n": 5,
+     "name": "GVE",
+     "abbr": "GVE",
+     "park": "GV-King Road"
+    },
+    {
+     "n": 6,
+     "name": "Lower Merion",
+     "abbr": "LM",
+     "park": "Lower Merion"
+    },
+    {
+     "n": 7,
+     "name": "Lower Perk",
+     "abbr": "LP",
+     "park": "LP-Palmer Park"
+    },
+    {
+     "n": 8,
+     "name": "Pottsgrove-Pottstown",
+     "abbr": "PGP",
+     "park": "PGP-Novak Field"
+    },
+    {
+     "n": 9,
+     "name": "Radnor/Wayne",
+     "abbr": "RW",
+     "park": "R/W-Encke Park"
+    },
+    {
+     "n": 10,
+     "name": "Upper Providence",
+     "abbr": "UP",
+     "park": "UP-MacFarlan Park"
+    }
+   ]
+  },
+  {
+   "file": "D27_BB-11_2026_v01.xlsx",
+   "key": "BB-11",
+   "special": false,
+   "sport": "Baseball",
+   "name": "BB-11 (9-10-11)",
+   "games": [
+    {
+     "g": 1,
+     "id": "BB-11-01",
+     "date": "2026-06-23",
+     "time": "20:00",
+     "away": "Lower Perk",
+     "as": 0,
+     "home": "Upper Providence",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 2,
+     "id": "BB-11-02",
+     "date": "2026-06-25",
+     "time": "18:00",
+     "away": "Radnor/Wayne",
+     "as": 0,
+     "home": "Coventry",
+     "hs": 0,
+     "field": "R/W-Encke Park"
+    },
+    {
+     "g": 3,
+     "id": "BB-11-03",
+     "date": "2026-06-25",
+     "time": "18:00",
+     "away": "Berwyn/Paoli",
+     "as": 0,
+     "home": "Lower Merion",
+     "hs": 0,
+     "field": "Lower Merion"
+    },
+    {
+     "g": 4,
+     "id": "BB-11-04",
+     "date": "2026-06-25",
+     "time": "18:00",
+     "away": "Devon/Strafford",
+     "as": 0,
+     "home": "Chester Valley",
+     "hs": 0,
+     "field": "D/S-Clarke Field"
+    },
+    {
+     "g": 5,
+     "id": "BB-11-05",
+     "date": "2026-06-25",
+     "time": "20:00",
+     "away": "GVE",
+     "as": 0,
+     "home": "WG-1",
+     "hs": 0,
+     "field": "R/W-Encke Park"
+    },
+    {
+     "g": 6,
+     "id": "BB-11-06",
+     "date": "2026-06-26",
+     "time": "19:00",
+     "away": "LG-1",
+     "as": 0,
+     "home": "LG-2",
+     "hs": 0,
+     "field": "COV-Wampler Complex"
+    },
+    {
+     "g": 7,
+     "id": "BB-11-07",
+     "date": "2026-06-27",
+     "time": "13:00",
+     "away": "WG-6",
+     "as": 0,
+     "home": "LG-3",
+     "hs": 0,
+     "field": "GV-King Road"
+    },
+    {
+     "g": 8,
+     "id": "BB-11-08",
+     "date": "2026-06-27",
+     "time": "09:00",
+     "away": "LG-4",
+     "as": 0,
+     "home": "LG-5",
+     "hs": 0,
+     "field": "GV-King Road"
+    },
+    {
+     "g": 9,
+     "id": "BB-11-09",
+     "date": "2026-06-27",
+     "time": "17:00",
+     "away": "WG-2",
+     "as": 0,
+     "home": "WG-3",
+     "hs": 0,
+     "field": "UP-MacFarlan Park"
+    },
+    {
+     "g": 10,
+     "id": "BB-11-10",
+     "date": "2026-06-27",
+     "time": "19:00",
+     "away": "WG-4",
+     "as": 0,
+     "home": "WG-5",
+     "hs": 0,
+     "field": "UP-MacFarlan Park"
+    },
+    {
+     "g": 11,
+     "id": "BB-11-11",
+     "date": "2026-06-29",
+     "time": "18:00",
+     "away": "LG-10",
+     "as": 0,
+     "home": "WG-7",
+     "hs": 0,
+     "field": "CV-Monument Park"
+    },
+    {
+     "g": 12,
+     "id": "BB-11-12",
+     "date": "2026-06-29",
+     "time": "18:00",
+     "away": "WG-8",
+     "as": 0,
+     "home": "LG-9",
+     "hs": 0,
+     "field": "Lower Merion"
+    },
+    {
+     "g": 13,
+     "id": "BB-11-13",
+     "date": "2026-07-01",
+     "time": "18:00",
+     "away": "WG-9",
+     "as": 0,
+     "home": "WG-10",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 14,
+     "id": "BB-11-14",
+     "date": "2026-07-01",
+     "time": "20:00",
+     "away": "WG-11",
+     "as": 0,
+     "home": "WG-12",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 15,
+     "id": "BB-11-15",
+     "date": "2026-07-02",
+     "time": "18:00",
+     "away": "WG-14",
+     "as": 0,
+     "home": "LG-13",
+     "hs": 0,
+     "field": "CV-Monument Park"
+    },
+    {
+     "g": 16,
+     "id": "BB-11-16",
+     "date": "2026-07-06",
+     "time": "18:00",
+     "away": "WG-13",
+     "as": 0,
+     "home": "WG-15",
+     "hs": 0,
+     "field": "BP-Field of Dreams"
+    },
+    {
+     "g": 17,
+     "id": "BB-11-17",
+     "date": "2026-07-07",
+     "time": "18:00",
+     "away": "WG-16",
+     "as": 0,
+     "home": "If Necessary",
+     "hs": 0,
+     "field": "BP-Field of Dreams"
+    }
+   ],
+   "teams": [
+    {
+     "n": 1,
+     "name": "Berwyn/Paoli",
+     "abbr": "BP",
+     "park": "BP-Field of Dreams"
+    },
+    {
+     "n": 2,
+     "name": "Chester Valley",
+     "abbr": "CV",
+     "park": "CV-Monument Park"
+    },
+    {
+     "n": 3,
+     "name": "Coventry",
+     "abbr": "COV",
+     "park": "COV-Wampler Complex"
+    },
+    {
+     "n": 4,
+     "name": "Devon/Strafford",
+     "abbr": "DS",
+     "park": "D/S-Clarke Field"
+    },
+    {
+     "n": 5,
+     "name": "GVE",
+     "abbr": "GVE",
+     "park": "GV-King Road"
+    },
+    {
+     "n": 6,
+     "name": "Lower Merion",
+     "abbr": "LM",
+     "park": "Lower Merion"
+    },
+    {
+     "n": 7,
+     "name": "Lower Perk",
+     "abbr": "LP",
+     "park": "LP-Palmer Park"
+    },
+    {
+     "n": 8,
+     "name": "Radnor/Wayne",
+     "abbr": "RW",
+     "park": "R/W-Encke Park"
+    },
+    {
+     "n": 9,
+     "name": "Upper Providence",
+     "abbr": "UP",
+     "park": "UP-MacFarlan Park"
+    }
+   ]
+  },
+  {
+   "file": "D27_BB-12_2026_v01.xlsx",
+   "key": "BB-12",
+   "special": false,
+   "sport": "Baseball",
+   "name": "BB-12 (10-11-12)",
+   "games": [
+    {
+     "g": 1,
+     "id": "BB-12-01",
+     "date": "2026-06-25",
+     "time": "18:00",
+     "away": "Lower Merion",
+     "as": 0,
+     "home": "Devon/Strafford",
+     "hs": 0,
+     "field": "PT-Novak Park"
+    },
+    {
+     "g": 2,
+     "id": "BB-12-02",
+     "date": "2026-06-25",
+     "time": "20:00",
+     "away": "Pottsgrove-Pottstown",
+     "as": 0,
+     "home": "Lower Perk",
+     "hs": 0,
+     "field": "PT-Novak Park"
+    },
+    {
+     "g": 3,
+     "id": "BB-12-03",
+     "date": "2026-06-27",
+     "time": "19:00",
+     "away": "Radnor/Wayne",
+     "as": 0,
+     "home": "Upper Providence",
+     "hs": 0,
+     "field": "R/W-Encke Park"
+    },
+    {
+     "g": 4,
+     "id": "BB-12-04",
+     "date": "2026-06-27",
+     "time": "17:00",
+     "away": "Chester Valley",
+     "as": 0,
+     "home": "GVE",
+     "hs": 0,
+     "field": "R/W-Encke Park"
+    },
+    {
+     "g": 5,
+     "id": "BB-12-05",
+     "date": "2026-06-27",
+     "time": "09:00",
+     "away": "WG-1",
+     "as": 0,
+     "home": "Coventry",
+     "hs": 0,
+     "field": "BP-Field of Dreams"
+    },
+    {
+     "g": 6,
+     "id": "BB-12-06",
+     "date": "2026-06-27",
+     "time": "11:00",
+     "away": "WG-2",
+     "as": 0,
+     "home": "Berwyn/Paoli",
+     "hs": 0,
+     "field": "BP-Field of Dreams"
+    },
+    {
+     "g": 7,
+     "id": "BB-12-07",
+     "date": "2026-06-28",
+     "time": "13:00",
+     "away": "LG-2",
+     "as": 0,
+     "home": "LG-3",
+     "hs": 0,
+     "field": "Lower Merion"
+    },
+    {
+     "g": 8,
+     "id": "BB-12-08",
+     "date": "2026-06-28",
+     "time": "15:00",
+     "away": "LG-1",
+     "as": 0,
+     "home": "LG-4",
+     "hs": 0,
+     "field": "Lower Merion"
+    },
+    {
+     "g": 9,
+     "id": "BB-12-09",
+     "date": "2026-06-30",
+     "time": "18:00",
+     "away": "WG-7",
+     "as": 0,
+     "home": "LG-5",
+     "hs": 0,
+     "field": "D/S-Clarke Field"
+    },
+    {
+     "g": 10,
+     "id": "BB-12-10",
+     "date": "2026-06-30",
+     "time": "18:00",
+     "away": "WG-8",
+     "as": 0,
+     "home": "LG-6",
+     "hs": 0,
+     "field": "CV-Monument Park"
+    },
+    {
+     "g": 11,
+     "id": "BB-12-11",
+     "date": "2026-07-02",
+     "time": "18:00",
+     "away": "WG-3",
+     "as": 0,
+     "home": "WG-5",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 12,
+     "id": "BB-12-12",
+     "date": "2026-07-02",
+     "time": "20:00",
+     "away": "WG-6",
+     "as": 0,
+     "home": "WG-4",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 13,
+     "id": "BB-12-13",
+     "date": "2026-07-03",
+     "time": "18:00",
+     "away": "WG-10",
+     "as": 0,
+     "home": "LG-11",
+     "hs": 0,
+     "field": "COV-Wampler Complex"
+    },
+    {
+     "g": 14,
+     "id": "BB-12-14",
+     "date": "2026-07-03",
+     "time": "20:00",
+     "away": "LG-12",
+     "as": 0,
+     "home": "WG-9",
+     "hs": 0,
+     "field": "COV-Wampler Complex"
+    },
+    {
+     "g": 15,
+     "id": "BB-12-15",
+     "date": "2026-07-07",
+     "time": "18:00",
+     "away": "WG-11",
+     "as": 0,
+     "home": "WG-12",
+     "hs": 0,
+     "field": "GV-King Road"
+    },
+    {
+     "g": 16,
+     "id": "BB-12-16",
+     "date": "2026-07-06",
+     "time": "18:00",
+     "away": "WG-13",
+     "as": 0,
+     "home": "WG-14",
+     "hs": 0,
+     "field": "D/S-Clarke Field"
+    },
+    {
+     "g": 17,
+     "id": "BB-12-17",
+     "date": "2026-07-09",
+     "time": "18:00",
+     "away": "WG-16",
+     "as": 0,
+     "home": "LG-15",
+     "hs": 0,
+     "field": "GV-King Road"
+    },
+    {
+     "g": 18,
+     "id": "BB-12-18",
+     "date": "2026-07-11",
+     "time": "19:00",
+     "away": "WG-15",
+     "as": 0,
+     "home": "WG-17",
+     "hs": 0,
+     "field": "UP-MacFarlan Park"
+    },
+    {
+     "g": 19,
+     "id": "BB-12-19",
+     "date": "2026-07-12",
+     "time": "13:00",
+     "away": "WG-18",
+     "as": 0,
+     "home": "If Necessary",
+     "hs": 0,
+     "field": "UP-MacFarlan Park"
+    }
+   ],
+   "teams": [
+    {
+     "n": 1,
+     "name": "Berwyn/Paoli",
+     "abbr": "BP",
+     "park": "BP-Field of Dreams"
+    },
+    {
+     "n": 2,
+     "name": "Chester Valley",
+     "abbr": "CV",
+     "park": "CV-Monument Park"
+    },
+    {
+     "n": 3,
+     "name": "Coventry",
+     "abbr": "COV",
+     "park": "COV-Wampler Complex"
+    },
+    {
+     "n": 4,
+     "name": "Devon/Strafford",
+     "abbr": "DS",
+     "park": "D/S-Clarke Field"
+    },
+    {
+     "n": 5,
+     "name": "GVE",
+     "abbr": "GVE",
+     "park": "GV-King Road"
+    },
+    {
+     "n": 6,
+     "name": "Lower Merion",
+     "abbr": "LM",
+     "park": "Lower Merion"
+    },
+    {
+     "n": 7,
+     "name": "Lower Perk",
+     "abbr": "LP",
+     "park": "LP-Palmer Park"
+    },
+    {
+     "n": 8,
+     "name": "Pottsgrove-Pottstown",
+     "abbr": "PGP",
+     "park": "PGP-Novak Field"
+    },
+    {
+     "n": 9,
+     "name": "Radnor/Wayne",
+     "abbr": "RW",
+     "park": "R/W-Encke Park"
+    },
+    {
+     "n": 10,
+     "name": "Upper Providence",
+     "abbr": "UP",
+     "park": "UP-MacFarlan Park"
+    }
+   ]
+  },
+  {
+   "file": "D27_BB-INT_2026_v01.xlsx",
+   "key": "BB-INT",
+   "special": false,
+   "sport": "Baseball",
+   "name": "Intermediate (50/70)",
+   "games": [
+    {
+     "g": 1,
+     "id": "BB-INT-01",
+     "date": "2026-06-26",
+     "time": "18:00",
+     "away": "Lower Merion",
+     "as": 0,
+     "home": "Upper Providence",
+     "hs": 0,
+     "field": "LM-S. Ardmore Park"
+    },
+    {
+     "g": 2,
+     "id": "BB-INT-02",
+     "date": "2026-06-28",
+     "time": "19:00",
+     "away": "WG-1",
+     "as": 0,
+     "home": "LG-1",
+     "hs": 0,
+     "field": "UP-MacFarlan Park"
+    },
+    {
+     "g": 3,
+     "id": "BB-INT-03",
+     "date": "2026-06-29",
+     "time": "19:00",
+     "away": "WG-2",
+     "as": 0,
+     "home": "If Necessary",
+     "hs": 0,
+     "field": "UP-MacFarlan Park"
+    }
+   ],
+   "teams": [
+    {
+     "n": 1,
+     "name": "Lower Merion",
+     "abbr": "LM",
+     "park": "LM-S. Ardmore Park"
+    },
+    {
+     "n": 2,
+     "name": "Upper Providence",
+     "abbr": "UP",
+     "park": "UP-MacFarlan Park"
+    }
+   ]
+  },
+  {
+   "file": "D27_BB-JR_2026_v01.xlsx",
+   "key": "BB-JR",
+   "special": false,
+   "sport": "Baseball",
+   "name": "Junior League Baseball",
+   "games": [
+    {
+     "g": 1,
+     "id": "BB-JR-01",
+     "date": "2026-06-23",
+     "time": "17:30",
+     "away": "Lower Perk",
+     "as": null,
+     "home": "Chester Valley",
+     "hs": null,
+     "field": "LP-French Field"
+    },
+    {
+     "g": 2,
+     "id": "BB-JR-02",
+     "date": "2026-06-26",
+     "time": "17:30",
+     "away": "WG-1",
+     "as": null,
+     "home": "Great Valley Exton",
+     "hs": null,
+     "field": "GV-King Road"
+    },
+    {
+     "g": 3,
+     "id": "BB-JR-03",
+     "date": "2026-06-28",
+     "time": "16:00",
+     "away": "LG-1",
+     "as": null,
+     "home": "LG-2",
+     "hs": null,
+     "field": "GV-King Road"
+    },
+    {
+     "g": 4,
+     "id": "BB-JR-04",
+     "date": "2026-06-30",
+     "time": "17:30",
+     "away": "WG-2",
+     "as": null,
+     "home": "WG-3",
+     "hs": null,
+     "field": "CV-Monument Park"
+    },
+    {
+     "g": 5,
+     "id": "BB-JR-05",
+     "date": "2026-07-01",
+     "time": "17:30",
+     "away": "WG-4",
+     "as": null,
+     "home": "If Necessary",
+     "hs": null,
+     "field": "CV-Monument Park"
+    }
+   ],
+   "teams": [
+    {
+     "n": 1,
+     "name": "Chester Valley",
+     "abbr": "CV",
+     "park": "CV-Monument Park"
+    },
+    {
+     "n": 2,
+     "name": "Great Valley Exton",
+     "abbr": "GVE",
+     "park": "GV-King Road"
+    },
+    {
+     "n": 3,
+     "name": "Lower Perk",
+     "abbr": "LP",
+     "park": "LP-French Field"
+    }
+   ]
+  },
+  {
+   "file": "D27_BB-SR_2026_v01.xlsx",
+   "key": "BB-SR",
+   "special": false,
+   "sport": "Baseball",
+   "name": "Senior League Baseball",
+   "games": [
+    {
+     "g": 1,
+     "id": "BB-SR-01",
+     "date": "2026-06-24",
+     "time": "17:30",
+     "away": "Chester Valley",
+     "as": 0,
+     "home": "Great Valley Exton",
+     "hs": 0,
+     "field": "CV-Monument Park"
+    },
+    {
+     "g": 2,
+     "id": "BB-SR-02",
+     "date": "2026-06-27",
+     "time": "15:00",
+     "away": "WG-1",
+     "as": 0,
+     "home": "LG-1",
+     "hs": 0,
+     "field": "GV-King Road"
+    },
+    {
+     "g": 3,
+     "id": "BB-SR-03",
+     "date": "2026-06-28",
+     "time": "13:00",
+     "away": "WG-2",
+     "as": 0,
+     "home": "If Necessary",
+     "hs": 0,
+     "field": "GV-King Road"
+    }
+   ],
+   "teams": [
+    {
+     "n": 1,
+     "name": "Chester Valley",
+     "abbr": "CV",
+     "park": "CV-Monument Park"
+    },
+    {
+     "n": 2,
+     "name": "Great Valley Exton",
+     "abbr": "GVE",
+     "park": "GV-King Road"
+    }
+   ]
+  },
+  {
+   "file": "D27_SB-10_2026_v01.xlsx",
+   "key": "SB-10",
+   "special": false,
+   "sport": "Softball",
+   "name": "SB-10 (8-9-10)",
+   "games": [
+    {
+     "g": 1,
+     "id": "SB-10-01",
+     "date": "2026-06-20",
+     "time": "14:00",
+     "away": "Coventry",
+     "as": 0,
+     "home": "Radnor/Wayne",
+     "hs": 0,
+     "field": "UP-MacFarlan Park"
+    },
+    {
+     "g": 2,
+     "id": "SB-10-02",
+     "date": "2026-06-20",
+     "time": "12:00",
+     "away": "Chester Valley",
+     "as": 0,
+     "home": "Upper Providence",
+     "hs": 0,
+     "field": "UP-MacFarlan Park"
+    },
+    {
+     "g": 3,
+     "id": "SB-10-03",
+     "date": "2026-06-20",
+     "time": "16:00",
+     "away": "Lower Perk",
+     "as": 0,
+     "home": "Lower Merion",
+     "hs": 0,
+     "field": "UP-MacFarlan Park"
+    },
+    {
+     "g": 4,
+     "id": "SB-10-04",
+     "date": "2026-06-21",
+     "time": "15:00",
+     "away": "DSBP",
+     "as": 0,
+     "home": "WG-1",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 5,
+     "id": "SB-10-05",
+     "date": "2026-06-21",
+     "time": "17:00",
+     "away": "WG-2",
+     "as": 0,
+     "home": "WG-3",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 6,
+     "id": "SB-10-06",
+     "date": "2026-06-21",
+     "time": "13:00",
+     "away": "LG-2",
+     "as": 0,
+     "home": "LG-3",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 7,
+     "id": "SB-10-07",
+     "date": "2026-06-25",
+     "time": "18:00",
+     "away": "LG-1",
+     "as": 0,
+     "home": "LG-5",
+     "hs": 0,
+     "field": "R/W-Tunnell Park"
+    },
+    {
+     "g": 8,
+     "id": "SB-10-08",
+     "date": "2026-06-25",
+     "time": "18:00",
+     "away": "WG-6",
+     "as": 0,
+     "home": "LG-4",
+     "hs": 0,
+     "field": "LM-S. Ardmore Park"
+    },
+    {
+     "g": 9,
+     "id": "SB-10-09",
+     "date": "2026-06-27",
+     "time": "12:00",
+     "away": "WG-4",
+     "as": 0,
+     "home": "WG-5",
+     "hs": 0,
+     "field": "BP-Field of Dreams"
+    },
+    {
+     "g": 10,
+     "id": "SB-10-10",
+     "date": "2026-06-27",
+     "time": "10:00",
+     "away": "WG-7",
+     "as": 0,
+     "home": "WG-8",
+     "hs": 0,
+     "field": "BP-Field of Dreams"
+    },
+    {
+     "g": 11,
+     "id": "SB-10-11",
+     "date": "2026-06-28",
+     "time": "16:00",
+     "away": "WG-10",
+     "as": 0,
+     "home": "LG-9",
+     "hs": 0,
+     "field": "CV-Mill Rd Park"
+    },
+    {
+     "g": 12,
+     "id": "SB-10-12",
+     "date": "2026-07-01",
+     "time": "19:00",
+     "away": "WG-9",
+     "as": 0,
+     "home": "WG-11",
+     "hs": 0,
+     "field": "COV-Wampler Complex"
+    },
+    {
+     "g": 13,
+     "id": "SB-10-13",
+     "date": "2026-07-02",
+     "time": "19:00",
+     "away": "WG-12",
+     "as": 0,
+     "home": "If Necessary",
+     "hs": 0,
+     "field": "COV-Wampler Complex"
+    }
+   ],
+   "teams": [
+    {
+     "n": 1,
+     "name": "Chester Valley",
+     "abbr": "CV",
+     "park": "CV-Mill Rd Park"
+    },
+    {
+     "n": 2,
+     "name": "Coventry",
+     "abbr": "COV",
+     "park": "COV-Wampler Complex"
+    },
+    {
+     "n": 3,
+     "name": "DSBP",
+     "abbr": "DSBP",
+     "park": "BP-Field of Dreams"
+    },
+    {
+     "n": 4,
+     "name": "Lower Merion",
+     "abbr": "LM",
+     "park": "LM-S. Ardmore Park"
+    },
+    {
+     "n": 5,
+     "name": "Lower Perk",
+     "abbr": "LP",
+     "park": "LP-Palmer Park"
+    },
+    {
+     "n": 6,
+     "name": "Radnor/Wayne",
+     "abbr": "RW",
+     "park": "R/W-Tunnell Park"
+    },
+    {
+     "n": 7,
+     "name": "Upper Providence",
+     "abbr": "UP",
+     "park": "UP-MacFarlan Park"
+    }
+   ]
+  },
+  {
+   "file": "D27_SB-11_2026_v01.xlsx",
+   "key": "SB-11",
+   "special": false,
+   "sport": "Softball",
+   "name": "SB-11 (9-10-11)",
+   "games": [
+    {
+     "g": 1,
+     "id": "SB-11-01",
+     "date": "2026-06-24",
+     "time": "19:00",
+     "away": "Coventry",
+     "as": 0,
+     "home": "PGP",
+     "hs": 0,
+     "field": "COV-Wampler Complex"
+    },
+    {
+     "g": 2,
+     "id": "SB-11-02",
+     "date": "2026-06-26",
+     "time": "18:00",
+     "away": "Lower Perk",
+     "as": 0,
+     "home": "WG-1",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 3,
+     "id": "SB-11-03",
+     "date": "2026-06-26",
+     "time": "18:00",
+     "away": "DSBP",
+     "as": 0,
+     "home": "Lower Merion",
+     "hs": 0,
+     "field": "LM-S. Ardmore Park"
+    },
+    {
+     "g": 4,
+     "id": "SB-11-04",
+     "date": "2026-06-29",
+     "time": "18:00",
+     "away": "LG-1",
+     "as": 0,
+     "home": "LG-3",
+     "hs": 0,
+     "field": "BP-Field of Dreams"
+    },
+    {
+     "g": 5,
+     "id": "SB-11-05",
+     "date": "2026-07-01",
+     "time": "18:00",
+     "away": "WG-4",
+     "as": 0,
+     "home": "LG-2",
+     "hs": 0,
+     "field": "BP-Field of Dreams"
+    },
+    {
+     "g": 6,
+     "id": "SB-11-06",
+     "date": "2026-07-01",
+     "time": "18:00",
+     "away": "WG-2",
+     "as": 0,
+     "home": "WG-3",
+     "hs": 0,
+     "field": "LM-S. Ardmore Park"
+    },
+    {
+     "g": 7,
+     "id": "SB-11-07",
+     "date": "2026-07-05",
+     "time": "19:00",
+     "away": "WG-5",
+     "as": 0,
+     "home": "LG-6",
+     "hs": 0,
+     "field": "COV-Wampler Complex"
+    },
+    {
+     "g": 8,
+     "id": "SB-11-08",
+     "date": "2026-07-07",
+     "time": "19:00",
+     "away": "WG-6",
+     "as": 0,
+     "home": "WG-7",
+     "hs": 0,
+     "field": "PT-Novak Park"
+    },
+    {
+     "g": 9,
+     "id": "SB-11-09",
+     "date": "2026-07-08",
+     "time": "19:00",
+     "away": "WG-8",
+     "as": 0,
+     "home": "If Necessary",
+     "hs": 0,
+     "field": "PT-Novak Park"
+    }
+   ],
+   "teams": [
+    {
+     "n": 1,
+     "name": "Coventry",
+     "abbr": "COV",
+     "park": "COV-Wampler Complex"
+    },
+    {
+     "n": 2,
+     "name": "DSBP",
+     "abbr": "DSBP",
+     "park": "BP-Field of Dreams"
+    },
+    {
+     "n": 3,
+     "name": "Lower Merion",
+     "abbr": "LM",
+     "park": "LM-S. Ardmore Park"
+    },
+    {
+     "n": 4,
+     "name": "Lower Perk",
+     "abbr": "LP",
+     "park": "LP-Palmer Park"
+    },
+    {
+     "n": 5,
+     "name": "PGP",
+     "abbr": "PGP",
+     "park": "PT-Novak Park"
+    }
+   ]
+  },
+  {
+   "file": "D27_SB-12_2026_v01.xlsx",
+   "key": "SB-12",
+   "special": false,
+   "sport": "Softball",
+   "name": "SB-12 (10-11-12)",
+   "games": [
+    {
+     "g": 1,
+     "id": "SB-12-01",
+     "date": "2026-06-13",
+     "time": "12:00",
+     "away": "DSBP",
+     "as": 0,
+     "home": "Lower Perk",
+     "hs": 0,
+     "field": "EX-Manor Park"
+    },
+    {
+     "g": 2,
+     "id": "SB-12-02",
+     "date": "2026-06-13",
+     "time": "10:00",
+     "away": "Exton",
+     "as": 0,
+     "home": "Radnor/Wayne",
+     "hs": 0,
+     "field": "EX-Manor Park"
+    },
+    {
+     "g": 3,
+     "id": "SB-12-03",
+     "date": "2026-06-16",
+     "time": "18:00",
+     "away": "Chester Valley",
+     "as": 0,
+     "home": "WG-1",
+     "hs": 0,
+     "field": "CV-Mill Rd Park"
+    },
+    {
+     "g": 4,
+     "id": "SB-12-04",
+     "date": "2026-06-16",
+     "time": "18:00",
+     "away": "WG-2",
+     "as": 0,
+     "home": "Lower Merion",
+     "hs": 0,
+     "field": "LM-S. Ardmore Park"
+    },
+    {
+     "g": 5,
+     "id": "SB-12-05",
+     "date": "2026-06-18",
+     "time": "18:00",
+     "away": "LG-1",
+     "as": 0,
+     "home": "LG-4",
+     "hs": 0,
+     "field": "R/W-Tunnell Park"
+    },
+    {
+     "g": 6,
+     "id": "SB-12-06",
+     "date": "2026-06-18",
+     "time": "18:00",
+     "away": "LG-2",
+     "as": 0,
+     "home": "LG-3",
+     "hs": 0,
+     "field": "CV-Mill Rd Park"
+    },
+    {
+     "g": 7,
+     "id": "SB-12-07",
+     "date": "2026-06-20",
+     "time": "09:00",
+     "away": "WG-3",
+     "as": 0,
+     "home": "WG-4",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 8,
+     "id": "SB-12-08",
+     "date": "2026-06-20",
+     "time": "11:00",
+     "away": "WG-5",
+     "as": 0,
+     "home": "WG-6",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 9,
+     "id": "SB-12-09",
+     "date": "2026-06-22",
+     "time": "18:00",
+     "away": "WG-8",
+     "as": 0,
+     "home": "LG-7",
+     "hs": 0,
+     "field": "R/W-Tunnell Park"
+    },
+    {
+     "g": 10,
+     "id": "SB-12-10",
+     "date": "2026-06-24",
+     "time": "18:00",
+     "away": "WG-8",
+     "as": 0,
+     "home": "WG-9",
+     "hs": 0,
+     "field": "BP-Field of Dreams"
+    },
+    {
+     "g": 11,
+     "id": "SB-12-11",
+     "date": "2026-06-25",
+     "time": "18:00",
+     "away": "WG-10",
+     "as": 0,
+     "home": "If Necessary",
+     "hs": 0,
+     "field": "BP-Field of Dreams"
+    }
+   ],
+   "teams": [
+    {
+     "n": 1,
+     "name": "Chester Valley",
+     "abbr": "CV",
+     "park": "CV-Mill Rd Park"
+    },
+    {
+     "n": 2,
+     "name": "DSBP",
+     "abbr": "DSBP",
+     "park": "BP-Field of Dreams"
+    },
+    {
+     "n": 3,
+     "name": "Exton",
+     "abbr": "EX",
+     "park": "EX-Manor Park"
+    },
+    {
+     "n": 4,
+     "name": "Lower Merion",
+     "abbr": "LM",
+     "park": "LM-S. Ardmore Park"
+    },
+    {
+     "n": 5,
+     "name": "Lower Perk",
+     "abbr": "LP",
+     "park": "LP-Palmer Park"
+    },
+    {
+     "n": 6,
+     "name": "Radnor/Wayne",
+     "abbr": "RW",
+     "park": "R/W-Tunnell Park"
+    }
+   ]
+  },
+  {
+   "file": "D27_SB-JR_2026_v01.xlsx",
+   "key": "SB-JR",
+   "special": false,
+   "sport": "Softball",
+   "name": "Junior League Softball",
+   "games": [
+    {
+     "g": 1,
+     "id": "SB-JR-01",
+     "date": "2026-06-21",
+     "time": "13:00",
+     "away": "Radnor/Wayne",
+     "as": 0,
+     "home": "Lower Merion",
+     "hs": 0,
+     "field": "LM-S. Ardmore Park"
+    },
+    {
+     "g": 2,
+     "id": "SB-JR-02",
+     "date": "2026-06-21",
+     "time": "15:00",
+     "away": "Lower Perk",
+     "as": 0,
+     "home": "Coventry",
+     "hs": 0,
+     "field": "LM-S. Ardmore Park"
+    },
+    {
+     "g": 3,
+     "id": "SB-JR-03",
+     "date": "2026-06-23",
+     "time": "18:00",
+     "away": "WG-1",
+     "as": 0,
+     "home": "WG-2",
+     "hs": 0,
+     "field": "COV-Wampler Complex"
+    },
+    {
+     "g": 4,
+     "id": "SB-JR-04",
+     "date": "2026-06-23",
+     "time": "20:00",
+     "away": "LG-1",
+     "as": 0,
+     "home": "LG-2",
+     "hs": 0,
+     "field": "COV-Wampler Complex"
+    },
+    {
+     "g": 5,
+     "id": "SB-JR-05",
+     "date": "2026-06-26",
+     "time": "18:00",
+     "away": "WG-4",
+     "as": 0,
+     "home": "LG-3",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 6,
+     "id": "SB-JR-06",
+     "date": "2026-06-28",
+     "time": "17:00",
+     "away": "WG-3",
+     "as": 0,
+     "home": "WG-5",
+     "hs": 0,
+     "field": "R/W-Tunnell Park"
+    },
+    {
+     "g": 7,
+     "id": "SB-JR-07",
+     "date": "2026-06-29",
+     "time": "18:00",
+     "away": "WG-6",
+     "as": 0,
+     "home": "If Necessary",
+     "hs": 0,
+     "field": "R/W-Tunnell Park"
+    }
+   ],
+   "teams": [
+    {
+     "n": 1,
+     "name": "Coventry",
+     "abbr": "COV",
+     "park": "COV-Wampler Complex"
+    },
+    {
+     "n": 2,
+     "name": "Lower Merion",
+     "abbr": "LM",
+     "park": "LM-S. Ardmore Park"
+    },
+    {
+     "n": 3,
+     "name": "Lower Perk",
+     "abbr": "LP",
+     "park": "LP-Palmer Park"
+    },
+    {
+     "n": 4,
+     "name": "Radnor/Wayne",
+     "abbr": "R/W",
+     "park": "R/W-Tunnell Park"
+    }
+   ]
+  },
+  {
+   "file": "D27sp_BB-9_2026_v02.xlsx",
+   "key": "BB-9",
+   "special": true,
+   "sport": "Baseball",
+   "name": "9-Year-Old Invitational",
+   "games": [
+    {
+     "g": 1,
+     "id": "BB-9-01",
+     "date": "2026-06-13",
+     "time": "10:00",
+     "away": "Lower Perk (Ceneviva)",
+     "as": 0,
+     "home": "Lower Merion",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 2,
+     "id": "BB-9-02",
+     "date": "2026-06-13",
+     "time": "11:00",
+     "away": "GVE (Morabito)",
+     "as": 0,
+     "home": "Coventry (Keeler)",
+     "hs": 0,
+     "field": "BP-Field of Dreams"
+    },
+    {
+     "g": 3,
+     "id": "BB-9-03",
+     "date": "2026-06-13",
+     "time": "09:00",
+     "away": "Upper Prov (McCormick)",
+     "as": 0,
+     "home": "Berwyn-Paoli",
+     "hs": 0,
+     "field": "BP-Field of Dreams"
+    },
+    {
+     "g": 4,
+     "id": "BB-9-04",
+     "date": "2026-06-13",
+     "time": "09:00",
+     "away": "Radnor/Wayne (Morris)",
+     "as": 0,
+     "home": "Lower Perk (Gawel)",
+     "hs": 0,
+     "field": "R/W-Encke Park"
+    },
+    {
+     "g": 5,
+     "id": "BB-9-05",
+     "date": "2026-06-13",
+     "time": "11:00",
+     "away": "Radnor/Wayne (Parkyn)",
+     "as": 0,
+     "home": "Upper Prov (Batty)",
+     "hs": 0,
+     "field": "R/W-Encke Park"
+    },
+    {
+     "g": 6,
+     "id": "BB-9-06",
+     "date": "2026-06-13",
+     "time": "09:00",
+     "away": "Devon/Strafford",
+     "as": 0,
+     "home": "Chester Valley (Culbertson)",
+     "hs": 0,
+     "field": "D/S-Clarke Field"
+    },
+    {
+     "g": 7,
+     "id": "BB-9-07",
+     "date": "2026-06-13",
+     "time": null,
+     "away": "BYE",
+     "as": 0,
+     "home": "Chester Valley (Arena)",
+     "hs": 6,
+     "field": "N/A"
+    },
+    {
+     "g": 8,
+     "id": "BB-9-08",
+     "date": "2026-06-13",
+     "time": "11:00",
+     "away": "GVE (Plaskas)",
+     "as": 0,
+     "home": "Coventry (Vermillion)",
+     "hs": 0,
+     "field": "D/S-Clarke Field"
+    },
+    {
+     "g": 9,
+     "id": "BB-9-09",
+     "date": "2026-06-15",
+     "time": "18:00",
+     "away": "LG-1",
+     "as": 0,
+     "home": "LG-2",
+     "hs": 0,
+     "field": "COV-Wampler Complex"
+    },
+    {
+     "g": 10,
+     "id": "BB-9-10",
+     "date": "2026-06-15",
+     "time": "20:00",
+     "away": "LG-3",
+     "as": 0,
+     "home": "LG-4",
+     "hs": 0,
+     "field": "COV-Wampler Complex"
+    },
+    {
+     "g": 11,
+     "id": "BB-9-11",
+     "date": "2026-06-15",
+     "time": "18:00",
+     "away": "LG-5",
+     "as": 0,
+     "home": "LG-6",
+     "hs": 0,
+     "field": "CV-Monument Park"
+    },
+    {
+     "g": 12,
+     "id": "BB-9-12",
+     "date": "2026-06-15",
+     "time": null,
+     "away": "BYE",
+     "as": 0,
+     "home": "LG-8",
+     "hs": 6,
+     "field": "N/A"
+    },
+    {
+     "g": 13,
+     "id": "BB-9-13",
+     "date": "2026-06-14",
+     "time": "13:00",
+     "away": "WG-1",
+     "as": 0,
+     "home": "WG-2",
+     "hs": 0,
+     "field": "EX-Ship Park"
+    },
+    {
+     "g": 14,
+     "id": "BB-9-14",
+     "date": "2026-06-14",
+     "time": "15:00",
+     "away": "WG-3",
+     "as": 0,
+     "home": "WG-4",
+     "hs": 0,
+     "field": "EX-Ship Park"
+    },
+    {
+     "g": 15,
+     "id": "BB-9-15",
+     "date": "2026-06-14",
+     "time": "13:00",
+     "away": "WG-5",
+     "as": 0,
+     "home": "WG-6",
+     "hs": 0,
+     "field": "CV-Monument Park"
+    },
+    {
+     "g": 16,
+     "id": "BB-9-16",
+     "date": "2026-06-14",
+     "time": "15:00",
+     "away": "Chester Valley (Arena)",
+     "as": 0,
+     "home": "WG-8",
+     "hs": 0,
+     "field": "CV-Monument Park"
+    },
+    {
+     "g": 17,
+     "id": "BB-9-17",
+     "date": "2026-06-17",
+     "time": "18:00",
+     "away": "LG-16",
+     "as": 0,
+     "home": "WG-9",
+     "hs": 0,
+     "field": "COV-Wampler Complex"
+    },
+    {
+     "g": 18,
+     "id": "BB-9-18",
+     "date": "2026-06-17",
+     "time": "20:00",
+     "away": "WG-10",
+     "as": 0,
+     "home": "LG-15",
+     "hs": 0,
+     "field": "COV-Wampler Complex"
+    },
+    {
+     "g": 19,
+     "id": "BB-9-19",
+     "date": "2026-06-17",
+     "time": "18:00",
+     "away": "LG-14",
+     "as": 0,
+     "home": "WG-11",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 20,
+     "id": "BB-9-20",
+     "date": "2026-06-17",
+     "time": "20:00",
+     "away": "LG-8",
+     "as": 0,
+     "home": "LG-13",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 21,
+     "id": "BB-9-21",
+     "date": "2026-06-20",
+     "time": "09:00",
+     "away": "WG-13",
+     "as": 0,
+     "home": "WG-14",
+     "hs": 0,
+     "field": "Lower Merion"
+    },
+    {
+     "g": 22,
+     "id": "BB-9-22",
+     "date": "2026-06-20",
+     "time": "11:00",
+     "away": "WG-15",
+     "as": 0,
+     "home": "WG-16",
+     "hs": 0,
+     "field": "Lower Merion"
+    },
+    {
+     "g": 23,
+     "id": "BB-9-23",
+     "date": "2026-06-20",
+     "time": "10:00",
+     "away": "WG-17",
+     "as": 0,
+     "home": "WG-18",
+     "hs": 0,
+     "field": "R/W-Encke Park"
+    },
+    {
+     "g": 24,
+     "id": "BB-9-24",
+     "date": "2026-06-20",
+     "time": "12:00",
+     "away": "WG-19",
+     "as": 0,
+     "home": "WG-20",
+     "hs": 0,
+     "field": "R/W-Encke Park"
+    },
+    {
+     "g": 25,
+     "id": "BB-9-25",
+     "date": "2026-06-21",
+     "time": "17:00",
+     "away": "LG-22",
+     "as": 0,
+     "home": "WG-24",
+     "hs": 0,
+     "field": "UP-MacFarlan Park"
+    },
+    {
+     "g": 26,
+     "id": "BB-9-26",
+     "date": "2026-06-21",
+     "time": "19:00",
+     "away": "LG-21",
+     "as": 0,
+     "home": "WG-23",
+     "hs": 0,
+     "field": "UP-MacFarlan Park"
+    },
+    {
+     "g": 27,
+     "id": "BB-9-27",
+     "date": "2026-06-23",
+     "time": "18:00",
+     "away": "WG-21",
+     "as": 0,
+     "home": "WG-22",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 28,
+     "id": "BB-9-28",
+     "date": "2026-06-23",
+     "time": "18:00",
+     "away": "WG-26",
+     "as": 0,
+     "home": "WG-25",
+     "hs": 0,
+     "field": "CV-Monument Park"
+    },
+    {
+     "g": 29,
+     "id": "BB-9-29",
+     "date": "2026-06-25",
+     "time": "18:00",
+     "away": "LG-27",
+     "as": 0,
+     "home": "WG-28",
+     "hs": 0,
+     "field": "UP-MacFarlan Park"
+    },
+    {
+     "g": 30,
+     "id": "BB-9-30",
+     "date": "2026-06-27",
+     "time": "11:00",
+     "away": "WG-27",
+     "as": 0,
+     "home": "WG-29",
+     "hs": 0,
+     "field": "GV-King Road"
+    },
+    {
+     "g": 31,
+     "id": "BB-9-31",
+     "date": "2026-06-28",
+     "time": "13:00",
+     "away": "WG-30",
+     "as": 0,
+     "home": "If Necessary",
+     "hs": 0,
+     "field": "GV-King Road"
+    }
+   ],
+   "teams": [
+    {
+     "n": 1,
+     "name": "Coventry (Vermillion)",
+     "abbr": "COV1",
+     "park": 16.063
+    },
+    {
+     "n": 2,
+     "name": "Coventry (Keeler)",
+     "abbr": "COV2",
+     "park": 11.06
+    },
+    {
+     "n": 3,
+     "name": "Berwyn-Paoli",
+     "abbr": "BP",
+     "park": 12.03
+    },
+    {
+     "n": 4,
+     "name": "Devon/Strafford",
+     "abbr": "DS",
+     "park": 9.07
+    },
+    {
+     "n": 5,
+     "name": "Chester Valley (Arena)",
+     "abbr": "CV1",
+     "park": 16.061
+    },
+    {
+     "n": 6,
+     "name": "Chester Valley (Culbertson)",
+     "abbr": "CV2",
+     "park": 15.08
+    },
+    {
+     "n": 7,
+     "name": "GVE (Morabito)",
+     "abbr": "GVE1",
+     "park": 5.11
+    },
+    {
+     "n": 8,
+     "name": "GVE (Plaskas)",
+     "abbr": "GVE2",
+     "park": 10.09
+    },
+    {
+     "n": 9,
+     "name": "Lower Merion",
+     "abbr": "LM",
+     "park": 10.1
+    },
+    {
+     "n": 10,
+     "name": "Lower Perk (Ceneviva)",
+     "abbr": "LP1",
+     "park": 5.02
+    },
+    {
+     "n": 11,
+     "name": "Lower Perk (Gawel)",
+     "abbr": "LP2",
+     "park": 12.08
+    },
+    {
+     "n": 12,
+     "name": "Radnor/Wayne (Parkyn)",
+     "abbr": "RW1",
+     "park": 8.07
+    },
+    {
+     "n": 13,
+     "name": "Radnor/Wayne (Morris)",
+     "abbr": "RW2",
+     "park": 8.06
+    },
+    {
+     "n": 14,
+     "name": "Upper Prov (Batty)",
+     "abbr": "UP1",
+     "park": 14.1
+    },
+    {
+     "n": 15,
+     "name": "Upper Prov (McCormick)",
+     "abbr": "UP2",
+     "park": 7.03
+    },
+    {
+     "n": 16,
+     "name": "BYE",
+     "abbr": "BYE",
+     "park": 10.04
+    },
+    {
+     "n": 1,
+     "name": "Lower Perk (Ceneviva)",
+     "abbr": "LP1-D27-BB9",
+     "park": null
+    },
+    {
+     "n": 2,
+     "name": "GVE (Morabito)",
+     "abbr": "GVE1-D27-BB9",
+     "park": null
+    },
+    {
+     "n": 3,
+     "name": "Upper Prov (McCormick)",
+     "abbr": "UP2-D27-BB9",
+     "park": null
+    },
+    {
+     "n": 4,
+     "name": "Radnor/Wayne (Morris)",
+     "abbr": "RW2-D27-BB9",
+     "park": null
+    },
+    {
+     "n": 5,
+     "name": "Radnor/Wayne (Parkyn)",
+     "abbr": "RW1-D27-BB9",
+     "park": null
+    },
+    {
+     "n": 6,
+     "name": "Devon/Strafford",
+     "abbr": "DS-D27-BB9",
+     "park": null
+    },
+    {
+     "n": 7,
+     "name": "BYE",
+     "abbr": "BYE-D27-BB9",
+     "park": null
+    },
+    {
+     "n": 8,
+     "name": "GVE (Plaskas)",
+     "abbr": "GVE2-D27-BB9",
+     "park": null
+    },
+    {
+     "n": 9,
+     "name": "Lower Merion",
+     "abbr": "LM-D27-BB9",
+     "park": null
+    },
+    {
+     "n": 10,
+     "name": "Coventry (Keeler)",
+     "abbr": "COV2-D27-BB9",
+     "park": null
+    },
+    {
+     "n": 11,
+     "name": "Berwyn-Paoli",
+     "abbr": "BP-D27-BB9",
+     "park": null
+    },
+    {
+     "n": 12,
+     "name": "Lower Perk (Gawel)",
+     "abbr": "LP2-D27-BB9",
+     "park": null
+    },
+    {
+     "n": 13,
+     "name": "Upper Prov (Batty)",
+     "abbr": "UP1-D27-BB9",
+     "park": null
+    },
+    {
+     "n": 14,
+     "name": "Chester Valley (Culbertson)",
+     "abbr": "CV2-D27-BB9",
+     "park": null
+    },
+    {
+     "n": 15,
+     "name": "Chester Valley (Arena)",
+     "abbr": "CV1-D27-BB9",
+     "park": null
+    },
+    {
+     "n": 16,
+     "name": "Coventry (Vermillion)",
+     "abbr": "COV1-D27-BB9",
+     "park": null
+    }
+   ]
+  },
+  {
+   "file": "D27sp_BB-Bob_Jones_2026_v02.xlsx",
+   "key": "BB-Bob_Jones",
+   "special": true,
+   "sport": "Baseball",
+   "name": "Bob Jones Championship",
+   "games": [
+    {
+     "g": 1,
+     "id": "BB-BobJones-1",
+     "date": "2026-06-10",
+     "time": "18:00",
+     "away": "Devon/Strafford",
+     "as": 0,
+     "home": "Lower Perk (TBD)",
+     "hs": 0,
+     "field": "DS-Clarke Field"
+    },
+    {
+     "g": 2,
+     "id": "BB-BobJones-2",
+     "date": null,
+     "time": null,
+     "away": "GVE1 (Grizzlies)",
+     "as": 6,
+     "home": "Chester Valley",
+     "hs": 0,
+     "field": "N/A"
+    },
+    {
+     "g": 3,
+     "id": "BB-BobJones-3",
+     "date": "2026-06-12",
+     "time": "18:00",
+     "away": "GVE2 (TBD)",
+     "as": 0,
+     "home": "WG-1",
+     "hs": 0,
+     "field": "EX-Ship Park"
+    },
+    {
+     "g": 4,
+     "id": "BB-BobJones-4",
+     "date": "2026-06-12",
+     "time": "19:00",
+     "away": "GVE1 (Grizzlies)",
+     "as": 0,
+     "home": "Lower Perk (TBD)",
+     "hs": 0,
+     "field": "EX-Ship Park"
+    },
+    {
+     "g": 5,
+     "id": "BB-BobJones-5",
+     "date": "2026-06-15",
+     "time": "19:00",
+     "away": "WG-3",
+     "as": 0,
+     "home": "WG-4",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    }
+   ],
+   "teams": [
+    {
+     "n": 1,
+     "name": "Devon/Strafford",
+     "abbr": "DS",
+     "park": 6.06
+    },
+    {
+     "n": 2,
+     "name": "Chester Valley",
+     "abbr": "CV",
+     "park": 11.08
+    },
+    {
+     "n": 3,
+     "name": "GVE1 (Grizzlies)",
+     "abbr": "GVE1",
+     "park": 11.05
+    },
+    {
+     "n": 4,
+     "name": "GVE2 (TBD)",
+     "abbr": "GVE2",
+     "park": 11.09
+    },
+    {
+     "n": 5,
+     "name": "Lower Perk (TBD)",
+     "abbr": "LP1",
+     "park": 14.04
+    },
+    {
+     "n": 6,
+     "name": "Lower Perk (TBD)",
+     "abbr": "LP2",
+     "park": 8.08
+    }
+   ]
+  },
+  {
+   "file": "D27sp_SB-Major_Champ_2026_v03.xlsx",
+   "key": "SB-Major_Champ",
+   "special": true,
+   "sport": "Softball",
+   "name": "Softball Major Championship",
+   "games": [
+    {
+     "g": 1,
+     "id": "SB-Major_Champ-1",
+     "date": "2026-06-05",
+     "time": "19:00",
+     "away": "Coventry 2 (Texas Tech)",
+     "as": 0,
+     "home": "Lower Perk",
+     "hs": 0,
+     "field": "COV-Wampler Complex"
+    },
+    {
+     "g": 2,
+     "id": "SB-Major_Champ-2",
+     "date": "2026-06-02",
+     "time": "19:00",
+     "away": "PGP",
+     "as": 0,
+     "home": "Coventry 1 (Penn State)",
+     "hs": 15,
+     "field": "PT-Novak Park"
+    },
+    {
+     "g": 3,
+     "id": "SB-Major_Champ-3",
+     "date": "2026-06-07",
+     "time": "18:00",
+     "away": "WG-1",
+     "as": 0,
+     "home": "Coventry 1 (Penn State)",
+     "hs": 0,
+     "field": "LP-Palmer Park"
+    },
+    {
+     "g": 4,
+     "id": "SB-Major_Champ-4",
+     "date": null,
+     "time": null,
+     "away": null,
+     "as": null,
+     "home": null,
+     "hs": null,
+     "field": null
+    },
+    {
+     "g": 5,
+     "id": "SB-Major_Champ-5",
+     "date": null,
+     "time": null,
+     "away": null,
+     "as": null,
+     "home": null,
+     "hs": null,
+     "field": null
+    }
+   ],
+   "teams": [
+    {
+     "n": 1,
+     "name": "Coventry 1 (Penn State)",
+     "abbr": "COV1",
+     "park": 12.07
+    },
+    {
+     "n": 2,
+     "name": "Coventry 2 (Texas Tech)",
+     "abbr": "COV2",
+     "park": 6.09
+    },
+    {
+     "n": 3,
+     "name": "Lower Perk",
+     "abbr": "LP",
+     "park": 11
+    },
+    {
+     "n": 4,
+     "name": "PGP",
+     "abbr": "PGP",
+     "park": 11.08
+    }
+   ]
+  }
+ ]
+}
