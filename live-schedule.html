@@ -46,6 +46,8 @@
   .ls-tourney-head .updated { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #047857; background: #ECFDF5; border: 1px solid rgba(4,120,87,.2); padding: 4px 10px; border-radius: 999px; font-weight: 600; }
   .ls-tourney-head .updated .dot { width: 7px; height: 7px; border-radius: 50%; background: #10B981; }
   .ls-tourney-head .meta { color: var(--muted); font-size: 13px; }
+  .ls-tourney-head .bracket-link { font-size: 13px; color: var(--d27-navy); font-weight: 600; text-decoration: none; border-bottom: 1px dashed var(--d27-gold); padding-bottom: 1px; }
+  .ls-tourney-head .bracket-link:hover { color: var(--d27-red); }
 
   /* Date group */
   .ls-date { font-family: var(--font-display); font-size: 14px; color: var(--d27-red); letter-spacing: .06em; text-transform: uppercase; font-weight: 600; margin: 18px 0 8px; padding-left: 2px; }
@@ -211,6 +213,7 @@ function tourneyHTML(t, q) {
       <h2>${t.name}</h2>
       <span class="sport-tag ${t.sport === 'Softball' ? 'sb' : 'bb'}">${t.sport}</span>
       <span class="meta">${t.games.length} games</span>
+      <a class="bracket-link" href="brackets.html?t=${t.key}">🏆 Bracket view →</a>
       ${t.updated ? `<span class="updated"><span class="dot"></span>${updatedLabel(t.updated)}</span>` : ''}
     </div>`;
   for (const k of order) {

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Tournament Brackets · PA District 27 Little League</title>
+<meta name="description" content="Live PA District 27 tournament brackets — winners auto-advance as games finish." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  body { background: var(--d27-paper); }
+
+  .bk-bar { background: var(--surface); border-bottom: 1px solid var(--line); padding: 12px 0; }
+  .bk-bar .container { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .bk-bar select { padding: 9px 12px; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 14px; background: var(--surface); min-width: 250px; }
+  .bk-bar .view-link { margin-left: auto; font-size: 13px; color: var(--d27-navy); font-weight: 600; text-decoration: none; border-bottom: 1px dashed var(--d27-gold); padding-bottom: 1px; }
+
+  /* Branded bracket title band — tournament name lives here (logos drop in later) */
+  .bk-title { background: linear-gradient(120deg, var(--d27-navy), var(--d27-navy-dark)); color: #fff; border-radius: 12px; padding: 22px 26px; margin: 22px 0 8px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; position: relative; overflow: hidden; }
+  .bk-title::after { content: ''; position: absolute; right: -40px; top: -40px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(201,162,39,.16), transparent 60%); }
+  .bk-title .crest-slot { width: 64px; height: 64px; border-radius: 50%; border: 2px dashed rgba(255,255,255,.35); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--d27-gold); flex-shrink: 0; }
+  .bk-title .tt { position: relative; }
+  .bk-title .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 12px; font-weight: 600; }
+  .bk-title h1 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 40px); margin: 2px 0 0; letter-spacing: -.01em; line-height: 1; color: #fff; }
+  .bk-title .sub { color: rgba(255,255,255,.72); font-size: 13px; margin-top: 6px; }
+  .bk-title .updated { margin-left: auto; position: relative; display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: #fff; background: rgba(16,185,129,.2); border: 1px solid rgba(16,185,129,.5); padding: 6px 13px; border-radius: 999px; font-weight: 600; }
+  .bk-title .updated .dot { width: 7px; height: 7px; border-radius: 50%; background: #34D399; box-shadow: 0 0 0 0 rgba(52,211,153,.6); animation: bkPulse 1.7s infinite; }
+  @keyframes bkPulse { 70% { box-shadow: 0 0 0 8px rgba(52,211,153,0); } }
+
+  .bk-legend { display: flex; gap: 18px; flex-wrap: wrap; padding: 6px 2px 0; font-size: 12px; color: var(--muted); }
+  .bk-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .bk-legend .chip { width: 20px; height: 4px; border-radius: 2px; }
+  .bk-legend .w { background: var(--d27-navy); }
+  .bk-legend .l { background: var(--d27-red); }
+  .bk-legend .f { background: var(--d27-gold); }
+
+  /* Section label (Winners / Losers / Final) */
+  .bk-sec-label { font-family: var(--font-display); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; margin: 26px 0 2px; padding-left: 12px; border-left: 4px solid var(--d27-navy); }
+  .bk-sec-label.l { border-left-color: var(--d27-red); }
+  .bk-sec-label.f { border-left-color: var(--d27-gold); }
+
+  /* Bracket canvas (absolute-positioned cards + SVG connectors) */
+  .bk-scroll { overflow-x: auto; padding: 10px 0 30px; }
+  .bk-canvas { position: relative; }
+  .bk-canvas svg { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+
+  .bk-match { position: absolute; width: 210px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,.05); overflow: hidden; transition: box-shadow .15s, transform .15s; z-index: 2; }
+  .bk-match:hover { box-shadow: 0 10px 26px rgba(0,0,0,.13); transform: translateY(-1px); z-index: 4; }
+  .bk-match.acc-w { border-left: 3px solid var(--d27-navy); }
+  .bk-match.acc-l { border-left: 3px solid var(--d27-red); }
+  .bk-match.acc-f { border-left: 3px solid var(--d27-gold); box-shadow: 0 0 0 2px rgba(201,162,39,.25), 0 6px 18px rgba(201,162,39,.18); }
+
+  .bk-mtop { display: flex; align-items: center; justify-content: space-between; padding: 5px 10px; background: rgba(0,45,114,.035); border-bottom: 1px solid var(--line); }
+  .bk-mtop .g { font-family: var(--font-display); font-weight: 700; font-size: 11px; color: var(--d27-navy); letter-spacing: .04em; }
+  .bk-mtop .tag { font-size: 8px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; }
+  .bk-mtop .tag.w { background: rgba(0,45,114,.1); color: var(--d27-navy); }
+  .bk-mtop .tag.l { background: rgba(218,41,28,.1); color: var(--d27-red); }
+  .bk-mtop .tag.f { background: rgba(201,162,39,.22); color: #8a6d10; }
+
+  .bk-side { display: flex; align-items: center; gap: 8px; padding: 8px 10px; min-height: 20px; }
+  .bk-side + .bk-side { border-top: 1px solid var(--line); }
+  .bk-side .nm { flex: 1; font-weight: 700; font-size: 13px; color: var(--d27-ink); line-height: 1.15; }
+  .bk-side .nm .via { display: block; font-size: 9px; color: var(--muted); font-weight: 500; }
+  .bk-side.tbd .nm { color: var(--muted); font-weight: 600; font-style: italic; }
+  .bk-side.bye .nm { color: var(--muted); }
+  .bk-side .sc { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--muted); min-width: 18px; text-align: center; }
+  .bk-side.win .nm { color: #047857; }
+  .bk-side.win .sc { color: #047857; }
+
+  .bk-mfoot { padding: 5px 10px; font-size: 10px; color: var(--muted); border-top: 1px dashed var(--line); display: flex; justify-content: space-between; gap: 6px; }
+  .bk-mfoot .fin { color: #047857; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+
+  .bk-empty, .bk-loading { text-align: center; color: var(--muted); padding: 60px; font-family: var(--font-display); letter-spacing: .06em; text-transform: uppercase; }
+  .bk-note { background: linear-gradient(90deg, rgba(201,162,39,.06), rgba(0,45,114,.04)); border: 1px solid rgba(0,45,114,.12); border-left: 4px solid var(--d27-gold); border-radius: 6px; padding: 13px 18px; margin: 18px 0 0; font-size: 13px; color: var(--muted); }
+  .bk-note b { color: var(--d27-navy); }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">⚠ Demo · Sample data only · Real D27 data wires in Phase 1</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="baseball.html">Baseball</a></li>
+      <li><a href="softball.html">Softball</a></li>
+      <li><a href="live-schedule.html">Schedule</a></li>
+      <li><a href="brackets.html" aria-current="page">Brackets</a></li>
+      <li><a href="leagues.html">Leagues</a></li>
+      <li><a href="champions.html">Champions</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="bk-bar">
+  <div class="container">
+    <select id="tourneySelect"></select>
+    <a class="view-link" href="live-schedule.html">View as schedule →</a>
+  </div>
+</div>
+
+<main class="container">
+  <div id="titleband"></div>
+  <div class="bk-legend">
+    <span><span class="chip w"></span> Winners bracket</span>
+    <span><span class="chip l"></span> Losers bracket</span>
+    <span><span class="chip f"></span> Championship</span>
+  </div>
+  <div class="bk-scroll"><div id="output"><div class="bk-loading">Loading brackets…</div></div></div>
+  <div class="bk-note"><b>Live bracket.</b> When a score is entered, the winner advances automatically — “Winner of Game 5” becomes the actual team, and the line carries them to the next round.</div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
+      <div><h5>Tournaments</h5><ul><li><a href="live-schedule.html">Schedules</a></li><li><a href="brackets.html">Brackets</a></li><li><a href="champions.html">Champions</a></li></ul></div>
+      <div><h5>Resources</h5><ul><li><a href="rules.html">Rules</a></li><li><a href="leagues.html">Leagues</a></li><li><a href="about.html">About</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
+  </div>
+</footer>
+
+<script>
+let DATA = null;
+const CARD_W = 210, COL_GAP = 76, ROW_GAP = 22;
+
+// ── reference parsing + winner resolution ───────────────────────────
+function parseRef(s) {
+  if (s == null) return { kind: 'tbd' };
+  const t = String(s).trim();
+  let m = t.match(/^WG-(\d+)$/i); if (m) return { kind: 'WG', g: +m[1] };
+  m = t.match(/^LG-(\d+)$/i);     if (m) return { kind: 'LG', g: +m[1] };
+  if (/if necessary/i.test(t)) return { kind: 'tbd', label: 'If necessary' };
+  if (/^bye$/i.test(t))        return { kind: 'bye' };
+  return { kind: 'team', name: t };
+}
+const gameByNum = (t, n) => t.games.find(g => g.g === n);
+const isPlayed = g => g && g.as != null && g.hs != null && (g.as + g.hs) > 0;
+function resolveSide(t, ref, seen) {
+  seen = seen || new Set();
+  if (ref.kind === 'team') return ref.name;
+  if (ref.kind === 'bye')  return 'BYE';
+  if (ref.kind !== 'WG' && ref.kind !== 'LG') return null;
+  const g = gameByNum(t, ref.g); if (!g || seen.has(ref.g)) return null;
+  seen.add(ref.g);
+  return ref.kind === 'WG' ? winnerName(t, g, seen) : loserName(t, g, seen);
+}
+function winnerName(t, g, seen) { if (!isPlayed(g)) return null; const a = resolveSide(t, parseRef(g.away), new Set(seen)), h = resolveSide(t, parseRef(g.home), new Set(seen)); return g.as > g.hs ? a : g.hs > g.as ? h : null; }
+function loserName(t, g, seen)  { if (!isPlayed(g)) return null; const a = resolveSide(t, parseRef(g.away), new Set(seen)), h = resolveSide(t, parseRef(g.home), new Set(seen)); return g.as > g.hs ? h : g.hs > g.as ? a : null; }
+function sideDisplay(t, raw) {
+  const ref = parseRef(raw);
+  if (ref.kind === 'team') return { name: ref.name };
+  if (ref.kind === 'bye')  return { name: 'BYE', bye: true };
+  if (ref.kind === 'tbd')  return { name: ref.label || 'TBD', tbd: true };
+  const resolved = resolveSide(t, ref, new Set());
+  if (resolved) return { name: resolved, via: 'G' + ref.g };
+  return { name: (ref.kind === 'WG' ? 'Winner' : 'Loser') + ' G' + ref.g, tbd: true };
+}
+
+// ── structure: feeders, rounds, bracket-class (W/L/F) ───────────────
+function feeders(g) { const o = []; for (const raw of [g.away, g.home]) { const r = parseRef(raw); if (r.kind === 'WG' || r.kind === 'LG') o.push(r.g); } return o; }
+function computeRounds(t) {
+  const depth = {}, guard = new Set();
+  function d(n) { if (depth[n] != null) return depth[n]; if (guard.has(n)) return 1; guard.add(n); const g = gameByNum(t, n); if (!g) return 1; const f = feeders(g); const r = f.length ? 1 + Math.max(...f.map(d)) : 1; depth[n] = r; return r; }
+  t.games.forEach(g => d(g.g)); return depth;
+}
+function classify(t) {
+  // Winners bracket = "pure winners": no LG anywhere in the game's lineage (both teams still unbeaten).
+  const pw = {}, guard = new Set();
+  function isPw(n) {
+    if (pw[n] != null) return pw[n];
+    if (guard.has(n)) return true; guard.add(n);
+    const g = gameByNum(t, n); if (!g) { pw[n] = true; return true; }
+    let v = true;
+    for (const raw of [g.away, g.home]) {
+      const r = parseRef(raw);
+      if (r.kind === 'LG') v = false;
+      if (r.kind === 'WG' && !isPw(r.g)) v = false;
+    }
+    pw[n] = v; return v;
+  }
+  t.games.forEach(g => isPw(g.g));
+
+  // WB final = deepest pure-winners game (the last unbeaten-vs-unbeaten game)
+  const depth = computeRounds(t);
+  let wbFinal = null, wbDepth = -1;
+  for (const g of t.games) if (pw[g.g] && (depth[g.g] || 1) > wbDepth) { wbDepth = depth[g.g] || 1; wbFinal = g.g; }
+
+  // who references each game's winner/loser
+  const consumers = {};
+  for (const g of t.games) for (const raw of [g.away, g.home]) { const r = parseRef(raw); if (r.kind === 'WG' || r.kind === 'LG') (consumers[r.g] = consumers[r.g] || []).push(g.g); }
+
+  // Grand final = the game(s) that consume the WB-final's winner (+ any "if necessary" follow-on)
+  const fin = new Set();
+  if (wbFinal != null) {
+    let q = (consumers[wbFinal] || []).filter(n => {
+      const g = gameByNum(t, n);
+      const a = parseRef(g.away), h = parseRef(g.home);
+      return (a.kind === 'WG' && a.g === wbFinal) || (h.kind === 'WG' && h.g === wbFinal);
+    });
+    while (q.length) { const n = q.shift(); if (fin.has(n)) continue; fin.add(n); (consumers[n] || []).forEach(c => q.push(c)); }
+  }
+
+  const cls = {};
+  for (const g of t.games) cls[g.g] = fin.has(g.g) ? 'f' : pw[g.g] ? 'w' : 'l';
+  return cls;
+}
+
+// card height depends on footer; keep constant for clean geometry
+function cardHeight(g) { return 92; }
+
+function matchHTML(t, g, cls, x, y) {
+  const A = sideDisplay(t, g.away), H = sideDisplay(t, g.home);
+  const played = isPlayed(g), aWin = played && g.as > g.hs, hWin = played && g.hs > g.as;
+  const side = (s, sc, win) => `<div class="bk-side${win ? ' win' : ''}${s.tbd ? ' tbd' : ''}${s.bye ? ' bye' : ''}"><span class="nm">${s.name}${s.via ? `<span class="via">via ${s.via}</span>` : ''}</span><span class="sc">${sc != null ? sc : ''}</span></div>`;
+  const tag = cls === 'f' ? '<span class="tag f">Final</span>' : cls === 'l' ? '<span class="tag l">Losers</span>' : '<span class="tag w">Winners</span>';
+  const when = [g.date ? new Date(g.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : null, g.time ? fmtTime(g.time) : null].filter(Boolean).join(' · ');
+  return `<div class="bk-match acc-${cls}" style="left:${x}px;top:${y}px"><div class="bk-mtop"><span class="g">Game ${g.g}</span>${tag}</div>${side(A, g.as, aWin)}${side(H, g.hs, hWin)}<div class="bk-mfoot"><span>${when || 'TBD'}</span>${played ? '<span class="fin">Final</span>' : (g.field ? `<span>${g.field.slice(0,18)}</span>` : '')}</div></div>`;
+}
+function fmtTime(t) { let [h, m] = t.split(':').map(Number); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return `${h}:${String(m).padStart(2,'0')} ${ap}`; }
+
+// depth within a subset — feeders only count if also in the subset
+function depthInSubset(t, games) {
+  const inSet = new Set(games.map(g => g.g));
+  const depth = {}, guard = new Set();
+  function d(n) {
+    if (depth[n] != null) return depth[n];
+    if (guard.has(n)) return 1; guard.add(n);
+    const g = gameByNum(t, n); if (!g) return 1;
+    const f = feeders(g).filter(x => inSet.has(x));
+    const r = f.length ? 1 + Math.max(...f.map(d)) : 1;
+    depth[n] = r; return r;
+  }
+  games.forEach(g => d(g.g)); return depth;
+}
+
+// render one section (Winners / Losers / Final) as its own clean tree
+function sectionCanvas(t, games, cls, accent) {
+  const inSet = new Set(games.map(g => g.g));
+  const depth = depthInSubset(t, games);
+  const maxR = Math.max(...games.map(g => depth[g.g] || 1));
+  const cols = {};
+  for (const g of games) { const r = depth[g.g] || 1; (cols[r] = cols[r] || []).push(g); }
+
+  const pos = {}; const SLOT = 92 + ROW_GAP;
+  for (let r = 1; r <= maxR; r++) {
+    const placed = [];
+    (cols[r] || []).sort((a, b) => a.g - b.g).forEach((g, i) => {
+      const h = cardHeight(g);
+      const f = feeders(g).filter(x => inSet.has(x)).map(n => pos[n]).filter(Boolean);
+      const yc = f.length ? f.reduce((s, p) => s + p.y + p.h / 2, 0) / f.length : i * SLOT + h / 2;
+      placed.push({ g, y: yc - h / 2, h });
+    });
+    placed.sort((a, b) => a.y - b.y);
+    for (let i = 1; i < placed.length; i++) {
+      const minY = placed[i - 1].y + placed[i - 1].h + ROW_GAP;
+      if (placed[i].y < minY) placed[i].y = minY;
+    }
+    for (const p of placed) pos[p.g.g] = { x: (r - 1) * (CARD_W + COL_GAP), y: p.y, h: p.h };
+  }
+
+  let maxX = 0, maxY = 0;
+  for (const k in pos) { maxX = Math.max(maxX, pos[k].x + CARD_W); maxY = Math.max(maxY, pos[k].y + pos[k].h); }
+
+  // connectors — ONLY between games in this same section (no crossing)
+  const col = accent === 'f' ? '#C9A227' : accent === 'l' ? 'rgba(218,41,28,.5)' : 'rgba(0,45,114,.45)';
+  let paths = '';
+  for (const g of games) {
+    const p = pos[g.g]; if (!p) continue;
+    for (const fn of feeders(g)) {
+      if (!inSet.has(fn)) continue;            // skip cross-section feeds → no spaghetti
+      const fp = pos[fn]; if (!fp) continue;
+      const x1 = fp.x + CARD_W, y1 = fp.y + fp.h / 2, x2 = p.x, y2 = p.y + p.h / 2, mx = x1 + (x2 - x1) / 2;
+      paths += `<path d="M${x1},${y1} H${mx} V${y2} H${x2}" fill="none" stroke="${col}" stroke-width="2"/>`;
+    }
+  }
+  let cards = '';
+  for (const g of games) { const p = pos[g.g]; if (p) cards += matchHTML(t, g, cls[g.g], p.x, p.y); }
+
+  return `<div class="bk-scroll"><div class="bk-canvas" style="width:${maxX}px;height:${maxY + 8}px">
+    <svg width="${maxX}" height="${maxY + 8}">${paths}</svg>${cards}</div></div>`;
+}
+
+function renderBracket(t) {
+  const out = document.getElementById('output');
+  if (!t.games.length) { out.innerHTML = '<div class="bk-empty">No games yet for this tournament.</div>'; renderTitle(t); return; }
+  const cls = classify(t);
+  const sections = [
+    { key: 'w', label: 'Winners Bracket', cls: '' },
+    { key: 'l', label: 'Losers Bracket', cls: 'l' },
+    { key: 'f', label: 'Championship', cls: 'f' },
+  ];
+  let html = '';
+  for (const s of sections) {
+    const games = t.games.filter(g => cls[g.g] === s.key);
+    if (!games.length) continue;
+    html += `<div class="bk-sec-label ${s.cls}">${s.label}</div>`;
+    html += sectionCanvas(t, games, cls, s.key);
+  }
+  out.innerHTML = html || '<div class="bk-empty">No bracket games.</div>';
+  renderTitle(t);
+}
+
+function renderTitle(t) {
+  const initials = t.key.replace(/[^A-Za-z0-9]/g, '').slice(0, 4).toUpperCase();
+  document.getElementById('titleband').innerHTML = `
+    <div class="bk-title">
+      <div class="crest-slot">${initials}</div>
+      <div class="tt">
+        <div class="eyebrow">${(t.category || '').toUpperCase()}</div>
+        <h1>${t.name}</h1>
+        <div class="sub">${t.sport} · Double-elimination · ${t.games.length} games</div>
+      </div>
+      ${t.updated ? `<span class="updated"><span class="dot"></span>${updatedLabel(t.updated)}</span>` : ''}
+    </div>`;
+}
+function updatedLabel(iso) { const then = new Date(iso + (iso.length <= 10 ? 'T12:00:00' : '')); const d = Math.floor((Date.now() - then.getTime()) / 86400000); if (d <= 0) return 'Updated today'; if (d === 1) return 'Updated yesterday'; if (d < 7) return `Updated ${d} days ago`; return 'Updated ' + then.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
+
+function initSelect() {
+  const sel = document.getElementById('tourneySelect');
+  const byCat = {}; for (const t of DATA.tournaments) (byCat[t.category] = byCat[t.category] || []).push(t);
+  for (const cat of (DATA.categoryOrder || [])) {
+    if (!byCat[cat]) continue;
+    const og = document.createElement('optgroup'); og.label = cat;
+    for (const t of byCat[cat]) { const o = document.createElement('option'); o.value = t.key; o.textContent = t.name; og.appendChild(o); }
+    sel.appendChild(og);
+  }
+  sel.addEventListener('change', () => { const t = DATA.tournaments.find(x => x.key === sel.value); renderBracket(t); location.hash = sel.value; });
+  const want = new URLSearchParams(location.search).get('t') || location.hash.replace('#', '') || 'BB-12';
+  const found = DATA.tournaments.find(t => t.key === want) || DATA.tournaments[0];
+  sel.value = found.key; renderBracket(found);
+}
+
+fetch('data/schedule-data.json').then(r => r.json()).then(d => { DATA = d; initSelect(); })
+  .catch(() => { document.getElementById('output').innerHTML = '<div class="bk-empty">Could not load bracket data.</div>'; });
+</script>
+
+</body>
+</html>
