@@ -279,7 +279,9 @@
      "abbr": "UP",
      "park": "UP-MacFarlan Park"
     }
-   ]
+   ],
+   "category": "LL International — Baseball",
+   "updated": "2026-06-04"
   },
   {
    "file": "D27_BB-11_2026_v01.xlsx",
@@ -531,7 +533,9 @@
      "abbr": "UP",
      "park": "UP-MacFarlan Park"
     }
-   ]
+   ],
+   "category": "LL International — Baseball",
+   "updated": "2026-06-04"
   },
   {
    "file": "D27_BB-12_2026_v01.xlsx",
@@ -811,7 +815,9 @@
      "abbr": "UP",
      "park": "UP-MacFarlan Park"
     }
-   ]
+   ],
+   "category": "LL International — Baseball",
+   "updated": "2026-06-04"
   },
   {
    "file": "D27_BB-INT_2026_v01.xlsx",
@@ -867,7 +873,9 @@
      "abbr": "UP",
      "park": "UP-MacFarlan Park"
     }
-   ]
+   ],
+   "category": "LL International — Baseball",
+   "updated": "2026-06-04"
   },
   {
    "file": "D27_BB-JR_2026_v01.xlsx",
@@ -951,7 +959,9 @@
      "abbr": "LP",
      "park": "LP-French Field"
     }
-   ]
+   ],
+   "category": "LL International — Baseball",
+   "updated": "2026-06-04"
   },
   {
    "file": "D27_BB-SR_2026_v01.xlsx",
@@ -1007,7 +1017,9 @@
      "abbr": "GVE",
      "park": "GV-King Road"
     }
-   ]
+   ],
+   "category": "LL International — Baseball",
+   "updated": "2026-06-04"
   },
   {
    "file": "D27_SB-10_2026_v01.xlsx",
@@ -1203,7 +1215,9 @@
      "abbr": "UP",
      "park": "UP-MacFarlan Park"
     }
-   ]
+   ],
+   "category": "LL International — Softball",
+   "updated": "2026-06-04"
   },
   {
    "file": "D27_SB-11_2026_v01.xlsx",
@@ -1343,7 +1357,9 @@
      "abbr": "PGP",
      "park": "PT-Novak Park"
     }
-   ]
+   ],
+   "category": "LL International — Softball",
+   "updated": "2026-06-04"
   },
   {
    "file": "D27_SB-12_2026_v01.xlsx",
@@ -1511,7 +1527,9 @@
      "abbr": "RW",
      "park": "R/W-Tunnell Park"
     }
-   ]
+   ],
+   "category": "LL International — Softball",
+   "updated": "2026-06-04"
   },
   {
    "file": "D27_SB-JR_2026_v01.xlsx",
@@ -1623,7 +1641,9 @@
      "abbr": "R/W",
      "park": "R/W-Tunnell Park"
     }
-   ]
+   ],
+   "category": "LL International — Softball",
+   "updated": "2026-06-04"
   },
   {
    "file": "D27sp_BB-9_2026_v02.xlsx",
@@ -2167,7 +2187,9 @@
      "abbr": "COV1-D27-BB9",
      "park": null
     }
-   ]
+   ],
+   "category": "D27 Special Games",
+   "updated": "2026-06-04"
   },
   {
    "file": "D27sp_BB-Bob_Jones_2026_v02.xlsx",
@@ -2269,7 +2291,9 @@
      "abbr": "LP2",
      "park": 8.08
     }
-   ]
+   ],
+   "category": "D27 Special Games",
+   "updated": "2026-06-04"
   },
   {
    "file": "D27sp_SB-Major_Champ_2026_v03.xlsx",
@@ -2359,7 +2383,16 @@
      "abbr": "PGP",
      "park": 11.08
     }
-   ]
+   ],
+   "category": "D27 Special Games",
+   "updated": "2026-06-04"
   }
+ ],
+ "categoryOrder": [
+  "LL International — Baseball",
+  "LL International — Softball",
+  "D27 Special Games",
+  "Sectional",
+  "State"
  ]
 }
