@@ -272,8 +272,9 @@ function sectionCanvas(t, games, cls, accent) {
   let maxX = 0, maxY = 0;
   for (const k in pos) { maxX = Math.max(maxX, pos[k].x + CARD_W); maxY = Math.max(maxY, pos[k].y + pos[k].h); }
 
-  // connectors — ONLY between games in this same section (no crossing)
-  const col = accent === 'f' ? '#C9A227' : accent === 'l' ? 'rgba(218,41,28,.5)' : 'rgba(0,45,114,.45)';
+  // connectors — ONLY between games in this same section (no crossing).
+  // line color follows the consuming game's class, so championship lines are gold.
+  const lineColor = k => k === 'f' ? '#C9A227' : k === 'l' ? 'rgba(218,41,28,.5)' : 'rgba(0,45,114,.45)';
   let paths = '';
   for (const g of games) {
     const p = pos[g.g]; if (!p) continue;
@@ -281,7 +282,7 @@ function sectionCanvas(t, games, cls, accent) {
       if (!inSet.has(fn)) continue;            // skip cross-section feeds → no spaghetti
       const fp = pos[fn]; if (!fp) continue;
       const x1 = fp.x + CARD_W, y1 = fp.y + fp.h / 2, x2 = p.x, y2 = p.y + p.h / 2, mx = x1 + (x2 - x1) / 2;
-      paths += `<path d="M${x1},${y1} H${mx} V${y2} H${x2}" fill="none" stroke="${col}" stroke-width="2"/>`;
+      paths += `<path d="M${x1},${y1} H${mx} V${y2} H${x2}" fill="none" stroke="${lineColor(cls[g.g])}" stroke-width="2"/>`;
     }
   }
   let cards = '';
@@ -295,17 +296,18 @@ function renderBracket(t) {
   const out = document.getElementById('output');
   if (!t.games.length) { out.innerHTML = '<div class="bk-empty">No games yet for this tournament.</div>'; renderTitle(t); return; }
   const cls = classify(t);
+  // Winners bracket flows straight into the Championship (one connected tree).
+  // Losers bracket is its own section; its champion feeds the final via the "Winner G__" label.
   const sections = [
-    { key: 'w', label: 'Winners Bracket', cls: '' },
-    { key: 'l', label: 'Losers Bracket', cls: 'l' },
-    { key: 'f', label: 'Championship', cls: 'f' },
+    { keys: ['w', 'f'], label: 'Winners Bracket → Championship', cls: '', accent: 'w' },
+    { keys: ['l'],      label: 'Losers Bracket',                 cls: 'l', accent: 'l' },
   ];
   let html = '';
   for (const s of sections) {
-    const games = t.games.filter(g => cls[g.g] === s.key);
+    const games = t.games.filter(g => s.keys.includes(cls[g.g]));
     if (!games.length) continue;
     html += `<div class="bk-sec-label ${s.cls}">${s.label}</div>`;
-    html += sectionCanvas(t, games, cls, s.key);
+    html += sectionCanvas(t, games, cls, s.accent);
   }
   out.innerHTML = html || '<div class="bk-empty">No bracket games.</div>';
   renderTitle(t);
