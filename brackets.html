@@ -43,7 +43,7 @@
   .bk-sec-label.f { border-left-color: var(--d27-gold); }
 
   /* Bracket canvas (absolute-positioned cards + SVG connectors) */
-  .bk-scroll { overflow-x: auto; padding: 10px 0 30px; }
+  .bk-scroll { overflow-x: auto; overflow-y: hidden; padding: 14px 0 26px; }
   .bk-canvas { position: relative; }
   .bk-canvas svg { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
 
@@ -53,24 +53,24 @@
   .bk-match.acc-l { border-left: 3px solid var(--d27-red); }
   .bk-match.acc-f { border-left: 3px solid var(--d27-gold); box-shadow: 0 0 0 2px rgba(201,162,39,.25), 0 6px 18px rgba(201,162,39,.18); }
 
-  .bk-mtop { display: flex; align-items: center; justify-content: space-between; padding: 5px 10px; background: rgba(0,45,114,.035); border-bottom: 1px solid var(--line); }
+  .bk-mtop { display: flex; align-items: center; justify-content: space-between; height: 24px; box-sizing: border-box; padding: 0 10px; background: rgba(0,45,114,.035); border-bottom: 1px solid var(--line); }
   .bk-mtop .g { font-family: var(--font-display); font-weight: 700; font-size: 11px; color: var(--d27-navy); letter-spacing: .04em; }
   .bk-mtop .tag { font-size: 8px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; }
   .bk-mtop .tag.w { background: rgba(0,45,114,.1); color: var(--d27-navy); }
   .bk-mtop .tag.l { background: rgba(218,41,28,.1); color: var(--d27-red); }
   .bk-mtop .tag.f { background: rgba(201,162,39,.22); color: #8a6d10; }
 
-  .bk-side { display: flex; align-items: center; gap: 8px; padding: 8px 10px; min-height: 20px; }
+  .bk-side { display: flex; align-items: center; gap: 8px; padding: 0 10px; height: 35px; box-sizing: border-box; }
   .bk-side + .bk-side { border-top: 1px solid var(--line); }
-  .bk-side .nm { flex: 1; font-weight: 700; font-size: 13px; color: var(--d27-ink); line-height: 1.15; }
-  .bk-side .nm .via { display: block; font-size: 9px; color: var(--muted); font-weight: 500; }
+  .bk-side .nm { flex: 1; min-width: 0; font-weight: 700; font-size: 13px; color: var(--d27-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bk-side .nm .via { font-size: 10px; color: var(--muted); font-weight: 500; margin-left: 4px; }
   .bk-side.tbd .nm { color: var(--muted); font-weight: 600; font-style: italic; }
   .bk-side.bye .nm { color: var(--muted); }
   .bk-side .sc { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--muted); min-width: 18px; text-align: center; }
   .bk-side.win .nm { color: #047857; }
   .bk-side.win .sc { color: #047857; }
 
-  .bk-mfoot { padding: 5px 10px; font-size: 10px; color: var(--muted); border-top: 1px dashed var(--line); display: flex; justify-content: space-between; gap: 6px; }
+  .bk-mfoot { height: 23px; box-sizing: border-box; padding: 0 10px; font-size: 10px; color: var(--muted); border-top: 1px dashed var(--line); display: flex; align-items: center; justify-content: space-between; gap: 6px; }
   .bk-mfoot .fin { color: #047857; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
 
   .bk-empty, .bk-loading { text-align: center; color: var(--muted); padding: 60px; font-family: var(--font-display); letter-spacing: .06em; text-transform: uppercase; }
@@ -132,7 +132,7 @@
 
 <script>
 let DATA = null;
-const CARD_W = 210, COL_GAP = 76, ROW_GAP = 22;
+const CARD_W = 210, CARD_H = 120, COL_GAP = 76, ROW_GAP = 26, Y_PAD = 14;
 
 // ── reference parsing + winner resolution ───────────────────────────
 function parseRef(s) {
@@ -216,8 +216,8 @@ function classify(t) {
   return cls;
 }
 
-// card height depends on footer; keep constant for clean geometry
-function cardHeight(g) { return 92; }
+// fixed card height (CSS locks each row's height) → exact geometry
+function cardHeight(g) { return CARD_H; }
 
 function matchHTML(t, g, cls, x, y) {
   const A = sideDisplay(t, g.away), H = sideDisplay(t, g.home);
@@ -252,13 +252,13 @@ function sectionCanvas(t, games, cls, accent) {
   const cols = {};
   for (const g of games) { const r = depth[g.g] || 1; (cols[r] = cols[r] || []).push(g); }
 
-  const pos = {}; const SLOT = 92 + ROW_GAP;
+  const pos = {}; const SLOT = CARD_H + ROW_GAP;
   for (let r = 1; r <= maxR; r++) {
     const placed = [];
     (cols[r] || []).sort((a, b) => a.g - b.g).forEach((g, i) => {
       const h = cardHeight(g);
       const f = feeders(g).filter(x => inSet.has(x)).map(n => pos[n]).filter(Boolean);
-      const yc = f.length ? f.reduce((s, p) => s + p.y + p.h / 2, 0) / f.length : i * SLOT + h / 2;
+      const yc = f.length ? f.reduce((s, p) => s + p.y + p.h / 2, 0) / f.length : Y_PAD + i * SLOT + h / 2;
       placed.push({ g, y: yc - h / 2, h });
     });
     placed.sort((a, b) => a.y - b.y);
@@ -288,8 +288,9 @@ function sectionCanvas(t, games, cls, accent) {
   let cards = '';
   for (const g of games) { const p = pos[g.g]; if (p) cards += matchHTML(t, g, cls[g.g], p.x, p.y); }
 
-  return `<div class="bk-scroll"><div class="bk-canvas" style="width:${maxX}px;height:${maxY + 8}px">
-    <svg width="${maxX}" height="${maxY + 8}">${paths}</svg>${cards}</div></div>`;
+  const H = maxY + Y_PAD;
+  return `<div class="bk-scroll"><div class="bk-canvas" style="width:${maxX}px;height:${H}px">
+    <svg width="${maxX}" height="${H}">${paths}</svg>${cards}</div></div>`;
 }
 
 function renderBracket(t) {
