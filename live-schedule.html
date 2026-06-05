@@ -43,6 +43,20 @@
   .ls-champion .ct { display: flex; flex-direction: column; line-height: 1.1; }
   .ls-champion .lbl { font-family: var(--font-display); font-size: 11px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; opacity: .8; }
   .ls-champion .team { font-family: var(--font-display); font-size: clamp(22px, 4.5vw, 32px); font-weight: 800; letter-spacing: -.01em; margin-top: 2px; }
+  .ls-teams { border: 1px solid #e5e7eb; border-radius: 10px; margin: 0 0 16px; background: #fff; overflow: hidden; }
+  .ls-teams > summary { cursor: pointer; padding: 12px 16px; font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--d27-navy); list-style: none; display: flex; align-items: center; gap: 8px; user-select: none; }
+  .ls-teams > summary::-webkit-details-marker { display: none; }
+  .ls-teams > summary:hover { background: #f8fafc; }
+  .ls-teams .chev { display: inline-block; transition: transform .2s ease; color: var(--d27-gold); font-size: 12px; }
+  .ls-teams[open] > summary .chev { transform: rotate(90deg); }
+  .ls-teams .cnt { color: #6b7280; font-weight: 600; font-size: 12px; }
+  .ls-teams-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 2px; padding: 4px 10px 12px; border-top: 1px solid #f1f5f9; }
+  .ls-team-row { display: flex; align-items: baseline; gap: 8px; padding: 8px 10px; border-radius: 6px; }
+  .ls-team-row:hover { background: #f8fafc; }
+  .ls-team-row .tn { font-weight: 700; color: #1f2937; }
+  .ls-team-row .ta { font-size: 11px; color: #475569; font-weight: 700; background: #f1f5f9; padding: 1px 6px; border-radius: 4px; letter-spacing: .03em; }
+  .ls-team-row .tp { margin-left: auto; font-size: 13px; color: #374151; white-space: nowrap; }
+  .ls-team-row .tp .pin { margin-right: 3px; opacity: .65; font-size: 11px; }
   .ls-tourney:last-child { margin-bottom: 0; }
   .ls-tourney-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--d27-navy); flex-wrap: wrap; }
   .ls-tourney-head h2 { font-family: var(--font-display); margin: 0; color: var(--d27-navy); font-size: 22px; }
@@ -295,6 +309,21 @@ function gameHTML(t, g) {
     </div>`;
 }
 
+// roster + home-field table for a tournament (from the Excel team table)
+function teamsPanelHTML(t, open) {
+  const teams = (t.teams || []).slice().sort((a, b) => (a.n || 0) - (b.n || 0));
+  if (!teams.length) return '';
+  const rows = teams.map(tm => `
+      <div class="ls-team-row">
+        <span class="tn">${tm.name}</span>${tm.abbr ? `<span class="ta">${tm.abbr}</span>` : ''}
+        ${tm.park ? `<span class="tp"><span class="pin">📍</span>${tm.park}</span>` : ''}
+      </div>`).join('');
+  return `<details class="ls-teams"${open ? ' open' : ''}>
+      <summary><span class="chev">▸</span> Teams &amp; Fields <span class="cnt">${teams.length} teams</span></summary>
+      <div class="ls-teams-grid">${rows}</div>
+    </details>`;
+}
+
 function tourneyHTML(t, q) {
   const cls = classify(t);
   const outcome = championOutcome(t, cls);
@@ -325,7 +354,8 @@ function tourneyHTML(t, q) {
       <a class="bracket-link" href="brackets.html?t=${t.key}">🏆 Bracket view →</a>
       ${t.updated ? `<span class="updated"><span class="dot"></span>${updatedLabel(t.updated)}</span>` : ''}
     </div>
-    ${outcome.champion ? `<div class="ls-champion"><span class="trophy">🏆</span><div class="ct"><span class="lbl">Tournament Champion</span><span class="team">${outcome.champion}</span></div></div>` : ''}`;
+    ${outcome.champion ? `<div class="ls-champion"><span class="trophy">🏆</span><div class="ct"><span class="lbl">Tournament Champion</span><span class="team">${outcome.champion}</span></div></div>` : ''}
+    ${teamsPanelHTML(t, filter.tourney !== 'all')}`;
   for (const k of order) {
     html += `<div class="ls-date">${fmtDate(k)}</div>`;
     byDate[k].sort((a, b) => String(a.time || '').localeCompare(String(b.time || '')));

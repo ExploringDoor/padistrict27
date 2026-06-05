@@ -48,6 +48,15 @@
       const data = await res.json();
       if (!data.documents || !data.documents.length) throw new Error('empty');
       const tournaments = data.documents.map(parseDoc).filter(t => t.key);
+      // Firestore doesn't store the team/home-field table yet — merge it from the
+      // static export by tournament key so the Teams & Fields panel has data.
+      try {
+        const sres = await fetch('data/schedule-data.json');
+        const sd = await sres.json();
+        const teamMap = {};
+        (sd.tournaments || []).forEach(st => { if (st.key && st.teams && st.teams.length) teamMap[st.key] = st.teams; });
+        tournaments.forEach(t => { if ((!t.teams || !t.teams.length) && teamMap[t.key]) t.teams = teamMap[t.key]; });
+      } catch (e) { /* teams are optional — ignore if the static file is unreachable */ }
       return { tournaments, categoryOrder: CATEGORY_ORDER, source: 'firebase' };
     } catch (e) {
       const res = await fetch('data/schedule-data.json');
