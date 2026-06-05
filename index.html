@@ -4,8 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#002D72" />
-<title>PA District 27 Little League · Home</title>
-<meta name="description" content="PA District 27 Little League — 10,000 baseball and softball players across 12 member leagues in Chester, Delaware, and Montgomery Counties. Live brackets, schedule, standings, and news." />
+<title>PA District 27 Little League · Baseball &amp; Softball</title>
+<meta name="description" content="PA District 27 Little League — baseball and softball tournaments across Chester, Delaware, and Montgomery Counties. Live schedules, brackets, champions, and member leagues." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,840 +13,120 @@
 
 <script src="config.js"></script>
 <link rel="stylesheet" href="css/styles.css" />
+
+<style>
+  .home-hero { background: linear-gradient(135deg, rgba(0,27,71,.96) 0%, rgba(0,45,114,.9) 60%, rgba(201,162,39,.22) 100%), var(--d27-navy); color: var(--d27-white); padding: var(--space-7) 0; }
+  .home-hero .eyebrow { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: var(--space-3); }
+  .home-hero h1 { color: var(--d27-white); font-size: clamp(2.4rem, 5.5vw, 3.6rem); line-height: 1.05; margin-bottom: var(--space-3); max-width: 16ch; }
+  .home-hero p { color: rgba(255,255,255,.85); font-size: var(--text-lg); max-width: 56ch; margin-bottom: var(--space-5); }
+  .home-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  .home-cta a { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; font-size: var(--text-sm); padding: 12px 24px; border-radius: 6px; text-decoration: none; transition: filter .12s ease, background .12s ease; }
+  .home-cta .primary { background: var(--gold); color: var(--d27-navy); }
+  .home-cta .primary:hover { filter: brightness(1.08); }
+  .home-cta .ghost { background: rgba(255,255,255,.1); color: var(--d27-white); border: 1.5px solid rgba(255,255,255,.4); }
+  .home-cta .ghost:hover { background: rgba(255,255,255,.18); }
+  .home-hero .counties { margin-top: var(--space-5); font-size: var(--text-sm); color: rgba(255,255,255,.7); }
+
+  .section-head { text-align: center; margin-bottom: var(--space-5); }
+  .section-head .eyebrow { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); letter-spacing: .14em; text-transform: uppercase; color: var(--d27-red); }
+  .section-head h2 { color: var(--d27-navy); margin: 4px 0 0; }
+
+  .explore { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-4); }
+  .ex-card { display: flex; flex-direction: column; gap: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: var(--space-5); text-decoration: none; color: var(--fg); transition: transform .12s ease, box-shadow .15s ease, border-color .15s ease; }
+  .ex-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: var(--d27-navy); text-decoration: none; }
+  .ex-card .ico { font-size: 2rem; }
+  .ex-card h3 { margin: 0; color: var(--d27-navy); font-size: var(--text-xl); }
+  .ex-card p { margin: 0; color: var(--muted); font-size: var(--text-sm); }
+  .ex-card .go { margin-top: auto; padding-top: 8px; font-family: 'Oswald', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .06em; color: var(--accent); }
+
+  .champ-strip { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-3); }
+  .cs-card { display: flex; align-items: center; gap: var(--space-3); background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--gold); border-radius: var(--radius); padding: var(--space-4); }
+  .cs-card .trophy { font-size: 1.6rem; }
+  .cs-card .yr { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); color: var(--muted); }
+  .cs-card .team { font-family: 'Oswald', sans-serif; font-size: var(--text-lg); font-weight: 600; color: var(--d27-navy); line-height: 1.1; }
+  .cs-card .tn { font-size: var(--text-xs); color: var(--muted); }
+  .home-section { padding: var(--space-7) 0; }
+  .home-section.alt { background: var(--d27-sub); }
+  .center-cta { text-align: center; margin-top: var(--space-5); }
+</style>
 </head>
 <body>
 
-<div class="demo-ribbon">⚠ Demo · Sample data only · Real D27 data wires in Phase 1</div>
+<div id="d27-nav"></div>
 
-<!-- Nav ------------------------------------------------------------- -->
-<nav class="nav">
-  <div class="container nav-inner">
-    <a class="nav-brand" href="index.html">
-      <span class="mark">D27</span>
-      <span class="name-block">
-        PA District 27
-        <span class="sub">Little League · Baseball &amp; Softball</span>
-      </span>
-    </a>
-    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
-    </button>
-    <ul class="nav-links">
-      <li><a href="index.html" aria-current="page">Home</a></li>
-      <li><a href="baseball.html">Baseball</a></li>
-      <li><a href="softball.html">Softball</a></li>
-      <li><a href="live-schedule.html">Schedule</a></li><li><a href="brackets.html">Brackets</a></li>
-      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
-      <li><a href="champions.html">Champions</a></li>
-      <li><a href="rules.html">Rules</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
-    </ul>
-  </div>
-</nav>
-
-<!-- Hero ------------------------------------------------------------- -->
-<header class="hero">
-  <div class="container hero-inner">
-    <div>
-      <div class="hero-eyebrow">Tournament Season · Summer 2026</div>
-      <h1>
-        10,000 players.
-        <span class="accent-line">17 tournaments.</span>
-        One District.
-      </h1>
-      <p class="lede">
-        PA District 27 provides leadership for locally chartered Little Leagues
-        across Chester, Delaware, and Montgomery counties — from 4-year-old
-        teeball through 16-year-old Senior League. Live brackets, master
-        schedule, standings, and stats in one place.
-      </p>
-      <div class="hero-stats">
-        <div class="hero-stat"><span class="n">12</span><span class="l">Member Leagues</span></div>
-        <div class="hero-stat"><span class="n">17</span><span class="l">Annual Tournaments</span></div>
-        <div class="hero-stat"><span class="n">3</span><span class="l">Counties</span></div>
-        <div class="hero-stat"><span class="n">4–16</span><span class="l">Age Range</span></div>
-      </div>
-      <div style="margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap;">
-        <a href="baseball.html" class="btn btn-primary">View Baseball Brackets</a>
-        <a href="softball.html" class="btn btn-ghost">View Softball Brackets</a>
-      </div>
+<!-- Hero -->
+<header class="home-hero">
+  <div class="container">
+    <div class="eyebrow">PA District 27 Little League</div>
+    <h1>Baseball &amp; Softball Tournaments</h1>
+    <p>Live schedules, brackets, and champions for District 27's tournament season — across Chester, Delaware, and Montgomery counties.</p>
+    <div class="home-cta">
+      <a class="primary" href="live-schedule.html">View Schedules</a>
+      <a class="ghost" href="brackets.html">View Brackets</a>
     </div>
-
-    <!-- Live-now card -->
-    <aside class="live-card" aria-label="Currently live games">
-      <div class="live-label"><span class="live-dot"></span> Live Now</div>
-      <div class="live-tournament">Bob Jones Tournament · Semifinal · Monument Ave</div>
-
-      <div class="live-game">
-        <div class="live-team">
-          Lower Perk Cubs
-          <span class="rec">3-0 · Division A</span>
-        </div>
-        <div class="live-score">4<span class="inning">Top 5</span></div>
-        <div class="live-team" style="text-align:right">
-          Chester Valley
-          <span class="rec">2-1 · Division B</span>
-        </div>
-      </div>
-
-      <div class="live-game">
-        <div class="live-team">
-          Radnor-Wayne
-          <span class="rec">2-0 · Division A</span>
-        </div>
-        <div class="live-score">—<span class="inning">7:00 PM</span></div>
-        <div class="live-team" style="text-align:right">
-          Upper Providence
-          <span class="rec">2-0 · Division B</span>
-        </div>
-      </div>
-
-      <div class="live-footer">
-        <a href="#" style="color: var(--gold); font-weight: 600;">Open live board →</a>
-      </div>
-    </aside>
+    <div class="counties">12 member leagues · Baseball &amp; Softball · Ages 8–16</div>
   </div>
 </header>
 
-<!-- News & Announcements ticker ------------------------------------- -->
-<section style="background: var(--d27-navy-dark); color: #fff; padding: 18px 0; border-bottom: 4px solid var(--d27-gold);">
-  <div class="container" style="display:flex; gap:18px; align-items:center; flex-wrap:wrap;">
-    <span style="background: var(--d27-gold); color: var(--d27-navy); padding: 4px 12px; border-radius: 4px; font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; white-space:nowrap;">📰 District News</span>
-    <div style="flex:1; display:flex; gap:24px; overflow-x:auto; font-size: 14px; min-width: 0;">
-      <a href="all-stars.html" style="color:#fff; text-decoration:none; white-space:nowrap;"><b style="color:var(--d27-gold);">★ Today:</b> 2026 All-Star rosters announced — 9 division teams →</a>
-      <a href="awards.html" style="color:#fff; text-decoration:none; white-space:nowrap;"><b style="color:var(--d27-gold);">May 1:</b> Player &amp; Coach of the Year unveiled →</a>
-      <a href="volunteer.html" style="color:#fff; text-decoration:none; white-space:nowrap;"><b style="color:var(--d27-gold);">Apr 28:</b> Bob Jones SF needs 4 scorekeepers →</a>
-      <a href="standings.html" style="color:#fff; text-decoration:none; white-space:nowrap;"><b style="color:var(--d27-gold);">Apr 26:</b> Standings updated through Week 3 →</a>
-      <a href="sponsors.html" style="color:#fff; text-decoration:none; white-space:nowrap;"><b style="color:var(--d27-gold);">Apr 22:</b> Wawa renews as Champion sponsor (14th yr) →</a>
-    </div>
-  </div>
-</section>
-
-<!-- Sitewide Search bar --------------------------------------------- -->
-<section style="background: linear-gradient(90deg, var(--d27-sub), #fff); padding: 14px 0; border-bottom: 1px solid var(--line);">
-  <div class="container" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-    <span style="font-family: var(--font-display); font-size: 13px; color: var(--muted); letter-spacing:.06em; text-transform:uppercase; white-space:nowrap;">🔍 Search D27</span>
-    <input type="text" id="d27-search" placeholder="Players, teams, coaches, fields, tournaments..." style="flex:1; padding: 10px 14px; border:1px solid var(--line); border-radius: 6px; font: inherit; font-size: 14px; min-width: 240px;" oninput="d27Search(this.value)" />
-    <span style="font-size: 12px; color: var(--muted);">e.g. "Luke DiSanto" · "Bob Jones" · "field of dreams"</span>
-    <div id="d27-search-results" style="width: 100%; display: none; background: #fff; border:1px solid var(--line); border-radius:8px; padding: 12px; margin-top: 6px; box-shadow: 0 8px 24px rgba(0,0,0,.08);"></div>
-  </div>
-</section>
-
-<!-- Field status board (live) --------------------------------------- -->
-<!--
-  Per competitive research, this is the #1 feature parents check on a
-  district site. No scouted LL district site renders field status
-  visually — most show "All fields open" in footer text or nothing. A
-  live per-league board is a D27 differentiator.
--->
-<section class="field-status">
+<!-- Explore -->
+<section class="home-section">
   <div class="container">
-    <div class="fs-head">
-      <div>
-        <span class="eyebrow">Live · District-wide</span>
-        <h2>Field Status</h2>
-      </div>
-      <div class="fs-summary">
-        <div class="open"><strong>20</strong> open</div>
-        <div class="wet"><strong>2</strong> wet</div>
-        <div class="closed"><strong>1</strong> closed</div>
-      </div>
-      <div class="fs-stamp"><span class="dot"></span>Updated 11 min ago</div>
-    </div>
-
-    <div class="fs-grid">
-
-      <div class="fs-card" data-league="berwyn-paoli">
-        <div class="fs-league"><strong>Berwyn-Paoli</strong><span class="abbr">BP</span></div>
-        <div class="fs-fields">
-          <span class="field-pill open">Field of Dreams</span>
-        </div>
-      </div>
-
-      <div class="fs-card" data-league="chester-valley">
-        <div class="fs-league"><strong>Chester Valley</strong><span class="abbr">CV</span></div>
-        <div class="fs-fields">
-          <span class="field-pill game">1st Ave · 5:30</span>
-          <span class="field-pill open">Lower</span>
-          <span class="field-pill open">Monument</span>
-        </div>
-      </div>
-
-      <div class="fs-card" data-league="coventry">
-        <div class="fs-league"><strong>Coventry</strong><span class="abbr">CO</span></div>
-        <div class="fs-fields">
-          <span class="field-pill open">Wampler Complex</span>
-        </div>
-      </div>
-
-      <div class="fs-card" data-league="devon-strafford">
-        <div class="fs-league"><strong>Devon-Strafford</strong><span class="abbr">DS</span></div>
-        <div class="fs-fields">
-          <span class="field-pill open">Clarke 1</span>
-          <span class="field-pill open">Clarke 2</span>
-          <span class="field-pill wet">VFMS</span>
-        </div>
-      </div>
-
-      <div class="fs-card" data-league="exton">
-        <div class="fs-league"><strong>Exton</strong><span class="abbr">EX</span></div>
-        <div class="fs-fields">
-          <span class="field-pill open">Ship Road</span>
-          <span class="field-pill open">Meadowbrook</span>
-        </div>
-      </div>
-
-      <div class="fs-card" data-league="great-valley">
-        <div class="fs-league"><strong>Great Valley</strong><span class="abbr">GV</span></div>
-        <div class="fs-fields">
-          <span class="field-pill open">King Road</span>
-        </div>
-      </div>
-
-      <div class="fs-card" data-league="lower-merion">
-        <div class="fs-league"><strong>Lower Merion</strong><span class="abbr">LM</span></div>
-        <div class="fs-fields">
-          <span class="field-pill open">Ashburn</span>
-          <span class="field-pill open">S. Ardmore</span>
-        </div>
-      </div>
-
-      <div class="fs-card" data-league="lower-perkiomen">
-        <div class="fs-league"><strong>Lower Perkiomen</strong><span class="abbr">LP</span></div>
-        <div class="fs-fields">
-          <span class="field-pill game">Palmer Park · 6:00</span>
-          <span class="field-pill open">Jeanne Rosset</span>
-        </div>
-      </div>
-
-      <div class="fs-card" data-league="pottsgrove">
-        <div class="fs-league"><strong>Pottsgrove</strong><span class="abbr">PG</span></div>
-        <div class="fs-fields">
-          <span class="field-pill closed">Teeball Fields</span>
-        </div>
-      </div>
-
-      <div class="fs-card" data-league="pottstown">
-        <div class="fs-league"><strong>Pottstown</strong><span class="abbr">PT</span></div>
-        <div class="fs-fields">
-          <span class="field-pill open">Manatawny Main</span>
-        </div>
-      </div>
-
-      <div class="fs-card" data-league="radnor-wayne">
-        <div class="fs-league"><strong>Radnor-Wayne</strong><span class="abbr">RW</span></div>
-        <div class="fs-fields">
-          <span class="field-pill open">Encke</span>
-          <span class="field-pill open">Radnor Elem</span>
-          <span class="field-pill wet">Valley Forge</span>
-        </div>
-      </div>
-
-      <div class="fs-card" data-league="upper-providence">
-        <div class="fs-league"><strong>Upper Providence</strong><span class="abbr">UP</span></div>
-        <div class="fs-fields">
-          <span class="field-pill open">Anderson Farm</span>
-          <span class="field-pill open">Black Rock</span>
-          <span class="field-pill open">Mill Road</span>
-        </div>
-      </div>
-
-    </div>
-
-    <div style="margin-top: var(--space-5); display: flex; gap: var(--space-3); align-items: center; justify-content: space-between; flex-wrap: wrap;">
-      <p class="text-muted" style="margin: 0; font-size: var(--text-sm);">
-        League presidents update status from their phone. Affected teams get push + SMS.
-      </p>
-      <a href="about.html#fields" class="btn btn-navy btn-sm">View full field directory</a>
+    <div class="section-head"><span class="eyebrow">Explore</span><h2>The 2026 Tournament Season</h2></div>
+    <div class="explore">
+      <a class="ex-card" href="baseball.html"><span class="ico">⚾</span><h3>Baseball</h3><p>International divisions, Special Games, Sectional &amp; State.</p><span class="go">View tournaments →</span></a>
+      <a class="ex-card" href="softball.html"><span class="ico">🥎</span><h3>Softball</h3><p>International divisions, Special Games &amp; Sectional.</p><span class="go">View tournaments →</span></a>
+      <a class="ex-card" href="live-schedule.html"><span class="ico">📅</span><h3>Schedules</h3><p>Every game, grouped by tournament and date.</p><span class="go">View schedule →</span></a>
+      <a class="ex-card" href="brackets.html"><span class="ico">🏆</span><h3>Brackets</h3><p>Live double-elimination brackets that update with scores.</p><span class="go">View brackets →</span></a>
+      <a class="ex-card" href="champions.html"><span class="ico">🥇</span><h3>Champions</h3><p>This season's titles plus the past-champions archive.</p><span class="go">View champions →</span></a>
+      <a class="ex-card" href="leagues.html"><span class="ico">📍</span><h3>Leagues &amp; Fields</h3><p>All 12 member leagues, home fields, and websites.</p><span class="go">View leagues →</span></a>
     </div>
   </div>
 </section>
 
-
-<!-- 12-league directory --------------------------------------------- -->
-<section class="section">
+<!-- Recent champions (live) -->
+<section class="home-section alt">
   <div class="container">
-    <div class="section-head">
-      <div>
-        <span class="eyebrow">Directory</span>
-        <h2>12 Member Leagues</h2>
-      </div>
-      <a href="leagues.html" class="more">Full directory →</a>
-    </div>
-
-    <div class="grid leagues">
-
-      <a href="leagues.html#berwyn-paoli" class="league-card" data-league="berwyn-paoli" data-showcase="true">
-        <div class="league-card-head">
-          <span class="league-badge">BP</span>
-          <div>
-            <h3>Berwyn-Paoli LL</h3>
-            <p class="town">Berwyn, PA · Chester</p>
-          </div>
-        </div>
-        <div class="meta">
-          <span><strong>1</strong> field</span>
-          <span>Field of Dreams</span>
-        </div>
-      </a>
-
-      <a href="leagues.html#chester-valley" class="league-card" data-league="chester-valley" data-showcase="true">
-        <div class="league-card-head">
-          <span class="league-badge">CV</span>
-          <div>
-            <h3>Chester Valley LL</h3>
-            <p class="town">Malvern, PA · Chester</p>
-          </div>
-        </div>
-        <div class="meta">
-          <span><strong>3</strong> fields</span>
-          <span>Hosts S8-BB-JR</span>
-        </div>
-      </a>
-
-      <a href="leagues.html#coventry" class="league-card" data-league="coventry">
-        <div class="league-card-head">
-          <span class="league-badge">CO</span>
-          <div>
-            <h3>Coventry LL</h3>
-            <p class="town">Pottstown, PA · Chester</p>
-          </div>
-        </div>
-        <div class="meta">
-          <span><strong>1</strong> field</span>
-          <span>Wampler Complex</span>
-        </div>
-      </a>
-
-      <a href="leagues.html#devon-strafford" class="league-card" data-league="devon-strafford">
-        <div class="league-card-head">
-          <span class="league-badge">DS</span>
-          <div>
-            <h3>Devon-Strafford LL</h3>
-            <p class="town">Berwyn, PA · Chester</p>
-          </div>
-        </div>
-        <div class="meta">
-          <span><strong>3</strong> fields</span>
-          <span>Clarke · VFMS</span>
-        </div>
-      </a>
-
-      <a href="leagues.html#exton" class="league-card" data-league="exton">
-        <div class="league-card-head">
-          <span class="league-badge">EX</span>
-          <div>
-            <h3>Exton LL</h3>
-            <p class="town">Exton, PA · Chester</p>
-          </div>
-        </div>
-        <div class="meta">
-          <span><strong>2</strong> fields</span>
-          <span>Ship Road · Meadowbrook</span>
-        </div>
-      </a>
-
-      <a href="leagues.html#great-valley" class="league-card" data-league="great-valley">
-        <div class="league-card-head">
-          <span class="league-badge">GV</span>
-          <div>
-            <h3>Great Valley LL</h3>
-            <p class="town">Malvern, PA · Chester</p>
-          </div>
-        </div>
-        <div class="meta">
-          <span><strong>1</strong> complex</span>
-          <span>King Road</span>
-        </div>
-      </a>
-
-      <a href="leagues.html#lower-merion" class="league-card" data-league="lower-merion">
-        <div class="league-card-head">
-          <span class="league-badge">LM</span>
-          <div>
-            <h3>Lower Merion LL</h3>
-            <p class="town">Gladwyne, PA · Montgomery</p>
-          </div>
-        </div>
-        <div class="meta">
-          <span><strong>2</strong> fields</span>
-          <span>2025 BB-INT Champs</span>
-        </div>
-      </a>
-
-      <a href="leagues.html#lower-perkiomen" class="league-card" data-league="lower-perkiomen">
-        <div class="league-card-head">
-          <span class="league-badge">LP</span>
-          <div>
-            <h3>Lower Perkiomen LL</h3>
-            <p class="town">Collegeville, PA · Montgomery</p>
-          </div>
-        </div>
-        <div class="meta">
-          <span><strong>2</strong> fields</span>
-          <span>2025 SB-12 Champs</span>
-        </div>
-      </a>
-
-      <a href="leagues.html#pottsgrove" class="league-card" data-league="pottsgrove">
-        <div class="league-card-head">
-          <span class="league-badge">PG</span>
-          <div>
-            <h3>Pottsgrove LL</h3>
-            <p class="town">Pottstown, PA · Montgomery</p>
-          </div>
-        </div>
-        <div class="meta">
-          <span><strong>1</strong> complex</span>
-          <span>Pleasantview Rd</span>
-        </div>
-      </a>
-
-      <a href="leagues.html#pottstown" class="league-card" data-league="pottstown">
-        <div class="league-card-head">
-          <span class="league-badge">PT</span>
-          <div>
-            <h3>Pottstown LL</h3>
-            <p class="town">Pottstown, PA · Montgomery</p>
-          </div>
-        </div>
-        <div class="meta">
-          <span><strong>1</strong> complex</span>
-          <span>Manatawny St</span>
-        </div>
-      </a>
-
-      <a href="leagues.html#radnor-wayne" class="league-card" data-league="radnor-wayne">
-        <div class="league-card-head">
-          <span class="league-badge">RW</span>
-          <div>
-            <h3>Radnor-Wayne LL</h3>
-            <p class="town">Wayne, PA · Delaware</p>
-          </div>
-        </div>
-        <div class="meta">
-          <span>Multiple fields</span>
-          <span>2024 SB-11 Champs</span>
-        </div>
-      </a>
-
-      <a href="leagues.html#upper-providence" class="league-card" data-league="upper-providence">
-        <div class="league-card-head">
-          <span class="league-badge">UP</span>
-          <div>
-            <h3>Upper Providence LL</h3>
-            <p class="town">Upper Providence · Montgomery</p>
-          </div>
-        </div>
-        <div class="meta">
-          <span>Multiple fields</span>
-          <span>2021 Mid-Atlantic Champs</span>
-        </div>
-      </a>
-
-    </div>
+    <div class="section-head"><span class="eyebrow">District 27</span><h2>Recent Champions</h2></div>
+    <div class="champ-strip" id="recentChamps"><div style="text-align:center;color:var(--muted);grid-column:1/-1">Loading…</div></div>
+    <div class="center-cta"><a class="home-cta primary" style="display:inline-block;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.05em;font-weight:600;font-size:var(--text-sm);padding:12px 24px;border-radius:6px;text-decoration:none;background:var(--d27-navy);color:#fff" href="champions.html">All Champions →</a></div>
   </div>
 </section>
 
-<!-- News & Announcements -->
-<section class="section" style="background: var(--surface);">
-  <div class="container">
-    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 22px; flex-wrap:wrap; gap:10px; padding-bottom: 12px; border-bottom: 2px solid var(--line);">
-      <div>
-        <span style="color: var(--d27-red); font-family: var(--font-display); letter-spacing:.14em; font-size:13px; font-weight:600;">DISTRICT 27 NEWS</span>
-        <h2 style="font-family: var(--font-display); margin: 4px 0 0; font-size: 32px;">Latest Announcements</h2>
-      </div>
-      <a href="#" style="color: var(--d27-navy); font-weight: 600; font-size: 14px; text-decoration: none;">View archive →</a>
-    </div>
+<div id="d27-footer"></div>
 
-    <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap: 18px;">
-      <article style="background:#fff; border:1px solid var(--line); border-radius: 8px; overflow:hidden;">
-        <div style="background: linear-gradient(135deg, var(--d27-navy), var(--d27-navy-dark)); height: 200px; display:flex; align-items:flex-end; padding: 18px; position: relative;">
-          <span style="position:absolute; top: 14px; left: 14px; background: var(--d27-gold); color: var(--d27-navy); padding:3px 10px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing:.04em; text-transform:uppercase;">Featured</span>
-          <h3 style="color:#fff; font-family: var(--font-display); margin: 0; font-size: 24px; max-width: 80%;">2026 D27 All-Star rosters announced — 9 division teams, 116 players</h3>
-        </div>
-        <div style="padding: 18px;">
-          <div style="color: var(--muted); font-size: 12px; letter-spacing:.06em; text-transform:uppercase; margin-bottom: 8px;">May 4 · DA Jeff Bennett</div>
-          <p style="margin:0 0 12px; color: var(--d27-ink); line-height: 1.6;">All twelve member leagues have submitted their All-Star selections for the summer tournament path. Berwyn-Paoli returns as 12U defending champ. Radnor-Wayne sweeps three age divisions for the first time since 2019. Section 8 opens July 6 in Springfield.</p>
-          <a href="all-stars.html" style="color: var(--d27-navy); font-weight: 600; text-decoration: none;">Read full announcement →</a>
-        </div>
-      </article>
-
-      <article style="background:#fff; border:1px solid var(--line); border-radius: 8px; padding: 18px;">
-        <span style="background: rgba(218,41,28,.1); color: var(--d27-red); padding:3px 10px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing:.04em; text-transform:uppercase; display:inline-block; margin-bottom:10px;">Awards</span>
-        <h3 style="font-family: var(--font-display); margin: 0 0 8px; font-size: 18px;">Player &amp; Coach of the Year unveiled at District banquet</h3>
-        <div style="color: var(--muted); font-size: 12px; margin-bottom: 8px;">May 1</div>
-        <p style="margin:0 0 12px; color: var(--d27-ink); font-size: 14px; line-height: 1.55;">Luke DiSanto (BP) and Tom Caldwell (BP) headline the 2026 honor list. Pottstown 12U claims its third Sportsmanship Award.</p>
-        <a href="awards.html" style="color: var(--d27-navy); font-weight: 600; font-size: 13px; text-decoration: none;">See all winners →</a>
-      </article>
-
-      <article style="background:#fff; border:1px solid var(--line); border-radius: 8px; padding: 18px;">
-        <span style="background: rgba(201,162,39,.18); color: #B45309; padding:3px 10px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing:.04em; text-transform:uppercase; display:inline-block; margin-bottom:10px;">Volunteers</span>
-        <h3 style="font-family: var(--font-display); margin: 0 0 8px; font-size: 18px;">Bob Jones SF needs 4 scorekeepers on June 24</h3>
-        <div style="color: var(--muted); font-size: 12px; margin-bottom: 8px;">Apr 28</div>
-        <p style="margin:0 0 12px; color: var(--d27-ink); font-size: 14px; line-height: 1.55;">High-school students earn verified volunteer hours. GameChanger or paper book — we'll train. ~4 hours, lunch covered.</p>
-        <a href="volunteer.html" style="color: var(--d27-navy); font-weight: 600; font-size: 13px; text-decoration: none;">Sign up →</a>
-      </article>
-    </div>
-
-    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 18px;">
-      <a href="standings.html" style="background:#fff; border:1px solid var(--line); border-radius: 6px; padding: 12px 14px; text-decoration: none; color: var(--d27-ink);">
-        <div style="color: var(--muted); font-size:11px; letter-spacing:.06em; text-transform:uppercase;">Apr 26</div>
-        <div style="font-weight:700; margin-top:2px;">Week 3 standings published →</div>
-      </a>
-      <a href="sponsors.html" style="background:#fff; border:1px solid var(--line); border-radius: 6px; padding: 12px 14px; text-decoration: none; color: var(--d27-ink);">
-        <div style="color: var(--muted); font-size:11px; letter-spacing:.06em; text-transform:uppercase;">Apr 22</div>
-        <div style="font-weight:700; margin-top:2px;">Wawa renews Champion sponsorship →</div>
-      </a>
-      <a href="pitch-count.html" style="background:#fff; border:1px solid var(--line); border-radius: 6px; padding: 12px 14px; text-decoration: none; color: var(--d27-ink);">
-        <div style="color: var(--muted); font-size:11px; letter-spacing:.06em; text-transform:uppercase;">Apr 18</div>
-        <div style="font-weight:700; margin-top:2px;">Pitch-count compliance dashboard live →</div>
-      </a>
-      <a href="scholarship.html" style="background:#fff; border:1px solid var(--line); border-radius: 6px; padding: 12px 14px; text-decoration: none; color: var(--d27-ink);">
-        <div style="color: var(--muted); font-size:11px; letter-spacing:.06em; text-transform:uppercase;">Apr 14</div>
-        <div style="font-weight:700; margin-top:2px;">Scott Scholarship now accepting →</div>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- Recent champions ------------------------------------------------- -->
-<section class="section" style="background: var(--d27-sub);">
-  <div class="container">
-    <div class="section-head">
-      <div>
-        <span class="eyebrow">2025 Season Recap</span>
-        <h2>Recent Champions</h2>
-      </div>
-      <a href="champions.html" class="more">Full archive →</a>
-    </div>
-
-    <div class="champ-row">
-
-      <div class="champ-card">
-        <span class="champ-trophy">🏆</span>
-        <div>
-          <span class="champ-tournament">SB-12 Championship · 10-11-12 YO Softball</span>
-          <span class="champ-team">Lower Perkiomen LL</span>
-        </div>
-        <div class="champ-meta">
-          <span class="champ-year">2025</span><br>
-          <span class="badge int">International</span>
-        </div>
-      </div>
-
-      <div class="champ-card">
-        <span class="champ-trophy">🏆</span>
-        <div>
-          <span class="champ-tournament">SB Majors · Bob Jones Tournament</span>
-          <span class="champ-team">Lower Perk Gators</span>
-        </div>
-        <div class="champ-meta">
-          <span class="champ-year">2025</span><br>
-          <span class="badge special">Special Games</span>
-        </div>
-      </div>
-
-      <div class="champ-card">
-        <span class="champ-trophy">🏆</span>
-        <div>
-          <span class="champ-tournament">BB-INT Championship · Intermediate 50/70</span>
-          <span class="champ-team">Lower Merion LL</span>
-        </div>
-        <div class="champ-meta">
-          <span class="champ-year">2025</span><br>
-          <span class="badge int">International</span>
-        </div>
-      </div>
-
-      <div class="champ-card">
-        <span class="champ-trophy">🏆</span>
-        <div>
-          <span class="champ-tournament">Bob Jones Tournament · 11-12 YO Majors</span>
-          <span class="champ-team">Chester Valley LL</span>
-        </div>
-        <div class="champ-meta">
-          <span class="champ-year">2024</span><br>
-          <span class="text-muted" style="font-size: var(--text-xs);">def. Lower Perk, 17-15</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- News / announcements -------------------------------------------- -->
-<section class="section">
-  <div class="container" style="display: grid; grid-template-columns: 2fr 1fr; gap: 48px;">
-    <div>
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">Announcements</span>
-          <h2>District News</h2>
-        </div>
-        <a href="#" class="more">All news →</a>
-      </div>
-
-      <div class="news-item">
-        <div class="news-date"><span class="m">Apr</span><span class="d">22</span></div>
-        <div class="news-body">
-          <span class="news-tag schedule">Schedule</span>
-          <h4>Bob Jones Tournament brackets released</h4>
-          <p>Pool play begins June 16. Single-elimination bracket for regular-season Majors teams — each league enters 1-2 teams. View the full bracket and pool assignments.</p>
-        </div>
-      </div>
-
-      <div class="news-item">
-        <div class="news-date"><span class="m">Apr</span><span class="d">19</span></div>
-        <div class="news-body">
-          <span class="news-tag results">Results</span>
-          <h4>Spring exhibition season wraps across all 12 leagues</h4>
-          <p>Regular-season play continues through mid-June before the District 27 tournament window opens. Age charts for the 2026 season are posted on the Rules page.</p>
-        </div>
-      </div>
-
-      <div class="news-item">
-        <div class="news-date"><span class="m">Apr</span><span class="d">14</span></div>
-        <div class="news-body">
-          <span class="news-tag champion">Champion</span>
-          <h4>Lower Perk banners unveiled: 2025 SB-12 &amp; SB Majors</h4>
-          <p>Back-to-back softball titles for Lower Perkiomen. Banner ceremony at Palmer Park opened the 2026 regular season.</p>
-        </div>
-      </div>
-
-      <div class="news-item">
-        <div class="news-date"><span class="m">Apr</span><span class="d">08</span></div>
-        <div class="news-body">
-          <span class="news-tag weather">Weather</span>
-          <h4>Opening day rainout — make-up dates posted</h4>
-          <p>Weather-forced rescheduling for 6 fields. All affected teams have been notified via the app and all make-ups are on the master schedule.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Side rail: tournaments, scholarship CTA -->
-    <aside>
-      <div class="card mb-5">
-        <div class="card-head">
-          <h3 style="margin:0">Upcoming Tournaments</h3>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-          <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line);">
-            <div>
-              <strong>Bob Jones</strong><br>
-              <span class="text-muted" style="font-size: var(--text-sm);">11-12 YO Majors · Single elim</span>
-            </div>
-            <span class="badge special">Jun 16</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line);">
-            <div>
-              <strong>BB-10 Pappy Patton</strong><br>
-              <span class="text-muted" style="font-size: var(--text-sm);">8-9-10 YO Baseball</span>
-            </div>
-            <span class="badge int">Jun 23</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line);">
-            <div>
-              <strong>SB-12</strong><br>
-              <span class="text-muted" style="font-size: var(--text-sm);">10-11-12 YO Softball</span>
-            </div>
-            <span class="badge int">Jun 23</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; padding: 10px 0;">
-            <div>
-              <strong>John Klein</strong><br>
-              <span class="text-muted" style="font-size: var(--text-sm);">11-12 YO Invitational</span>
-            </div>
-            <span class="badge special">Jul 07</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="age-widget mb-5">
-        <span class="eyebrow">Division Lookup</span>
-        <h3>Age Eligibility Calculator</h3>
-        <p>Enter a player's date of birth — get the Little League division for the 2026 season.</p>
-        <div class="ac-row">
-          <input type="date" id="ac-dob" max="2022-12-31" />
-          <button class="ac-btn" onclick="calculateDivision()">Check</button>
-        </div>
-        <div class="ac-result" id="ac-result">
-          <span style="color: rgba(255,255,255,.5); font-size: var(--text-xs);">Enter a date to see division + eligible tournaments.</span>
-        </div>
-      </div>
-
-      <div class="card" style="background: var(--d27-navy); color: var(--d27-white); border: 0;">
-        <span class="eyebrow" style="color: var(--gold);">Since 2005</span>
-        <h3 style="color: var(--d27-white); margin: 8px 0 12px;">Scott Scholarship</h3>
-        <p style="color: rgba(255,255,255,.8); font-size: var(--text-sm);">
-          Two $1,000 scholarships awarded each October — one baseball, one softball — to D27 alumni pursuing higher education. Established in honor of Laura &amp; Van Scott.
-        </p>
-        <a href="scholarship.html" class="btn btn-primary btn-sm">Learn more</a>
-      </div>
-    </aside>
-
-  </div>
-</section>
-
-
-<!-- Footer ----------------------------------------------------------- -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <h5>PA District 27 Little League</h5>
-        <p style="color: rgba(255,255,255,.7); max-width: 48ch;">
-          Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties. One team. One Little League.
-        </p>
-        <p style="color: rgba(255,255,255,.55); font-size: var(--text-xs); margin-top: 12px;">
-          Jeff Bennett — District Administrator<br>
-          <a href="mailto:jeffbennett.d27@gmail.com">jeffbennett.d27@gmail.com</a>
-        </p>
-      </div>
-
-      <div>
-        <h5>Tournaments</h5>
-        <ul>
-          <li><a href="baseball.html">Baseball (11)</a></li>
-          <li><a href="softball.html">Softball (6)</a></li>
-          <li><a href="champions.html">Champions Archive</a></li>
-          <li><a href="schedule.html">Master Schedule</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h5>Resources</h5>
-        <ul>
-          <li><a href="rules.html">Rules &amp; Guidelines</a></li>
-          <li><a href="scholarship.html">Scott Scholarship</a></li>
-          <li><a href="about.html#history">History</a></li>
-          <li><a href="about.html#fields">Field Directory</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h5>Connect</h5>
-        <ul>
-          <li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li>
-          <li><a href="contact.html">Contact D27</a></li>
-          <li><a href="about.html">About</a></li>
-      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
-          <li><a href="admin.html">Admin</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <div>
-        © 2026 PA District 27 Little League. All rights reserved.
-      </div>
-      <div>
-        <span class="credit">Built by Mainline Web Design · Adam Miller</span>
-      </div>
-    </div>
-  </div>
-</footer>
-
+<script src="js/d27-data.js"></script>
+<script src="js/d27-bracket.js"></script>
+<script src="js/d27-chrome.js"></script>
 <script>
-  // ─ Sitewide Search (demo) ──────────────────────────────────────────
-  const D27_SEARCH_INDEX = [
-    { t: 'Luke DiSanto', s: 'Player · #1 SS/P · Berwyn-Paoli 12U Red · .412 BA', u: 'player.html', icon: '👤' },
-    { t: 'Tom Caldwell', s: 'Coach · Berwyn-Paoli 12U Red · 2026 Coach of the Year', u: 'captain.html', icon: '🎓' },
-    { t: 'Miles Hartley', s: 'Player · #2 P/SS · Radnor-Wayne Maroon · .378 BA', u: 'all-stars.html', icon: '👤' },
-    { t: 'Jaxon Ruiz', s: 'Player · #1 SS · Chester Valley Maroon · .402 BA', u: 'chester-valley.html', icon: '👤' },
-    { t: 'Berwyn-Paoli LL', s: 'League · 642 players · 48 teams · Field of Dreams', u: 'league-detail.html', icon: '🏟️' },
-    { t: 'Radnor-Wayne LL', s: 'League · 582 players · 42 teams · Ricketts Complex', u: 'radnor-wayne.html', icon: '🏟️' },
-    { t: 'Chester Valley LL', s: 'League · 448 players · 32 teams · CV Complex', u: 'chester-valley.html', icon: '🏟️' },
-    { t: 'Bob Jones Tournament 2026', s: 'Tournament · 12U · 16 teams · Jun 14–28', u: 'tournament.html', icon: '🏆' },
-    { t: 'Pappy Patton Tournament', s: 'Tournament · 10U · BB-10', u: 'baseball.html', icon: '🏆' },
-    { t: 'Field of Dreams', s: 'Field · BP home · 4 fields · open', u: 'fields.html', icon: '📍' },
-    { t: 'Monument Avenue', s: 'Field · Great Valley home · wet · AM inspect', u: 'fields.html', icon: '📍' },
-    { t: 'Ricketts Sports Complex', s: 'Field · Radnor-Wayne home · 4 fields · open', u: 'fields.html', icon: '📍' },
-    { t: 'Pitch Count Compliance', s: 'Operations · Auto-tracked Little League pitch limits', u: 'pitch-count.html', icon: '⚾' },
-    { t: 'Coach Certification', s: 'Operations · 237 coaches tracked · 5 lapsed', u: 'coaches.html', icon: '🎓' },
-    { t: 'District Standings', s: 'Standings · all 12 leagues · all divisions', u: 'standings.html', icon: '📈' },
-    { t: 'All-Star Teams', s: '2026 D27 All-Star roster announcements', u: 'all-stars.html', icon: '⭐' },
-    { t: 'Awards & Honors', s: 'Player/Coach of the Year, Sportsmanship, Volunteer awards', u: 'awards.html', icon: '🏆' },
-    { t: 'Sponsors', s: '87 active sponsors · $214K raised · become a 2027 sponsor', u: 'sponsors.html', icon: '💼' },
-    { t: 'Volunteer Sign-up', s: 'Open roles · scorekeepers · field crew · umpires', u: 'volunteer.html', icon: '🙋' },
-    { t: 'Scott Memorial Scholarship', s: '$214K awarded since 2008 · apply by Jun 1', u: 'scholarship.html', icon: '🎓' },
-    { t: 'Umpire Portal', s: 'Operations · 42 active umpires · availability + assignments', u: 'umpires.html', icon: '🧑‍⚖️' },
-    { t: 'Master Schedule', s: 'All games across all leagues and tournaments', u: 'schedule.html', icon: '📅' },
-    { t: 'Champions Archive', s: 'Past D27 tournament winners 2008–present', u: 'champions.html', icon: '🏆' },
-    { t: 'Rules & Guidelines', s: 'D27 tournament rules · LL rulebook · pitch limits', u: 'rules.html', icon: '📖' },
-    { t: 'Jeff Bennett', s: 'D27 District Administrator', u: 'about.html', icon: '👤' },
-    { t: 'About D27', s: 'History · leadership · field directory', u: 'about.html', icon: 'ℹ️' },
-    { t: 'Stats Leaderboard', s: '.498 BA, 51 K, top hitters and pitchers across district', u: 'stats.html', icon: '📊' },
-    { t: 'Photos & Memories', s: 'Bob Jones, Opening Day, Banquets — 1,420+ photos', u: 'photos.html', icon: '📸' },
-    { t: 'League President Portal', s: 'Single-league dashboard for the 12 league presidents', u: 'president.html', icon: '🏛' },
-    { t: 'Equipment Exchange', s: '42 items · gloves, bats, cleats, helmets · free or low-cost', u: 'equipment.html', icon: '🧤' },
-    { t: 'Tryouts & Registration', s: 'Spring 2027 master calendar · all 12 leagues', u: 'tryouts.html', icon: '🏟' },
-    { t: 'Snack Bar Schedule', s: 'Sign up for shifts · tips fund Scott Scholarship', u: 'snack-bar.html', icon: '🥨' },
-    { t: 'Treasury', s: 'Per-league budget tracking · sponsor funding · audit trail', u: 'treasury.html', icon: '💰' },
-    { t: 'D27 Swag Store', s: 'Tees, hats, hoodies · 50/50 profit split league + scholarship', u: 'store.html', icon: '🛒' },
-    { t: 'Auth Flow Mock', s: 'Phase 1 · Firebase magic-link login preview', u: 'auth.html', icon: '🔐' },
-    { t: 'Spring Registration', s: 'Phase 1 · Stripe checkout for spring 2027 signup', u: 'registration.html', icon: '📝' },
-    { t: 'GameChanger Import', s: 'Phase 1 · captain drops PDF, system parses + publishes', u: 'gamechanger-import.html', icon: '⚾' },
-    { t: 'Sports Connect Sync', s: 'Phase 1 · nightly roster sync from SC', u: 'sc-sync.html', icon: '🔄' },
-    { t: 'Live Scoring Console', s: 'Phase 2 · pitch-by-pitch real-time scoring', u: 'live-scoring.html', icon: '🟢' },
-    { t: 'Push Notifications', s: 'Phase 2 · live game alerts to parents in &lt; 2 sec', u: 'push-demo.html', icon: '📱' },
-    { t: 'Sponsor ROI Dashboard', s: 'Phase 3 · what Wawa sees · CPM vs other channels', u: 'sponsor-roi.html', icon: '📈' },
-    { t: 'Hall of Fame', s: 'Class of 2026 inductees · 87 honorees since 1990', u: 'hall-of-fame.html', icon: '⭐' },
-    { t: '2026 Annual Impact Report', s: 'Printable · numbers, stories, finances, donor wall', u: 'annual-report.html', icon: '📊' },
-    { t: 'Safety & EAP', s: 'Per-field Emergency Action Plans · concussion · heat · lightning', u: 'safety.html', icon: '🚨' },
-    { t: 'Newsletter Builder', s: 'Phase 3 · auto-built D27 weekly digest · drag-drop blocks', u: 'newsletter.html', icon: '📧' },
-  ];
-  function d27Search(q) {
-    const out = document.getElementById('d27-search-results');
-    if (!q || q.length < 2) { out.style.display = 'none'; return; }
-    const ql = q.toLowerCase();
-    const hits = D27_SEARCH_INDEX.filter(r => (r.t + ' ' + r.s).toLowerCase().includes(ql)).slice(0, 8);
-    if (!hits.length) { out.innerHTML = '<div style="color:var(--muted); font-size:13px; padding: 8px;">No matches. Try a player name, team, league, or tournament.</div>'; out.style.display = 'block'; return; }
-    out.innerHTML = hits.map(r => '<a href="' + r.u + '" style="display:flex; gap:10px; align-items:center; padding: 8px 10px; border-radius:5px; text-decoration:none; color:var(--d27-ink);" onmouseenter="this.style.background=\'var(--d27-sub)\';" onmouseleave="this.style.background=\'transparent\';"><span style="font-size:18px;">' + r.icon + '</span><span><b style="color:var(--d27-navy);">' + r.t + '</b><br><span style="color:var(--muted); font-size:12px;">' + r.s + '</span></span></a>').join('');
-    out.style.display = 'block';
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function csCard(yr, c){
+    return '<div class="cs-card"><span class="trophy">🏆</span><div>' +
+      '<div class="yr">' + esc(yr) + (c.sport ? ' · ' + esc(c.sport) : '') + '</div>' +
+      '<div class="team">' + esc(c.team) + '</div>' +
+      '<div class="tn">' + esc(c.tournament) + '</div></div></div>';
   }
-
-  // ─ Age Eligibility Calculator ──────────────────────────────────────
-  // Little League "age" is the player's age on August 31 of the season
-  // year (all LL divisions use this cutoff since 2018). Returns the
-  // division + eligible D27 tournaments for 2026.
-  function calculateDivision() {
-    const dob = document.getElementById('ac-dob').value;
-    const out = document.getElementById('ac-result');
-    if (!dob) {
-      out.innerHTML = '<span style="color:#FCA5A5;font-size:var(--text-sm);">Please pick a date of birth.</span>';
-      return;
-    }
-    const birth = new Date(dob + 'T00:00:00');
-    const cutoff = new Date('2026-08-31T00:00:00');
-    let age = cutoff.getFullYear() - birth.getFullYear();
-    const m = cutoff.getMonth() - birth.getMonth();
-    if (m < 0 || (m === 0 && cutoff.getDate() < birth.getDate())) age--;
-
-    let division, tournaments;
-    if (age < 4)       { division = 'Not yet eligible'; tournaments = []; }
-    else if (age <= 6) { division = 'Tee Ball'; tournaments = []; }
-    else if (age === 7){ division = 'Minor League'; tournaments = []; }
-    else if (age === 8){ division = 'Minor / Majors'; tournaments = ['BB-9','BB-10 (Pappy Patton)','SB-10']; }
-    else if (age === 9){ division = 'Minor / Majors'; tournaments = ['BB-9','BB-10 (Pappy Patton)','BB-11','SB-10','SB-11']; }
-    else if (age === 10){division = 'Major League';  tournaments = ['BB-10 (Pappy Patton)','BB-11','BB-12','Bennett','SB-10','SB-11','SB-12']; }
-    else if (age === 11){division = 'Major League';  tournaments = ['BB-11','BB-12','Bob Jones','John Klein','BB-INT','SB-11','SB-12','SB Majors (Bob Jones)']; }
-    else if (age === 12){division = 'Major League';  tournaments = ['BB-12','Bob Jones','John Klein','BB-INT','BB-JR','SB-12','SB Majors','SB-JR']; }
-    else if (age === 13){division = 'Intermediate / Junior'; tournaments = ['BB-INT','BB-JR','BB-SR','SB-JR','SB-SR']; }
-    else if (age === 14){division = 'Junior League'; tournaments = ['BB-JR','BB-SR','SB-JR','SB-SR']; }
-    else if (age <= 16){ division = 'Senior League'; tournaments = ['BB-SR','SB-SR']; }
-    else               { division = 'Aged out of Little League'; tournaments = []; }
-
-    const tstr = tournaments.length
-      ? '<div style="margin-top:8px;font-size:var(--text-xs);color:rgba(255,255,255,.7);">Eligible tournaments: ' +
-          tournaments.map(t => '<span class="badge" style="background:rgba(255,255,255,.1);color:#fff;margin:2px 4px 0 0;">' + t + '</span>').join('') +
-        '</div>'
-      : '';
-    out.innerHTML = '<span class="division">' + division + '</span>' +
-      '<span style="font-size:var(--text-xs);color:rgba(255,255,255,.65);">League age ' + age + ' for 2026 season</span>' + tstr;
-  }
+  (async function(){
+    var el = document.getElementById('recentChamps');
+    var items = [];
+    // Live current-season champions first
+    try {
+      var data = await window.D27loadSchedules();
+      (data.tournaments || []).forEach(function(t){
+        try { var ch = window.D27bracket.championOutcome(t, window.D27bracket.classify(t)).champion;
+          if (ch) items.push(['2026', { sport: t.sport, team: ch, tournament: t.name }]); } catch(e){}
+      });
+    } catch(e){}
+    // Fill out with the most recent archive year
+    try {
+      var res = await fetch('data/champions-history.json');
+      var hist = await res.json();
+      (hist.years || []).forEach(function(y){
+        (y.champions || []).forEach(function(c){ items.push([String(y.year), c]); });
+      });
+    } catch(e){}
+    el.innerHTML = items.slice(0, 6).map(function(p){ return csCard(p[0], p[1]); }).join('') ||
+      '<div style="text-align:center;color:var(--muted);grid-column:1/-1">Champions will appear here as tournaments finish.</div>';
+  })();
 </script>
 
 </body>

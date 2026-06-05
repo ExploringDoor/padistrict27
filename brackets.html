@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/styles.css" />
 <script src="js/d27-data.js"></script>
+<script src="js/d27-chrome.js"></script>
 <style>
   body { background: var(--d27-paper); }
 
@@ -124,25 +125,7 @@
 </head>
 <body>
 
-<div class="demo-ribbon">⚠ Demo · Sample data only · Real D27 data wires in Phase 1</div>
-
-<nav class="nav">
-  <div class="container nav-inner">
-    <a class="nav-brand" href="index.html"><span class="mark">D27</span><span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>
-    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="baseball.html">Baseball</a></li>
-      <li><a href="softball.html">Softball</a></li>
-      <li><a href="live-schedule.html">Schedule</a></li>
-      <li><a href="brackets.html" aria-current="page">Brackets</a></li>
-      <li><a href="leagues.html">Leagues</a></li>
-      <li><a href="champions.html">Champions</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
-    </ul>
-  </div>
-</nav>
+<div id="d27-nav"></div>
 
 <div class="bk-bar">
   <div class="container">
@@ -162,17 +145,7 @@
   <div class="bk-note"><b>Live bracket.</b> When a score is entered, the winner advances automatically — “Winner of Game 5” becomes the actual team, and the line carries them to the next round.</div>
 </main>
 
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div><h5>PA District 27 Little League</h5><p style="color: rgba(255,255,255,.7); max-width: 48ch;">Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties.</p></div>
-      <div><h5>Tournaments</h5><ul><li><a href="live-schedule.html">Schedules</a></li><li><a href="brackets.html">Brackets</a></li><li><a href="champions.html">Champions</a></li></ul></div>
-      <div><h5>Resources</h5><ul><li><a href="rules.html">Rules</a></li><li><a href="leagues.html">Leagues</a></li><li><a href="about.html">About</a></li></ul></div>
-      <div><h5>Connect</h5><ul><li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li><li><a href="login.html">Sign In</a></li></ul></div>
-    </div>
-    <div class="footer-bottom"><div>© 2026 PA District 27 Little League.</div><div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div></div>
-  </div>
-</footer>
+<div id="d27-footer"></div>
 
 <script>
 let DATA = null;

@@ -175,32 +175,7 @@
 </head>
 <body>
 
-<!-- Nav ------------------------------------------------------------- -->
-<nav class="nav">
-  <div class="container nav-inner">
-    <a class="nav-brand" href="index.html">
-      <span class="mark">D27</span>
-      <span class="name-block">
-        PA District 27
-        <span class="sub">Little League · Baseball &amp; Softball</span>
-      </span>
-    </a>
-    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
-    </button>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="baseball.html">Baseball</a></li>
-      <li><a href="softball.html" aria-current="page">Softball</a></li>
-      <li><a href="live-schedule.html">Schedule</a></li><li><a href="brackets.html">Brackets</a></li>
-      <li><a href="leagues.html">Leagues</a></li><li><a href="standings.html">Standings</a></li>
-      <li><a href="champions.html">Champions</a></li>
-      <li><a href="rules.html">Rules</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
-    </ul>
-  </div>
-</nav>
+<div id="d27-nav"></div>
 
 <!-- Hub hero --------------------------------------------------------- -->
 <header class="hub-hero">
@@ -223,59 +198,12 @@
   <div class="hub-loading">Loading tournaments…</div>
 </main>
 
-<!-- Footer ----------------------------------------------------------- -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <h5>PA District 27 Little League</h5>
-        <p style="color: rgba(255,255,255,.7); max-width: 48ch;">
-          Leadership and guidance to locally chartered Little Leagues across Chester, Delaware, and Montgomery counties. One team. One Little League.
-        </p>
-        <p style="color: rgba(255,255,255,.55); font-size: var(--text-xs); margin-top: 12px;">
-          Jeff Bennett — District Administrator<br>
-          <a href="mailto:jeffbennett.d27@gmail.com">jeffbennett.d27@gmail.com</a>
-        </p>
-      </div>
-      <div>
-        <h5>Tournaments</h5>
-        <ul>
-          <li><a href="baseball.html">Baseball</a></li>
-          <li><a href="softball.html">Softball</a></li>
-          <li><a href="champions.html">Champions Archive</a></li>
-          <li><a href="live-schedule.html">Master Schedule</a></li>
-        </ul>
-      </div>
-      <div>
-        <h5>Resources</h5>
-        <ul>
-          <li><a href="rules.html">Rules &amp; Guidelines</a></li>
-          <li><a href="scholarship.html">Scott Scholarship</a></li>
-          <li><a href="about.html#history">History</a></li>
-          <li><a href="about.html#fields">Field Directory</a></li>
-        </ul>
-      </div>
-      <div>
-        <h5>Connect</h5>
-        <ul>
-          <li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li>
-          <li><a href="contact.html">Contact D27</a></li>
-          <li><a href="about.html">About</a></li>
-      <li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>
-          <li><a href="admin.html">Admin</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <div>© 2026 PA District 27 Little League. All rights reserved.</div>
-      <div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div>
-    </div>
-  </div>
-</footer>
+<div id="d27-footer"></div>
 
 <script src="js/d27-data.js"></script>
 <script src="js/d27-bracket.js"></script>
 <script src="js/d27-hub.js"></script>
+<script src="js/d27-chrome.js"></script>
 <script>
   D27renderHub({
     sport: 'Softball',
