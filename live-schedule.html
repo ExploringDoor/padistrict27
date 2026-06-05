@@ -38,6 +38,11 @@
 
   /* Tournament block */
   .ls-tourney { margin-bottom: 28px; }
+  .ls-champion { display: flex; align-items: center; gap: 16px; background: linear-gradient(120deg, #C9A227, #EBCB5E 45%, #C9A227); color: var(--d27-navy); border-radius: 12px; padding: 14px 22px; margin: 0 0 16px; box-shadow: 0 8px 26px rgba(201,162,39,.4); }
+  .ls-champion .trophy { font-size: 38px; line-height: 1; filter: drop-shadow(0 2px 3px rgba(0,0,0,.18)); }
+  .ls-champion .ct { display: flex; flex-direction: column; line-height: 1.1; }
+  .ls-champion .lbl { font-family: var(--font-display); font-size: 11px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; opacity: .8; }
+  .ls-champion .team { font-family: var(--font-display); font-size: clamp(22px, 4.5vw, 32px); font-weight: 800; letter-spacing: -.01em; margin-top: 2px; }
   .ls-tourney:last-child { margin-bottom: 0; }
   .ls-tourney-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--d27-navy); flex-wrap: wrap; }
   .ls-tourney-head h2 { font-family: var(--font-display); margin: 0; color: var(--d27-navy); font-size: 22px; }
@@ -166,7 +171,7 @@ function updatedLabel(iso) {
   return `Updated ${date} · ${time}`;
 }
 
-// ── auto-resolve WG-/LG- placeholders to real teams (same as the bracket) ──
+// ── auto-resolve WG-/LG- placeholders + champion detection (same engine as the bracket) ──
 function parseRef(s) {
   if (s == null) return { kind: 'tbd' };
   const t = String(s).trim();
@@ -176,26 +181,91 @@ function parseRef(s) {
   if (/^bye$/i.test(t))        return { kind: 'bye' };
   return { kind: 'team', name: t };
 }
-const gByNum = (games, n) => games.find(g => g.g === n);
-const isPlayedG = g => g && g.as != null && g.hs != null && (g.as + g.hs) > 0;
-function resolveRef(games, ref, seen) {
+const gameByNum = (t, n) => t.games.find(g => g.g === n);
+const isPlayed = g => g && g.as != null && g.hs != null && (g.as + g.hs) > 0;
+function resolveSide(t, ref, seen) {
   seen = seen || new Set();
   if (ref.kind === 'team') return ref.name;
-  if (ref.kind === 'bye') return 'BYE';
+  if (ref.kind === 'bye')  return 'BYE';
   if (ref.kind !== 'WG' && ref.kind !== 'LG') return null;
-  const g = gByNum(games, ref.g); if (!g || seen.has(ref.g)) return null; seen.add(ref.g);
-  return ref.kind === 'WG' ? winnerOf(games, g, seen) : loserOf(games, g, seen);
+  const g = gameByNum(t, ref.g); if (!g || seen.has(ref.g)) return null;
+  seen.add(ref.g);
+  return ref.kind === 'WG' ? winnerName(t, g, seen) : loserName(t, g, seen);
 }
-function winnerOf(games, g, seen) { if (!isPlayedG(g)) return null; const a = resolveRef(games, parseRef(g.away), new Set(seen)), h = resolveRef(games, parseRef(g.home), new Set(seen)); return g.as > g.hs ? a : g.hs > g.as ? h : null; }
-function loserOf(games, g, seen)  { if (!isPlayedG(g)) return null; const a = resolveRef(games, parseRef(g.away), new Set(seen)), h = resolveRef(games, parseRef(g.home), new Set(seen)); return g.as > g.hs ? h : g.hs > g.as ? a : null; }
-function displayTeam(games, raw) {
-  const r = parseRef(raw);
-  if (r.kind === 'team') return { name: r.name };
-  if (r.kind === 'bye')  return { name: 'BYE', tbd: true };
-  if (r.kind === 'tbd')  return { name: r.label || 'TBD', tbd: true };
-  const resolved = resolveRef(games, r, new Set());
+function winnerName(t, g, seen) { if (!isPlayed(g)) return null; const a = resolveSide(t, parseRef(g.away), new Set(seen)), h = resolveSide(t, parseRef(g.home), new Set(seen)); return g.as > g.hs ? a : g.hs > g.as ? h : null; }
+function loserName(t, g, seen)  { if (!isPlayed(g)) return null; const a = resolveSide(t, parseRef(g.away), new Set(seen)), h = resolveSide(t, parseRef(g.home), new Set(seen)); return g.as > g.hs ? h : g.hs > g.as ? a : null; }
+function sideDisplay(t, raw) {
+  const ref = parseRef(raw);
+  if (ref.kind === 'team') return { name: ref.name };
+  if (ref.kind === 'bye')  return { name: 'BYE', tbd: true };
+  if (ref.kind === 'tbd')  return { name: ref.label || 'TBD', tbd: true };
+  const resolved = resolveSide(t, ref, new Set());
   if (resolved) return { name: resolved };
-  return { name: (r.kind === 'WG' ? 'Winner G' : 'Loser G') + r.g, tbd: true };
+  return { name: (ref.kind === 'WG' ? 'Winner G' : 'Loser G') + ref.g, tbd: true };
+}
+function feeders(g) { const o = []; for (const raw of [g.away, g.home]) { const r = parseRef(raw); if (r.kind === 'WG' || r.kind === 'LG') o.push(r.g); } return o; }
+function computeRounds(t) {
+  const depth = {}, guard = new Set();
+  function d(n) { if (depth[n] != null) return depth[n]; if (guard.has(n)) return 1; guard.add(n); const g = gameByNum(t, n); if (!g) return 1; const f = feeders(g); const r = f.length ? 1 + Math.max(...f.map(d)) : 1; depth[n] = r; return r; }
+  t.games.forEach(g => d(g.g)); return depth;
+}
+// classify each game as 'w' (winners), 'l' (losers) or 'f' (grand final)
+function classify(t) {
+  const pw = {}, guard = new Set();
+  function isPw(n) {
+    if (pw[n] != null) return pw[n];
+    if (guard.has(n)) return true; guard.add(n);
+    const g = gameByNum(t, n); if (!g) { pw[n] = true; return true; }
+    let v = true;
+    for (const raw of [g.away, g.home]) {
+      const r = parseRef(raw);
+      if (r.kind === 'LG') v = false;
+      if (r.kind === 'WG' && !isPw(r.g)) v = false;
+    }
+    pw[n] = v; return v;
+  }
+  t.games.forEach(g => isPw(g.g));
+  const depth = computeRounds(t);
+  let wbFinal = null, wbDepth = -1;
+  for (const g of t.games) if (pw[g.g] && (depth[g.g] || 1) > wbDepth) { wbDepth = depth[g.g] || 1; wbFinal = g.g; }
+  const consumers = {};
+  for (const g of t.games) for (const raw of [g.away, g.home]) { const r = parseRef(raw); if (r.kind === 'WG' || r.kind === 'LG') (consumers[r.g] = consumers[r.g] || []).push(g.g); }
+  const fin = new Set();
+  if (wbFinal != null) {
+    let q = (consumers[wbFinal] || []).filter(n => {
+      const g = gameByNum(t, n);
+      const a = parseRef(g.away), h = parseRef(g.home);
+      return (a.kind === 'WG' && a.g === wbFinal) || (h.kind === 'WG' && h.g === wbFinal);
+    });
+    while (q.length) { const n = q.shift(); if (fin.has(n)) continue; fin.add(n); (consumers[n] || []).forEach(c => q.push(c)); }
+  }
+  const cls = {};
+  for (const g of t.games) cls[g.g] = fin.has(g.g) ? 'f' : pw[g.g] ? 'w' : 'l';
+  return cls;
+}
+// who's champion + which "if necessary" games to hide (never played because the winners champ closed it out)
+function championOutcome(t, cls) {
+  const finals = t.games.filter(g => cls[g.g] === 'f').sort((a, b) => a.g - b.g);
+  const hide = new Set();
+  if (!finals.length) return { champion: null, hide };
+  const gf = finals[0];
+  const feederCls = raw => { const r = parseRef(raw); return (r.kind === 'WG' || r.kind === 'LG') ? cls[r.g] : null; };
+  const winnersSide = feederCls(gf.away) === 'w' ? 'away' : feederCls(gf.home) === 'w' ? 'home' : 'away';
+  let champion = null;
+  if (isPlayed(gf)) {
+    const winSide = gf.as > gf.hs ? 'away' : gf.hs > gf.as ? 'home' : null;
+    if (winSide === winnersSide) {
+      champion = resolveSide(t, parseRef(winSide === 'away' ? gf.away : gf.home), new Set());
+      finals.slice(1).forEach(g => hide.add(g.g));
+    } else if (winSide) {
+      const dec = finals[1];
+      if (dec && isPlayed(dec)) {
+        const ds = dec.as > dec.hs ? 'away' : dec.hs > dec.as ? 'home' : null;
+        if (ds) champion = resolveSide(t, parseRef(ds === 'away' ? dec.away : dec.home), new Set());
+      }
+    }
+  }
+  return { champion, hide };
 }
 
 function teamHTML(disp, score, otherScore, played) {
@@ -205,8 +275,7 @@ function teamHTML(disp, score, otherScore, played) {
 }
 
 function gameHTML(t, g) {
-  const games = t.games;
-  const A = displayTeam(games, g.away), H = displayTeam(games, g.home);
+  const A = sideDisplay(t, g.away), H = sideDisplay(t, g.home);
   const played = (g.as != null && g.hs != null) && (g.as + g.hs) > 0;
   let match;
   if (played) {
@@ -227,13 +296,18 @@ function gameHTML(t, g) {
 }
 
 function tourneyHTML(t, q) {
-  let games = t.games.slice();
+  const cls = classify(t);
+  const outcome = championOutcome(t, cls);
+  // drop "if necessary" games that will never be played (winners champ already closed it out)
+  let games = t.games.slice().filter(g => !outcome.hide.has(g.g));
   if (q) {
-    games = games.filter(g =>
-      [g.away, g.home, g.field, g.date, fmtDate(g.date)].some(v => String(v || '').toLowerCase().includes(q))
-    );
+    games = games.filter(g => {
+      const A = sideDisplay(t, g.away).name, H = sideDisplay(t, g.home).name;
+      return [g.away, g.home, A, H, g.field, g.date, fmtDate(g.date)].some(v => String(v || '').toLowerCase().includes(q));
+    });
   }
   if (!games.length) return { html: '', count: 0 };
+  const liveCount = t.games.length - outcome.hide.size;
 
   const byDate = {}, order = [];
   for (const g of games) {
@@ -247,10 +321,11 @@ function tourneyHTML(t, q) {
     <div class="ls-tourney-head">
       <h2>${t.name}</h2>
       <span class="sport-tag ${t.sport === 'Softball' ? 'sb' : 'bb'}">${t.sport}</span>
-      <span class="meta">${t.games.length} games</span>
+      <span class="meta">${liveCount} games</span>
       <a class="bracket-link" href="brackets.html?t=${t.key}">🏆 Bracket view →</a>
       ${t.updated ? `<span class="updated"><span class="dot"></span>${updatedLabel(t.updated)}</span>` : ''}
-    </div>`;
+    </div>
+    ${outcome.champion ? `<div class="ls-champion"><span class="trophy">🏆</span><div class="ct"><span class="lbl">Tournament Champion</span><span class="team">${outcome.champion}</span></div></div>` : ''}`;
   for (const k of order) {
     html += `<div class="ls-date">${fmtDate(k)}</div>`;
     byDate[k].sort((a, b) => String(a.time || '').localeCompare(String(b.time || '')));
