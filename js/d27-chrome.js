@@ -9,15 +9,15 @@
     ['index.html', 'Home'],
     ['baseball.html', 'Baseball'],
     ['softball.html', 'Softball'],
-    ['live-schedule.html', 'Schedule'],
-    ['brackets.html', 'Brackets'],
     ['leagues.html', 'Leagues'],
   ];
   var MORE = [
+    ['live-schedule.html', 'Schedule'],
+    ['brackets.html', 'Brackets'],
+    ['champions.html', 'Champions'],
+    ['rules.html', 'Rules'],
     ['history.html', 'History'],
     ['scholarship.html', 'Scholarship'],
-    ['rules.html', 'Rules'],
-    ['champions.html', 'Champions'],
   ];
   var CONTACT = 'jeffbennett.d27@gmail.com';
 
