@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#002D72" />
 <title>Softball Tournaments · PA District 27 Little League</title>
-<meta name="description" content="All 6 D27 softball tournaments — International divisions (SB-10 through Senior League) plus the Bob Jones Majors softball tournament. Live brackets, schedules, and champion history." />
+<meta name="description" content="Every D27 softball tournament — Little League International (SB-10 through SB-JR), District 27 Special Games, and Section 8. Live brackets and schedules." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="css/styles.css" />
 
 <style>
-  /* Page-specific tournament hub styles — mirror of baseball.html hub */
+  /* Page-specific tournament hub styles */
   .hub-hero {
     background:
       linear-gradient(135deg, rgba(0,27,71,.94) 0%, rgba(0,45,114,.9) 100%),
@@ -39,36 +39,7 @@
   .hub-stat .n { font-family: 'Oswald', sans-serif; font-size: var(--text-3xl); font-weight: 600; color: var(--gold); display: block; line-height: 1; }
   .hub-stat .l { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,.7); }
 
-  .filter-bar {
-    display: flex;
-    gap: var(--space-2);
-    flex-wrap: wrap;
-    padding: var(--space-4) 0;
-    border-bottom: 1px solid var(--line);
-    margin-bottom: var(--space-6);
-    background: var(--surface);
-    position: sticky;
-    top: 64px;
-    z-index: 20;
-  }
-  .filter-pill {
-    padding: 8px 16px;
-    border: 1.5px solid var(--line);
-    background: var(--surface);
-    border-radius: 999px;
-    font-family: 'Oswald', sans-serif;
-    font-size: var(--text-xs);
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--fg);
-    cursor: pointer;
-    transition: all .12s ease;
-  }
-  .filter-pill:hover { border-color: var(--d27-navy); }
-  .filter-pill.active { background: var(--d27-navy); color: var(--d27-white); border-color: var(--d27-navy); }
-  .filter-pill .count { opacity: .6; margin-left: 4px; }
-
+  /* Tournament card grid */
   .tcards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -99,6 +70,7 @@
     position: relative;
   }
   .tcard-banner.special { background: linear-gradient(135deg, var(--d27-red) 0%, var(--d27-red-dark) 100%); }
+  .tcard-banner.section { background: linear-gradient(135deg, #334155 0%, #1E293B 100%); }
   .tcard-kicker {
     font-family: 'Oswald', sans-serif;
     font-size: 10px;
@@ -138,21 +110,8 @@
   .tcard-row .k { color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-size: var(--text-xs); font-family: 'Oswald', sans-serif; }
   .tcard-row .v { color: var(--fg); font-weight: 500; text-align: right; }
   .tcard-row .v strong { color: var(--d27-navy); font-family: 'Oswald', sans-serif; font-size: var(--text-base); }
-  .tcard-foot {
-    padding: var(--space-3) var(--space-4);
-    background: var(--d27-sub);
-    border-top: 1px solid var(--line);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: 'Oswald', sans-serif;
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--accent);
-    font-weight: 500;
-  }
 
+  /* Status badges inside cards */
   .tstatus {
     position: absolute;
     top: var(--space-4);
@@ -168,8 +127,22 @@
     color: var(--d27-white);
     backdrop-filter: blur(4px);
   }
+  .tstatus.live { background: #FF3B30; animation: livepulse 1.8s infinite; }
   .tstatus.upcoming { background: rgba(201,162,39,.9); color: var(--d27-ink); }
   .tstatus.complete { background: rgba(22,163,74,.85); }
+
+  /* Card action buttons + empty state + loading (data-driven hub) */
+  .tcard-actions { display: flex; gap: var(--space-2); padding: var(--space-3) var(--space-4); background: var(--d27-sub); border-top: 1px solid var(--line); }
+  .tbtn { flex: 1; text-align: center; padding: 9px 10px; border-radius: 6px; font-family: 'Oswald', sans-serif; font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; border: 1.5px solid var(--d27-navy); color: var(--d27-navy); background: var(--surface); transition: all .12s ease; }
+  .tbtn:hover { background: var(--d27-navy); color: var(--d27-white); text-decoration: none; }
+  .tbtn.primary { background: var(--d27-navy); color: var(--d27-white); }
+  .tbtn.primary:hover { background: var(--d27-navy-dark); }
+  .tcard-empty { flex-direction: row; align-items: center; gap: var(--space-3); padding: var(--space-5); border-style: dashed; }
+  .tcard-empty:hover { transform: none; box-shadow: none; border-color: var(--line); }
+  .tcard-empty .ce-ico { font-size: 2rem; opacity: .5; }
+  .tcard-empty h3 { color: var(--fg); margin: 0 0 2px; font-size: var(--text-lg); }
+  .tcard-empty p { margin: 0; font-size: var(--text-sm); color: var(--muted); }
+  .hub-loading { padding: var(--space-6); text-align: center; color: var(--muted); font-family: 'Oswald', sans-serif; letter-spacing: .04em; }
 
   .type-group { margin-bottom: var(--space-7); }
   .type-head {
@@ -182,6 +155,15 @@
     border-bottom: 2px solid var(--d27-navy);
   }
   .type-head h2 { margin: 0; }
+  .type-head .eyebrow {
+    display: block;
+    font-family: 'Oswald', sans-serif;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 2px;
+  }
   .type-head .count {
     font-family: 'Oswald', sans-serif;
     font-size: var(--text-sm);
@@ -192,8 +174,6 @@
 </style>
 </head>
 <body>
-
-<div class="demo-ribbon">⚠ Demo · Sample data only · Real D27 data wires in Phase 1</div>
 
 <!-- Nav ------------------------------------------------------------- -->
 <nav class="nav">
@@ -230,161 +210,18 @@
     </div>
     <h1>Softball Tournaments · 2026</h1>
     <p>
-      6 softball tournaments each summer — five International divisions
-      (SB-10 through Senior League) plus the Bob Jones Tournament at the
-      Majors level. Growing girls' fast-pitch across all 12 D27 leagues.
+      Every D27 softball tournament — Little League International divisions,
+      District&nbsp;27 Special Games, and Section&nbsp;8. Tap any tournament for
+      its live bracket and schedule.
     </p>
-    <div class="hub-stats">
-      <div class="hub-stat"><span class="n">6</span><span class="l">Tournaments</span></div>
-      <div class="hub-stat"><span class="n">5</span><span class="l">International</span></div>
-      <div class="hub-stat"><span class="n">1</span><span class="l">Special Games</span></div>
-      <div class="hub-stat"><span class="n">8–16</span><span class="l">Age Range</span></div>
-      <div class="hub-stat"><span class="n">12</span><span class="l">Participating Leagues</span></div>
-    </div>
+    <div class="hub-stats" id="hubStats"></div>
   </div>
 </header>
 
-<!-- Filter bar ------------------------------------------------------- -->
-<div class="filter-bar">
-  <div class="container" style="display: flex; gap: var(--space-2); flex-wrap: wrap; align-items: center;">
-    <button class="filter-pill active" data-type="all">All <span class="count">· 6</span></button>
-    <button class="filter-pill" data-type="international">International <span class="count">· 5</span></button>
-    <button class="filter-pill" data-type="special">Special Games <span class="count">· 1</span></button>
-    <span style="margin-left:auto; color: var(--muted); font-size: var(--text-xs); font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: .08em;">
-      Tap any card for bracket + schedule + standings
-    </span>
-  </div>
-</div>
-
-
-<!-- Tournament groups ----------------------------------------------- -->
-<main class="container section-tight">
-
-  <!-- Special Games (Bob Jones Majors SB leads) -->
-  <div class="type-group" data-type="special">
-    <div class="type-head">
-      <div>
-        <span class="eyebrow">District 27 Special Games</span>
-        <h2>Special Games Tournaments</h2>
-      </div>
-      <span class="count">1 tournament</span>
-    </div>
-
-    <div class="tcards">
-
-      <a href="tournament.html?t=sb-majors-bob-jones" class="tcard">
-        <div class="tcard-banner special">
-          <span class="tstatus upcoming">Bracket Posted</span>
-          <span class="tcard-kicker">Softball Majors · Bob Jones Tradition</span>
-          <h3>Bob Jones Tournament · Softball</h3>
-          <div class="tcard-age">11–12 YO Majors · Single Elimination</div>
-        </div>
-        <div class="tcard-body">
-          <div class="tcard-row"><span class="k">First pitch</span><span class="v"><strong>Jun 16, 2026</strong></span></div>
-          <div class="tcard-row"><span class="k">Teams entered</span><span class="v">12 (1 per league)</span></div>
-          <div class="tcard-row"><span class="k">2024 champion</span><span class="v">Great Valley</span></div>
-          <div class="tcard-row"><span class="k">2023 champion</span><span class="v">Chester Valley</span></div>
-        </div>
-        <div class="tcard-foot"><span>View bracket · history</span><span>→</span></div>
-      </a>
-
-    </div>
-  </div>
-
-
-  <!-- International Little League Tournaments -->
-  <div class="type-group" data-type="international">
-    <div class="type-head">
-      <div>
-        <span class="eyebrow">International Little League Tournaments</span>
-        <h2>International Division</h2>
-      </div>
-      <span class="count">5 tournaments</span>
-    </div>
-
-    <div class="tcards">
-
-      <a href="tournament.html?t=sb-10" class="tcard">
-        <div class="tcard-banner">
-          <span class="tstatus upcoming">Jun 23</span>
-          <span class="tcard-kicker">International</span>
-          <h3>SB-10</h3>
-          <div class="tcard-age">8-9-10 YO · International</div>
-        </div>
-        <div class="tcard-body">
-          <div class="tcard-row"><span class="k">First pitch</span><span class="v"><strong>Jun 23, 2026</strong></span></div>
-          <div class="tcard-row"><span class="k">Advances to</span><span class="v">Section 8</span></div>
-          <div class="tcard-row"><span class="k">2024 champion</span><span class="v">Chester Valley</span></div>
-        </div>
-        <div class="tcard-foot"><span>View bracket · history</span><span>→</span></div>
-      </a>
-
-      <a href="tournament.html?t=sb-11" class="tcard">
-        <div class="tcard-banner">
-          <span class="tstatus upcoming">Jun 23</span>
-          <span class="tcard-kicker">International</span>
-          <h3>SB-11</h3>
-          <div class="tcard-age">9-10-11 YO · International</div>
-        </div>
-        <div class="tcard-body">
-          <div class="tcard-row"><span class="k">First pitch</span><span class="v"><strong>Jun 23, 2026</strong></span></div>
-          <div class="tcard-row"><span class="k">Advances to</span><span class="v">Section 8</span></div>
-          <div class="tcard-row"><span class="k">Typical entries</span><span class="v">8 teams</span></div>
-        </div>
-        <div class="tcard-foot"><span>View bracket · history</span><span>→</span></div>
-      </a>
-
-      <a href="tournament.html?t=sb-12" class="tcard">
-        <div class="tcard-banner">
-          <span class="tstatus upcoming">Jun 23</span>
-          <span class="tcard-kicker">International · Little League Softball World Series path</span>
-          <h3>SB-12 · Little League</h3>
-          <div class="tcard-age">10-11-12 YO · International</div>
-        </div>
-        <div class="tcard-body">
-          <div class="tcard-row"><span class="k">First pitch</span><span class="v"><strong>Jun 23, 2026</strong></span></div>
-          <div class="tcard-row"><span class="k">Advances to</span><span class="v">Section 8 → State → Region → LLSWS</span></div>
-          <div class="tcard-row"><span class="k">2024 champion</span><span class="v">Lower Perkiomen</span></div>
-          <div class="tcard-row"><span class="k">2023 champion</span><span class="v">Great Valley</span></div>
-        </div>
-        <div class="tcard-foot"><span>View bracket · history</span><span>→</span></div>
-      </a>
-
-      <a href="tournament.html?t=sb-jr" class="tcard">
-        <div class="tcard-banner">
-          <span class="tstatus upcoming">Jul 07</span>
-          <span class="tcard-kicker">International · Junior League path</span>
-          <h3>SB Junior League</h3>
-          <div class="tcard-age">12-14 YO · International</div>
-        </div>
-        <div class="tcard-body">
-          <div class="tcard-row"><span class="k">First pitch</span><span class="v"><strong>Jul 07, 2026</strong></span></div>
-          <div class="tcard-row"><span class="k">Advances to</span><span class="v">Section 8 Junior</span></div>
-          <div class="tcard-row"><span class="k">Typical entries</span><span class="v">6 teams</span></div>
-        </div>
-        <div class="tcard-foot"><span>View bracket · history</span><span>→</span></div>
-      </a>
-
-      <a href="tournament.html?t=sb-sr" class="tcard">
-        <div class="tcard-banner">
-          <span class="tstatus upcoming">Jul 14</span>
-          <span class="tcard-kicker">International · Senior League path</span>
-          <h3>SB Senior League</h3>
-          <div class="tcard-age">13-16 YO · International</div>
-        </div>
-        <div class="tcard-body">
-          <div class="tcard-row"><span class="k">First pitch</span><span class="v"><strong>Jul 14, 2026</strong></span></div>
-          <div class="tcard-row"><span class="k">Advances to</span><span class="v">Section 8 Senior</span></div>
-          <div class="tcard-row"><span class="k">Typical entries</span><span class="v">4–6 teams</span></div>
-        </div>
-        <div class="tcard-foot"><span>View bracket · history</span><span>→</span></div>
-      </a>
-
-    </div>
-  </div>
-
+<!-- Tournament hub (data-driven from live schedules) ----------------- -->
+<main class="container section-tight" id="hub">
+  <div class="hub-loading">Loading tournaments…</div>
 </main>
-
 
 <!-- Footer ----------------------------------------------------------- -->
 <footer class="footer">
@@ -403,10 +240,10 @@
       <div>
         <h5>Tournaments</h5>
         <ul>
-          <li><a href="baseball.html">Baseball (11)</a></li>
-          <li><a href="softball.html">Softball (6)</a></li>
+          <li><a href="baseball.html">Baseball</a></li>
+          <li><a href="softball.html">Softball</a></li>
           <li><a href="champions.html">Champions Archive</a></li>
-          <li><a href="schedule.html">Master Schedule</a></li>
+          <li><a href="live-schedule.html">Master Schedule</a></li>
         </ul>
       </div>
       <div>
@@ -436,16 +273,19 @@
   </div>
 </footer>
 
+<script src="js/d27-data.js"></script>
+<script src="js/d27-bracket.js"></script>
+<script src="js/d27-hub.js"></script>
 <script>
-  document.querySelectorAll('.filter-pill').forEach(pill => {
-    pill.addEventListener('click', () => {
-      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-      const t = pill.dataset.type;
-      document.querySelectorAll('.type-group').forEach(g => {
-        g.style.display = (t === 'all' || g.dataset.type === t) ? '' : 'none';
-      });
-    });
+  D27renderHub({
+    sport: 'Softball',
+    hubId: 'hub',
+    statsId: 'hubStats',
+    sections: [
+      { cat: 'LL International — Softball', eyebrow: 'Little League International', title: 'International Tournaments', accent: '' },
+      { cat: 'D27 Special Games',          eyebrow: 'District 27',                title: 'Special Games',           accent: 'special' },
+      { cat: 'Sectional',                  eyebrow: 'Section 8',                  title: 'Sectional Schedules',     accent: 'section', soon: 'Section 8 brackets will be posted here once D27 teams advance and the section schedule is set.' },
+    ],
   });
 </script>
 

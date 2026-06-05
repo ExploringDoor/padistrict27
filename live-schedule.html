@@ -419,6 +419,9 @@ function initFilters() {
     sel.appendChild(o);
   }
   sel.addEventListener('change', e => { filter.tourney = e.target.value; render(); });
+  // Deep-link: ?t=KEY or #KEY (from the Baseball/Softball hub) pre-selects a tournament
+  const want = new URLSearchParams(location.search).get('t') || location.hash.replace('#', '');
+  if (want && DATA.tournaments.some(t => t.key === want)) { filter.tourney = want; sel.value = want; }
   document.querySelectorAll('.ls-sport button').forEach(b => b.addEventListener('click', () => {
     document.querySelectorAll('.ls-sport button').forEach(x => x.classList.remove('active'));
     b.classList.add('active');
