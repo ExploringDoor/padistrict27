@@ -382,7 +382,15 @@ function renderTitle(t) {
       ${t.updated ? `<span class="updated"><span class="dot"></span>${updatedLabel(t.updated)}</span>` : ''}
     </div>`;
 }
-function updatedLabel(iso) { const then = new Date(iso + (iso.length <= 10 ? 'T12:00:00' : '')); const d = Math.floor((Date.now() - then.getTime()) / 86400000); if (d <= 0) return 'Updated today'; if (d === 1) return 'Updated yesterday'; if (d < 7) return `Updated ${d} days ago`; return 'Updated ' + then.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
+function updatedLabel(iso) {
+  if (!iso) return '';
+  const dateOnly = iso.length <= 10;
+  const d = new Date(iso + (dateOnly ? 'T12:00:00' : ''));
+  const date = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  if (dateOnly) return 'Updated ' + date;
+  const time = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  return `Updated ${date} · ${time}`;
+}
 
 function initSelect() {
   const sel = document.getElementById('tourneySelect');
