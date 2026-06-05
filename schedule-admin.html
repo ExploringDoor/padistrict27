@@ -45,6 +45,8 @@
   .ed-table td { padding: 5px 6px; border-bottom: 1px solid var(--line); }
   .ed-table tr:hover td { background: rgba(0,45,114,.02); }
   .ed-table input { width: 100%; padding: 7px 8px; border: 1px solid var(--line); border-radius: 5px; font: inherit; font-size: 13px; box-sizing: border-box; }
+  .ed-table .hint { font-size: 11px; color: var(--muted); margin-top: 2px; font-style: italic; min-height: 14px; }
+  .ed-table .hint.ok { color: #047857; font-style: normal; font-weight: 600; }
   .ed-table input.sc { width: 52px; text-align: center; }
   .ed-table input.gn { width: 44px; text-align: center; }
   .ed-table .vs { color: var(--muted); text-align: center; font-size: 11px; }
@@ -209,6 +211,53 @@ function selectTourney(key) {
 function renderRows() {
   const tb = $('rows'); tb.innerHTML = '';
   current.games.slice().sort((a,b)=>a.g-b.g).forEach(g => tb.appendChild(rowEl(g)));
+  updateHints();
+}
+
+// ── live "resolves to" hints (same auto-advance logic as the bracket) ──
+function parseRef(s){ if(s==null) return {kind:'tbd'}; const t=String(s).trim();
+  let m=t.match(/^WG-(\d+)$/i); if(m) return {kind:'WG',g:+m[1]};
+  m=t.match(/^LG-(\d+)$/i); if(m) return {kind:'LG',g:+m[1]};
+  return {kind:'team'}; }
+function rowsToGames(){
+  const games=[];
+  $('rows').querySelectorAll('tr').forEach(tr=>{
+    const get=f=>tr.querySelector(`[data-f="${f}"]`).value;
+    const num=v=>v===''?null:Number(v);
+    const gn=num(get('g')); if(gn==null) return;
+    games.push({ g:gn, away:get('away')||null, as:num(get('as')), home:get('home')||null, hs:num(get('hs')) });
+  });
+  return games;
+}
+const gByNum=(games,n)=>games.find(g=>g.g===n);
+const played=g=>g && g.as!=null && g.hs!=null && (g.as+g.hs)>0;
+function resolveRef(games, raw, seen){
+  seen=seen||new Set();
+  const r=parseRef(raw);
+  if(r.kind!=='WG' && r.kind!=='LG') return null;
+  const g=gByNum(games,r.g); if(!g||seen.has(r.g)) return null; seen.add(r.g);
+  if(!played(g)) return null;
+  const a = parseRef(g.away).kind==='team' ? g.away : resolveRef(games,g.away,new Set(seen));
+  const h = parseRef(g.home).kind==='team' ? g.home : resolveRef(games,g.home,new Set(seen));
+  const winner = g.as>g.hs ? a : g.hs>g.as ? h : null;
+  const loser  = g.as>g.hs ? h : g.hs>g.as ? a : null;
+  return r.kind==='WG' ? winner : loser;
+}
+function updateHints(){
+  const games=rowsToGames();
+  $('rows').querySelectorAll('tr').forEach(tr=>{
+    ['away','home'].forEach(side=>{
+      const inp=tr.querySelector(`[data-f="${side}"]`);
+      const hint=tr.querySelector(`[data-hint="${side}"]`);
+      if(!inp||!hint) return;
+      const r=parseRef(inp.value);
+      if(r.kind==='WG'||r.kind==='LG'){
+        const team=resolveRef(games, inp.value, new Set());
+        hint.textContent = team ? '→ '+team : '→ awaiting G'+r.g;
+        hint.className = 'hint' + (team?' ok':'');
+      } else { hint.textContent=''; hint.className='hint'; }
+    });
+  });
 }
 function rowEl(g) {
   const tr = document.createElement('tr');
@@ -216,9 +265,9 @@ function rowEl(g) {
     <td><input class="gn" type="number" value="${g.g ?? ''}" data-f="g"></td>
     <td><input type="date" value="${g.date ?? ''}" data-f="date"></td>
     <td><input type="time" value="${g.time ?? ''}" data-f="time"></td>
-    <td><input type="text" value="${esc(g.away)}" data-f="away" placeholder="Team or WG-5"></td>
+    <td><input type="text" value="${esc(g.away)}" data-f="away" placeholder="Team or WG-5"><div class="hint" data-hint="away"></div></td>
     <td><input class="sc" type="number" value="${g.as ?? ''}" data-f="as"></td>
-    <td><input type="text" value="${esc(g.home)}" data-f="home" placeholder="Team or LG-3"></td>
+    <td><input type="text" value="${esc(g.home)}" data-f="home" placeholder="Team or LG-3"><div class="hint" data-hint="home"></div></td>
     <td><input class="sc" type="number" value="${g.hs ?? ''}" data-f="hs"></td>
     <td><input type="text" value="${esc(g.field)}" data-f="field" placeholder="Field"></td>
     <td><button class="del" title="Delete game" onclick="this.closest('tr').remove()">✕</button></td>`;
@@ -285,6 +334,9 @@ window.__seed = async () => {
     loadAll();
   } catch (e) { $('seedStatus').textContent = 'Error: ' + e.message; }
 };
+
+// recompute the "resolves to" hints live as scores/teams are edited
+$('rows').addEventListener('input', updateHints);
 </script>
 
 </body>
