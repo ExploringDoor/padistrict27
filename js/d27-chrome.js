@@ -37,7 +37,7 @@
         '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">' +
         '<line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>' +
       '<ul class="nav-links">' + links +
-        '<li><a href="login.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>' +
+        '<li><a href="schedule-admin.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>' +
       '</ul>' +
     '</div></nav>';
 
@@ -57,7 +57,7 @@
       '<div><h5>Connect</h5><ul>' +
         '<li><a href="https://www.facebook.com/padistrict27llbs/" target="_blank" rel="noopener">Facebook</a></li>' +
         '<li><a href="mailto:' + CONTACT + '">Contact D27</a></li>' +
-        '<li><a href="login.html">Sign In</a></li></ul></div>' +
+        '<li><a href="schedule-admin.html">Sign In</a></li></ul></div>' +
     '</div><div class="footer-bottom">' +
       '<div>© 2026 PA District 27 Little League. All rights reserved.</div>' +
       '<div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div>' +
