@@ -11,7 +11,10 @@
     if (!iso) return '';
     const dateOnly = iso.length <= 10;
     const d = new Date(iso + (dateOnly ? 'T12:00:00' : ''));
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const date = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    if (dateOnly) return date;
+    const time = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    return `${date} · ${time}`;
   }
 
   function cardHTML(t, accent) {
