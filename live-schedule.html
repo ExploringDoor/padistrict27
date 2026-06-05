@@ -166,23 +166,57 @@ function updatedLabel(iso) {
   return `Updated ${date} · ${time}`;
 }
 
-function teamHTML(name, score, otherScore, played) {
-  if (isPlaceholder(name)) return `<span class="ls-team tbd">${name || 'TBD'}</span>`;
-  const win = played && score != null && otherScore != null && score > otherScore;
-  return `<span class="ls-team${win ? ' win' : ''}">${name}</span>`;
+// ── auto-resolve WG-/LG- placeholders to real teams (same as the bracket) ──
+function parseRef(s) {
+  if (s == null) return { kind: 'tbd' };
+  const t = String(s).trim();
+  let m = t.match(/^WG-(\d+)$/i); if (m) return { kind: 'WG', g: +m[1] };
+  m = t.match(/^LG-(\d+)$/i);     if (m) return { kind: 'LG', g: +m[1] };
+  if (/if necessary/i.test(t)) return { kind: 'tbd', label: 'If necessary' };
+  if (/^bye$/i.test(t))        return { kind: 'bye' };
+  return { kind: 'team', name: t };
+}
+const gByNum = (games, n) => games.find(g => g.g === n);
+const isPlayedG = g => g && g.as != null && g.hs != null && (g.as + g.hs) > 0;
+function resolveRef(games, ref, seen) {
+  seen = seen || new Set();
+  if (ref.kind === 'team') return ref.name;
+  if (ref.kind === 'bye') return 'BYE';
+  if (ref.kind !== 'WG' && ref.kind !== 'LG') return null;
+  const g = gByNum(games, ref.g); if (!g || seen.has(ref.g)) return null; seen.add(ref.g);
+  return ref.kind === 'WG' ? winnerOf(games, g, seen) : loserOf(games, g, seen);
+}
+function winnerOf(games, g, seen) { if (!isPlayedG(g)) return null; const a = resolveRef(games, parseRef(g.away), new Set(seen)), h = resolveRef(games, parseRef(g.home), new Set(seen)); return g.as > g.hs ? a : g.hs > g.as ? h : null; }
+function loserOf(games, g, seen)  { if (!isPlayedG(g)) return null; const a = resolveRef(games, parseRef(g.away), new Set(seen)), h = resolveRef(games, parseRef(g.home), new Set(seen)); return g.as > g.hs ? h : g.hs > g.as ? a : null; }
+function displayTeam(games, raw) {
+  const r = parseRef(raw);
+  if (r.kind === 'team') return { name: r.name };
+  if (r.kind === 'bye')  return { name: 'BYE', tbd: true };
+  if (r.kind === 'tbd')  return { name: r.label || 'TBD', tbd: true };
+  const resolved = resolveRef(games, r, new Set());
+  if (resolved) return { name: resolved };
+  return { name: (r.kind === 'WG' ? 'Winner G' : 'Loser G') + r.g, tbd: true };
 }
 
-function gameHTML(g) {
+function teamHTML(disp, score, otherScore, played) {
+  if (disp.tbd) return `<span class="ls-team tbd">${disp.name}</span>`;
+  const win = played && score != null && otherScore != null && score > otherScore;
+  return `<span class="ls-team${win ? ' win' : ''}">${disp.name}</span>`;
+}
+
+function gameHTML(t, g) {
+  const games = t.games;
+  const A = displayTeam(games, g.away), H = displayTeam(games, g.home);
   const played = (g.as != null && g.hs != null) && (g.as + g.hs) > 0;
   let match;
   if (played) {
     match = `
-      ${teamHTML(g.away, g.as, g.hs, true)}
+      ${teamHTML(A, g.as, g.hs, true)}
       <span class="ls-score">${g.as}</span><span class="ls-vs">–</span><span class="ls-score">${g.hs}</span>
-      ${teamHTML(g.home, g.hs, g.as, true)}
+      ${teamHTML(H, g.hs, g.as, true)}
       <span class="ls-final">Final</span>`;
   } else {
-    match = `${teamHTML(g.away)} <span class="ls-vs">vs</span> ${teamHTML(g.home)}`;
+    match = `${teamHTML(A)} <span class="ls-vs">vs</span> ${teamHTML(H)}`;
   }
   return `
     <div class="ls-game">
@@ -220,7 +254,7 @@ function tourneyHTML(t, q) {
   for (const k of order) {
     html += `<div class="ls-date">${fmtDate(k)}</div>`;
     byDate[k].sort((a, b) => String(a.time || '').localeCompare(String(b.time || '')));
-    for (const g of byDate[k]) html += gameHTML(g);
+    for (const g of byDate[k]) html += gameHTML(t, g);
   }
   html += `</section>`;
   return { html, count: games.length };
