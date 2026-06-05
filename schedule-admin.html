@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Schedule Editor · PA District 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  body { background: var(--d27-paper); }
+  .ed-topbar { background: var(--d27-navy); color: #fff; padding: 12px 0; }
+  .ed-topbar .container { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .ed-topbar .brand { font-family: var(--font-display); font-weight: 700; letter-spacing: .04em; }
+  .ed-topbar .who { margin-left: auto; font-size: 13px; color: rgba(255,255,255,.8); }
+  .ed-topbar .who b { color: var(--d27-gold); }
+  .ed-topbar button { background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.25); padding: 6px 12px; border-radius: 5px; font-size: 12px; font-weight: 700; cursor: pointer; }
+
+  /* Login */
+  .ed-login { max-width: 380px; margin: 60px auto; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 32px; box-shadow: 0 8px 28px rgba(0,0,0,.06); }
+  .ed-login .crest { width: 56px; height: 56px; border-radius: 50%; background: var(--d27-navy); color: var(--d27-gold); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; margin: 0 auto 14px; }
+  .ed-login h1 { font-family: var(--font-display); text-align: center; color: var(--d27-navy); margin: 0 0 4px; font-size: 24px; }
+  .ed-login .sub { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+  .ed-login label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 12px 0 4px; }
+  .ed-login input { width: 100%; padding: 11px 13px; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 15px; }
+  .ed-login button { width: 100%; background: var(--d27-navy); color: #fff; border: none; padding: 13px; border-radius: 6px; font-family: var(--font-display); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; margin-top: 16px; }
+  .ed-err { background: #FEE2E2; color: var(--d27-red); border-radius: 6px; padding: 10px 12px; font-size: 13px; margin-top: 12px; display: none; }
+
+  .ed-toolbar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 22px 0 14px; }
+  .ed-toolbar select { padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 14px; background: var(--surface); min-width: 250px; }
+  .ed-toolbar .meta { color: var(--muted); font-size: 13px; }
+  .ed-toolbar .links { margin-left: auto; display: flex; gap: 10px; }
+  .ed-toolbar .links a { font-size: 13px; color: var(--d27-navy); font-weight: 600; text-decoration: none; }
+
+  .ed-seed { background: linear-gradient(90deg, rgba(201,162,39,.08), rgba(0,45,114,.04)); border: 1px solid rgba(0,45,114,.14); border-left: 4px solid var(--d27-gold); border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+  .ed-seed h3 { font-family: var(--font-display); margin: 0 0 6px; color: var(--d27-navy); }
+  .ed-seed p { margin: 0 0 12px; color: var(--muted); font-size: 14px; }
+  .ed-seed button { background: var(--d27-gold); color: var(--d27-navy); border: none; padding: 11px 20px; border-radius: 6px; font-family: var(--font-display); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+
+  .ed-table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+  table.ed-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 860px; }
+  .ed-table th { background: var(--d27-navy); color: #fff; padding: 9px 8px; text-align: left; font-family: var(--font-display); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; position: sticky; top: 0; }
+  .ed-table td { padding: 5px 6px; border-bottom: 1px solid var(--line); }
+  .ed-table tr:hover td { background: rgba(0,45,114,.02); }
+  .ed-table input { width: 100%; padding: 7px 8px; border: 1px solid var(--line); border-radius: 5px; font: inherit; font-size: 13px; box-sizing: border-box; }
+  .ed-table input.sc { width: 52px; text-align: center; }
+  .ed-table input.gn { width: 44px; text-align: center; }
+  .ed-table .vs { color: var(--muted); text-align: center; font-size: 11px; }
+  .ed-table .del { background: #FEE2E2; color: var(--d27-red); border: none; width: 28px; height: 28px; border-radius: 5px; cursor: pointer; font-weight: 700; }
+  .ed-hint { font-size: 11px; color: var(--muted); }
+  .ed-hint code { background: var(--d27-sub); padding: 1px 5px; border-radius: 3px; }
+
+  .ed-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 16px 0 60px; position: sticky; bottom: 0; background: linear-gradient(180deg, transparent, var(--d27-paper) 40%); padding: 14px 0; }
+  .ed-actions .add { background: var(--surface); border: 1px solid var(--d27-navy); color: var(--d27-navy); padding: 11px 18px; border-radius: 6px; font-family: var(--font-display); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+  .ed-actions .save { background: #10B981; color: #fff; border: none; padding: 12px 26px; border-radius: 6px; font-family: var(--font-display); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+  .ed-actions .status { font-size: 13px; color: var(--muted); }
+  .ed-actions .status.ok { color: #047857; font-weight: 700; }
+
+  .ed-notconfigured { max-width: 600px; margin: 60px auto; background: #FEF3C7; border: 1px solid #F59E0B; border-radius: 10px; padding: 26px; color: #7c5e10; }
+  .ed-notconfigured h2 { font-family: var(--font-display); margin: 0 0 8px; color: #92400e; }
+  .ed-notconfigured code { background: rgba(0,0,0,.06); padding: 1px 6px; border-radius: 3px; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="ed-topbar">
+  <div class="container">
+    <span class="brand">D27 · Schedule Editor</span>
+    <span class="who" id="whoami"></span>
+    <button id="signoutBtn" class="hidden" onclick="window.__signout()">Sign out</button>
+  </div>
+</div>
+
+<main class="container">
+
+  <!-- Not configured yet -->
+  <div class="ed-notconfigured hidden" id="notConfigured">
+    <h2>⚙️ Firebase not connected yet</h2>
+    <p>Paste your <code>firebaseConfig</code> into <code>js/firebase-init.js</code> (replace the <code>PASTE_…</code> placeholders), then reload this page. The public schedule &amp; bracket pages keep working from the saved data until then.</p>
+  </div>
+
+  <!-- Login -->
+  <div class="ed-login hidden" id="loginView">
+    <div class="crest">D27</div>
+    <h1>Sign in</h1>
+    <div class="sub">District schedule &amp; bracket editor</div>
+    <label>Email</label>
+    <input id="email" type="email" placeholder="you@d27.org" autocomplete="username" />
+    <label>Password</label>
+    <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" />
+    <button onclick="window.__signin()">Sign In</button>
+    <div class="ed-err" id="loginErr"></div>
+  </div>
+
+  <!-- Editor -->
+  <div class="hidden" id="editorView">
+    <div class="ed-seed hidden" id="seedBox">
+      <h3>No schedules in the database yet</h3>
+      <p>One-time import: load all 13 tournaments &amp; 147 games from the current data into Firebase. After this, edits happen here and go live instantly.</p>
+      <button onclick="window.__seed()">⤓ Import starter schedules</button>
+      <span id="seedStatus" style="margin-left:12px; font-size:13px; color:var(--muted);"></span>
+    </div>
+
+    <div id="editorMain" class="hidden">
+      <div class="ed-toolbar">
+        <select id="tourneySelect"></select>
+        <span class="meta" id="tourneyMeta"></span>
+        <div class="links">
+          <a id="schedLink" href="live-schedule.html" target="_blank">View schedule ↗</a>
+          <a id="brkLink" href="brackets.html" target="_blank">View bracket ↗</a>
+        </div>
+      </div>
+
+      <div class="ed-table-wrap">
+        <table class="ed-table">
+          <thead><tr><th>G#</th><th>Date</th><th>Time</th><th>Away team</th><th></th><th>Home team</th><th></th><th>Field</th><th></th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <p class="ed-hint">Tip: leave scores blank until a game is played. Use <code>WG-5</code> (winner of game 5) or <code>LG-3</code> (loser of game 3) for bracket spots — they resolve automatically once scores go in.</p>
+
+      <div class="ed-actions">
+        <button class="add" onclick="window.__addRow()">+ Add Game</button>
+        <button class="save" onclick="window.__save()">💾 Save Changes</button>
+        <span class="status" id="saveStatus"></span>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script type="module">
+import { isConfigured, db, auth } from './js/firebase-init.js';
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
+import { collection, getDocs, doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
+
+const $ = id => document.getElementById(id);
+let TOURNEYS = {};   // key -> {key,name,sport,category,games,...}
+let current = null;
+
+if (!isConfigured) {
+  $('notConfigured').classList.remove('hidden');
+} else {
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      $('whoami').innerHTML = `signed in as <b>${user.email}</b>`;
+      $('signoutBtn').classList.remove('hidden');
+      $('loginView').classList.add('hidden');
+      $('editorView').classList.remove('hidden');
+      loadAll();
+    } else {
+      $('whoami').textContent = '';
+      $('signoutBtn').classList.add('hidden');
+      $('editorView').classList.add('hidden');
+      $('loginView').classList.remove('hidden');
+    }
+  });
+}
+
+window.__signin = async () => {
+  $('loginErr').style.display = 'none';
+  try { await signInWithEmailAndPassword(auth, $('email').value.trim(), $('password').value); }
+  catch (e) { $('loginErr').textContent = e.message.replace('Firebase: ', ''); $('loginErr').style.display = 'block'; }
+};
+window.__signout = () => signOut(auth);
+
+async function loadAll() {
+  const snap = await getDocs(collection(db, 'schedules'));
+  TOURNEYS = {};
+  snap.forEach(d => { TOURNEYS[d.id] = d.data(); });
+  const keys = Object.keys(TOURNEYS);
+  if (!keys.length) {
+    $('seedBox').classList.remove('hidden');
+    $('editorMain').classList.add('hidden');
+    return;
+  }
+  $('seedBox').classList.add('hidden');
+  $('editorMain').classList.remove('hidden');
+  buildSelect();
+  selectTourney($('tourneySelect').value);
+}
+
+function buildSelect() {
+  const sel = $('tourneySelect'); sel.innerHTML = '';
+  const cats = ['LL International — Baseball','LL International — Softball','D27 Special Games','Sectional','State','Other'];
+  const byCat = {};
+  for (const k in TOURNEYS) { const t = TOURNEYS[k]; (byCat[t.category||'Other'] = byCat[t.category||'Other'] || []).push(t); }
+  for (const cat of cats) {
+    if (!byCat[cat]) continue;
+    const og = document.createElement('optgroup'); og.label = cat;
+    byCat[cat].sort((a,b)=>a.name.localeCompare(b.name)).forEach(t => { const o = document.createElement('option'); o.value = t.key; o.textContent = t.name; og.appendChild(o); });
+    sel.appendChild(og);
+  }
+  sel.onchange = () => selectTourney(sel.value);
+}
+
+function selectTourney(key) {
+  current = TOURNEYS[key];
+  $('tourneyMeta').textContent = `${current.sport} · ${current.games.length} games`;
+  $('schedLink').href = `live-schedule.html`;
+  $('brkLink').href = `brackets.html?t=${key}`;
+  renderRows();
+  $('saveStatus').textContent = '';
+}
+
+function renderRows() {
+  const tb = $('rows'); tb.innerHTML = '';
+  current.games.slice().sort((a,b)=>a.g-b.g).forEach(g => tb.appendChild(rowEl(g)));
+}
+function rowEl(g) {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input class="gn" type="number" value="${g.g ?? ''}" data-f="g"></td>
+    <td><input type="date" value="${g.date ?? ''}" data-f="date"></td>
+    <td><input type="time" value="${g.time ?? ''}" data-f="time"></td>
+    <td><input type="text" value="${esc(g.away)}" data-f="away" placeholder="Team or WG-5"></td>
+    <td><input class="sc" type="number" value="${g.as ?? ''}" data-f="as"></td>
+    <td><input type="text" value="${esc(g.home)}" data-f="home" placeholder="Team or LG-3"></td>
+    <td><input class="sc" type="number" value="${g.hs ?? ''}" data-f="hs"></td>
+    <td><input type="text" value="${esc(g.field)}" data-f="field" placeholder="Field"></td>
+    <td><button class="del" title="Delete game" onclick="this.closest('tr').remove()">✕</button></td>`;
+  return tr;
+}
+const esc = v => v == null ? '' : String(v).replace(/"/g, '&quot;');
+
+window.__addRow = () => {
+  const next = current.games.reduce((m,g)=>Math.max(m,g.g||0),0) + 1;
+  $('rows').appendChild(rowEl({ g: next }));
+};
+
+function collectGames() {
+  const games = [];
+  $('rows').querySelectorAll('tr').forEach(tr => {
+    const get = f => tr.querySelector(`[data-f="${f}"]`).value;
+    const num = v => v === '' ? null : Number(v);
+    const gn = num(get('g'));
+    if (gn == null) return;
+    games.push({
+      g: gn, id: `${current.key}-${String(gn).padStart(2,'0')}`,
+      date: get('date') || null, time: get('time') || null,
+      away: get('away') || null, as: num(get('as')),
+      home: get('home') || null, hs: num(get('hs')),
+      field: get('field') || null,
+    });
+  });
+  games.sort((a,b)=>a.g-b.g);
+  return games;
+}
+
+window.__save = async () => {
+  $('saveStatus').textContent = 'Saving…'; $('saveStatus').className = 'status';
+  const games = collectGames();
+  try {
+    await setDoc(doc(db, 'schedules', current.key), {
+      key: current.key, name: current.name, sport: current.sport,
+      category: current.category, special: current.special || false,
+      games, updated: serverTimestamp(),
+    }, { merge: true });
+    current.games = games;
+    $('saveStatus').textContent = `✓ Saved · ${games.length} games · live now`;
+    $('saveStatus').className = 'status ok';
+    $('tourneyMeta').textContent = `${current.sport} · ${games.length} games`;
+  } catch (e) {
+    $('saveStatus').textContent = 'Error: ' + e.message; $('saveStatus').className = 'status';
+  }
+};
+
+window.__seed = async () => {
+  $('seedStatus').textContent = 'Loading current data…';
+  try {
+    const res = await fetch('data/schedule-data.json');
+    const data = await res.json();
+    let n = 0;
+    for (const t of data.tournaments) {
+      await setDoc(doc(db, 'schedules', t.key), {
+        key: t.key, name: t.name, sport: t.sport, category: t.category,
+        special: t.special || false, games: t.games, updated: serverTimestamp(),
+      });
+      n++; $('seedStatus').textContent = `Imported ${n}/${data.tournaments.length}…`;
+    }
+    $('seedStatus').textContent = `✓ Imported ${n} tournaments`;
+    loadAll();
+  } catch (e) { $('seedStatus').textContent = 'Error: ' + e.message; }
+};
+</script>
+
+</body>
+</html>
