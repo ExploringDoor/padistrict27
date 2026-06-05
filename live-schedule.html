@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/styles.css" />
+<script src="js/d27-data.js"></script>
 <style>
   .ls-hero { background: linear-gradient(180deg, var(--d27-navy), var(--d27-navy-dark)); color: #fff; padding: 48px 0 32px; border-bottom: 4px solid var(--d27-gold); }
   .ls-hero h1 { font-family: var(--font-display); font-size: clamp(32px, 5vw, 52px); margin: 0; letter-spacing: -.01em; }
@@ -275,8 +276,7 @@ function initFilters() {
   document.getElementById('searchBox').addEventListener('input', e => { filter.q = e.target.value; render(); });
 }
 
-fetch('data/schedule-data.json')
-  .then(r => r.json())
+D27loadSchedules()
   .then(d => { DATA = d; initFilters(); render(); })
   .catch(() => { document.getElementById('output').innerHTML = '<div class="ls-empty">Could not load schedule data.</div>'; });
 </script>
