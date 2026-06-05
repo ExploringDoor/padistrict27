@@ -9,16 +9,14 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/fireba
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
 
-// ↓↓↓ REPLACE THIS WHOLE OBJECT with the one from the Firebase console ↓↓↓
 const firebaseConfig = {
-  apiKey: "PASTE_API_KEY",
-  authDomain: "PASTE.firebaseapp.com",
-  projectId: "PASTE_PROJECT_ID",
-  storageBucket: "PASTE.appspot.com",
-  messagingSenderId: "PASTE_SENDER_ID",
-  appId: "PASTE_APP_ID"
+  apiKey: "AIzaSyBu_Qd5AUWVSUB6vHP39-zzZgTpbC7s0Fs",
+  authDomain: "d27-schedules.firebaseapp.com",
+  projectId: "d27-schedules",
+  storageBucket: "d27-schedules.firebasestorage.app",
+  messagingSenderId: "160177355434",
+  appId: "1:160177355434:web:00446604832ad1563d2ed3"
 };
-// ↑↑↑ REPLACE ABOVE ↑↑↑
 
 export const isConfigured = !String(firebaseConfig.apiKey).startsWith('PASTE');
 
