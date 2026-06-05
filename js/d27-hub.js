@@ -64,11 +64,11 @@
     const statsEl = opts.statsId && document.getElementById(opts.statsId);
     if (statsEl) {
       const totalGames = mine.reduce((s, t) => s + ((t.games || []).length), 0);
-      const live = mine.filter(t => { try { return global.D27bracket.playedCount(t) > 0; } catch (e) { return false; } }).length;
+      const playedGames = mine.reduce((s, t) => { try { return s + global.D27bracket.playedCount(t); } catch (e) { return s; } }, 0);
       statsEl.innerHTML =
         `<div class="hub-stat"><span class="n">${mine.length}</span><span class="l">Tournaments</span></div>` +
         `<div class="hub-stat"><span class="n">${totalGames}</span><span class="l">Games</span></div>` +
-        `<div class="hub-stat"><span class="n">${live}</span><span class="l">Underway</span></div>`;
+        `<div class="hub-stat"><span class="n">${playedGames}</span><span class="l">Played</span></div>`;
     }
 
     let html = '';
