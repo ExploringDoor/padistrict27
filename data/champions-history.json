@@ -1,0 +1,45 @@
+{
+  "source": "padistrict27.com/tournament-winners",
+  "years": [
+    {
+      "year": 2025,
+      "champions": [
+        { "sport": "Baseball", "tournament": "Intermediate (50/70) — BB-INT", "team": "Lower Merion" },
+        { "sport": "Softball", "tournament": "Softball 12U — SB-12", "team": "Lower Perk" },
+        { "sport": "Softball", "tournament": "Softball Majors", "team": "Lower Perk Gators" }
+      ]
+    },
+    {
+      "year": 2024,
+      "champions": [
+        { "sport": "Baseball", "tournament": "BB-10 (8-9-10)", "team": "Upper Providence" },
+        { "sport": "Baseball", "tournament": "Bob Jones Tournament", "team": "Chester Valley", "note": "Won 17–15" },
+        { "sport": "Softball", "tournament": "Softball 11U — SB-11", "team": "Radnor-Wayne" }
+      ]
+    },
+    {
+      "year": 2023,
+      "champions": [
+        { "sport": "Baseball", "tournament": "Bob Jones Tournament", "team": "Lower Perk Cubs" },
+        { "sport": "Baseball", "tournament": "John Klein — Blue", "team": "Great Valley Blue" },
+        { "sport": "Baseball", "tournament": "John Klein — Red", "team": "Devon-Strafford" }
+      ]
+    },
+    {
+      "year": 2022,
+      "champions": [
+        { "sport": "Baseball", "tournament": "BB-12 (10-11-12)", "team": "Lower Perk" },
+        { "sport": "Baseball", "tournament": "Junior League — BB-JRS", "team": "Radnor-Wayne" },
+        { "sport": "Softball", "tournament": "District Championship", "team": "DSBP", "note": "Defeated Lower Perk 10–0" }
+      ]
+    },
+    {
+      "year": 2021,
+      "champions": [
+        { "sport": "Baseball", "tournament": "PA State Championship", "team": "Upper Providence", "note": "State champions" },
+        { "sport": "Baseball", "tournament": "Mid-Atlantic Eastern Regional", "team": "Upper Providence", "note": "Regional champions" },
+        { "sport": "Baseball", "tournament": "Bob Jones District 27", "team": "Lower Perk Astros" }
+      ]
+    }
+  ]
+}
