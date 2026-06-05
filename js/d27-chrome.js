@@ -11,11 +11,13 @@
     ['softball.html', 'Softball'],
     ['live-schedule.html', 'Schedule'],
     ['brackets.html', 'Brackets'],
-    ['champions.html', 'Champions'],
     ['leagues.html', 'Leagues'],
-    ['rules.html', 'Rules'],
+  ];
+  var MORE = [
     ['history.html', 'History'],
     ['scholarship.html', 'Scholarship'],
+    ['rules.html', 'Rules'],
+    ['champions.html', 'Champions'],
   ];
   var CONTACT = 'jeffbennett.d27@gmail.com';
 
@@ -24,10 +26,16 @@
   function base(s) { return s.toLowerCase().replace(/\.html$/, '').replace(/\/+$/, '') || 'index'; }
   var here = base(location.pathname.split('/').pop());
 
-  var links = NAV.map(function (n) {
+  function navItem(n) {
     var active = base(n[0]) === here;
     return '<li><a href="' + n[0] + '"' + (active ? ' aria-current="page"' : '') + '>' + n[1] + '</a></li>';
-  }).join('');
+  }
+  var topLinks = NAV.map(navItem).join('');
+  var moreActive = MORE.some(function (n) { return base(n[0]) === here; });
+  var moreHTML = '<li class="nav-more">' +
+    '<a href="#more" class="nav-more-trigger"' + (moreActive ? ' aria-current="page"' : '') +
+      ' aria-haspopup="true" aria-expanded="false">More <span class="caret">▾</span></a>' +
+    '<ul class="nav-dropdown">' + MORE.map(navItem).join('') + '</ul></li>';
 
   var navHTML =
     '<nav class="nav"><div class="container nav-inner">' +
@@ -36,7 +44,7 @@
       '<button class="nav-toggle" aria-label="Menu" onclick="document.querySelector(\'.nav-links\').classList.toggle(\'open\')">' +
         '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">' +
         '<line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>' +
-      '<ul class="nav-links">' + links +
+      '<ul class="nav-links">' + topLinks + moreHTML +
         '<li><a href="schedule-admin.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>' +
       '</ul>' +
     '</div></nav>';
@@ -66,6 +74,18 @@
   function inject() {
     var n = document.getElementById('d27-nav'); if (n) n.outerHTML = navHTML;
     var f = document.getElementById('d27-footer'); if (f) f.outerHTML = footHTML;
+    var more = document.querySelector('.nav-more');
+    if (more) {
+      var trig = more.querySelector('.nav-more-trigger');
+      trig.addEventListener('click', function (e) {
+        e.preventDefault();
+        var open = more.classList.toggle('open');
+        trig.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      document.addEventListener('click', function (e) {
+        if (!more.contains(e.target)) { more.classList.remove('open'); trig.setAttribute('aria-expanded', 'false'); }
+      });
+    }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', inject);
   else inject();
