@@ -48,6 +48,29 @@
   .bk-champion .ct .team { font-family: var(--font-display); font-size: clamp(30px, 6vw, 58px); font-weight: 700; line-height: 1; letter-spacing: -.01em; margin-top: 2px; }
   .bk-champion .ct .word { font-family: var(--font-display); font-size: clamp(18px, 3vw, 26px); font-weight: 700; letter-spacing: .12em; }
 
+  /* Teams & Fields panel (collapsible roster + home fields) */
+  .ls-teams { border: 1px solid #e5e7eb; border-radius: 10px; margin: 18px 0 6px; background: #fff; overflow: hidden; }
+  .ls-teams > summary { cursor: pointer; padding: 12px 16px; font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--d27-navy); list-style: none; display: flex; align-items: center; gap: 8px; user-select: none; }
+  .ls-teams > summary::-webkit-details-marker { display: none; }
+  .ls-teams > summary:hover { background: #f8fafc; }
+  .ls-teams .chev { display: inline-block; transition: transform .2s ease; color: var(--d27-gold); font-size: 12px; }
+  .ls-teams[open] > summary .chev { transform: rotate(90deg); }
+  .ls-teams .cnt { color: #6b7280; font-weight: 600; font-size: 12px; }
+  .ls-teams-wrap { padding: 8px 14px 12px; border-top: 1px solid #f1f5f9; }
+  .ls-teams-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 36px; }
+  @media (max-width: 720px) { .ls-teams-cols { grid-template-columns: 1fr; } }
+  .ls-teams-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .ls-teams-table td { padding: 8px 8px; border-bottom: 1px solid #f3f5f8; vertical-align: middle; }
+  .ls-teams-table tr:last-child td { border-bottom: none; }
+  .ls-teams-table tr:hover td { background: #f8fafc; }
+  .ls-teams-table .ts { width: 24px; text-align: center; color: #b0bac8; font-weight: 700; font-size: 12px; }
+  .ls-teams-table .tn { font-weight: 700; color: #1f2937; white-space: nowrap; }
+  .ls-teams-table .tac { width: 1px; white-space: nowrap; }
+  .ls-teams-table .ta { font-size: 10.5px; color: #475569; font-weight: 700; background: #eef2f7; padding: 2px 7px; border-radius: 4px; letter-spacing: .04em; }
+  .ls-teams-table .tp { color: #5b6675; width: 99%; white-space: nowrap; padding-left: 14px; }
+  .ls-teams-table .tp .pin { opacity: .6; margin-right: 4px; font-size: 11px; }
+  .ls-teams-table .muted { color: #cbd5e1; }
+
   /* Section label (Winners / Losers / Final) */
   .bk-sec-label { font-family: var(--font-display); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; margin: 26px 0 2px; padding-left: 12px; border-left: 4px solid var(--d27-navy); }
   .bk-sec-label.l { border-left-color: var(--d27-red); }
@@ -344,9 +367,30 @@ function championOutcome(t, cls) {
   return { champion, hide };
 }
 
+// roster + home-field table for a tournament (from the Excel team table)
+function teamsPanelHTML(t, open) {
+  const teams = (t.teams || []).slice().sort((a, b) => (a.n || 0) - (b.n || 0));
+  if (!teams.length) return '';
+  const mkTable = list => `<table class="ls-teams-table"><tbody>${list.map(tm => `
+        <tr>
+          <td class="ts">${tm.n || ''}</td>
+          <td class="tn">${tm.name}</td>
+          <td class="tac"><span class="ta">${tm.abbr || ''}</span></td>
+          <td class="tp">${tm.park ? `<span class="pin">📍</span>${tm.park}` : '<span class="muted">—</span>'}</td>
+        </tr>`).join('')}</tbody></table>`;
+  const half = Math.ceil(teams.length / 2);
+  const body = teams.length > 6
+    ? `<div class="ls-teams-cols">${mkTable(teams.slice(0, half))}${mkTable(teams.slice(half))}</div>`
+    : mkTable(teams);
+  return `<details class="ls-teams"${open ? ' open' : ''}>
+      <summary><span class="chev">▸</span> Teams &amp; Fields <span class="cnt">${teams.length} teams</span></summary>
+      <div class="ls-teams-wrap">${body}</div>
+    </details>`;
+}
+
 function renderBracket(t) {
   const out = document.getElementById('output');
-  if (!t.games.length) { out.innerHTML = '<div class="bk-empty">No games yet for this tournament.</div>'; renderTitle(t); return; }
+  if (!t.games.length) { out.innerHTML = teamsPanelHTML(t, true) + '<div class="bk-empty">No games yet for this tournament.</div>'; renderTitle(t); return; }
   const cls = classify(t);
   const outcome = championOutcome(t, cls);
   const visible = t.games.filter(g => !outcome.hide.has(g.g));
@@ -359,6 +403,7 @@ function renderBracket(t) {
   if (outcome.champion) {
     html += `<div class="bk-champion"><span class="trophy">🏆</span><div class="ct"><div class="lbl">★ Tournament Champion ★</div><div class="team">${outcome.champion}</div><div class="word">Champion</div></div></div>`;
   }
+  html += teamsPanelHTML(t, true);
   for (const s of sections) {
     const games = visible.filter(g => s.keys.includes(cls[g.g]));
     if (!games.length) continue;
