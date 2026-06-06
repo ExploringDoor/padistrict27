@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/styles.css" />
 <script src="js/d27-data.js"></script>
+<script src="js/d27-gamemodal.js"></script>
 <script src="js/d27-chrome.js"></script>
 <style>
   body { background: var(--d27-paper); }
@@ -308,7 +309,7 @@ function matchHTML(t, g, cls, x, y) {
   const side = (s, sc, win) => `<div class="bk-side${win ? ' win' : ''}${s.tbd ? ' tbd' : ''}${s.bye ? ' bye' : ''}"><span class="nm">${s.name}${s.via ? `<span class="via">via ${s.via}</span>` : ''}</span><span class="sc">${sc != null ? sc : ''}</span></div>`;
   const tag = cls === 'f' ? '<span class="tag f">🏆 Final</span>' : cls === 'l' ? '<span class="tag l">Losers</span>' : '<span class="tag w">Winners</span>';
   const when = [g.date ? new Date(g.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : null, g.time ? fmtTime(g.time) : null].filter(Boolean).join(' · ');
-  return `<div class="bk-match acc-${cls}" style="left:${x}px;top:${y}px"><div class="bk-mtop"><span class="g">Game ${g.g}</span>${tag}</div>${side(A, g.as, aWin)}${side(H, g.hs, hWin)}<div class="bk-mfoot"><span>${when || 'TBD'}</span>${played ? '<span class="fin">Final</span>' : (g.field ? `<span>${g.field.slice(0,18)}</span>` : '')}</div></div>`;
+  return `<div class="bk-match acc-${cls}" data-tkey="${t.key}" data-g="${g.g}" style="left:${x}px;top:${y}px"><div class="bk-mtop"><span class="g">Game ${g.g}</span>${tag}</div>${side(A, g.as, aWin)}${side(H, g.hs, hWin)}<div class="bk-mfoot"><span>${when || 'TBD'}</span>${played ? '<span class="fin">Final</span>' : (g.field ? `<span>${g.field.slice(0,18)}</span>` : '')}</div></div>`;
 }
 function fmtTime(t) { let [h, m] = t.split(':').map(Number); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return `${h}:${String(m).padStart(2,'0')} ${ap}`; }
 
@@ -631,8 +632,13 @@ function initSelect() {
   if (found) selectTourney(found.key);
 }
 
-D27loadSchedules().then(d => { DATA = d; initSelect(); })
+D27loadSchedules().then(d => { DATA = d; D27gameModal.setData(d.tournaments); initSelect(); })
   .catch(() => { document.getElementById('output').innerHTML = '<div class="bk-empty">Could not load bracket data.</div>'; });
+// click any game card → preview (not started) or recap (final)
+document.getElementById('output').addEventListener('click', e => {
+  const card = e.target.closest('.bk-match[data-g]');
+  if (card) D27gameModal.openByKey(card.dataset.tkey, card.dataset.g);
+});
 </script>
 
 </body>

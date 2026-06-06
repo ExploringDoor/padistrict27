@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/styles.css" />
 <script src="js/d27-data.js"></script>
+<script src="js/d27-gamemodal.js"></script>
 <script src="js/d27-chrome.js"></script>
 <style>
   .ls-hero { background: linear-gradient(180deg, var(--d27-navy), var(--d27-navy-dark)); color: #fff; padding: 48px 0 32px; border-bottom: 4px solid var(--d27-gold); }
@@ -286,7 +287,7 @@ function gameHTML(t, g) {
     match = `${teamHTML(A)} <span class="ls-vs">vs</span> ${teamHTML(H)}`;
   }
   return `
-    <div class="ls-game">
+    <div class="ls-game" data-tkey="${t.key}" data-g="${g.g}">
       <div class="ls-time"><div class="t">${fmtTime(g.time)}</div><div class="g">Game ${g.g}</div></div>
       <div class="ls-match">${match}</div>
       <div class="ls-field">${g.field || ''}</div>
@@ -417,8 +418,13 @@ function initFilters() {
 }
 
 D27loadSchedules()
-  .then(d => { DATA = d; initFilters(); render(); })
+  .then(d => { DATA = d; D27gameModal.setData(d.tournaments); initFilters(); render(); })
   .catch(() => { document.getElementById('output').innerHTML = '<div class="ls-empty">Could not load schedule data.</div>'; });
+// click a game → preview (not started) or recap (final)
+document.getElementById('output').addEventListener('click', e => {
+  const card = e.target.closest('.ls-game[data-g]');
+  if (card) D27gameModal.openByKey(card.dataset.tkey, card.dataset.g);
+});
 </script>
 
 </body>

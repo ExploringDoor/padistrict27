@@ -73,6 +73,7 @@
 <script src="js/d27-data.js"></script>
 <script src="js/d27-bracket.js"></script>
 <script src="js/d27-scores.js"></script>
+<script src="js/d27-gamemodal.js"></script>
 <script src="js/d27-chrome.js"></script>
 <script>
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
@@ -90,7 +91,7 @@
     } else {
       match=teamHTML(A,false)+' <span class="sc-vs">vs</span> '+teamHTML(H,false);
     }
-    return '<div class="sc-game"><div class="sc-time"><div class="t">'+fmtTime(g.time)+'</div><div class="tag">'+esc(String(g.tourneyKey).replace(/_/g,' '))+'</div></div>'+
+    return '<div class="sc-game" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'"><div class="sc-time"><div class="t">'+fmtTime(g.time)+'</div><div class="tag">'+esc(String(g.tourneyKey).replace(/_/g,' '))+'</div></div>'+
       '<div class="sc-match">'+match+'</div><div class="sc-field">'+esc(g.field||'')+'</div></div>';
   }
   function render(){
@@ -117,8 +118,12 @@
     document.querySelectorAll('.sc-tab').forEach(function(x){ x.classList.toggle('active', x===b); });
     render();
   });
+  document.getElementById('scFeed').addEventListener('click', function(e){
+    var card=e.target.closest('.sc-game[data-g]');
+    if(card) D27gameModal.openByKey(card.dataset.tkey, card.dataset.g);
+  });
   (async function(){
-    try { var data=await D27loadSchedules(); ALL=D27scores.allGames(data); render(); }
+    try { var data=await D27loadSchedules(); D27gameModal.setData(data.tournaments); ALL=D27scores.allGames(data); render(); }
     catch(e){ document.getElementById('scFeed').innerHTML='<div class="hub-loading">Could not load games. Please refresh.</div>'; }
   })();
 </script>
