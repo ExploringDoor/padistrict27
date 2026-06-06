@@ -13,6 +13,7 @@
   ];
   var MORE = [
     ['live-schedule.html', 'Schedule'],
+    ['scores.html', 'Scores'],
     ['brackets.html', 'Brackets'],
     ['champions.html', 'Champions'],
     ['special-games.html', 'Special Games'],

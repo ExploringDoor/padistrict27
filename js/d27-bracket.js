@@ -90,6 +90,16 @@
     return { champion, hide };
   }
   function playedCount(t) { return (t.games || []).filter(isPlayed).length; }
+  // resolve a slot (team / WG-3 / LG-2 / bye) to a display object { name, tbd? }
+  function sideDisplay(t, raw) {
+    const ref = parseRef(raw);
+    if (ref.kind === 'team') return { name: ref.name };
+    if (ref.kind === 'bye')  return { name: 'BYE', tbd: true };
+    if (ref.kind === 'tbd')  return { name: ref.label || 'TBD', tbd: true };
+    const resolved = resolveSide(t, ref, new Set());
+    if (resolved) return { name: resolved };
+    return { name: (ref.kind === 'WG' ? 'Winner G' : 'Loser G') + ref.g, tbd: true };
+  }
 
-  global.D27bracket = { parseRef, isPlayed, classify, championOutcome, playedCount };
+  global.D27bracket = { parseRef, isPlayed, classify, championOutcome, playedCount, sideDisplay, resolveSide };
 })(window);
