@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#002D72" />
 <title>PA District 27 Little League · Baseball &amp; Softball</title>
-<meta name="description" content="PA District 27 Little League — baseball and softball tournaments across Chester, Delaware, and Montgomery Counties. Live schedules, brackets, champions, and member leagues." />
+<meta name="description" content="PA District 27 Little League — baseball and softball tournaments across Chester, Delaware, and Montgomery counties. Live schedules, brackets, champions, and member leagues." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,39 +15,73 @@
 <link rel="stylesheet" href="css/styles.css" />
 
 <style>
-  .home-hero { background: linear-gradient(135deg, rgba(0,27,71,.96) 0%, rgba(0,45,114,.9) 60%, rgba(201,162,39,.22) 100%), var(--d27-navy); color: var(--d27-white); padding: var(--space-7) 0; }
-  .home-hero .eyebrow { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: var(--space-3); }
-  .home-hero h1 { color: var(--d27-white); font-size: clamp(2.4rem, 5.5vw, 3.6rem); line-height: 1.05; margin-bottom: var(--space-3); max-width: 16ch; }
-  .home-hero p { color: rgba(255,255,255,.85); font-size: var(--text-lg); max-width: 56ch; margin-bottom: var(--space-5); }
-  .home-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
-  .home-cta a { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; font-size: var(--text-sm); padding: 12px 24px; border-radius: 6px; text-decoration: none; transition: filter .12s ease, background .12s ease; }
-  .home-cta .primary { background: var(--gold); color: var(--d27-navy); }
-  .home-cta .primary:hover { filter: brightness(1.08); }
-  .home-cta .ghost { background: rgba(255,255,255,.1); color: var(--d27-white); border: 1.5px solid rgba(255,255,255,.4); }
-  .home-cta .ghost:hover { background: rgba(255,255,255,.18); }
-  .home-hero .counties { margin-top: var(--space-5); font-size: var(--text-sm); color: rgba(255,255,255,.7); }
+  /* ── Hero ───────────────────────────────────────────── */
+  .hero {
+    position: relative; min-height: 66vh; display: flex; align-items: flex-end;
+    color: var(--d27-white); padding: var(--space-7) 0 calc(var(--space-7) + 30px);
+    background:
+      linear-gradient(180deg, rgba(0,14,38,.35) 0%, rgba(0,12,32,.55) 42%, rgba(0,9,26,.95) 100%),
+      url('assets/d27-vintage-hero.jpg') center 35% / cover no-repeat;
+    background-color: #00091a;
+  }
+  .hero .container { width: 100%; }
+  .hero .eyebrow { font-family: 'Oswald', sans-serif; font-size: var(--text-sm); letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: var(--space-3); display: inline-flex; align-items: center; gap: 12px; }
+  .hero .eyebrow::before { content: ''; width: 38px; height: 2px; background: var(--gold); }
+  .hero h1 { color: #fff; font-size: clamp(2.6rem, 6.2vw, 4.6rem); line-height: .97; letter-spacing: -.015em; margin: 0 0 var(--space-3); max-width: 15ch; text-shadow: 0 2px 40px rgba(0,0,0,.55); }
+  .hero p { color: rgba(255,255,255,.88); font-size: var(--text-lg); max-width: 50ch; margin-bottom: var(--space-5); }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  .btn { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; font-size: var(--text-sm); padding: 14px 30px; border-radius: 6px; text-decoration: none; display: inline-block; transition: transform .14s ease, filter .14s ease, background .14s ease; }
+  .btn-gold { background: var(--gold); color: var(--d27-navy); }
+  .btn-gold:hover { filter: brightness(1.08); transform: translateY(-2px); text-decoration: none; }
+  .btn-ghost { background: rgba(255,255,255,.1); color: #fff; border: 1.5px solid rgba(255,255,255,.5); }
+  .btn-ghost:hover { background: rgba(255,255,255,.2); text-decoration: none; color: #fff; }
 
-  .section-head { text-align: center; margin-bottom: var(--space-5); }
-  .section-head .eyebrow { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); letter-spacing: .14em; text-transform: uppercase; color: var(--d27-red); }
-  .section-head h2 { color: var(--d27-navy); margin: 4px 0 0; }
+  /* ── Feature tiles (Baseball / Softball) ─────────────── */
+  .features { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-top: -52px; position: relative; z-index: 5; }
+  .ft { position: relative; overflow: hidden; border-radius: 14px; padding: var(--space-6); min-height: 230px; display: flex; flex-direction: column; justify-content: flex-end; text-decoration: none; color: #fff; box-shadow: var(--shadow-lg); transition: transform .15s ease; }
+  .ft:hover { transform: translateY(-4px); text-decoration: none; color: #fff; }
+  .ft-bb { background: linear-gradient(145deg, #0a47a0 0%, var(--d27-navy-dark) 100%); }
+  .ft-sb { background: linear-gradient(145deg, #d23420 0%, var(--d27-red-dark) 100%); }
+  .ft .ft-num { position: absolute; top: -22px; right: 8px; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 9rem; line-height: 1; color: rgba(255,255,255,.09); pointer-events: none; }
+  .ft .ft-kick { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .16em; color: rgba(255,255,255,.72); }
+  .ft h2 { color: #fff; margin: 4px 0 8px; font-size: clamp(1.9rem, 3.6vw, 2.7rem); line-height: 1; }
+  .ft p { color: rgba(255,255,255,.84); font-size: var(--text-sm); margin: 0 0 var(--space-3); max-width: 36ch; }
+  .ft .ft-go { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; font-size: var(--text-sm); color: var(--gold); }
 
-  .explore { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-4); }
-  .ex-card { display: flex; flex-direction: column; gap: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: var(--space-5); text-decoration: none; color: var(--fg); transition: transform .12s ease, box-shadow .15s ease, border-color .15s ease; }
-  .ex-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: var(--d27-navy); text-decoration: none; }
-  .ex-card .ico { font-size: 2rem; }
-  .ex-card h3 { margin: 0; color: var(--d27-navy); font-size: var(--text-xl); }
-  .ex-card p { margin: 0; color: var(--muted); font-size: var(--text-sm); }
-  .ex-card .go { margin-top: auto; padding-top: 8px; font-family: 'Oswald', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .06em; color: var(--accent); }
+  /* ── Quick links ─────────────────────────────────────── */
+  .quick { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-3); margin-top: var(--space-4); }
+  .ql { display: flex; flex-direction: column; gap: 3px; padding: var(--space-4); background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--gold); border-radius: 10px; text-decoration: none; color: var(--fg); transition: transform .12s ease, box-shadow .12s ease, border-left-color .12s ease; }
+  .ql:hover { transform: translateY(-2px); box-shadow: var(--shadow); border-left-color: var(--d27-red); text-decoration: none; }
+  .ql .qt { font-family: 'Oswald', sans-serif; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--d27-navy); font-size: var(--text-base); }
+  .ql .qd { font-size: var(--text-xs); color: var(--muted); }
 
-  .champ-strip { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-3); }
-  .cs-card { display: flex; align-items: center; gap: var(--space-3); background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--gold); border-radius: var(--radius); padding: var(--space-4); }
-  .cs-card .trophy { font-size: 1.6rem; }
-  .cs-card .yr { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); color: var(--muted); }
-  .cs-card .team { font-family: 'Oswald', sans-serif; font-size: var(--text-lg); font-weight: 600; color: var(--d27-navy); line-height: 1.1; }
-  .cs-card .tn { font-size: var(--text-xs); color: var(--muted); }
-  .home-section { padding: var(--space-7) 0; }
-  .home-section.alt { background: var(--d27-sub); }
-  .center-cta { text-align: center; margin-top: var(--space-5); }
+  /* ── Champions band ──────────────────────────────────── */
+  .champ-band { background: linear-gradient(135deg, var(--d27-navy) 0%, var(--d27-navy-dark) 100%); color: #fff; margin-top: var(--space-7); padding: var(--space-7) 0; }
+  .champ-band .head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-5); flex-wrap: wrap; }
+  .champ-band .eyebrow { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
+  .champ-band h2 { color: #fff; margin: 4px 0 0; font-size: var(--text-3xl); }
+  .champ-band .seeall { color: var(--gold); font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: .05em; font-size: var(--text-sm); text-decoration: none; white-space: nowrap; }
+  .champ-band .seeall:hover { text-decoration: underline; }
+  .cstrip { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: var(--space-3); }
+  .cs { display: flex; align-items: center; gap: var(--space-3); background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.13); border-left: 4px solid var(--gold); border-radius: 10px; padding: var(--space-4); }
+  .cs .tr { font-size: 1.5rem; line-height: 1; }
+  .cs .yr { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); color: rgba(255,255,255,.62); text-transform: uppercase; letter-spacing: .06em; }
+  .cs .tm { font-family: 'Oswald', sans-serif; font-size: var(--text-lg); font-weight: 600; color: #fff; line-height: 1.1; }
+  .cs .tn { font-size: var(--text-xs); color: rgba(255,255,255,.6); }
+
+  /* ── Leagues strip ───────────────────────────────────── */
+  .leagues-strip { padding: var(--space-7) 0; }
+  .leagues-strip .head { text-align: center; margin-bottom: var(--space-5); }
+  .leagues-strip .eyebrow { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); letter-spacing: .16em; text-transform: uppercase; color: var(--d27-red); }
+  .leagues-strip h2 { color: var(--d27-navy); margin: 4px 0 0; }
+  .lg-chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 880px; margin: 0 auto; }
+  .lg-chips a { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: .04em; font-size: var(--text-sm); font-weight: 500; color: var(--d27-navy); background: var(--surface); border: 1px solid var(--line); padding: 9px 18px; border-radius: 999px; text-decoration: none; transition: all .12s ease; }
+  .lg-chips a:hover { background: var(--d27-navy); color: #fff; border-color: var(--d27-navy); text-decoration: none; }
+
+  @media (max-width: 720px) {
+    .features { grid-template-columns: 1fr; margin-top: var(--space-5); }
+    .quick { grid-template-columns: 1fr 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -55,40 +89,74 @@
 <div id="d27-nav"></div>
 
 <!-- Hero -->
-<header class="home-hero">
+<header class="hero">
   <div class="container">
-    <div class="eyebrow">PA District 27 Little League</div>
-    <h1>Baseball &amp; Softball Tournaments</h1>
-    <p>Live schedules, brackets, and champions for District 27's tournament season — across Chester, Delaware, and Montgomery counties.</p>
-    <div class="home-cta">
-      <a class="primary" href="live-schedule.html">View Schedules</a>
-      <a class="ghost" href="brackets.html">View Brackets</a>
+    <div class="eyebrow">PA District 27 Little League · Est. 1956</div>
+    <h1>The 2026 Tournament Season</h1>
+    <p>Live brackets, schedules, and champions for the leagues of Chester, Delaware &amp; Montgomery counties.</p>
+    <div class="hero-cta">
+      <a class="btn btn-gold" href="live-schedule.html">View Schedule</a>
+      <a class="btn btn-ghost" href="brackets.html">Brackets</a>
     </div>
-    <div class="counties">12 member leagues · Baseball &amp; Softball · Ages 8–16</div>
   </div>
 </header>
 
-<!-- Explore -->
-<section class="home-section">
-  <div class="container">
-    <div class="section-head"><span class="eyebrow">Explore</span><h2>The 2026 Tournament Season</h2></div>
-    <div class="explore">
-      <a class="ex-card" href="baseball.html"><span class="ico">⚾</span><h3>Baseball</h3><p>International divisions, Special Games, Sectional &amp; State.</p><span class="go">View tournaments →</span></a>
-      <a class="ex-card" href="softball.html"><span class="ico">🥎</span><h3>Softball</h3><p>International divisions, Special Games &amp; Sectional.</p><span class="go">View tournaments →</span></a>
-      <a class="ex-card" href="live-schedule.html"><span class="ico">📅</span><h3>Schedules</h3><p>Every game, grouped by tournament and date.</p><span class="go">View schedule →</span></a>
-      <a class="ex-card" href="brackets.html"><span class="ico">🏆</span><h3>Brackets</h3><p>Live double-elimination brackets that update with scores.</p><span class="go">View brackets →</span></a>
-      <a class="ex-card" href="champions.html"><span class="ico">🥇</span><h3>Champions</h3><p>This season's titles plus the past-champions archive.</p><span class="go">View champions →</span></a>
-      <a class="ex-card" href="leagues.html"><span class="ico">📍</span><h3>Leagues &amp; Fields</h3><p>All 12 member leagues, home fields, and websites.</p><span class="go">View leagues →</span></a>
-    </div>
+<!-- Baseball / Softball + quick links -->
+<section class="container">
+  <div class="features">
+    <a class="ft ft-bb" href="baseball.html">
+      <span class="ft-num">27</span>
+      <span class="ft-kick">8 Tournaments</span>
+      <h2>Baseball</h2>
+      <p>International divisions, District Special Games, Section&nbsp;8, and the Pennsylvania State Championship.</p>
+      <span class="ft-go">Explore tournaments →</span>
+    </a>
+    <a class="ft ft-sb" href="softball.html">
+      <span class="ft-num">27</span>
+      <span class="ft-kick">5 Tournaments</span>
+      <h2>Softball</h2>
+      <p>International divisions, District Special Games, and Section&nbsp;8.</p>
+      <span class="ft-go">Explore tournaments →</span>
+    </a>
+  </div>
+
+  <div class="quick">
+    <a class="ql" href="live-schedule.html"><span class="qt">Schedule</span><span class="qd">Every game, by date</span></a>
+    <a class="ql" href="brackets.html"><span class="qt">Brackets</span><span class="qd">Live &amp; auto-updating</span></a>
+    <a class="ql" href="champions.html"><span class="qt">Champions</span><span class="qd">This year + archive</span></a>
+    <a class="ql" href="leagues.html"><span class="qt">Leagues</span><span class="qd">Fields &amp; websites</span></a>
   </div>
 </section>
 
-<!-- Recent champions (live) -->
-<section class="home-section alt">
+<!-- Reigning champions (live) -->
+<section class="champ-band">
   <div class="container">
-    <div class="section-head"><span class="eyebrow">District 27</span><h2>Recent Champions</h2></div>
-    <div class="champ-strip" id="recentChamps"><div style="text-align:center;color:var(--muted);grid-column:1/-1">Loading…</div></div>
-    <div class="center-cta"><a class="home-cta primary" style="display:inline-block;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.05em;font-weight:600;font-size:var(--text-sm);padding:12px 24px;border-radius:6px;text-decoration:none;background:var(--d27-navy);color:#fff" href="champions.html">All Champions →</a></div>
+    <div class="head">
+      <div><span class="eyebrow">District 27</span><h2>Reigning Champions</h2></div>
+      <a class="seeall" href="champions.html">All champions →</a>
+    </div>
+    <div class="cstrip" id="recentChamps"><div style="color:rgba(255,255,255,.6)">Loading champions…</div></div>
+  </div>
+</section>
+
+<!-- Member leagues -->
+<section class="leagues-strip">
+  <div class="container">
+    <div class="head"><span class="eyebrow">12 Member Leagues</span><h2>Across Three Counties</h2></div>
+    <div class="lg-chips">
+      <a href="leagues.html">Berwyn-Paoli</a>
+      <a href="leagues.html">Chester Valley</a>
+      <a href="leagues.html">Coventry</a>
+      <a href="leagues.html">Devon-Strafford</a>
+      <a href="leagues.html">Exton</a>
+      <a href="leagues.html">Great Valley</a>
+      <a href="leagues.html">Lower Merion</a>
+      <a href="leagues.html">Lower Perkiomen</a>
+      <a href="leagues.html">Pottsgrove</a>
+      <a href="leagues.html">Pottstown</a>
+      <a href="leagues.html">Radnor-Wayne</a>
+      <a href="leagues.html">Upper Providence</a>
+    </div>
   </div>
 </section>
 
@@ -100,15 +168,14 @@
 <script>
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function csCard(yr, c){
-    return '<div class="cs-card"><span class="trophy">🏆</span><div>' +
+    return '<div class="cs"><span class="tr">🏆</span><div>' +
       '<div class="yr">' + esc(yr) + (c.sport ? ' · ' + esc(c.sport) : '') + '</div>' +
-      '<div class="team">' + esc(c.team) + '</div>' +
+      '<div class="tm">' + esc(c.team) + '</div>' +
       '<div class="tn">' + esc(c.tournament) + '</div></div></div>';
   }
   (async function(){
     var el = document.getElementById('recentChamps');
     var items = [];
-    // Live current-season champions first
     try {
       var data = await window.D27loadSchedules();
       (data.tournaments || []).forEach(function(t){
@@ -116,16 +183,13 @@
           if (ch) items.push(['2026', { sport: t.sport, team: ch, tournament: t.name }]); } catch(e){}
       });
     } catch(e){}
-    // Fill out with the most recent archive year
     try {
       var res = await fetch('data/champions-history.json');
       var hist = await res.json();
-      (hist.years || []).forEach(function(y){
-        (y.champions || []).forEach(function(c){ items.push([String(y.year), c]); });
-      });
+      (hist.years || []).forEach(function(y){ (y.champions || []).forEach(function(c){ items.push([String(y.year), c]); }); });
     } catch(e){}
-    el.innerHTML = items.slice(0, 6).map(function(p){ return csCard(p[0], p[1]); }).join('') ||
-      '<div style="text-align:center;color:var(--muted);grid-column:1/-1">Champions will appear here as tournaments finish.</div>';
+    el.innerHTML = items.slice(0, 8).map(function(p){ return csCard(p[0], p[1]); }).join('') ||
+      '<div style="color:rgba(255,255,255,.6)">Champions will appear here as tournaments finish.</div>';
   })();
 </script>
 
