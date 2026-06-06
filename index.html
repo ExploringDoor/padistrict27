@@ -58,20 +58,21 @@
   .ql .qd { font-size: var(--text-xs); color: var(--muted); }
 
   /* ── Champions band ──────────────────────────────────── */
-  .champ-band { background: linear-gradient(135deg, var(--d27-navy) 0%, var(--d27-navy-dark) 100%); color: #fff; margin-top: var(--space-7); padding: var(--space-7) 0; }
+  .champ-band { background: var(--d27-sub, #eef2f7); margin-top: var(--space-7); padding: var(--space-7) 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
   .champ-band .head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-5); flex-wrap: wrap; }
-  .champ-band .eyebrow { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
-  .champ-band h2 { color: #fff; margin: 4px 0 0; font-size: var(--text-3xl); }
-  .champ-band .seeall { color: var(--gold); font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: .05em; font-size: var(--text-sm); text-decoration: none; white-space: nowrap; }
+  .champ-band .eyebrow { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); letter-spacing: .16em; text-transform: uppercase; color: var(--gold-deep, #9a7b16); }
+  .champ-band h2 { color: var(--d27-navy); margin: 4px 0 0; font-size: var(--text-3xl); }
+  .champ-band .seeall { color: var(--d27-navy); font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: .05em; font-size: var(--text-sm); text-decoration: none; white-space: nowrap; }
   .champ-band .seeall:hover { text-decoration: underline; }
   .cstrip { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: var(--space-3); }
-  .cs { display: flex; align-items: center; gap: var(--space-3); background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.13); border-left: 4px solid var(--gold); border-radius: 10px; padding: var(--space-4); }
-  .cs .tr { font-size: 1.5rem; line-height: 1; }
-  .cs .cs-logo { display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; background: #fff; border-radius: 9px; padding: 5px; flex: none; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
-  .cs .cs-logo .d27-logo, .cs .cs-logo .d27-logo-fb { width: 40px !important; height: 40px !important; }
-  .cs .yr { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); color: rgba(255,255,255,.62); text-transform: uppercase; letter-spacing: .06em; }
-  .cs .tm { font-family: 'Oswald', sans-serif; font-size: var(--text-lg); font-weight: 600; color: #fff; line-height: 1.1; }
-  .cs .tn { font-size: var(--text-xs); color: rgba(255,255,255,.6); }
+  .cs { display: flex; align-items: center; gap: var(--space-3); background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--gold); border-radius: 10px; padding: var(--space-4); transition: transform .15s ease, box-shadow .15s ease; }
+  .cs:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(0,23,60,.12); }
+  .cs .tr { font-size: 1.7rem; line-height: 1; flex: none; }
+  .cs .cs-logo { display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; flex: none; }
+  .cs .cs-logo .d27-logo, .cs .cs-logo .d27-logo-fb { width: 48px !important; height: 48px !important; }
+  .cs .yr { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .cs .tm { font-family: 'Oswald', sans-serif; font-size: var(--text-lg); font-weight: 600; color: var(--d27-navy); line-height: 1.1; }
+  .cs .tn { font-size: var(--text-xs); color: var(--muted); }
 
   /* ── Leagues strip ───────────────────────────────────── */
   .leagues-strip { padding: var(--space-7) 0; }
