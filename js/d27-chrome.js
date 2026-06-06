@@ -9,6 +9,7 @@
     ['index.html', 'Home'],
     ['baseball.html', 'Baseball'],
     ['softball.html', 'Softball'],
+    ['special-games.html', 'Special Games'],
     ['leagues.html', 'Leagues'],
   ];
   var MORE = [
@@ -16,7 +17,6 @@
     ['scores.html', 'Scores'],
     ['brackets.html', 'Brackets'],
     ['champions.html', 'Champions'],
-    ['special-games.html', 'Special Games'],
     ['rules.html', 'Rules'],
     ['history.html', 'History'],
     ['scholarship.html', 'Scholarship'],
