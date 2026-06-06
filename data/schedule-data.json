@@ -1999,193 +1999,97 @@
      "n": 1,
      "name": "Coventry (Vermillion)",
      "abbr": "COV1",
-     "park": 16.063
+     "park": "COV-Wampler Complex"
     },
     {
      "n": 2,
      "name": "Coventry (Keeler)",
      "abbr": "COV2",
-     "park": 11.06
+     "park": ""
     },
     {
      "n": 3,
      "name": "Berwyn-Paoli",
      "abbr": "BP",
-     "park": 12.03
+     "park": "BP-Field of Dreams"
     },
     {
      "n": 4,
      "name": "Devon/Strafford",
      "abbr": "DS",
-     "park": 9.07
+     "park": "D/S-Clarke Field"
     },
     {
      "n": 5,
      "name": "Chester Valley (Arena)",
      "abbr": "CV1",
-     "park": 16.061
+     "park": "CV-Monument Park"
     },
     {
      "n": 6,
      "name": "Chester Valley (Culbertson)",
      "abbr": "CV2",
-     "park": 15.08
+     "park": ""
     },
     {
      "n": 7,
      "name": "GVE (Morabito)",
      "abbr": "GVE1",
-     "park": 5.11
+     "park": "GV-King Road"
     },
     {
      "n": 8,
      "name": "GVE (Plaskas)",
      "abbr": "GVE2",
-     "park": 10.09
+     "park": "EX-Ship Park"
     },
     {
      "n": 9,
      "name": "Lower Merion",
      "abbr": "LM",
-     "park": 10.1
+     "park": "Lower Merion"
     },
     {
      "n": 10,
      "name": "Lower Perk (Ceneviva)",
      "abbr": "LP1",
-     "park": 5.02
+     "park": "LP-Palmer Park"
     },
     {
      "n": 11,
      "name": "Lower Perk (Gawel)",
      "abbr": "LP2",
-     "park": 12.08
+     "park": ""
     },
     {
      "n": 12,
      "name": "Radnor/Wayne (Parkyn)",
      "abbr": "RW1",
-     "park": 8.07
+     "park": "R/W-Encke Park"
     },
     {
      "n": 13,
      "name": "Radnor/Wayne (Morris)",
      "abbr": "RW2",
-     "park": 8.06
+     "park": ""
     },
     {
      "n": 14,
      "name": "Upper Prov (Batty)",
      "abbr": "UP1",
-     "park": 14.1
+     "park": "UP-MacFarlan Park"
     },
     {
      "n": 15,
      "name": "Upper Prov (McCormick)",
      "abbr": "UP2",
-     "park": 7.03
+     "park": ""
     },
     {
      "n": 16,
      "name": "BYE",
      "abbr": "BYE",
-     "park": 10.04
-    },
-    {
-     "n": 1,
-     "name": "Lower Perk (Ceneviva)",
-     "abbr": "LP1-D27-BB9",
-     "park": null
-    },
-    {
-     "n": 2,
-     "name": "GVE (Morabito)",
-     "abbr": "GVE1-D27-BB9",
-     "park": null
-    },
-    {
-     "n": 3,
-     "name": "Upper Prov (McCormick)",
-     "abbr": "UP2-D27-BB9",
-     "park": null
-    },
-    {
-     "n": 4,
-     "name": "Radnor/Wayne (Morris)",
-     "abbr": "RW2-D27-BB9",
-     "park": null
-    },
-    {
-     "n": 5,
-     "name": "Radnor/Wayne (Parkyn)",
-     "abbr": "RW1-D27-BB9",
-     "park": null
-    },
-    {
-     "n": 6,
-     "name": "Devon/Strafford",
-     "abbr": "DS-D27-BB9",
-     "park": null
-    },
-    {
-     "n": 7,
-     "name": "BYE",
-     "abbr": "BYE-D27-BB9",
-     "park": null
-    },
-    {
-     "n": 8,
-     "name": "GVE (Plaskas)",
-     "abbr": "GVE2-D27-BB9",
-     "park": null
-    },
-    {
-     "n": 9,
-     "name": "Lower Merion",
-     "abbr": "LM-D27-BB9",
-     "park": null
-    },
-    {
-     "n": 10,
-     "name": "Coventry (Keeler)",
-     "abbr": "COV2-D27-BB9",
-     "park": null
-    },
-    {
-     "n": 11,
-     "name": "Berwyn-Paoli",
-     "abbr": "BP-D27-BB9",
-     "park": null
-    },
-    {
-     "n": 12,
-     "name": "Lower Perk (Gawel)",
-     "abbr": "LP2-D27-BB9",
-     "park": null
-    },
-    {
-     "n": 13,
-     "name": "Upper Prov (Batty)",
-     "abbr": "UP1-D27-BB9",
-     "park": null
-    },
-    {
-     "n": 14,
-     "name": "Chester Valley (Culbertson)",
-     "abbr": "CV2-D27-BB9",
-     "park": null
-    },
-    {
-     "n": 15,
-     "name": "Chester Valley (Arena)",
-     "abbr": "CV1-D27-BB9",
-     "park": null
-    },
-    {
-     "n": 16,
-     "name": "Coventry (Vermillion)",
-     "abbr": "COV1-D27-BB9",
-     "park": null
+     "park": "N/A"
     }
    ],
    "category": "D27 Special Games",
@@ -2259,37 +2163,31 @@
      "n": 1,
      "name": "Devon/Strafford",
      "abbr": "DS",
-     "park": 6.06
+     "park": "DS-Clarke Field"
     },
     {
      "n": 2,
      "name": "Chester Valley",
      "abbr": "CV",
-     "park": 11.08
+     "park": "CV-Monument Park"
     },
     {
      "n": 3,
      "name": "GVE1 (Grizzlies)",
      "abbr": "GVE1",
-     "park": 11.05
+     "park": "EX-Ship Park"
     },
     {
      "n": 4,
      "name": "GVE2 (TBD)",
      "abbr": "GVE2",
-     "park": 11.09
+     "park": "GV-King Road"
     },
     {
      "n": 5,
      "name": "Lower Perk (TBD)",
      "abbr": "LP1",
-     "park": 14.04
-    },
-    {
-     "n": 6,
-     "name": "Lower Perk (TBD)",
-     "abbr": "LP2",
-     "park": 8.08
+     "park": "LP-Palmer Park"
     }
    ],
    "category": "D27 Special Games",
@@ -2363,25 +2261,25 @@
      "n": 1,
      "name": "Coventry 1 (Penn State)",
      "abbr": "COV1",
-     "park": 12.07
+     "park": "COV-Wampler Complex"
     },
     {
      "n": 2,
      "name": "Coventry 2 (Texas Tech)",
      "abbr": "COV2",
-     "park": 6.09
+     "park": ""
     },
     {
      "n": 3,
      "name": "Lower Perk",
      "abbr": "LP",
-     "park": 11
+     "park": "LP-Palmer Park"
     },
     {
      "n": 4,
      "name": "PGP",
      "abbr": "PGP",
-     "park": 11.08
+     "park": "PT-Novak Park"
     }
    ],
    "category": "D27 Special Games",
