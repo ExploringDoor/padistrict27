@@ -65,11 +65,19 @@
   .ed-notconfigured h2 { font-family: var(--font-display); margin: 0 0 8px; color: #92400e; }
   .ed-notconfigured code { background: rgba(0,0,0,.06); padding: 1px 6px; border-radius: 3px; }
 
-  /* Excel import */
-  .ed-import { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 22px; margin: 18px 0; }
-  .ed-import .imp-head h3 { font-family: var(--font-display); margin: 0 0 4px; color: var(--d27-navy); }
-  .ed-import .imp-head p { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
-  .ed-import .imp-head code { background: var(--d27-sub); padding: 1px 5px; border-radius: 3px; }
+  /* Excel import — trigger button + modal */
+  .ed-import-bar { display: flex; justify-content: flex-end; margin: 18px 0 0; }
+  .ed-import-btn { background: var(--surface); border: 1px solid var(--d27-navy); color: var(--d27-navy); padding: 9px 16px; border-radius: 6px; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .03em; text-transform: uppercase; cursor: pointer; }
+  .ed-import-btn:hover { background: var(--d27-navy); color: #fff; }
+  .imp-modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-start; justify-content: center; padding: 56px 20px; }
+  .imp-modal-backdrop { position: absolute; inset: 0; background: rgba(0,12,32,.55); }
+  .imp-modal-card { position: relative; z-index: 1; background: var(--surface); border-radius: 12px; box-shadow: 0 24px 60px rgba(0,0,0,.3); width: 100%; max-width: 560px; padding: 22px 24px; max-height: 85vh; overflow-y: auto; }
+  .imp-modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .imp-modal-head h3 { font-family: var(--font-display); margin: 0; color: var(--d27-navy); font-size: 19px; }
+  .imp-x { background: none; border: none; font-size: 26px; line-height: 1; color: var(--muted); cursor: pointer; padding: 0 4px; }
+  .imp-x:hover { color: var(--d27-navy); }
+  .imp-modal-sub { margin: 0 0 16px; color: var(--muted); font-size: 14px; }
+  .imp-modal-sub code { background: var(--d27-sub); padding: 1px 5px; border-radius: 3px; }
   .imp-drop { display: flex; align-items: center; gap: 16px; justify-content: center; border: 2px dashed var(--line); border-radius: 10px; padding: 26px; cursor: pointer; transition: border-color .15s ease, background .15s ease; background: var(--d27-paper); }
   .imp-drop:hover, .imp-drop.over { border-color: var(--d27-navy); background: rgba(0,45,114,.04); }
   .imp-drop .imp-ico { font-size: 30px; color: var(--d27-navy); line-height: 1; }
@@ -134,17 +142,25 @@
       <span id="seedStatus" style="margin-left:12px; font-size:13px; color:var(--muted);"></span>
     </div>
 
-    <div class="ed-import" id="importBox">
-      <div class="imp-head">
-        <h3>📥 Import a tournament from Excel</h3>
-        <p>Drop one of your D27 schedule files (<code>.xlsx</code>) to add or update an entire tournament at once — games, teams, dates &amp; fields.</p>
+    <div class="ed-import-bar">
+      <button class="ed-import-btn" id="openImport">📥 Import a tournament from Excel</button>
+    </div>
+
+    <div class="imp-modal hidden" id="impModal">
+      <div class="imp-modal-backdrop" id="impBackdrop"></div>
+      <div class="imp-modal-card">
+        <div class="imp-modal-head">
+          <h3>📥 Import a tournament from Excel</h3>
+          <button class="imp-x" id="closeImport" aria-label="Close">×</button>
+        </div>
+        <p class="imp-modal-sub">Drop one of your D27 schedule files (<code>.xlsx</code>) to add or update an entire tournament — games, teams, dates &amp; fields.</p>
+        <label class="imp-drop" id="dropZone">
+          <input type="file" id="xlsxInput" accept=".xlsx,.xls" hidden />
+          <span class="imp-ico">⤓</span>
+          <span class="imp-tx"><b>Drag your Excel file here</b><span>or click to choose · .xlsx</span></span>
+        </label>
+        <div class="imp-preview hidden" id="impPreview"></div>
       </div>
-      <label class="imp-drop" id="dropZone">
-        <input type="file" id="xlsxInput" accept=".xlsx,.xls" hidden />
-        <span class="imp-ico">⤓</span>
-        <span class="imp-tx"><b>Drag your Excel file here</b><span>or click to choose · .xlsx</span></span>
-      </label>
-      <div class="imp-preview hidden" id="impPreview"></div>
     </div>
 
     <div id="editorMain" class="hidden">
@@ -468,7 +484,7 @@ async function impSave(){
     $('impStatus').className='imp-status ok';
     await loadAll();
     const sel=$('tourneySelect'); if (sel){ sel.value=key; sel.dispatchEvent(new Event('change')); }
-    setTimeout(()=>{ $('impPreview').classList.add('hidden'); $('xlsxInput').value=''; }, 2600);
+    setTimeout(()=>{ $('impPreview').classList.add('hidden'); $('xlsxInput').value=''; const md=$('impModal'); if(md) md.classList.add('hidden'); }, 2600);
   }catch(e){ $('impStatus').textContent='Error: '+e.message; $('impStatus').className='imp-status err'; }
 }
 function impHandleFile(file){
@@ -492,6 +508,15 @@ function impHandleFile(file){
   ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.add('over'); }));
   ['dragleave','dragend'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.remove('over'); }));
   dz.addEventListener('drop', e=>{ e.preventDefault(); dz.classList.remove('over'); impHandleFile(e.dataTransfer.files && e.dataTransfer.files[0]); });
+})();
+// import modal open/close
+(function(){
+  const openBtn=$('openImport'), modal=$('impModal'), closeBtn=$('closeImport'), bd=$('impBackdrop');
+  const hide=()=>{ if(modal) modal.classList.add('hidden'); };
+  if(openBtn) openBtn.addEventListener('click', ()=>{ if(modal) modal.classList.remove('hidden'); });
+  if(closeBtn) closeBtn.addEventListener('click', hide);
+  if(bd) bd.addEventListener('click', hide);
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') hide(); });
 })();
 </script>
 
