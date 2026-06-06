@@ -208,6 +208,7 @@
 <script src="js/d27-data.js"></script>
 <script src="js/d27-bracket.js"></script>
 <script src="js/d27-scores.js"></script>
+<script src="js/d27-gamemodal.js"></script>
 <script src="js/d27-chrome.js"></script>
 <script>
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
@@ -244,14 +245,19 @@
     } else {
       mt='<span class="hc-tm">'+esc(A.name)+'</span> <span style="color:var(--muted);font-size:12px">vs</span> <span class="hc-tm">'+esc(H.name)+'</span>';
     }
-    return '<div class="hc-row"><span class="hc-when">'+when+'</span><span class="hc-mt">'+mt+'</span><span class="hc-tag">'+esc(String(g.tourneyKey).replace(/_/g,' '))+'</span></div>';
+    return '<div class="hc-row" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'"><span class="hc-when">'+when+'</span><span class="hc-mt">'+mt+'</span><span class="hc-tag">'+esc(String(g.tourneyKey).replace(/_/g,' '))+'</span></div>';
   }
   (async function(){
     try {
       var data = await D27loadSchedules();
+      if (window.D27gameModal) D27gameModal.setData(data.tournaments);
       var recent = D27scores.recentResults(data, 5), up = D27scores.upcoming(data, 5);
       document.getElementById('hcScores').innerHTML = recent.length ? recent.map(function(g){return hcRow(g,'result');}).join('') : '<div class="hc-empty">No results yet — the season hasn\'t started.</div>';
       document.getElementById('hcUpcoming').innerHTML = up.length ? up.map(function(g){return hcRow(g,'upcoming');}).join('') : '<div class="hc-empty">Schedule coming soon.</div>';
+      document.querySelector('.home-cards').addEventListener('click', function(e){
+        var row = e.target.closest('.hc-row[data-g]');
+        if (row && window.D27gameModal) D27gameModal.openByKey(row.dataset.tkey, row.dataset.g);
+      });
     } catch(e){
       document.getElementById('hcScores').innerHTML='<div class="hc-empty">Could not load scores.</div>';
       document.getElementById('hcUpcoming').innerHTML='<div class="hc-empty">Could not load schedule.</div>';
