@@ -315,10 +315,12 @@ function colsFromEnd(t, games) {
 // render one section (Winners / Losers / Final) as its own clean tree
 function sectionCanvas(t, games, cls, accent) {
   const inSet = new Set(games.map(g => g.g));
-  // COLUMNS (x): winners + championship lay out by distance-to-final, so a
-  // play-in game sits in its own column BEFORE round 1. Losers keep
-  // distance-from-start (aligns the drop-in rounds).
-  const depth = (accent === 'w') ? colsFromEnd(t, games) : depthInSubset(t, games);
+  // COLUMNS (x): distance-to-final — every game lines up by how many games
+  // remain until the final (the way a bracket reads right-to-left). Play-in
+  // games land in their own column before round 1, and the TWO games that feed
+  // a given game always share a column instead of staggering, so no connector
+  // line ever has to jump across a column. Used for winners AND losers.
+  const depth = colsFromEnd(t, games);
   const SLOT = CARD_H + ROW_GAP;
 
   // ROWS (y): draw it the way a real bracket is drawn — walk the tree from the
