@@ -1,45 +1,305 @@
 {
-  "source": "padistrict27.com/tournament-winners",
-  "years": [
+ "source": "padistrict27.com/tournament-winners",
+ "years": [
+  {
+   "year": 2025,
+   "champions": [
     {
-      "year": 2025,
-      "champions": [
-        { "sport": "Baseball", "tournament": "Intermediate (50/70) — BB-INT", "team": "Lower Merion" },
-        { "sport": "Softball", "tournament": "Softball 12U — SB-12", "team": "Lower Perk" },
-        { "sport": "Softball", "tournament": "Softball Majors", "team": "Lower Perk Gators" }
-      ]
+     "sport": "Baseball",
+     "tournament": "Bob Jones",
+     "team": "Lower Perk Marlins"
     },
     {
-      "year": 2024,
-      "champions": [
-        { "sport": "Baseball", "tournament": "BB-10 (8-9-10)", "team": "Upper Providence" },
-        { "sport": "Baseball", "tournament": "Bob Jones Tournament", "team": "Chester Valley", "note": "Won 17–15" },
-        { "sport": "Softball", "tournament": "Softball 11U — SB-11", "team": "Radnor-Wayne" }
-      ]
+     "sport": "Baseball",
+     "tournament": "Intermediate (50/70) — BB-INT",
+     "team": "Lower Merion"
     },
     {
-      "year": 2023,
-      "champions": [
-        { "sport": "Baseball", "tournament": "Bob Jones Tournament", "team": "Lower Perk Cubs" },
-        { "sport": "Baseball", "tournament": "John Klein — Blue", "team": "Great Valley Blue" },
-        { "sport": "Baseball", "tournament": "John Klein — Red", "team": "Devon-Strafford" }
-      ]
+     "sport": "Baseball",
+     "tournament": "Junior League — BB-JR",
+     "team": "Chester Valley"
     },
     {
-      "year": 2022,
-      "champions": [
-        { "sport": "Baseball", "tournament": "BB-12 (10-11-12)", "team": "Lower Perk" },
-        { "sport": "Baseball", "tournament": "Junior League — BB-JRS", "team": "Radnor-Wayne" },
-        { "sport": "Softball", "tournament": "District Championship", "team": "DSBP", "note": "Defeated Lower Perk 10–0" }
-      ]
+     "sport": "Baseball",
+     "tournament": "Senior League — BB-SR",
+     "team": "Chester Valley"
     },
     {
-      "year": 2021,
-      "champions": [
-        { "sport": "Baseball", "tournament": "PA State Championship", "team": "Upper Providence", "note": "State champions" },
-        { "sport": "Baseball", "tournament": "Mid-Atlantic Eastern Regional", "team": "Upper Providence", "note": "Regional champions" },
-        { "sport": "Baseball", "tournament": "Bob Jones District 27", "team": "Lower Perk Astros" }
-      ]
+     "sport": "Softball",
+     "tournament": "Softball 12U — SB-12",
+     "team": "Lower Perk"
+    },
+    {
+     "sport": "Softball",
+     "tournament": "Softball Majors",
+     "team": "Lower Perk Gators"
     }
-  ]
+   ]
+  },
+  {
+   "year": 2024,
+   "champions": [
+    {
+     "sport": "Baseball",
+     "tournament": "Baseball (8-10) — BB-10",
+     "team": "Upper Providence"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Baseball (9-11) — BB-11",
+     "team": "Radnor Wayne"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Bob Jones",
+     "team": "Chester Valley"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Intermediate (50/70) — BB-INT",
+     "team": "Lower Merion"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Junior League — BB-JR",
+     "team": "Chester Valley"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Majors (10-12) — BB-12",
+     "team": "Coventry"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Senior League — BB-SR",
+     "team": "Chester Valley"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Special Games 9U — BB-9",
+     "team": "Radnor Wayne"
+    },
+    {
+     "sport": "Softball",
+     "tournament": "Senior Softball — SB-SR",
+     "team": "Coventry"
+    },
+    {
+     "sport": "Softball",
+     "tournament": "Softball 10U — SB-10",
+     "team": "DSBP"
+    },
+    {
+     "sport": "Softball",
+     "tournament": "Softball 11U — SB-11",
+     "team": "Radnor Wayne"
+    },
+    {
+     "sport": "Softball",
+     "tournament": "Softball 12U — SB-12",
+     "team": "Radnor Wayne"
+    }
+   ]
+  },
+  {
+   "year": 2023,
+   "champions": [
+    {
+     "sport": "Baseball",
+     "tournament": "Baseball (8-10) — BB-10",
+     "team": "Upper Providence"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Bennett Blue",
+     "team": "Lower Perk"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Bob Jones",
+     "team": "Lower Perk Cubs"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "John Klein — Blue",
+     "team": "Great Valley Blue"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "John Klein — Red",
+     "team": "Devon Strafford"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Section 8",
+     "team": "D22-Plymouth"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Section 8",
+     "team": "Lower Perk"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Special Games 9U — BB-9",
+     "team": "Upper Providence"
+    },
+    {
+     "sport": "Softball",
+     "tournament": "Junior Softball — SB-JR",
+     "team": "Radnor Wayne"
+    },
+    {
+     "sport": "Softball",
+     "tournament": "Softball 11U — SB-11",
+     "team": "Lower Merion"
+    },
+    {
+     "sport": "Softball",
+     "tournament": "Softball 12U — SB-12",
+     "team": "Lower Perk"
+    }
+   ]
+  },
+  {
+   "year": 2022,
+   "champions": [
+    {
+     "sport": "Baseball",
+     "tournament": "Baseball (8-10) — BB-10",
+     "team": "Upper Providence"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Baseball (9-11) — BB-11",
+     "team": "Coventry"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Bob Jones",
+     "team": "Lower Perk Pirates"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "District Championship",
+     "team": "DSBP"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "District Championship",
+     "team": "Great Valley"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Intermediate (50/70) — BB-INT",
+     "team": "Lower Merion"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Junior League — BB-JR",
+     "team": "Radnor Wayne"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Majors (10-12) — BB-12",
+     "team": "Lower Perk"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Special Games 9U — BB-9",
+     "team": "Upper Providence"
+    },
+    {
+     "sport": "Softball",
+     "tournament": "Softball 10U — SB-10",
+     "team": "Lower Perk"
+    },
+    {
+     "sport": "Softball",
+     "tournament": "Softball 11U — SB-11",
+     "team": "Lower Perk"
+    }
+   ]
+  },
+  {
+   "year": 2021,
+   "champions": [
+    {
+     "sport": "Baseball",
+     "tournament": "Baseball (8-10) — BB-10",
+     "team": "Coventry"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Baseball (9-11) — BB-11",
+     "team": "Lower Perk"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Bob Jones",
+     "team": "Lower Perk Astros"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "District Championship",
+     "team": "Upper Providence"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "District Championship",
+     "team": "DSBP"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Eastern Regional",
+     "team": "Upper Providence"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Intermediate (50/70) — BB-INT",
+     "team": "Lower Merion"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "PA State",
+     "team": "Upper Providence"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Section 8",
+     "team": "Lower Merion"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Section 8",
+     "team": "DSBP"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Senior League — BB-SR",
+     "team": "Exton"
+    },
+    {
+     "sport": "Baseball",
+     "tournament": "Special Games 9U — BB-9",
+     "team": "Coventry"
+    },
+    {
+     "sport": "Softball",
+     "tournament": "Senior Softball — SB-SR",
+     "team": "Chester Valley"
+    },
+    {
+     "sport": "Softball",
+     "tournament": "Softball 10U — SB-10",
+     "team": "Lower Perk"
+    },
+    {
+     "sport": "Softball",
+     "tournament": "Softball 11U — SB-11",
+     "team": "DSBP"
+    }
+   ]
+  }
+ ]
 }

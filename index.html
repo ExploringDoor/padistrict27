@@ -67,6 +67,8 @@
   .cstrip { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: var(--space-3); }
   .cs { display: flex; align-items: center; gap: var(--space-3); background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.13); border-left: 4px solid var(--gold); border-radius: 10px; padding: var(--space-4); }
   .cs .tr { font-size: 1.5rem; line-height: 1; }
+  .cs .cs-logo { display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; background: #fff; border-radius: 9px; padding: 5px; flex: none; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+  .cs .cs-logo .d27-logo, .cs .cs-logo .d27-logo-fb { width: 40px !important; height: 40px !important; }
   .cs .yr { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); color: rgba(255,255,255,.62); text-transform: uppercase; letter-spacing: .06em; }
   .cs .tm { font-family: 'Oswald', sans-serif; font-size: var(--text-lg); font-weight: 600; color: #fff; line-height: 1.1; }
   .cs .tn { font-size: var(--text-xs); color: rgba(255,255,255,.6); }
@@ -214,7 +216,8 @@
 <script>
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function csCard(yr, c){
-    return '<div class="cs"><span class="tr">🏆</span><div>' +
+    var logo = window.D27logos ? '<span class="cs-logo">' + D27logos.html(c.team, 40) + '</span>' : '<span class="tr">🏆</span>';
+    return '<div class="cs">' + logo + '<div>' +
       '<div class="yr">' + esc(yr) + (c.sport ? ' · ' + esc(c.sport) : '') + '</div>' +
       '<div class="tm">' + esc(c.team) + '</div>' +
       '<div class="tn">' + esc(c.tournament) + '</div></div></div>';
