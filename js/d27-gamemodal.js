@@ -202,9 +202,9 @@
     const field = cleanVal(g.field);
     return `
       <div class="gm-matchup">
-        <div class="gm-team ${A.tbd ? 'tbd' : ''}">${A.tbd ? '' : lg(A.name, 44)}<span class="gm-tn">${esc(A.name)}</span></div>
+        <div class="gm-team ${A.tbd ? 'tbd' : ''}">${A.tbd ? '' : lg(A.name, 80)}<span class="gm-tn">${esc(A.name)}</span></div>
         <div class="gm-vs">vs</div>
-        <div class="gm-team ${H.tbd ? 'tbd' : ''}">${H.tbd ? '' : lg(H.name, 44)}<span class="gm-tn">${esc(H.name)}</span></div>
+        <div class="gm-team ${H.tbd ? 'tbd' : ''}">${H.tbd ? '' : lg(H.name, 80)}<span class="gm-tn">${esc(H.name)}</span></div>
       </div>
       <div class="gm-meta">${when || 'Date &amp; time TBD'}${field ? ` &nbsp;·&nbsp; ${esc(field)}` : ''}</div>
       <div class="gm-sec"><h4>Preview</h4><p class="gm-recap">${esc(previewBlurb(t, g, cls))}</p></div>`;
@@ -214,21 +214,21 @@
     if (isByeSlot(g.away) || isByeSlot(g.home)) {
       const nm = sideDisplay(t, isByeSlot(g.away) ? g.home : g.away).name;
       return `
-        <div class="gm-byewrap">${lg(nm, 48)}<div class="gm-team">${esc(nm)}</div><div class="gm-meta">Advanced on a bye</div></div>
+        <div class="gm-byewrap">${lg(nm, 80)}<div class="gm-team">${esc(nm)}</div><div class="gm-meta">Advanced on a bye</div></div>
         <div class="gm-sec"><h4>Recap</h4><p class="gm-recap">${esc(text)}</p></div>`;
     }
     if (isForfeit(g)) {
       const win = g.as > g.hs ? sideDisplay(t, g.away).name : sideDisplay(t, g.home).name;
       return `
-        <div class="gm-byewrap">${lg(win, 48)}<div class="gm-team">${esc(win)}</div><div class="gm-meta">Won by forfeit</div></div>
+        <div class="gm-byewrap">${lg(win, 80)}<div class="gm-team">${esc(win)}</div><div class="gm-meta">Won by forfeit</div></div>
         <div class="gm-sec"><h4>Recap</h4><p class="gm-recap">${esc(text)}</p></div>`;
     }
     const A = sideDisplay(t, g.away), H = sideDisplay(t, g.home);
     const aWin = g.as > g.hs, hWin = g.hs > g.as;
     return `
       <div class="gm-score">
-        <div class="gm-srow ${aWin ? 'win' : ''}"><span class="t">${A.tbd ? '' : lg(A.name, 26)}<span class="gm-tn">${esc(A.name)}</span></span><span class="s">${g.as}</span></div>
-        <div class="gm-srow ${hWin ? 'win' : ''}"><span class="t">${H.tbd ? '' : lg(H.name, 26)}<span class="gm-tn">${esc(H.name)}</span></span><span class="s">${g.hs}</span></div>
+        <div class="gm-srow ${aWin ? 'win' : ''}"><span class="t">${A.tbd ? '' : lg(A.name, 40)}<span class="gm-tn">${esc(A.name)}</span></span><span class="s">${g.as}</span></div>
+        <div class="gm-srow ${hWin ? 'win' : ''}"><span class="t">${H.tbd ? '' : lg(H.name, 40)}<span class="gm-tn">${esc(H.name)}</span></span><span class="s">${g.hs}</span></div>
       </div>
       <div class="gm-sec"><h4>Recap</h4><p class="gm-recap">${esc(text)}</p></div>`;
   }

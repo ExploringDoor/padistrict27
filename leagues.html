@@ -23,10 +23,10 @@
 
   .lg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: var(--space-4); }
   .lg-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
-  .lg-head { padding: var(--space-4); background: linear-gradient(135deg, var(--d27-navy) 0%, var(--d27-navy-dark) 100%); color: var(--d27-white); display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
-  .lg-head h2 { color: var(--d27-white); margin: 0; font-size: var(--text-lg); line-height: 1.15; }
-  .lg-title { display: flex; align-items: center; gap: 12px; min-width: 0; }
-  .lg-logo { background: #fff; border-radius: 10px; padding: 5px; display: inline-flex; flex: none; box-shadow: 0 1px 4px rgba(0,0,0,.25); }
+  .lg-head { padding: var(--space-4); background: var(--surface); display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); border-bottom: 2px solid var(--d27-navy); }
+  .lg-head h2 { color: var(--d27-navy); margin: 0; font-size: var(--text-lg); line-height: 1.15; }
+  .lg-title { display: flex; align-items: center; gap: 14px; min-width: 0; }
+  .lg-logo { display: inline-flex; flex: none; }
   .lg-visit { flex-shrink: 0; font-family: 'Oswald', sans-serif; font-size: var(--text-xs); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; text-decoration: none; color: var(--d27-navy); background: var(--gold); padding: 6px 12px; border-radius: 5px; white-space: nowrap; transition: filter .12s ease; }
   .lg-visit:hover { filter: brightness(1.08); text-decoration: none; }
   .lg-body { padding: var(--space-4); flex: 1; }
@@ -76,7 +76,7 @@
       ? '<div class="lg-fields-label">Home Fields</div>' + l.fields.map(fieldHTML).join('')
       : '<div class="lg-nofield">See the league website for field locations.</div>';
     var visit = l.website ? '<a class="lg-visit" href="' + esc(l.website) + '" target="_blank" rel="noopener">Visit site →</a>' : '';
-    var logo = window.D27logos ? '<span class="lg-logo">' + D27logos.html(l.name, 40) + '</span>' : '';
+    var logo = window.D27logos ? '<span class="lg-logo">' + D27logos.html(l.name, 56) + '</span>' : '';
     return '<div class="lg-card"><div class="lg-head"><div class="lg-title">' + logo + '<h2>' + esc(l.name) + '</h2></div>' + visit + '</div>' +
       '<div class="lg-body">' + fields + '</div></div>';
   }
