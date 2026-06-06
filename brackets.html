@@ -103,6 +103,10 @@
   .bk-scroll { overflow-x: auto; overflow-y: hidden; padding: 14px 0 26px; }
   .bk-canvas { position: relative; }
   .bk-canvas svg { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+  .bk-region { position: absolute; font-family: var(--font-display); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding-left: 10px; border-left: 4px solid var(--d27-navy); white-space: nowrap; }
+  .bk-region.w { color: var(--d27-navy); border-left-color: var(--d27-navy); }
+  .bk-region.l { color: var(--d27-red); border-left-color: var(--d27-red); }
+  .bk-region.f { color: #9a7b15; border-left-color: var(--d27-gold); }
 
   .bk-match { position: absolute; width: 210px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,.05); overflow: hidden; transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease; z-index: 2; }
   .bk-match:hover { box-shadow: 0 0 0 3px rgba(0,120,255,.32), 0 10px 26px rgba(0,80,200,.30), 0 0 34px rgba(0,120,255,.42); border-color: #0070f3; transform: translateY(-3px); z-index: 6; }
@@ -313,22 +317,16 @@ function colsFromEnd(t, games) {
 }
 
 // render one section (Winners / Losers / Final) as its own clean tree
-function sectionCanvas(t, games, cls, accent) {
+// Lay out ONE bracket (winners or losers) into { gameNum: {x,y,h,col} }.
+//   COLUMNS (x): distance-to-final — play-ins land in their own column before
+//   round 1, and the two games that feed a given game always share a column.
+//   ROWS (y): walk the tree from the final backward — round-1 games + play-ins
+//   are leaves that stack top→bottom in feed order; every later game centers
+//   between its two feeders. Origin is (0, Y_PAD); the caller offsets as needed.
+function layoutSection(t, games) {
   const inSet = new Set(games.map(g => g.g));
-  // COLUMNS (x): distance-to-final — every game lines up by how many games
-  // remain until the final (the way a bracket reads right-to-left). Play-in
-  // games land in their own column before round 1, and the TWO games that feed
-  // a given game always share a column instead of staggering, so no connector
-  // line ever has to jump across a column. Used for winners AND losers.
   const depth = colsFromEnd(t, games);
   const SLOT = CARD_H + ROW_GAP;
-
-  // ROWS (y): draw it the way a real bracket is drawn — walk the tree from the
-  // FINAL backward. Round-1 games + play-ins are the "leaves": they stack
-  // top-to-bottom in the order they feed upward, and every later game centers
-  // between the two games that feed it. This is what puts a play-in directly
-  // beside the round-1 game it feeds (not floating at the top) and keeps every
-  // connector line straight — matching the Excel bracket.
   const kidsOf = n => {                      // in-section feeders, away(top) → home(bottom)
     const g = gameByNum(t, n); if (!g) return [];
     const ks = [];
@@ -354,10 +352,9 @@ function sectionCanvas(t, games, cls, accent) {
   games.forEach(g => { if (cen[g.g] == null) place(g.g); }); // any stragglers
 
   const pos = {};
-  for (const g of games) pos[g.g] = { x: ((depth[g.g] || 1) - 1) * (CARD_W + COL_GAP), y: cen[g.g] - CARD_H / 2, h: CARD_H };
+  for (const g of games) pos[g.g] = { x: ((depth[g.g] || 1) - 1) * (CARD_W + COL_GAP), y: cen[g.g] - CARD_H / 2, h: CARD_H, col: depth[g.g] || 1 };
 
-  // safety net: if two cards in the same column overlap, push the lower ones
-  // down (keeps their relative order, never reshuffles).
+  // safety net: if two cards in a column overlap, push the lower ones down.
   const byCol = {};
   for (const g of games) { const r = depth[g.g] || 1; (byCol[r] = byCol[r] || []).push(g.g); }
   for (const r in byCol) {
@@ -367,29 +364,77 @@ function sectionCanvas(t, games, cls, accent) {
       if (pos[list[i]].y < minY) pos[list[i]].y = minY;
     }
   }
+  return pos;
+}
+
+// Draw the WHOLE bracket on one canvas the way the Excel does it: winners
+// bracket on top, losers bracket directly below, and the Championship to the
+// RIGHT of both — fed by the winners final (from the top) and the losers final
+// (from the bottom). That convergence is the whole point: it shows the losers
+// bracket leads to the same final the winners bracket does.
+function combinedCanvas(t, cls, visible) {
+  const REGION_GAP = 64;                         // vertical breathing room between the two brackets
+  const W = visible.filter(g => cls[g.g] === 'w');
+  const L = visible.filter(g => cls[g.g] === 'l');
+  const F = visible.filter(g => cls[g.g] === 'f').sort((a, b) => a.g - b.g);
+
+  const pos = {};
+  const posW = layoutSection(t, W);
+  let winnersH = 0, winnersMaxCol = 0;
+  for (const k in posW) { pos[k] = posW[k]; winnersH = Math.max(winnersH, posW[k].y + posW[k].h); winnersMaxCol = Math.max(winnersMaxCol, posW[k].col); }
+
+  const losersOffsetY = winnersH + REGION_GAP;
+  let losersMaxCol = 0;
+  if (L.length) {
+    const posL = layoutSection(t, L);
+    for (const k in posL) { pos[k] = { x: posL[k].x, y: posL[k].y + losersOffsetY, h: posL[k].h, col: posL[k].col }; losersMaxCol = Math.max(losersMaxCol, posL[k].col); }
+  }
+
+  // Championship column(s): to the right of BOTH brackets. Each final game
+  // centers vertically between its feeders (winners final on top, losers final
+  // below), so the two gold lines visibly converge into it.
+  let fcol = Math.max(winnersMaxCol, losersMaxCol) + 1;
+  for (const g of F) {
+    const fc = feeders(g).map(n => pos[n]).filter(Boolean).map(p => p.y + p.h / 2);
+    const cy = fc.length ? (Math.min(...fc) + Math.max(...fc)) / 2 : losersOffsetY / 2 + Y_PAD;
+    pos[g.g] = { x: (fcol - 1) * (CARD_W + COL_GAP), y: cy - CARD_H / 2, h: CARD_H, col: fcol };
+    fcol++;
+  }
 
   let maxX = 0, maxY = 0;
   for (const k in pos) { maxX = Math.max(maxX, pos[k].x + CARD_W); maxY = Math.max(maxY, pos[k].y + pos[k].h); }
 
-  // connectors — ONLY between games in this same section (no crossing).
-  // line color follows the consuming game's class, so championship lines are gold.
-  const lineColor = k => k === 'f' ? '#C9A227' : k === 'l' ? 'rgba(218,41,28,.5)' : 'rgba(0,45,114,.45)';
+  // Connectors follow ONLY "winner advances" (WG-) references — never "loser
+  // drops" (LG-). That draws every advancement line, INCLUDING the winners
+  // final → championship and losers final → championship feeds, while leaving
+  // out the loser drop-ins that would otherwise turn into spaghetti.
+  const wgFeeders = g => { const o = []; for (const raw of [g.away, g.home]) { const r = parseRef(raw); if (r.kind === 'WG') o.push(r.g); } return o; };
+  const lineColor = k => k === 'f' ? '#C9A227' : k === 'l' ? 'rgba(218,41,28,.55)' : 'rgba(0,45,114,.5)';
   let paths = '';
-  for (const g of games) {
+  for (const g of visible) {
     const p = pos[g.g]; if (!p) continue;
-    for (const fn of feeders(g)) {
-      if (!inSet.has(fn)) continue;            // skip cross-section feeds → no spaghetti
+    for (const fn of wgFeeders(g)) {
       const fp = pos[fn]; if (!fp) continue;
       const x1 = fp.x + CARD_W, y1 = fp.y + fp.h / 2, x2 = p.x, y2 = p.y + p.h / 2, mx = x1 + (x2 - x1) / 2;
-      paths += `<path d="M${x1},${y1} H${mx} V${y2} H${x2}" fill="none" stroke="${lineColor(cls[g.g])}" stroke-width="2"/>`;
+      const sw = cls[g.g] === 'f' ? 2.5 : 2;
+      paths += `<path d="M${x1},${y1} H${mx} V${y2} H${x2}" fill="none" stroke="${lineColor(cls[g.g])}" stroke-width="${sw}"/>`;
     }
   }
+
   let cards = '';
-  for (const g of games) { const p = pos[g.g]; if (p) cards += matchHTML(t, g, cls[g.g], p.x, p.y); }
+  for (const g of visible) { const p = pos[g.g]; if (p) cards += matchHTML(t, g, cls[g.g], p.x, p.y); }
+
+  // floating region labels (only meaningful when there's a losers bracket)
+  let labels = '';
+  if (L.length) {
+    labels += `<div class="bk-region w" style="left:0;top:2px">Winners Bracket</div>`;
+    labels += `<div class="bk-region l" style="left:0;top:${losersOffsetY - 20}px">Losers Bracket</div>`;
+    if (F.length) { const fp = pos[F[0].g]; if (fp) labels += `<div class="bk-region f" style="left:${fp.x}px;top:${fp.y - 22}px">Championship</div>`; }
+  }
 
   const H = maxY + Y_PAD;
   return `<div class="bk-scroll"><div class="bk-canvas" style="width:${maxX}px;height:${H}px">
-    <svg width="${maxX}" height="${H}">${paths}</svg>${cards}</div></div>`;
+    <svg width="${maxX}" height="${H}">${paths}</svg>${labels}${cards}</div></div>`;
 }
 
 // Double-elim outcome: who's champion, and which "if necessary" games to hide.
@@ -491,22 +536,13 @@ function renderBracket(t) {
   const outcome = championOutcome(t, cls);
   const visible = t.games.filter(g => !outcome.hide.has(g.g));
 
-  const sections = [
-    { keys: ['w', 'f'], label: 'Winners Bracket → Championship', cls: '', accent: 'w' },
-    { keys: ['l'],      label: 'Losers Bracket',                 cls: 'l', accent: 'l' },
-  ];
   let html = '';
   if (outcome.champion) {
     html += `<div class="bk-champion"><span class="trophy">🏆</span><div class="ct"><div class="lbl">★ Tournament Champion ★</div><div class="team">${outcome.champion}</div><div class="word">Champion</div></div></div>`;
   }
   html += teamsPanelHTML(t, false);
   html += '<div class="bk-zoomable" id="bkZoom">';
-  for (const s of sections) {
-    const games = visible.filter(g => s.keys.includes(cls[g.g]));
-    if (!games.length) continue;
-    html += `<div class="bk-sec-label ${s.cls}">${s.label}</div>`;
-    html += sectionCanvas(t, games, cls, s.accent);
-  }
+  html += combinedCanvas(t, cls, visible);
   html += '</div>';
   out.innerHTML = html || '<div class="bk-empty">No bracket games.</div>';
   renderTitle(t);
