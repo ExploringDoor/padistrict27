@@ -106,9 +106,11 @@
   // a forfeit: a finished game between two real teams with no real date (the data
   // records forfeits with N/A date/time/field and a 6–0 administrative result)
   function isForfeit(g) {
-    const d = cleanVal(g.date);
+    if (!isPlayed(g)) return false;
+    if (g.forfeit != null) return !!g.forfeit;                 // explicit flag from the editor wins
+    const d = cleanVal(g.date);                                // legacy fallback: no real date = forfeit
     const dateOk = d && !isNaN(new Date(d + 'T12:00:00'));
-    return isPlayed(g) && !isByeSlot(g.away) && !isByeSlot(g.home) && !dateOk;
+    return !isByeSlot(g.away) && !isByeSlot(g.home) && !dateOk;
   }
   function recapTemplate(t, g, cls) {
     const next = nextGameOf(t, g.g);

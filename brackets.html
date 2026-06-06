@@ -313,7 +313,7 @@ function matchHTML(t, g, cls, x, y) {
   const okStr = v => v && !/^(n\/?a|tbd|tba|none|-+)$/i.test(String(v).trim());
   const cd = okStr(g.date) ? new Date(g.date + 'T12:00:00') : null;
   const when = [(cd && !isNaN(cd)) ? cd.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : null, okStr(g.time) ? fmtTime(g.time) : null].filter(Boolean).join(' · ');
-  const forfeit = played && !okStr(g.date) && !/^bye$/i.test(String(g.away).trim()) && !/^bye$/i.test(String(g.home).trim());
+  const forfeit = played && (g.forfeit != null ? !!g.forfeit : (!okStr(g.date) && !/^bye$/i.test(String(g.away).trim()) && !/^bye$/i.test(String(g.home).trim())));
   const foot = forfeit ? 'Forfeit' : (when || 'TBD');
   return `<div class="bk-match acc-${cls}" data-tkey="${t.key}" data-g="${g.g}" style="left:${x}px;top:${y}px"><div class="bk-mtop"><span class="g">Game ${g.g}</span>${tag}</div>${side(A, g.as, aWin)}${side(H, g.hs, hWin)}<div class="bk-mfoot"><span>${foot}</span><span class="gm-cue ${played ? 'recap' : 'preview'}">${played ? 'Recap' : 'Preview'} ›</span></div></div>`;
 }

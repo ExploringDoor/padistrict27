@@ -167,9 +167,11 @@ function fmtTime(t) {
 // a forfeit: a finished game between two real teams that has no real date
 // (the data records forfeits with N/A date/time/field and a 6–0 result)
 function isForfeit(g) {
-  const bye = /^\s*bye\s*$/i.test(String(g.away)) || /^\s*bye\s*$/i.test(String(g.home));
   const played = g.as != null && g.hs != null && (g.as + g.hs) > 0;
-  return played && !bye && !clean(g.date);
+  if (!played) return false;
+  if (g.forfeit != null) return !!g.forfeit;                 // explicit flag from the editor
+  const bye = /^\s*bye\s*$/i.test(String(g.away)) || /^\s*bye\s*$/i.test(String(g.home));
+  return !bye && !clean(g.date);
 }
 function updatedLabel(iso) {
   if (!iso) return '';

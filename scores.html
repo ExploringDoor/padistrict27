@@ -81,7 +81,7 @@
   function clean(v){ if(v==null) return ''; var s=String(v).trim(); return /^(n\/?a|tbd|tba|none|-+)$/i.test(s) ? '' : s; }
   function fmtTime(t){ t=clean(t); if(!t) return 'TBD'; var p=t.split(':'); var h=+p[0], m=p[1]||'00'; if(isNaN(h)) return 'TBD'; var ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+m+' '+ap; }
   function fmtDate(d){ d=clean(d); if(!d) return 'Date TBD'; var dt=new Date(d+'T12:00:00'); if(isNaN(dt)) return 'Date TBD'; return dt.toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'}); }
-  function isForfeit(g){ var bye=/^\s*bye\s*$/i.test(String(g.away))||/^\s*bye\s*$/i.test(String(g.home)); return D27scores.played(g) && !bye && !clean(g.date); }
+  function isForfeit(g){ if(!D27scores.played(g)) return false; if(g.forfeit!=null) return !!g.forfeit; var bye=/^\s*bye\s*$/i.test(String(g.away))||/^\s*bye\s*$/i.test(String(g.home)); return !bye && !clean(g.date); }
 
   var ALL=[], TAB='all';
   function teamHTML(disp, win){ return '<span class="sc-team'+(win?' win':'')+(disp.tbd?' tbd':'')+'">'+esc(disp.name)+'</span>'; }

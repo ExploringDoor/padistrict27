@@ -45,6 +45,7 @@
   table.ed-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 860px; }
   .ed-table th { background: var(--d27-navy); color: #fff; padding: 9px 8px; text-align: left; font-family: var(--font-display); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; position: sticky; top: 0; }
   .ed-table td { padding: 5px 6px; border-bottom: 1px solid var(--line); }
+  .ed-table td.ff { text-align: center; } .ed-table td.ff input { width: 16px; height: 16px; cursor: pointer; }
   .ed-table tr:hover td { background: rgba(0,45,114,.02); }
   .ed-table input { width: 100%; padding: 7px 8px; border: 1px solid var(--line); border-radius: 5px; font: inherit; font-size: 13px; box-sizing: border-box; }
   .ed-table input.resolved { background: #ECFDF5; color: #047857; font-weight: 600; border-color: rgba(4,120,87,.35); cursor: default; }
@@ -189,11 +190,11 @@
 
       <div class="ed-table-wrap">
         <table class="ed-table">
-          <thead><tr><th>G#</th><th>Date</th><th>Time</th><th>Away team</th><th></th><th>Home team</th><th></th><th>Field</th><th></th></tr></thead>
+          <thead><tr><th>G#</th><th>Date</th><th>Time</th><th>Away team</th><th></th><th>Home team</th><th></th><th>Field</th><th title="Forfeit">FF</th><th></th></tr></thead>
           <tbody id="rows"></tbody>
         </table>
       </div>
-      <p class="ed-hint">Tip: leave scores blank until a game is played. Use <code>WG-5</code> (winner of game 5) or <code>LG-3</code> (loser of game 3) for bracket spots — they resolve automatically once scores go in.</p>
+      <p class="ed-hint">Tip: leave scores blank until a game is played. Use <code>WG-5</code> (winner of game 5) or <code>LG-3</code> (loser of game 3) for bracket spots — they resolve automatically once scores go in. <b>Forfeit?</b> Tick the <b>FF</b> box and enter the winning team's score (e.g. 1–0) — it shows as “Forfeit” and still advances the winner.</p>
 
       <div class="ed-actions">
         <button class="add" onclick="window.__addRow()">+ Add Game</button>
@@ -390,6 +391,17 @@ function runBracketCheck() {
 }
 window.__check = runBracketCheck;
 
+// pre-check the FF box if the game already reads as a forfeit (explicit flag, or
+// the legacy no-date heuristic) so re-saving never silently drops the label
+function looksForfeit(g) {
+  const played = (Number(g.as) || 0) + (Number(g.hs) || 0) > 0;
+  if (!played) return false;
+  if (g.forfeit != null) return !!g.forfeit;
+  const d = g.date ? String(g.date).trim() : '';
+  const dateOk = d && !/^(n\/?a|tbd|tba|none)$/i.test(d) && !isNaN(new Date(d + 'T12:00:00'));
+  const bye = /^\s*bye\s*$/i.test(String(g.away)) || /^\s*bye\s*$/i.test(String(g.home));
+  return !bye && !dateOk;
+}
 function rowEl(g) {
   const tr = document.createElement('tr');
   // show scores blank until a game is actually played (don't seed 0–0)
@@ -405,6 +417,7 @@ function rowEl(g) {
     <td><input type="text" value="${esc(g.home)}" data-f="home" data-ref="${esc(g.home)}" placeholder="Team or LG-3"></td>
     <td><input class="sc" type="number" min="0" value="${hsV}" data-f="hs"></td>
     <td><input type="text" value="${esc(g.field)}" data-f="field" placeholder="Field"></td>
+    <td class="ff"><input type="checkbox" data-f="forfeit" title="Mark this game a forfeit" ${looksForfeit(g) ? 'checked' : ''}></td>
     <td><button class="del" title="Delete game" onclick="this.closest('tr').remove(); window.__check&&window.__check()">✕</button></td>`;
   return tr;
 }
@@ -430,6 +443,7 @@ function collectGames() {
       away: ref('away') || null, as: num(get('as')),   // ref() keeps WG-3 etc.
       home: ref('home') || null, hs: num(get('hs')),
       field: get('field') || null,
+      forfeit: !!(tr.querySelector('[data-f="forfeit"]') || {}).checked,
     });
   });
   games.sort((a,b)=>a.g-b.g);
