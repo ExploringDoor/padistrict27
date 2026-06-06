@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/styles.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   body { background: var(--d27-paper); }
   .ed-topbar { background: var(--d27-navy); color: #fff; padding: 12px 0; }
@@ -63,6 +64,33 @@
   .ed-notconfigured { max-width: 600px; margin: 60px auto; background: #FEF3C7; border: 1px solid #F59E0B; border-radius: 10px; padding: 26px; color: #7c5e10; }
   .ed-notconfigured h2 { font-family: var(--font-display); margin: 0 0 8px; color: #92400e; }
   .ed-notconfigured code { background: rgba(0,0,0,.06); padding: 1px 6px; border-radius: 3px; }
+
+  /* Excel import */
+  .ed-import { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 22px; margin: 18px 0; }
+  .ed-import .imp-head h3 { font-family: var(--font-display); margin: 0 0 4px; color: var(--d27-navy); }
+  .ed-import .imp-head p { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
+  .ed-import .imp-head code { background: var(--d27-sub); padding: 1px 5px; border-radius: 3px; }
+  .imp-drop { display: flex; align-items: center; gap: 16px; justify-content: center; border: 2px dashed var(--line); border-radius: 10px; padding: 26px; cursor: pointer; transition: border-color .15s ease, background .15s ease; background: var(--d27-paper); }
+  .imp-drop:hover, .imp-drop.over { border-color: var(--d27-navy); background: rgba(0,45,114,.04); }
+  .imp-drop .imp-ico { font-size: 30px; color: var(--d27-navy); line-height: 1; }
+  .imp-drop .imp-tx { display: flex; flex-direction: column; }
+  .imp-drop .imp-tx b { color: var(--d27-navy); font-size: 15px; }
+  .imp-drop .imp-tx span { color: var(--muted); font-size: 13px; }
+  .imp-preview { margin-top: 16px; border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; background: var(--d27-paper); }
+  .imp-preview h4 { font-family: var(--font-display); margin: 0 0 12px; color: var(--d27-navy); }
+  .imp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 12px; margin-bottom: 14px; }
+  .imp-field label { display: block; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+  .imp-field input, .imp-field select { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 5px; font: inherit; font-size: 13px; background: var(--surface); box-sizing: border-box; }
+  .imp-stats { font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+  .imp-stats b { color: var(--d27-navy); font-size: 16px; }
+  .imp-warn { background: #FEF3C7; border: 1px solid #F59E0B; color: #7c5e10; border-radius: 6px; padding: 8px 12px; font-size: 12px; margin-bottom: 12px; }
+  .imp-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .imp-actions .imp-go { background: #10B981; color: #fff; border: none; padding: 11px 22px; border-radius: 6px; font-family: var(--font-display); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+  .imp-actions .imp-cancel { background: var(--surface); border: 1px solid var(--line); color: var(--muted); padding: 11px 18px; border-radius: 6px; font-family: var(--font-display); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+  .imp-status { font-size: 13px; color: var(--muted); }
+  .imp-status.ok { color: #047857; font-weight: 700; }
+  .imp-status.err { color: var(--d27-red); }
+
   .hidden { display: none !important; }
 </style>
 </head>
@@ -104,6 +132,19 @@
       <p>One-time import: load all 13 tournaments &amp; 147 games from the current data into Firebase. After this, edits happen here and go live instantly.</p>
       <button onclick="window.__seed()">⤓ Import starter schedules</button>
       <span id="seedStatus" style="margin-left:12px; font-size:13px; color:var(--muted);"></span>
+    </div>
+
+    <div class="ed-import" id="importBox">
+      <div class="imp-head">
+        <h3>📥 Import a tournament from Excel</h3>
+        <p>Drop one of your D27 schedule files (<code>.xlsx</code>) to add or update an entire tournament at once — games, teams, dates &amp; fields.</p>
+      </div>
+      <label class="imp-drop" id="dropZone">
+        <input type="file" id="xlsxInput" accept=".xlsx,.xls" hidden />
+        <span class="imp-ico">⤓</span>
+        <span class="imp-tx"><b>Drag your Excel file here</b><span>or click to choose · .xlsx</span></span>
+      </label>
+      <div class="imp-preview hidden" id="impPreview"></div>
     </div>
 
     <div id="editorMain" class="hidden">
@@ -354,6 +395,104 @@ $('rows').addEventListener('input', (e) => {
   }
   applyResolved();
 });
+
+// ───────── Excel import (drag a tournament file → save as a tournament) ─────────
+const IMP_CATEGORIES = ['LL International — Baseball','LL International — Softball','D27 Special Games','Sectional','State'];
+const impPad2 = n => String(n).padStart(2,'0');
+const xlSerialISO = n => new Date(Math.round((n - 25569) * 86400000)).toISOString().slice(0,10);
+function xlDate(v){ if (v instanceof Date) return new Date(Date.UTC(v.getFullYear(),v.getMonth(),v.getDate())).toISOString().slice(0,10); if (typeof v === 'number') return xlSerialISO(v); if (typeof v === 'string'){ const d=new Date(v); if(!isNaN(d)) return d.toISOString().slice(0,10);} return ''; }
+function xlTime(v){ if (v instanceof Date) return impPad2(v.getHours())+':'+impPad2(v.getMinutes()); if (typeof v === 'number'){ let f=v-Math.floor(v), mins=Math.round(f*1440); return impPad2(Math.floor(mins/60))+':'+impPad2(mins%60);} if (typeof v === 'string') return v; return ''; }
+const impStr = v => v!=null ? String(v).trim() : null;
+function impParseName(name){
+  const base = String(name).replace(/\.[^.]+$/,'');
+  const special = /^d27sp/i.test(base);
+  const m = base.match(/^d27(?:sp)?_(.+?)_\d{4}(?:_v\d+)?$/i);
+  let key = m ? m[1] : base.replace(/^d27(?:sp)?_/i,'').replace(/_\d{4}.*$/,'');
+  const sport = /^sb/i.test(key) ? 'Softball' : 'Baseball';
+  const category = special ? 'D27 Special Games' : (sport==='Softball' ? 'LL International — Softball' : 'LL International — Baseball');
+  return { key, name: key, sport, category, special };
+}
+function impExtract(wb, filename){
+  const sheetName = wb.SheetNames.find(n=>/sched/i.test(n)) || wb.SheetNames[0];
+  const rows = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header:1, raw:true, defval:null });
+  const games=[], teams=[], meta=impParseName(filename);
+  for (const row of rows){
+    const a = row[0];
+    if (typeof a === 'number' && Number.isFinite(a)){
+      games.push({ g:a, id: meta.key+'-'+impPad2(a), date: xlDate(row[2]), time: xlTime(row[3]),
+        away: impStr(row[5]), as: typeof row[6]==='number' ? row[6] : 0,
+        home: impStr(row[8]), hs: typeof row[9]==='number' ? row[9] : 0, field: impStr(row[11]) });
+    }
+    const w = row[22];
+    if (typeof w === 'number' && Number.isFinite(w)){
+      const gc = row[24]!=null ? String(row[24]) : '';
+      teams.push({ n:w, name: impStr(row[23])||'', abbr: gc ? gc.split('-')[0] : '', park: impStr(row[25])||'' });
+    }
+  }
+  games.sort((a,b)=>a.g-b.g); teams.sort((a,b)=>a.n-b.n);
+  return { meta, games, teams };
+}
+let impPending = null;
+function impPreview(p){
+  impPending = p; const m = p.meta;
+  const sel = $('tourneySelect');
+  const exists = sel && [...sel.options].some(o=>o.value===m.key);
+  const catOpts = IMP_CATEGORIES.map(c=>'<option'+(c===m.category?' selected':'')+'>'+c+'</option>').join('');
+  $('impPreview').innerHTML =
+    '<h4>Review &amp; import</h4>'+
+    '<div class="imp-grid">'+
+      '<div class="imp-field"><label>Key</label><input id="impKey" value="'+m.key+'"></div>'+
+      '<div class="imp-field"><label>Display name</label><input id="impName" value="'+m.name+'"></div>'+
+      '<div class="imp-field"><label>Sport</label><select id="impSport"><option'+(m.sport==='Baseball'?' selected':'')+'>Baseball</option><option'+(m.sport==='Softball'?' selected':'')+'>Softball</option></select></div>'+
+      '<div class="imp-field"><label>Category</label><select id="impCat">'+catOpts+'</select></div>'+
+    '</div>'+
+    '<div class="imp-stats"><b>'+p.games.length+'</b> games &nbsp;·&nbsp; <b>'+p.teams.length+'</b> teams found</div>'+
+    (exists?'<div class="imp-warn">A tournament with key <b>'+m.key+'</b> already exists — importing will replace it.</div>':'')+
+    '<div class="imp-actions"><button class="imp-go" id="impGo">Import →</button><button class="imp-cancel" id="impCancel">Cancel</button><span class="imp-status" id="impStatus"></span></div>';
+  $('impPreview').classList.remove('hidden');
+  $('impGo').onclick = impSave;
+  $('impCancel').onclick = ()=>{ impPending=null; $('impPreview').classList.add('hidden'); $('xlsxInput').value=''; };
+}
+async function impSave(){
+  if (!impPending) return;
+  const key=$('impKey').value.trim(), name=$('impName').value.trim()||key, sport=$('impSport').value, category=$('impCat').value;
+  if (!key){ $('impStatus').textContent='Key is required'; $('impStatus').className='imp-status err'; return; }
+  $('impStatus').textContent='Importing…'; $('impStatus').className='imp-status';
+  try{
+    await setDoc(doc(db,'schedules',key), {
+      key, name, sport, category, special: category==='D27 Special Games',
+      games: impPending.games, teams: impPending.teams, updated: serverTimestamp(),
+    });
+    const n = impPending.games.length; impPending=null;
+    $('impStatus').textContent='✓ Imported '+n+' games · live now';
+    $('impStatus').className='imp-status ok';
+    await loadAll();
+    const sel=$('tourneySelect'); if (sel){ sel.value=key; sel.dispatchEvent(new Event('change')); }
+    setTimeout(()=>{ $('impPreview').classList.add('hidden'); $('xlsxInput').value=''; }, 2600);
+  }catch(e){ $('impStatus').textContent='Error: '+e.message; $('impStatus').className='imp-status err'; }
+}
+function impHandleFile(file){
+  if (!file) return;
+  if (!/\.xlsx?$/i.test(file.name)){ alert('Please choose an .xlsx file from your D27 schedule files.'); return; }
+  if (typeof XLSX === 'undefined'){ alert('Spreadsheet reader is still loading — try again in a second.'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try{
+      const wb = XLSX.read(new Uint8Array(ev.target.result), { type:'array' });
+      const p = impExtract(wb, file.name);
+      if (!p.games.length){ alert('No games found. Make sure this is a D27 schedule file with a SCHEDULE sheet.'); return; }
+      impPreview(p);
+    }catch(err){ alert('Could not read that file: '+err.message); }
+  };
+  reader.readAsArrayBuffer(file);
+}
+(function(){
+  const dz=$('dropZone'), inp=$('xlsxInput'); if (!dz || !inp) return;
+  inp.addEventListener('change', e=>impHandleFile(e.target.files[0]));
+  ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.add('over'); }));
+  ['dragleave','dragend'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.remove('over'); }));
+  dz.addEventListener('drop', e=>{ e.preventDefault(); dz.classList.remove('over'); impHandleFile(e.dataTransfer.files && e.dataTransfer.files[0]); });
+})();
 </script>
 
 </body>
