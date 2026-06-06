@@ -76,7 +76,7 @@
       ? '<div class="lg-fields-label">Home Fields</div>' + l.fields.map(fieldHTML).join('')
       : '<div class="lg-nofield">See the league website for field locations.</div>';
     var visit = l.website ? '<a class="lg-visit" href="' + esc(l.website) + '" target="_blank" rel="noopener">Visit site →</a>' : '';
-    var logo = window.D27logos ? '<span class="lg-logo">' + D27logos.html(l.name, 56) + '</span>' : '';
+    var logo = window.D27logos ? '<span class="lg-logo">' + D27logos.html(l.name, 84) + '</span>' : '';
     return '<div class="lg-card"><div class="lg-head"><div class="lg-title">' + logo + '<h2>' + esc(l.name) + '</h2></div>' + visit + '</div>' +
       '<div class="lg-body">' + fields + '</div></div>';
   }
