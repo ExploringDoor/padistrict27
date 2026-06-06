@@ -49,11 +49,15 @@
   .cg-sub { color: var(--muted); margin-bottom: var(--space-5); }
   .cg-year { margin-bottom: var(--space-6); }
   .cg-year h3 { font-family: 'Oswald', sans-serif; font-size: var(--text-xl); color: var(--d27-navy); margin: 0 0 var(--space-3); padding-bottom: var(--space-2); border-bottom: 2px solid var(--gold); }
-  .cg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: var(--space-4); }
-  .cg-item { display: flex; flex-direction: column; padding: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--surface); cursor: pointer; text-align: left; font: inherit; transition: transform .15s ease, box-shadow .15s ease; }
+  .cg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(184px, 1fr)); gap: var(--space-4); }
+  .cg-item { position: relative; display: flex; flex-direction: column; padding: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--surface); cursor: pointer; text-align: left; font: inherit; transition: transform .15s ease, box-shadow .15s ease; }
   .cg-item:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(0,23,60,.16); }
+  .cg-meta { padding: 10px 12px 8px; }
+  .cg-ttl { font-family: 'Oswald', sans-serif; font-size: 10.5px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); line-height: 1.25; }
+  .cg-team { display: flex; align-items: center; gap: 7px; font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 15px; color: var(--d27-navy); line-height: 1.15; margin-top: 2px; }
   .cg-item img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: var(--d27-sub, #eef2f7); }
-  .cg-cap { padding: 10px 12px; font-size: 12.5px; line-height: 1.35; color: var(--d27-ink, #14213D); }
+  .cg-zoom { position: absolute; bottom: 8px; right: 8px; font-family: 'Oswald', sans-serif; font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: #fff; background: rgba(0,18,48,.66); padding: 3px 8px; border-radius: 4px; opacity: 0; transition: opacity .15s ease; pointer-events: none; }
+  .cg-item:hover .cg-zoom { opacity: 1; }
   .cg-lb { position: fixed; inset: 0; z-index: 1000; display: none; align-items: center; justify-content: center; background: rgba(0,18,48,.9); padding: 24px; }
   .cg-lb.open { display: flex; }
   .cg-lb figure { margin: 0; max-width: 94vw; max-height: 90vh; display: flex; flex-direction: column; align-items: center; gap: 12px; }
@@ -164,9 +168,14 @@
       years.forEach(function(y){
         html += '<div class="cg-year"><h3>' + y + '</h3><div class="cg-grid">' +
           byYear[y].map(function(p){
+            var logo = (window.D27logos && p.team) ? D27logos.html(p.team, 20) : '';
             return '<button type="button" class="cg-item" data-src="' + esc(p.file) + '" data-cap="' + esc(p.caption) + '">' +
-              '<img src="' + esc(p.file) + '" alt="' + esc(p.caption) + '" loading="lazy">' +
-              '<div class="cg-cap">' + esc(p.caption) + '</div></button>';
+              '<div class="cg-meta">' +
+                (p.title ? '<div class="cg-ttl">' + esc(p.title) + '</div>' : '') +
+                '<div class="cg-team">' + logo + '<span>' + esc(p.team || p.caption) + '</span></div>' +
+              '</div>' +
+              '<img src="' + esc(p.file) + '" alt="' + esc(p.team || p.caption) + '" loading="lazy">' +
+              '<span class="cg-zoom">⤢ View</span></button>';
           }).join('') + '</div></div>';
       });
       box.innerHTML = html;

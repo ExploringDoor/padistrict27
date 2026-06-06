@@ -3,292 +3,408 @@
   {
    "year": "2025",
    "caption": "Congrats to Chester Valley on winning the BB-JR Championship!",
-   "file": "assets/champions/2025-01.jpg"
+   "file": "assets/champions/2025-01.jpg",
+   "team": "Chester Valley",
+   "title": "Junior League — BB-JR"
   },
   {
    "year": "2025",
    "caption": "Congrats to Chester Valley on winning the BB-SR Championship!",
-   "file": "assets/champions/2025-02.jpg"
+   "file": "assets/champions/2025-02.jpg",
+   "team": "Chester Valley",
+   "title": "Senior League — BB-SR"
   },
   {
    "year": "2025",
    "caption": "Congrats to Lower Merion on winning the BB-INT Championship! Champs 2025 LMLL",
-   "file": "assets/champions/2025-03.jpg"
+   "file": "assets/champions/2025-03.jpg",
+   "team": "Lower Merion",
+   "title": "Intermediate (50/70) — BB-INT"
   },
   {
    "year": "2025",
    "caption": "Congrats to Lower Perk Gators on winning the SB Majors Championship!",
-   "file": "assets/champions/2025-04.jpg"
+   "file": "assets/champions/2025-04.jpg",
+   "team": "Lower Perk Gators",
+   "title": "Softball Majors"
   },
   {
    "year": "2025",
    "caption": "Congrats to Lower Perk Marlins on winning the Bob Jones Championship!",
-   "file": "assets/champions/2025-05.jpg"
+   "file": "assets/champions/2025-05.jpg",
+   "team": "Lower Perk Marlins",
+   "title": "Bob Jones"
   },
   {
    "year": "2025",
    "caption": "Congrats to Lower Perk Marlins on winning the Bob Jones Championship! 2",
-   "file": "assets/champions/2025-06.jpg"
+   "file": "assets/champions/2025-06.jpg",
+   "team": "Lower Perk Marlins",
+   "title": "Bob Jones"
   },
   {
    "year": "2025",
    "caption": "Congrats to Lower Perk on winning the SB-12 Championship! (1)",
-   "file": "assets/champions/2025-07.jpg"
+   "file": "assets/champions/2025-07.jpg",
+   "team": "Lower Perk",
+   "title": "Softball 12U — SB-12"
   },
   {
    "year": "2025",
    "caption": "Congrats to Lower Perk on winning the SB-12 Championship!",
-   "file": "assets/champions/2025-08.jpg"
+   "file": "assets/champions/2025-08.jpg",
+   "team": "Lower Perk",
+   "title": "Softball 12U — SB-12"
   },
   {
    "year": "2024",
    "caption": "Congrats to Chester Valley on winning the BB-JR Tournament 13-3!",
-   "file": "assets/champions/2024-01.jpg"
+   "file": "assets/champions/2024-01.jpg",
+   "team": "Chester Valley",
+   "title": "Junior League — BB-JR"
   },
   {
    "year": "2024",
    "caption": "Congrats to Chester Valley on winning the BB-SR Tournament!",
-   "file": "assets/champions/2024-02.jpg"
+   "file": "assets/champions/2024-02.jpg",
+   "team": "Chester Valley",
+   "title": "Senior League — BB-SR"
   },
   {
    "year": "2024",
    "caption": "Congrats to Chester Valley on winning the Bob Jones Tournament 17-15!",
-   "file": "assets/champions/2024-03.jpg"
+   "file": "assets/champions/2024-03.jpg",
+   "team": "Chester Valley",
+   "title": "Bob Jones"
   },
   {
    "year": "2024",
    "caption": "Congrats to Coventry on winning the BB-12 Tournament!",
-   "file": "assets/champions/2024-04.jpg"
+   "file": "assets/champions/2024-04.jpg",
+   "team": "Coventry",
+   "title": "Majors (10-12) — BB-12"
   },
   {
    "year": "2024",
    "caption": "Congrats to DSBP on winning the SB-10 Tournament!",
-   "file": "assets/champions/2024-05.jpg"
+   "file": "assets/champions/2024-05.jpg",
+   "team": "DSBP",
+   "title": "Softball 10U — SB-10"
   },
   {
    "year": "2024",
    "caption": "Congrats to Lower Merion on winning the BB-INT Tournament 13-5!",
-   "file": "assets/champions/2024-06.jpg"
+   "file": "assets/champions/2024-06.jpg",
+   "team": "Lower Merion",
+   "title": "Intermediate (50/70) — BB-INT"
   },
   {
    "year": "2024",
    "caption": "Congrats to Radnor Wayne on winning the BB-11 Tournament 18-10!",
-   "file": "assets/champions/2024-07.jpg"
+   "file": "assets/champions/2024-07.jpg",
+   "team": "Radnor Wayne",
+   "title": "Baseball (9-11) — BB-11"
   },
   {
    "year": "2024",
    "caption": "Congrats to Radnor Wayne on winning the BB-9 Tournament 11-9!",
-   "file": "assets/champions/2024-08.jpg"
+   "file": "assets/champions/2024-08.jpg",
+   "team": "Radnor Wayne",
+   "title": "Special Games 9U — BB-9"
   },
   {
    "year": "2024",
    "caption": "Congrats to Radnor Wayne on winning the SB-11 Tournament!",
-   "file": "assets/champions/2024-09.jpg"
+   "file": "assets/champions/2024-09.jpg",
+   "team": "Radnor Wayne",
+   "title": "Softball 11U — SB-11"
   },
   {
    "year": "2024",
    "caption": "Congrats to Radnor Wayne on winning the SB-12 Tournament 7-4!",
-   "file": "assets/champions/2024-10.jpg"
+   "file": "assets/champions/2024-10.jpg",
+   "team": "Radnor Wayne",
+   "title": "Softball 12U — SB-12"
   },
   {
    "year": "2024",
    "caption": "Congrats to Upper Providence on winning the BB-10 Tournament!",
-   "file": "assets/champions/2024-11.jpg"
+   "file": "assets/champions/2024-11.jpg",
+   "team": "Upper Providence",
+   "title": "Baseball (8-10) — BB-10"
   },
   {
    "year": "2024",
    "caption": "On 61914, we honored Coventry Senior Softball Team with the SB-SR banner",
-   "file": "assets/champions/2024-12.jpg"
+   "file": "assets/champions/2024-12.jpg",
+   "team": "Coventry",
+   "title": "Senior Softball — SB-SR"
   },
   {
    "year": "2023",
    "caption": "Bob Jones Champions Lower Perk Cubs",
-   "file": "assets/champions/2023-01.jpg"
+   "file": "assets/champions/2023-01.jpg",
+   "team": "Lower Perk Cubs",
+   "title": "Bob Jones"
   },
   {
    "year": "2023",
    "caption": "Congrats to D22-Plymouth LL on winning the Section 8 Championship!",
-   "file": "assets/champions/2023-02.jpg"
+   "file": "assets/champions/2023-02.jpg",
+   "team": "D22-Plymouth",
+   "title": "Section 8"
   },
   {
    "year": "2023",
    "caption": "Congrats to Devon Strafford on winning the John Klein Red Championship!",
-   "file": "assets/champions/2023-03.jpg"
+   "file": "assets/champions/2023-03.jpg",
+   "team": "Devon Strafford",
+   "title": "John Klein — Red"
   },
   {
    "year": "2023",
    "caption": "Congrats to Greater Valley Blue on winning the John Klein Blue Championship!",
-   "file": "assets/champions/2023-04.jpg"
+   "file": "assets/champions/2023-04.jpg",
+   "team": "Great Valley Blue",
+   "title": "John Klein — Blue"
   },
   {
    "year": "2023",
    "caption": "Congrats to Lower Merion on winning the SB-11 District Championship!",
-   "file": "assets/champions/2023-05.jpg"
+   "file": "assets/champions/2023-05.jpg",
+   "team": "Lower Merion",
+   "title": "Softball 11U — SB-11"
   },
   {
    "year": "2023",
    "caption": "Congrats to Lower Perk on winning the Bennett Blue Championship!",
-   "file": "assets/champions/2023-06.jpg"
+   "file": "assets/champions/2023-06.jpg",
+   "team": "Lower Perk",
+   "title": "Bennett Blue"
   },
   {
    "year": "2023",
    "caption": "Congrats to Lower Perk on winning the S8-SB-9 District Championship!",
-   "file": "assets/champions/2023-07.jpg"
+   "file": "assets/champions/2023-07.jpg",
+   "team": "Lower Perk",
+   "title": "Section 8"
   },
   {
    "year": "2023",
    "caption": "Congrats to Lower Perk on winning the SB-12 District Championship!",
-   "file": "assets/champions/2023-08.jpg"
+   "file": "assets/champions/2023-08.jpg",
+   "team": "Lower Perk",
+   "title": "Softball 12U — SB-12"
   },
   {
    "year": "2023",
    "caption": "Congrats to RadnorWayne on winning the SB-JR District Championship!",
-   "file": "assets/champions/2023-09.jpg"
+   "file": "assets/champions/2023-09.jpg",
+   "team": "Radnor Wayne",
+   "title": "Junior Softball — SB-JR"
   },
   {
    "year": "2023",
    "caption": "Congrats to Upper Providence on winning the BB-10 District Championship!",
-   "file": "assets/champions/2023-10.jpg"
+   "file": "assets/champions/2023-10.jpg",
+   "team": "Upper Providence",
+   "title": "Baseball (8-10) — BB-10"
   },
   {
    "year": "2023",
    "caption": "Congrats to Upper Providence on winning the BB-9 District Championship!",
-   "file": "assets/champions/2023-11.jpg"
+   "file": "assets/champions/2023-11.jpg",
+   "team": "Upper Providence",
+   "title": "Special Games 9U — BB-9"
   },
   {
    "year": "2023",
    "caption": "Greater Valley Blue and Red Team Photo",
-   "file": "assets/champions/2023-12.jpg"
+   "file": "assets/champions/2023-12.jpg",
+   "team": "Great Valley Blue",
+   "title": "Team Photo"
   },
   {
    "year": "2022",
    "caption": "BB-10 Upper Providence Champions",
-   "file": "assets/champions/2022-01.jpg"
+   "file": "assets/champions/2022-01.jpg",
+   "team": "Upper Providence",
+   "title": "Baseball (8-10) — BB-10"
   },
   {
    "year": "2022",
    "caption": "BB-11 Coventry Champions",
-   "file": "assets/champions/2022-02.jpg"
+   "file": "assets/champions/2022-02.jpg",
+   "team": "Coventry",
+   "title": "Baseball (9-11) — BB-11"
   },
   {
    "year": "2022",
    "caption": "BB-12 Lower Perk Champions",
-   "file": "assets/champions/2022-03.jpg"
+   "file": "assets/champions/2022-03.jpg",
+   "team": "Lower Perk",
+   "title": "Majors (10-12) — BB-12"
   },
   {
    "year": "2022",
    "caption": "BB-JRS Radnor Wayne Champions",
-   "file": "assets/champions/2022-04.jpg"
+   "file": "assets/champions/2022-04.jpg",
+   "team": "Radnor Wayne",
+   "title": "Junior League — BB-JR"
   },
   {
    "year": "2022",
    "caption": "Congrats Pirates on winning the Bob Jones Tournament!",
-   "file": "assets/champions/2022-05.jpg"
+   "file": "assets/champions/2022-05.jpg",
+   "team": "Lower Perk Pirates",
+   "title": "Bob Jones"
   },
   {
    "year": "2022",
    "caption": "Congrats to Our 11Y SB Champions, Lower Perk!",
-   "file": "assets/champions/2022-06.jpg"
+   "file": "assets/champions/2022-06.jpg",
+   "team": "Lower Perk",
+   "title": "Softball 11U — SB-11"
   },
   {
    "year": "2022",
    "caption": "Congrats to our BB-INT Champions from Lower Merion LL!",
-   "file": "assets/champions/2022-07.jpg"
+   "file": "assets/champions/2022-07.jpg",
+   "team": "Lower Merion",
+   "title": "Intermediate (50/70) — BB-INT"
   },
   {
    "year": "2022",
    "caption": "DSBP defeated Lower Perk 10-0 to capture the D27 District Championship for Little League Softball.",
-   "file": "assets/champions/2022-08.jpg"
+   "file": "assets/champions/2022-08.jpg",
+   "team": "DSBP",
+   "title": "District Championship"
   },
   {
    "year": "2022",
    "caption": "Great Valley defeated Chester Valley 10-6 to capture the D27 District Championship",
-   "file": "assets/champions/2022-09.jpg"
+   "file": "assets/champions/2022-09.jpg",
+   "team": "Great Valley",
+   "title": "District Championship"
   },
   {
    "year": "2022",
    "caption": "SB-10 Lower Perk Champions",
-   "file": "assets/champions/2022-10.jpg"
+   "file": "assets/champions/2022-10.jpg",
+   "team": "Lower Perk",
+   "title": "Softball 10U — SB-10"
   },
   {
    "year": "2022",
    "caption": "Upper Providence defeated Lower Perk 8-7 in extra innings to win our Special Games 9-YO",
-   "file": "assets/champions/2022-11.jpg"
+   "file": "assets/champions/2022-11.jpg",
+   "team": "Upper Providence",
+   "title": "Special Games 9U — BB-9"
   },
   {
    "year": "2021",
    "caption": "Bob Jones District 27 Champions Lower Perk Astros",
-   "file": "assets/champions/2021-01.jpg"
+   "file": "assets/champions/2021-01.jpg",
+   "team": "Lower Perk Astros",
+   "title": "Bob Jones"
   },
   {
    "year": "2021",
    "caption": "Congrats to District 27 9-11 YO Softball Winner DSBP!!",
-   "file": "assets/champions/2021-02.jpg"
+   "file": "assets/champions/2021-02.jpg",
+   "team": "DSBP",
+   "title": "Softball 11U — SB-11"
   },
   {
    "year": "2021",
    "caption": "Congrats to Exton LL Senior Baseball! 2021 District Champions!!",
-   "file": "assets/champions/2021-03.jpg"
+   "file": "assets/champions/2021-03.jpg",
+   "team": "Exton",
+   "title": "Senior League — BB-SR"
   },
   {
    "year": "2021",
    "caption": "Congrats to LM LL winning the 2021 Section 8 Intermediate BB Tourney. Good luck at States!!",
-   "file": "assets/champions/2021-04.jpg"
+   "file": "assets/champions/2021-04.jpg",
+   "team": "Lower Merion",
+   "title": "Section 8"
   },
   {
    "year": "2021",
    "caption": "Congrats to Upper Providence LL for winning the District 27 Little League Championship!!",
-   "file": "assets/champions/2021-05.jpg"
+   "file": "assets/champions/2021-05.jpg",
+   "team": "Upper Providence",
+   "title": "District Championship"
   },
   {
    "year": "2021",
    "caption": "Congrats to our Mid Atlantic EasternRegional Champions Upper Providence LL!!",
-   "file": "assets/champions/2021-06.jpg"
+   "file": "assets/champions/2021-06.jpg",
+   "team": "Upper Providence",
+   "title": "Eastern Regional"
   },
   {
    "year": "2021",
    "caption": "Congrats to the 9YO District Invitational Winner Coventry!!",
-   "file": "assets/champions/2021-07.jpg"
+   "file": "assets/champions/2021-07.jpg",
+   "team": "Coventry",
+   "title": "Special Games 9U — BB-9"
   },
   {
    "year": "2021",
    "caption": "Congratulations to Chester Valley Softball for winning the Senior Softball District 27 Championship!",
-   "file": "assets/champions/2021-08.jpg"
+   "file": "assets/champions/2021-08.jpg",
+   "team": "Chester Valley",
+   "title": "Senior Softball — SB-SR"
   },
   {
    "year": "2021",
    "caption": "Congratulations to Coventry LL for winning the 2021 District 27 8-10 Baseball Tournament!",
-   "file": "assets/champions/2021-09.jpg"
+   "file": "assets/champions/2021-09.jpg",
+   "team": "Coventry",
+   "title": "Baseball (8-10) — BB-10"
   },
   {
    "year": "2021",
    "caption": "Congratulations to DSBP LL for winning the 2021 Section 8 Little League Softball Tourney. Good luck",
-   "file": "assets/champions/2021-10.jpg"
+   "file": "assets/champions/2021-10.jpg",
+   "team": "DSBP",
+   "title": "Section 8"
   },
   {
    "year": "2021",
    "caption": "Congratulations to DSBP Softball for winning the Little League District 27 Softball Championship!",
-   "file": "assets/champions/2021-11.jpg"
+   "file": "assets/champions/2021-11.jpg",
+   "team": "DSBP",
+   "title": "District Championship"
   },
   {
    "year": "2021",
    "caption": "Congratulations to Lower Merion LL for winning the 2021 District 27 Intermediate Baseball Tournament",
-   "file": "assets/champions/2021-12.jpg"
+   "file": "assets/champions/2021-12.jpg",
+   "team": "Lower Merion",
+   "title": "Intermediate (50/70) — BB-INT"
   },
   {
    "year": "2021",
    "caption": "Congratulations to Lower Perk LL for winning the 2021 District 27 8-10 Softball Tournament!",
-   "file": "assets/champions/2021-13.jpg"
+   "file": "assets/champions/2021-13.jpg",
+   "team": "Lower Perk",
+   "title": "Softball 10U — SB-10"
   },
   {
    "year": "2021",
    "caption": "Congratulations to Lower Perk LL for winning the 2021 District 27 9-11 Baseball Tournament.",
-   "file": "assets/champions/2021-14.jpg"
+   "file": "assets/champions/2021-14.jpg",
+   "team": "Lower Perk",
+   "title": "Baseball (9-11) — BB-11"
   },
   {
    "year": "2021",
    "caption": "Congratulations to Upper Providence Little League boys in winning the PA State Title!!",
-   "file": "assets/champions/2021-15.jpg"
+   "file": "assets/champions/2021-15.jpg",
+   "team": "Upper Providence",
+   "title": "PA State"
   }
  ]
 }

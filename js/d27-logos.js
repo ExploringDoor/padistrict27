@@ -16,12 +16,12 @@
     'chester valley': 'chester-valley',
     'coventry': 'coventry',
     'devon-strafford': 'devon-strafford', 'devon/strafford': 'devon-strafford', 'devon strafford': 'devon-strafford',
-    'gve': 'gve', 'great valley exton': 'gve', 'great valley': 'gve',
+    'gve': 'gve', 'great valley exton': 'gve', 'great valley': 'gve', 'greater valley': 'gve',
     'exton': 'exton',
     'lower merion': 'lower-merion',
     'lower perk': 'lower-perk', 'lower perkiomen': 'lower-perk',
     'pgp': 'pgp', 'pottsgrove-pottstown': 'pgp', 'pottsgrove/pottstown': 'pgp', 'pottsgrove': 'pgp', 'pottstown': 'pgp',
-    'radnor-wayne': 'radnor-wayne', 'radnor/wayne': 'radnor-wayne', 'radnor wayne': 'radnor-wayne',
+    'radnor-wayne': 'radnor-wayne', 'radnor/wayne': 'radnor-wayne', 'radnor wayne': 'radnor-wayne', 'radnorwayne': 'radnor-wayne',
     'upper providence': 'upper-providence', 'upper prov': 'upper-providence',
   };
   var ABBR = {
@@ -44,6 +44,10 @@
     var b = base(name); if (!b) return null;
     var k = b.toLowerCase().replace(/\s+/g, ' ').trim();
     if (MAP[k]) return MAP[k];
+    // prefix match: a known league followed by a mascot/color, e.g.
+    // "Lower Perk Gators" -> lower-perk, "Great Valley Blue" -> gve
+    var mk = Object.keys(MAP).sort(function (a, b) { return b.length - a.length; });
+    for (var i = 0; i < mk.length; i++) { if (k.indexOf(mk[i] + ' ') === 0) return MAP[mk[i]]; }
     var s = k.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
     return s || null;
   }
