@@ -113,6 +113,28 @@
   .imp-status.err { color: var(--d27-red); }
 
   .hidden { display: none !important; }
+
+  /* editor tabs */
+  .ed-tabs { display: flex; gap: 6px; margin: 22px 0 0; border-bottom: 2px solid var(--line); }
+  .ed-tab { font-family: var(--font-display); font-size: 14px; font-weight: 600; letter-spacing: .03em; padding: 11px 20px; border: none; background: none; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; }
+  .ed-tab:hover { color: var(--d27-navy); }
+  .ed-tab.active { color: var(--d27-navy); border-bottom-color: var(--d27-navy); }
+
+  /* contacts roster */
+  .ct-bar { display: flex; align-items: center; gap: 12px; margin: 20px 0 14px; }
+  .ct-bar input { flex: 1; max-width: 420px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px; font: inherit; }
+  .ct-count { font-size: 13px; color: var(--muted); font-family: var(--font-display); }
+  .ct-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+  .ct-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .ct-table th { text-align: left; font-family: var(--font-display); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); background: var(--d27-sub, #f4f6fb); padding: 10px 12px; position: sticky; top: 0; white-space: nowrap; }
+  .ct-table td { padding: 10px 12px; border-top: 1px solid var(--line); vertical-align: top; }
+  .ct-table tr:hover td { background: rgba(0,45,114,.03); }
+  .ct-table .ct-team { font-weight: 700; color: var(--d27-navy); display: flex; align-items: center; gap: 8px; }
+  .ct-table .ct-mgr { font-weight: 600; }
+  .ct-table a { color: var(--accent, #1d4ed8); text-decoration: none; white-space: nowrap; }
+  .ct-table a:hover { text-decoration: underline; }
+  .ct-table .ct-empty-cell { color: #cbd5e1; }
+  .ct-loading, .ct-empty { padding: 30px; text-align: center; color: var(--muted); font-family: var(--font-display); }
 </style>
 </head>
 <body>
@@ -177,6 +199,11 @@
     </div>
 
     <div id="editorMain" class="hidden">
+      <div class="ed-tabs">
+        <button type="button" class="ed-tab active" data-view="schedule">📅 Schedule Editor</button>
+        <button type="button" class="ed-tab" data-view="contacts">📇 Contacts</button>
+      </div>
+      <div id="view-schedule">
       <div class="ed-toolbar">
         <select id="tourneySelect"></select>
         <span class="meta" id="tourneyMeta"></span>
@@ -201,11 +228,22 @@
         <button class="save" onclick="window.__save()">💾 Save Changes</button>
         <span class="status" id="saveStatus"></span>
       </div>
+      </div><!-- /view-schedule -->
+
+      <div id="view-contacts" class="hidden">
+        <div class="ct-bar">
+          <input type="search" id="ctSearch" placeholder="Search team, manager, email, field…" autocomplete="off" />
+          <span class="ct-count" id="ctCount"></span>
+        </div>
+        <div class="ct-wrap" id="ctTable"><div class="ct-loading">Loading roster…</div></div>
+        <p class="ed-hint">🔒 Private roster — only visible while signed in. Manager contact info for District 27 teams.</p>
+      </div>
     </div>
   </div>
 
 </main>
 
+<script src="js/d27-logos.js"></script>
 <script type="module">
 import { isConfigured, db, auth } from './js/firebase-init.js';
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
@@ -611,6 +649,46 @@ function impHandleFile(file){
   if(closeBtn) closeBtn.addEventListener('click', hide);
   if(bd) bd.addEventListener('click', hide);
   document.addEventListener('keydown', e=>{ if(e.key==='Escape') hide(); });
+})();
+
+// ── Contacts roster (private; reads the auth-only `contacts` collection) ──
+(function(){
+  const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let loaded = false, all = [];
+  function tab(view){
+    document.querySelectorAll('.ed-tab').forEach(t=>t.classList.toggle('active', t.dataset.view===view));
+    $('view-schedule').classList.toggle('hidden', view!=='schedule');
+    $('view-contacts').classList.toggle('hidden', view!=='contacts');
+    if(view==='contacts' && !loaded){ loaded=true; loadContacts(); }
+  }
+  document.querySelectorAll('.ed-tab').forEach(t=> t.addEventListener('click', ()=>tab(t.dataset.view)));
+
+  async function loadContacts(){
+    try {
+      const snap = await getDocs(collection(db,'contacts'));
+      all = snap.docs.map(d=>d.data()).sort((a,b)=>(a.n||0)-(b.n||0));
+      render(all);
+    } catch(e){ $('ctTable').innerHTML = '<div class="ct-empty">Could not load contacts — '+esc(e.message||e)+'</div>'; }
+  }
+  const blank = '<span class="ct-empty-cell">—</span>';
+  const td = v => v ? esc(v) : blank;
+  function render(list){
+    if(!list.length){ $('ctTable').innerHTML='<div class="ct-empty">No contacts match.</div>'; $('ctCount').textContent=''; return; }
+    const logo = n => window.D27logos ? D27logos.html(n,22) : '';
+    let h = '<table class="ct-table"><thead><tr><th>Team</th><th>Manager</th><th>Cell</th><th>Email</th><th>GC Name</th><th>Park</th></tr></thead><tbody>';
+    list.forEach(c=>{
+      const tel = c.cell ? '<a href="tel:'+esc(String(c.cell).replace(/[^0-9+]/g,''))+'">'+esc(c.cell)+'</a>' : blank;
+      const mail = c.email ? '<a href="mailto:'+esc(c.email)+'">'+esc(c.email)+'</a>' : blank;
+      h += '<tr><td><div class="ct-team">'+logo(c.team)+'<span>'+esc(c.team)+'</span></div></td>'+
+        '<td class="ct-mgr">'+td(c.manager)+'</td><td>'+tel+'</td><td>'+mail+'</td><td>'+td(c.gc)+'</td><td>'+td(c.park)+'</td></tr>';
+    });
+    $('ctTable').innerHTML = h + '</tbody></table>';
+    $('ctCount').textContent = list.length + ' team' + (list.length===1?'':'s');
+  }
+  $('ctSearch').addEventListener('input', e=>{
+    const q = e.target.value.trim().toLowerCase();
+    render(q ? all.filter(c => [c.team,c.manager,c.email,c.gc,c.park,c.abbr].some(v=>String(v||'').toLowerCase().includes(q))) : all);
+  });
 })();
 </script>
 
