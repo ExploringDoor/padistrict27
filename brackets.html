@@ -315,28 +315,55 @@ function colsFromEnd(t, games) {
 // render one section (Winners / Losers / Final) as its own clean tree
 function sectionCanvas(t, games, cls, accent) {
   const inSet = new Set(games.map(g => g.g));
-  // winners + championship: lay out by distance-to-final (play-ins land before round 1).
-  // losers: keep distance-from-start (aligns the drop-in rounds).
+  // COLUMNS (x): winners + championship lay out by distance-to-final, so a
+  // play-in game sits in its own column BEFORE round 1. Losers keep
+  // distance-from-start (aligns the drop-in rounds).
   const depth = (accent === 'w') ? colsFromEnd(t, games) : depthInSubset(t, games);
-  const maxR = Math.max(...games.map(g => depth[g.g] || 1));
-  const cols = {};
-  for (const g of games) { const r = depth[g.g] || 1; (cols[r] = cols[r] || []).push(g); }
+  const SLOT = CARD_H + ROW_GAP;
 
-  const pos = {}; const SLOT = CARD_H + ROW_GAP;
-  for (let r = 1; r <= maxR; r++) {
-    const placed = [];
-    (cols[r] || []).sort((a, b) => a.g - b.g).forEach((g, i) => {
-      const h = cardHeight(g);
-      const f = feeders(g).filter(x => inSet.has(x)).map(n => pos[n]).filter(Boolean);
-      const yc = f.length ? f.reduce((s, p) => s + p.y + p.h / 2, 0) / f.length : Y_PAD + i * SLOT + h / 2;
-      placed.push({ g, y: yc - h / 2, h });
-    });
-    placed.sort((a, b) => a.y - b.y);
-    for (let i = 1; i < placed.length; i++) {
-      const minY = placed[i - 1].y + placed[i - 1].h + ROW_GAP;
-      if (placed[i].y < minY) placed[i].y = minY;
+  // ROWS (y): draw it the way a real bracket is drawn — walk the tree from the
+  // FINAL backward. Round-1 games + play-ins are the "leaves": they stack
+  // top-to-bottom in the order they feed upward, and every later game centers
+  // between the two games that feed it. This is what puts a play-in directly
+  // beside the round-1 game it feeds (not floating at the top) and keeps every
+  // connector line straight — matching the Excel bracket.
+  const kidsOf = n => {                      // in-section feeders, away(top) → home(bottom)
+    const g = gameByNum(t, n); if (!g) return [];
+    const ks = [];
+    for (const raw of [g.away, g.home]) { const r = parseRef(raw); if ((r.kind === 'WG' || r.kind === 'LG') && inSet.has(r.g)) ks.push(r.g); }
+    return ks;
+  };
+  const consumed = new Set();
+  for (const g of games) for (const k of kidsOf(g.g)) consumed.add(k);
+  const roots = games.map(g => g.g).filter(n => !consumed.has(n)).sort((a, b) => a - b);
+
+  const cen = {}; let leaf = 0; const guard = new Set();
+  function place(n) {
+    if (cen[n] != null) return cen[n];
+    if (guard.has(n)) return (cen[n] = Y_PAD + (leaf++) * SLOT + CARD_H / 2); // cycle guard
+    guard.add(n);
+    const ks = kidsOf(n);
+    const c = ks.length
+      ? (() => { const cs = ks.map(place); return (Math.min(...cs) + Math.max(...cs)) / 2; })()
+      : Y_PAD + (leaf++) * SLOT + CARD_H / 2;
+    return (cen[n] = c);
+  }
+  roots.forEach(place);
+  games.forEach(g => { if (cen[g.g] == null) place(g.g); }); // any stragglers
+
+  const pos = {};
+  for (const g of games) pos[g.g] = { x: ((depth[g.g] || 1) - 1) * (CARD_W + COL_GAP), y: cen[g.g] - CARD_H / 2, h: CARD_H };
+
+  // safety net: if two cards in the same column overlap, push the lower ones
+  // down (keeps their relative order, never reshuffles).
+  const byCol = {};
+  for (const g of games) { const r = depth[g.g] || 1; (byCol[r] = byCol[r] || []).push(g.g); }
+  for (const r in byCol) {
+    const list = byCol[r].sort((a, b) => pos[a].y - pos[b].y);
+    for (let i = 1; i < list.length; i++) {
+      const minY = pos[list[i - 1]].y + pos[list[i - 1]].h + ROW_GAP;
+      if (pos[list[i]].y < minY) pos[list[i]].y = minY;
     }
-    for (const p of placed) pos[p.g.g] = { x: (r - 1) * (CARD_W + COL_GAP), y: p.y, h: p.h };
   }
 
   let maxX = 0, maxY = 0;
