@@ -296,10 +296,28 @@ function depthInSubset(t, games) {
   games.forEach(g => d(g.g)); return depth;
 }
 
+// columns by distance to the section's FINAL game — so a play-in game (whose
+// winner feeds a round-1 game) sits in its own column BEFORE round 1, and each
+// round lines up cleanly, the way the Excel bracket reads.
+function colsFromEnd(t, games) {
+  const inSet = new Set(games.map(g => g.g));
+  const consumer = {};
+  for (const c of games) for (const raw of [c.away, c.home]) { const r = parseRef(raw); if (r.kind === 'WG' && inSet.has(r.g)) consumer[r.g] = c.g; }
+  const rank = {}, guard = new Set();
+  function rk(n) { if (rank[n] != null) return rank[n]; if (guard.has(n)) return 0; guard.add(n); const c = consumer[n]; rank[n] = (c != null && inSet.has(c)) ? 1 + rk(c) : 0; return rank[n]; }
+  games.forEach(g => rk(g.g));
+  const maxRank = Math.max(0, ...games.map(g => rank[g.g] || 0));
+  const col = {};
+  games.forEach(g => { col[g.g] = maxRank - (rank[g.g] || 0) + 1; });
+  return col;
+}
+
 // render one section (Winners / Losers / Final) as its own clean tree
 function sectionCanvas(t, games, cls, accent) {
   const inSet = new Set(games.map(g => g.g));
-  const depth = depthInSubset(t, games);
+  // winners + championship: lay out by distance-to-final (play-ins land before round 1).
+  // losers: keep distance-from-start (aligns the drop-in rounds).
+  const depth = (accent === 'w') ? colsFromEnd(t, games) : depthInSubset(t, games);
   const maxR = Math.max(...games.map(g => depth[g.g] || 1));
   const cols = {};
   for (const g of games) { const r = depth[g.g] || 1; (cols[r] = cols[r] || []).push(g); }
@@ -414,16 +432,20 @@ function bkFit() {
 }
 function printBracket() {
   const out = document.getElementById('output'), z = document.getElementById('bkZoom');
-  const prev = z ? z.style.zoom : '';
+  const teams = out.querySelector('.ls-teams');
+  const prevZ = z ? z.style.zoom : '', prevTeams = teams ? teams.style.display : '';
   if (z) z.style.zoom = '1';
+  if (teams) teams.style.display = 'none';            // teams panel is hidden in print — exclude from measure
   let maxW = 0; out.querySelectorAll('.bk-canvas').forEach(c => { maxW = Math.max(maxW, c.offsetWidth); });
-  const contentW = Math.max(maxW, out.scrollWidth), contentH = out.scrollHeight;
-  const fit = Math.min(1000 / contentW, 720 / contentH, 1);
+  const contentW = maxW || out.scrollWidth, contentH = out.scrollHeight;
+  if (teams) teams.style.display = prevTeams;
+  // landscape Letter printable area at 96dpi, ~0.4in margins (conservative so it never spills to page 2)
+  const fit = Math.min(930 / contentW, 690 / contentH, 1);
   document.body.classList.add('printing');
   out.style.zoom = fit;
-  const restore = () => { out.style.zoom = ''; if (z) z.style.zoom = prev; document.body.classList.remove('printing'); };
+  const restore = () => { out.style.zoom = ''; if (z) z.style.zoom = prevZ; document.body.classList.remove('printing'); };
   window.addEventListener('afterprint', restore, { once: true });
-  setTimeout(() => window.print(), 80);
+  setTimeout(() => window.print(), 120);
 }
 (function () {
   const wire = (id, fn) => { const el = document.getElementById(id); if (el) el.addEventListener('click', fn); };
