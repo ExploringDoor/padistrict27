@@ -19,14 +19,19 @@
   .ls-hero p { color: rgba(255,255,255,.78); max-width: 60ch; margin: 12px 0 0; }
 
   /* Filter bar */
-  .ls-filters { position: sticky; top: 0; z-index: 30; background: var(--surface); border-bottom: 1px solid var(--line); padding: 12px 0; box-shadow: 0 2px 10px rgba(0,0,0,.04); }
-  .ls-filters .container { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-  .ls-sport { display: flex; gap: 4px; }
-  .ls-sport button { background: var(--surface); border: 1px solid var(--line); padding: 8px 16px; border-radius: 6px; font-family: var(--font-display); font-weight: 600; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); cursor: pointer; }
-  .ls-sport button.active { background: var(--d27-navy); color: #fff; border-color: var(--d27-navy); }
-  .ls-tourney-select { padding: 9px 12px; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 14px; background: var(--surface); min-width: 220px; }
+  .ls-filters { background: var(--surface); border-bottom: 1px solid var(--line); padding: 16px 0; }
+  .ls-filter-top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+  .ls-filter-title { font-family: var(--font-display); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
   .ls-search { flex: 1; min-width: 180px; padding: 9px 14px; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 14px; }
   .ls-count { font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .ls-all { margin-bottom: 14px; }
+  .ls-cat { margin-bottom: 12px; }
+  .ls-cat:last-child { margin-bottom: 0; }
+  .ls-cat-label { display: block; font-family: var(--font-display); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--d27-red); margin-bottom: 8px; }
+  .ls-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .ls-chip { font-family: var(--font-display); font-size: 15px; font-weight: 500; letter-spacing: .02em; text-transform: uppercase; color: var(--d27-navy); background: var(--surface); border: 1.5px solid var(--line); border-radius: 8px; padding: 10px 18px; cursor: pointer; transition: all .12s ease; white-space: nowrap; }
+  .ls-chip:hover { border-color: var(--d27-navy); background: var(--d27-sub); }
+  .ls-chip.active { background: var(--d27-navy); color: #fff; border-color: var(--d27-navy); box-shadow: 0 4px 14px rgba(0,45,114,.28); }
 
   main { padding: 24px 0 64px; }
 
@@ -117,14 +122,12 @@
 
 <div class="ls-filters">
   <div class="container">
-    <div class="ls-sport">
-      <button data-sport="all" class="active">All</button>
-      <button data-sport="Baseball">⚾ Baseball</button>
-      <button data-sport="Softball">🥎 Softball</button>
+    <div class="ls-filter-top">
+      <span class="ls-filter-title">Tournaments</span>
+      <input class="ls-search" id="searchBox" type="text" placeholder="Search team, field, date..." />
+      <span class="ls-count" id="gameCount"></span>
     </div>
-    <select class="ls-tourney-select" id="tourneySelect"><option value="all">All Tournaments</option></select>
-    <input class="ls-search" id="searchBox" type="text" placeholder="Search team, field, date..." />
-    <span class="ls-count" id="gameCount"></span>
+    <div class="ls-picker" id="tourneyPicker"></div>
   </div>
 </div>
 
@@ -384,24 +387,32 @@ function render() {
   document.getElementById('gameCount').textContent = total + ' games';
 }
 
+function escTxt(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function selectTourneyLS(key) {
+  filter.tourney = key;
+  document.querySelectorAll('.ls-chip').forEach(c => c.classList.toggle('active', c.dataset.key === key));
+  if (key !== 'all') location.hash = key;
+  render();
+}
 function initFilters() {
-  const sel = document.getElementById('tourneySelect');
-  for (const t of DATA.tournaments) {
-    const o = document.createElement('option');
-    o.value = t.key; o.textContent = t.name;
-    sel.appendChild(o);
+  const picker = document.getElementById('tourneyPicker');
+  const byCat = {}; for (const t of DATA.tournaments) (byCat[t.category] = byCat[t.category] || []).push(t);
+  const cats = (DATA.categoryOrder || []).slice();
+  for (const c in byCat) if (cats.indexOf(c) === -1) cats.push(c);
+  let html = '<div class="ls-chips ls-all"><button type="button" class="ls-chip" data-key="all">All Tournaments</button></div>';
+  for (const cat of cats) {
+    if (!byCat[cat]) continue;
+    html += '<div class="ls-cat"><span class="ls-cat-label">' + escTxt(cat) + '</span><div class="ls-chips">';
+    for (const t of byCat[cat]) html += '<button type="button" class="ls-chip" data-key="' + escTxt(t.key) + '">' + escTxt(t.name) + '</button>';
+    html += '</div></div>';
   }
-  sel.addEventListener('change', e => { filter.tourney = e.target.value; render(); });
+  picker.innerHTML = html;
+  picker.querySelectorAll('.ls-chip').forEach(function (c) { c.addEventListener('click', function () { selectTourneyLS(c.dataset.key); }); });
+  document.getElementById('searchBox').addEventListener('input', e => { filter.q = e.target.value; render(); });
   // Deep-link: ?t=KEY or #KEY (from the Baseball/Softball hub) pre-selects a tournament
   const want = new URLSearchParams(location.search).get('t') || location.hash.replace('#', '');
-  if (want && DATA.tournaments.some(t => t.key === want)) { filter.tourney = want; sel.value = want; }
-  document.querySelectorAll('.ls-sport button').forEach(b => b.addEventListener('click', () => {
-    document.querySelectorAll('.ls-sport button').forEach(x => x.classList.remove('active'));
-    b.classList.add('active');
-    filter.sport = b.dataset.sport;
-    render();
-  }));
-  document.getElementById('searchBox').addEventListener('input', e => { filter.q = e.target.value; render(); });
+  if (want && DATA.tournaments.some(t => t.key === want)) filter.tourney = want;
+  document.querySelectorAll('.ls-chip').forEach(c => c.classList.toggle('active', c.dataset.key === filter.tourney));
 }
 
 D27loadSchedules()
