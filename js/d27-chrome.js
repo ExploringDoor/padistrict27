@@ -39,7 +39,7 @@
 
   var navHTML =
     '<nav class="nav"><div class="container nav-inner">' +
-      '<a class="nav-brand" href="index.html"><span class="mark">D27</span>' +
+      '<a class="nav-brand" href="index.html"><img class="nav-crest" src="assets/d27-crest-logo.jpg" alt="PA District 27 Little League crest" />' +
         '<span class="name-block">PA District 27<span class="sub">Little League · Baseball &amp; Softball</span></span></a>' +
       '<button class="nav-toggle" aria-label="Menu" onclick="document.querySelector(\'.nav-links\').classList.toggle(\'open\')">' +
         '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">' +
