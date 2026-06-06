@@ -20,6 +20,7 @@
     ['rules.html', 'Rules'],
     ['history.html', 'History'],
     ['scholarship.html', 'Scholarship'],
+    ['https://www.padistrict27.com/', 'Main D27 Site ↗'],
   ];
   var CONTACT = 'jeffbennett.d27@gmail.com';
 
@@ -29,8 +30,10 @@
   var here = base(location.pathname.split('/').pop());
 
   function navItem(n) {
-    var active = base(n[0]) === here;
-    return '<li><a href="' + n[0] + '"' + (active ? ' aria-current="page"' : '') + '>' + n[1] + '</a></li>';
+    var ext = /^https?:/i.test(n[0]);
+    var active = !ext && base(n[0]) === here;
+    var attrs = (active ? ' aria-current="page"' : '') + (ext ? ' target="_blank" rel="noopener"' : '');
+    return '<li><a href="' + n[0] + '"' + attrs + '>' + n[1] + '</a></li>';
   }
   var topLinks = NAV.map(navItem).join('');
   var moreActive = MORE.some(function (n) { return base(n[0]) === here; });

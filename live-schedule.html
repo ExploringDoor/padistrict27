@@ -235,6 +235,7 @@ function classify(t) {
       return (a.kind === 'WG' && a.g === wbFinal) || (h.kind === 'WG' && h.g === wbFinal);
     });
     while (q.length) { const n = q.shift(); if (fin.has(n)) continue; fin.add(n); (consumers[n] || []).forEach(c => q.push(c)); }
+    if (!fin.size) fin.add(wbFinal); // WB final with no follow-on = the championship game (single-elimination)
   }
   const cls = {};
   for (const g of t.games) cls[g.g] = fin.has(g.g) ? 'f' : pw[g.g] ? 'w' : 'l';

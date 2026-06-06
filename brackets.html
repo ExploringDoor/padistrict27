@@ -260,6 +260,7 @@ function classify(t) {
       return (a.kind === 'WG' && a.g === wbFinal) || (h.kind === 'WG' && h.g === wbFinal);
     });
     while (q.length) { const n = q.shift(); if (fin.has(n)) continue; fin.add(n); (consumers[n] || []).forEach(c => q.push(c)); }
+    if (!fin.size) fin.add(wbFinal); // WB final with no follow-on = the championship game (single-elimination)
   }
 
   const cls = {};
@@ -434,7 +435,7 @@ function printBracket() {
 
 function renderBracket(t) {
   const out = document.getElementById('output');
-  if (!t.games.length) { out.innerHTML = teamsPanelHTML(t, true) + '<div class="bk-empty">No games yet for this tournament.</div>'; renderTitle(t); return; }
+  if (!t.games.length) { out.innerHTML = teamsPanelHTML(t, false) + '<div class="bk-empty">No games yet for this tournament.</div>'; renderTitle(t); return; }
   const cls = classify(t);
   const outcome = championOutcome(t, cls);
   const visible = t.games.filter(g => !outcome.hide.has(g.g));
@@ -447,7 +448,7 @@ function renderBracket(t) {
   if (outcome.champion) {
     html += `<div class="bk-champion"><span class="trophy">🏆</span><div class="ct"><div class="lbl">★ Tournament Champion ★</div><div class="team">${outcome.champion}</div><div class="word">Champion</div></div></div>`;
   }
-  html += teamsPanelHTML(t, true);
+  html += teamsPanelHTML(t, false);
   html += '<div class="bk-zoomable" id="bkZoom">';
   for (const s of sections) {
     const games = visible.filter(g => s.keys.includes(cls[g.g]));
