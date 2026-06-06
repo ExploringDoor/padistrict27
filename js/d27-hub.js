@@ -62,21 +62,30 @@
     try { data = await global.D27loadSchedules(); }
     catch (e) { hub.innerHTML = '<div class="hub-loading">Could not load tournaments. Please refresh the page.</div>'; return; }
 
-    const mine = data.tournaments.filter(t => t.sport === opts.sport);
+    // opts.sport filters to one sport; omit it (e.g. Special Games page) to span all sports.
+    const mine = opts.sport ? data.tournaments.filter(t => t.sport === opts.sport) : data.tournaments.slice();
+
+    // each section: filter by s.match(t) if given, else by category s.cat
+    const built = opts.sections.map(s => ({
+      s,
+      list: mine.filter(s.match || (t => t.category === s.cat)).sort((a, b) => a.key.localeCompare(b.key)),
+    }));
 
     const statsEl = opts.statsId && document.getElementById(opts.statsId);
     if (statsEl) {
-      const totalGames = mine.reduce((s, t) => s + ((t.games || []).length), 0);
-      const playedGames = mine.reduce((s, t) => { try { return s + global.D27bracket.playedCount(t); } catch (e) { return s; } }, 0);
+      const seen = {}, statsList = [];
+      built.forEach(b => b.list.forEach(t => { if (!seen[t.key]) { seen[t.key] = 1; statsList.push(t); } }));
+      const totalGames = statsList.reduce((s, t) => s + ((t.games || []).length), 0);
+      const playedGames = statsList.reduce((s, t) => { try { return s + global.D27bracket.playedCount(t); } catch (e) { return s; } }, 0);
       statsEl.innerHTML =
-        `<div class="hub-stat"><span class="n">${mine.length}</span><span class="l">Tournaments</span></div>` +
+        `<div class="hub-stat"><span class="n">${statsList.length}</span><span class="l">Tournaments</span></div>` +
         `<div class="hub-stat"><span class="n">${totalGames}</span><span class="l">Games</span></div>` +
         `<div class="hub-stat"><span class="n">${playedGames}</span><span class="l">Played</span></div>`;
     }
 
     let html = '';
-    for (const s of opts.sections) {
-      const list = mine.filter(t => t.category === s.cat).sort((a, b) => a.key.localeCompare(b.key));
+    for (const b of built) {
+      const s = b.s, list = b.list;
       const cards = list.length
         ? list.map(t => cardHTML(t, s.accent)).join('')
         : emptyCardHTML(s.soon || 'Schedules will be posted here once the District finalizes them.');

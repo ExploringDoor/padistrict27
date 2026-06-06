@@ -15,6 +15,7 @@
     ['live-schedule.html', 'Schedule'],
     ['brackets.html', 'Brackets'],
     ['champions.html', 'Champions'],
+    ['special-games.html', 'Special Games'],
     ['rules.html', 'Rules'],
     ['history.html', 'History'],
     ['scholarship.html', 'Scholarship'],

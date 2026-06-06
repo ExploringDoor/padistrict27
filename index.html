@@ -38,11 +38,12 @@
   .btn-ghost:hover { background: rgba(255,255,255,.2); text-decoration: none; color: #fff; }
 
   /* ── Feature tiles (Baseball / Softball) ─────────────── */
-  .features { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-top: var(--space-5); position: relative; z-index: 5; }
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-4); margin-top: var(--space-5); position: relative; z-index: 5; }
   .ft { position: relative; overflow: hidden; border-radius: 14px; padding: var(--space-6); min-height: 230px; display: flex; flex-direction: column; justify-content: flex-end; text-decoration: none; color: #fff; box-shadow: var(--shadow-lg); transition: transform .15s ease; }
   .ft:hover { transform: translateY(-4px); text-decoration: none; color: #fff; }
   .ft-bb { background: linear-gradient(145deg, #0a47a0 0%, var(--d27-navy-dark) 100%); }
   .ft-sb { background: linear-gradient(145deg, #d23420 0%, var(--d27-red-dark) 100%); }
+  .ft-sp { background: linear-gradient(145deg, #3b4a63 0%, #1e293b 100%); }
   .ft .ft-num { position: absolute; top: -22px; right: 8px; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 9rem; line-height: 1; color: rgba(255,255,255,.09); pointer-events: none; }
   .ft .ft-kick { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .16em; color: rgba(255,255,255,.72); }
   .ft h2 { color: #fff; margin: 4px 0 8px; font-size: clamp(1.9rem, 3.6vw, 2.7rem); line-height: 1; }
@@ -109,17 +110,24 @@
   <div class="features">
     <a class="ft ft-bb" href="baseball.html">
       <span class="ft-num">27</span>
-      <span class="ft-kick">8 Tournaments</span>
+      <span class="ft-kick">Little League International</span>
       <h2>Baseball</h2>
-      <p>International divisions, District Special Games, Section&nbsp;8, and the Pennsylvania State Championship.</p>
-      <span class="ft-go">Explore tournaments →</span>
+      <p>BB-10 through Senior League — the International divisions.</p>
+      <span class="ft-go">View tournaments →</span>
     </a>
     <a class="ft ft-sb" href="softball.html">
       <span class="ft-num">27</span>
-      <span class="ft-kick">5 Tournaments</span>
+      <span class="ft-kick">Little League International</span>
       <h2>Softball</h2>
-      <p>International divisions, District Special Games, and Section&nbsp;8.</p>
-      <span class="ft-go">Explore tournaments →</span>
+      <p>SB-10 through Junior League — the International divisions.</p>
+      <span class="ft-go">View tournaments →</span>
+    </a>
+    <a class="ft ft-sp" href="special-games.html">
+      <span class="ft-num">27</span>
+      <span class="ft-kick">District 27</span>
+      <h2>Special Games</h2>
+      <p>The Bob Jones, 9-Year-Old Invitational, Softball Majors &amp; more.</p>
+      <span class="ft-go">View tournaments →</span>
     </a>
   </div>
 
