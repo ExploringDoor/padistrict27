@@ -509,7 +509,7 @@ function teamsPanelHTML(t, open) {
   const mkTable = list => `<table class="ls-teams-table"><tbody>${list.map(tm => `
         <tr>
           <td class="ts">${tm.n || ''}</td>
-          <td class="tn">${tm.name}</td>
+          <td class="tn">${window.D27logos ? D27logos.html(tm.name, 22) : ''} ${tm.name}</td>
           <td class="tac"><span class="ta">${tm.abbr || ''}</span></td>
           <td class="tp">${tm.park ? `<span class="pin">📍</span>${tm.park}` : '<span class="muted">—</span>'}</td>
         </tr>`).join('')}</tbody></table>`;

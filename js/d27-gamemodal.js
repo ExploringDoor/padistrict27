@@ -13,6 +13,7 @@
 (function (global) {
   // ── tiny helpers ──
   function esc(s) { return s == null ? '' : String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+  function lg(name, sz) { return global.D27logos ? global.D27logos.html(name, sz) : ''; }
   function cleanVal(s) { if (s == null) return ''; const t = String(s).trim(); return /^(n\/?a|tbd|tba|-+)$/i.test(t) ? '' : t; } // drop placeholder junk like "N/A"
   function fmtTime(t) { t = cleanVal(t); if (!t) return ''; const p = String(t).split(':'); let h = +p[0]; const m = p[1] || '00'; const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return `${h}:${m} ${ap}`; }
   function fmtDate(d, opt) { d = cleanVal(d); if (!d) return ''; const dt = new Date(d + 'T12:00:00'); if (isNaN(dt)) return ''; return dt.toLocaleDateString('en-US', opt || { weekday: 'short', month: 'short', day: 'numeric' }); }
@@ -201,9 +202,9 @@
     const field = cleanVal(g.field);
     return `
       <div class="gm-matchup">
-        <div class="gm-team ${A.tbd ? 'tbd' : ''}">${esc(A.name)}</div>
+        <div class="gm-team ${A.tbd ? 'tbd' : ''}">${A.tbd ? '' : lg(A.name, 44)}<span class="gm-tn">${esc(A.name)}</span></div>
         <div class="gm-vs">vs</div>
-        <div class="gm-team ${H.tbd ? 'tbd' : ''}">${esc(H.name)}</div>
+        <div class="gm-team ${H.tbd ? 'tbd' : ''}">${H.tbd ? '' : lg(H.name, 44)}<span class="gm-tn">${esc(H.name)}</span></div>
       </div>
       <div class="gm-meta">${when || 'Date &amp; time TBD'}${field ? ` &nbsp;·&nbsp; ${esc(field)}` : ''}</div>
       <div class="gm-sec"><h4>Preview</h4><p class="gm-recap">${esc(previewBlurb(t, g, cls))}</p></div>`;
@@ -211,23 +212,23 @@
   function recapHTML(t, g, cls) {
     const text = (g.recap && String(g.recap).trim()) ? g.recap : recapTemplate(t, g, cls);
     if (isByeSlot(g.away) || isByeSlot(g.home)) {
-      const adv = isByeSlot(g.away) ? g.home : g.away;
+      const nm = sideDisplay(t, isByeSlot(g.away) ? g.home : g.away).name;
       return `
-        <div class="gm-byewrap"><div class="gm-team">${esc(sideDisplay(t, adv).name)}</div><div class="gm-meta">Advanced on a bye</div></div>
+        <div class="gm-byewrap">${lg(nm, 48)}<div class="gm-team">${esc(nm)}</div><div class="gm-meta">Advanced on a bye</div></div>
         <div class="gm-sec"><h4>Recap</h4><p class="gm-recap">${esc(text)}</p></div>`;
     }
     if (isForfeit(g)) {
       const win = g.as > g.hs ? sideDisplay(t, g.away).name : sideDisplay(t, g.home).name;
       return `
-        <div class="gm-byewrap"><div class="gm-team">${esc(win)}</div><div class="gm-meta">Won by forfeit</div></div>
+        <div class="gm-byewrap">${lg(win, 48)}<div class="gm-team">${esc(win)}</div><div class="gm-meta">Won by forfeit</div></div>
         <div class="gm-sec"><h4>Recap</h4><p class="gm-recap">${esc(text)}</p></div>`;
     }
     const A = sideDisplay(t, g.away), H = sideDisplay(t, g.home);
     const aWin = g.as > g.hs, hWin = g.hs > g.as;
     return `
       <div class="gm-score">
-        <div class="gm-srow ${aWin ? 'win' : ''}"><span class="t">${esc(A.name)}</span><span class="s">${g.as}</span></div>
-        <div class="gm-srow ${hWin ? 'win' : ''}"><span class="t">${esc(H.name)}</span><span class="s">${g.hs}</span></div>
+        <div class="gm-srow ${aWin ? 'win' : ''}"><span class="t">${A.tbd ? '' : lg(A.name, 26)}<span class="gm-tn">${esc(A.name)}</span></span><span class="s">${g.as}</span></div>
+        <div class="gm-srow ${hWin ? 'win' : ''}"><span class="t">${H.tbd ? '' : lg(H.name, 26)}<span class="gm-tn">${esc(H.name)}</span></span><span class="s">${g.hs}</span></div>
       </div>
       <div class="gm-sec"><h4>Recap</h4><p class="gm-recap">${esc(text)}</p></div>`;
   }

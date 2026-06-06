@@ -36,7 +36,7 @@
   .sc-time .t { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 15px; color: var(--d27-navy); line-height: 1.1; }
   .sc-time .tag { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; margin-top: 1px; }
   .sc-match { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
-  .sc-team { font-weight: 600; color: var(--d27-ink); }
+  .sc-team { font-weight: 600; color: var(--d27-ink); display: inline-flex; align-items: center; gap: 6px; }
   .sc-team.tbd { color: var(--muted); font-weight: 500; }
   .sc-team.win { color: var(--d27-navy); font-weight: 800; }
   .sc-score { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 17px; color: var(--d27-navy); padding: 0 2px; }
@@ -74,6 +74,7 @@
 <script src="js/d27-data.js"></script>
 <script src="js/d27-bracket.js"></script>
 <script src="js/d27-scores.js"></script>
+<script src="js/d27-logos.js"></script>
 <script src="js/d27-gamemodal.js"></script>
 <script src="js/d27-chrome.js"></script>
 <script>
@@ -84,7 +85,7 @@
   function isForfeit(g){ if(!D27scores.played(g)) return false; if(g.forfeit!=null) return !!g.forfeit; var bye=/^\s*bye\s*$/i.test(String(g.away))||/^\s*bye\s*$/i.test(String(g.home)); return !bye && !clean(g.date); }
 
   var ALL=[], TAB='all';
-  function teamHTML(disp, win){ return '<span class="sc-team'+(win?' win':'')+(disp.tbd?' tbd':'')+'">'+esc(disp.name)+'</span>'; }
+  function teamHTML(disp, win){ var logo=(!disp.tbd&&window.D27logos)?D27logos.html(disp.name,18):''; return '<span class="sc-team'+(win?' win':'')+(disp.tbd?' tbd':'')+'">'+logo+esc(disp.name)+'</span>'; }
   function gameRow(g){
     var A=D27scores.side(g,'away'), H=D27scores.side(g,'home'), played=D27scores.played(g);
     var match;

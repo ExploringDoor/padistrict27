@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/styles.css" />
 <script src="js/d27-data.js"></script>
+<script src="js/d27-logos.js"></script>
 <script src="js/d27-gamemodal.js"></script>
 <script src="js/d27-chrome.js"></script>
 <style>
@@ -93,7 +94,7 @@
   .ls-game .ls-time .t { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--d27-navy); line-height: 1.1; }
   .ls-game .ls-time .g { font-size: 10px; color: var(--muted); letter-spacing: .04em; }
   .ls-game .ls-match { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .ls-team { font-weight: 700; font-size: 15px; color: var(--d27-ink); }
+  .ls-team { font-weight: 700; font-size: 15px; color: var(--d27-ink); display: inline-flex; align-items: center; gap: 6px; }
   .ls-team.tbd { color: var(--muted); font-weight: 600; font-style: italic; }
   .ls-team.win { color: #047857; }
   .ls-vs { color: var(--muted); font-size: 12px; font-weight: 600; }
@@ -284,7 +285,8 @@ function championOutcome(t, cls) {
 function teamHTML(disp, score, otherScore, played) {
   if (disp.tbd) return `<span class="ls-team tbd">${disp.name}</span>`;
   const win = played && score != null && otherScore != null && score > otherScore;
-  return `<span class="ls-team${win ? ' win' : ''}">${disp.name}</span>`;
+  const logo = window.D27logos ? D27logos.html(disp.name, 18) : '';
+  return `<span class="ls-team${win ? ' win' : ''}">${logo}${disp.name}</span>`;
 }
 
 function gameHTML(t, g) {
@@ -316,7 +318,7 @@ function teamsPanelHTML(t, open) {
   const mkTable = list => `<table class="ls-teams-table"><tbody>${list.map(tm => `
         <tr>
           <td class="ts">${tm.n || ''}</td>
-          <td class="tn">${tm.name}</td>
+          <td class="tn">${window.D27logos ? D27logos.html(tm.name, 22) : ''} ${tm.name}</td>
           <td class="tac"><span class="ta">${tm.abbr || ''}</span></td>
           <td class="tp">${tm.park ? `<span class="pin">📍</span>${tm.park}` : '<span class="muted">—</span>'}</td>
         </tr>`).join('')}</tbody></table>`;
