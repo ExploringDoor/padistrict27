@@ -73,6 +73,16 @@
   .cs .yr { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
   .cs .tm { font-family: 'Oswald', sans-serif; font-size: var(--text-lg); font-weight: 600; color: var(--d27-navy); line-height: 1.1; }
   .cs .tn { font-size: var(--text-xs); color: var(--muted); }
+  .cs.cs-click { cursor: pointer; width: 100%; text-align: left; font: inherit; position: relative; }
+  .cs .cs-cam { position: absolute; top: 8px; right: 10px; font-size: 13px; opacity: .45; transition: opacity .15s ease; }
+  .cs.cs-click:hover .cs-cam { opacity: 1; }
+  .cs-lb { position: fixed; inset: 0; z-index: 2000; display: none; align-items: center; justify-content: center; background: rgba(0,18,48,.9); padding: 24px; }
+  .cs-lb.open { display: flex; }
+  .cs-lb figure { margin: 0; max-width: 94vw; max-height: 90vh; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .cs-lb img { max-width: 94vw; max-height: 78vh; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,.5); }
+  .cs-lb figcaption { color: #fff; font-size: var(--text-sm); text-align: center; max-width: 70ch; }
+  .cs-lb-close { position: absolute; top: 16px; right: 20px; width: 40px; height: 40px; border: none; border-radius: 50%; background: rgba(255,255,255,.16); color: #fff; font-size: 20px; cursor: pointer; }
+  .cs-lb-close:hover { background: rgba(255,255,255,.3); }
 
   /* ── Leagues strip ───────────────────────────────────── */
   .leagues-strip { padding: var(--space-7) 0; }
@@ -208,6 +218,8 @@
 
 <div id="d27-footer"></div>
 
+<div class="cs-lb" id="csLightbox"><button class="cs-lb-close" aria-label="Close">✕</button><figure><img id="csLbImg" alt=""><figcaption id="csLbCap"></figcaption></figure></div>
+
 <script src="js/d27-data.js"></script>
 <script src="js/d27-bracket.js"></script>
 <script src="js/d27-scores.js"></script>
@@ -216,26 +228,50 @@
 <script src="js/d27-chrome.js"></script>
 <script>
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-  function csCard(yr, c){
+  function csCard(yr, c, photo){
     var logo = window.D27logos ? '<span class="cs-logo">' + D27logos.html(c.team, 40) + '</span>' : '<span class="tr">🏆</span>';
-    return '<div class="cs">' + logo + '<div>' +
+    var inner = logo + '<div>' +
       '<div class="yr">' + esc(yr) + (c.sport ? ' · ' + esc(c.sport) : '') + '</div>' +
       '<div class="tm">' + esc(c.team) + '</div>' +
-      '<div class="tn">' + esc(c.tournament) + '</div></div></div>';
+      '<div class="tn">' + esc(c.tournament) + '</div></div>';
+    if (photo) {
+      return '<button type="button" class="cs cs-click" data-src="' + esc(photo.file) + '" data-cap="' + esc(photo.caption) + '">' + inner + '<span class="cs-cam" title="View photo">📷</span></button>';
+    }
+    return '<div class="cs">' + inner + '</div>';
   }
   (async function(){
     var el = document.getElementById('recentChamps');
-    var empty = '<div style="color:rgba(255,255,255,.6)">Champions will appear here as tournaments finish.</div>';
+    var empty = '<div style="color:var(--muted)">Champions will appear here as tournaments finish.</div>';
     try {
       var res = await fetch('data/champions-history.json');
       var hist = await res.json();
       var y = (hist.years || [])[0];  // most recent season only — the rest live on the Champions page
+      var photoMap = {};
+      try {
+        var photos = ((await (await fetch('data/champions-photos.json')).json()).photos) || [];
+        photos.forEach(function(p){ var k = p.year + '|' + p.team + '|' + p.title; if (!photoMap[k]) photoMap[k] = p; });
+      } catch(e){}
       if (y && y.champions && y.champions.length) {
-        el.innerHTML = y.champions.map(function(c){ return csCard(y.year, c); }).join('');
+        el.innerHTML = y.champions.map(function(c){ return csCard(y.year, c, photoMap[y.year + '|' + c.team + '|' + c.tournament]); }).join('');
         var eb = document.querySelector('.champ-band .eyebrow');
         if (eb) eb.textContent = y.year + ' Season';
       } else { el.innerHTML = empty; }
     } catch(e){ el.innerHTML = empty; }
+  })();
+
+  // Champion photo lightbox
+  (function(){
+    var lb = document.getElementById('csLightbox'); if (!lb) return;
+    var img = document.getElementById('csLbImg'), cap = document.getElementById('csLbCap');
+    function close(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
+    document.getElementById('recentChamps').addEventListener('click', function(e){
+      var card = e.target.closest('.cs-click'); if (!card) return;
+      img.src = card.getAttribute('data-src'); img.alt = card.getAttribute('data-cap') || '';
+      cap.textContent = card.getAttribute('data-cap') || '';
+      lb.classList.add('open'); document.body.style.overflow = 'hidden';
+    });
+    lb.addEventListener('click', function(e){ if (e.target === lb || e.target.closest('.cs-lb-close')) close(); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
   })();
 
   // Recent scores + upcoming schedule cards
