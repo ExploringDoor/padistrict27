@@ -61,6 +61,18 @@
   .ed-actions .status { font-size: 13px; color: var(--muted); }
   .ed-actions .status.ok { color: #047857; font-weight: 700; }
 
+  /* bracket wiring check */
+  .bk-check { margin: 0 0 14px; border-radius: 8px; padding: 11px 14px; font-size: 13px; }
+  .bk-check.ok { background: #ECFDF5; border: 1px solid #A7F3D0; color: #047857; font-weight: 600; }
+  .bk-check.has { background: #FFFBEB; border: 1px solid #FCD34D; color: #92400E; }
+  .bk-check-h { font-family: var(--font-display); font-weight: 700; letter-spacing: .02em; text-transform: uppercase; font-size: 12px; margin-bottom: 8px; color: #92400E; }
+  .bk-check .bk-row { display: flex; align-items: baseline; gap: 9px; padding: 5px 0; border-top: 1px solid rgba(146,64,14,.14); line-height: 1.4; }
+  .bk-check .bk-row:first-of-type { border-top: none; }
+  .bk-check .bk-row .tag { flex: none; font-family: var(--font-display); font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; }
+  .bk-check .bk-row.err .tag { background: #FEE2E2; color: #B91C1C; }
+  .bk-check .bk-row.warn .tag { background: #FEF3C7; color: #92400E; }
+  .bk-check .bk-row.err { color: #B91C1C; }
+
   .ed-notconfigured { max-width: 600px; margin: 60px auto; background: #FEF3C7; border: 1px solid #F59E0B; border-radius: 10px; padding: 26px; color: #7c5e10; }
   .ed-notconfigured h2 { font-family: var(--font-display); margin: 0 0 8px; color: #92400e; }
   .ed-notconfigured code { background: rgba(0,0,0,.06); padding: 1px 6px; border-radius: 3px; }
@@ -173,6 +185,8 @@
         </div>
       </div>
 
+      <div id="bracketCheck" class="bk-check"></div>
+
       <div class="ed-table-wrap">
         <table class="ed-table">
           <thead><tr><th>G#</th><th>Date</th><th>Time</th><th>Away team</th><th></th><th>Home team</th><th></th><th>Field</th><th></th></tr></thead>
@@ -269,6 +283,7 @@ function renderRows() {
   const tb = $('rows'); tb.innerHTML = '';
   current.games.slice().sort((a,b)=>a.g-b.g).forEach(g => tb.appendChild(rowEl(g)));
   applyResolved();
+  runBracketCheck();
 }
 
 // ── auto-advance: show the resolved team in the slot, keep WG/LG underneath ──
@@ -326,6 +341,55 @@ function applyResolved(){
     });
   });
 }
+// ── bracket wiring check ────────────────────────────────────────────
+// Catches the mistakes that quietly break a bracket: a game whose winner is
+// never used by a later game (so it floats off beside the final), the same
+// winner/loser sent to two games, and references to a game that doesn't exist.
+// Byes are skipped — the bracket page wires those up on its own.
+function bracketIssues(games) {
+  const issues = [];
+  const byNum = {}; games.forEach(g => byNum[g.g] = g);
+  const isBye = s => /^\s*bye\s*$/i.test(s == null ? '' : String(s));
+  const refsTo = {};                                   // gameNum -> [{by, kind}]
+  games.forEach(g => ['away', 'home'].forEach(side => {
+    const r = parseRef(g[side]);
+    if (r.kind === 'WG' || r.kind === 'LG') {
+      (refsTo[r.g] = refsTo[r.g] || []).push({ by: g.g, kind: r.kind });
+      if (!byNum[r.g]) issues.push({ level: 'err', game: g.g, msg: `Game ${g.g} points to ${r.kind}-${r.g}, but there is no Game ${r.g}.` });
+    }
+  }));
+  // depth (rounds from the start) so we can tell the real final from an orphan
+  const depth = {}, guard = new Set();
+  const feedersOf = g => ['away', 'home'].map(s => parseRef(g[s])).filter(r => r.kind === 'WG' || r.kind === 'LG').map(r => r.g);
+  function d(n) { if (depth[n] != null) return depth[n]; if (guard.has(n)) return 1; guard.add(n); const g = byNum[n]; if (!g) return 1; const f = feedersOf(g).filter(x => byNum[x]); depth[n] = f.length ? 1 + Math.max(...f.map(d)) : 1; return depth[n]; }
+  games.forEach(g => d(g.g));
+  const maxDepth = Math.max(0, ...games.map(g => depth[g.g] || 1));
+  // 1) a winner that goes nowhere (skip byes + the single deepest game = the final)
+  games.forEach(g => {
+    if (isBye(g.away) || isBye(g.home)) return;
+    const wgUsed = (refsTo[g.g] || []).some(r => r.kind === 'WG');
+    if (!wgUsed && (depth[g.g] || 1) < maxDepth)
+      issues.push({ level: 'warn', game: g.g, msg: `Game ${g.g}'s winner isn't sent to any later game. If it isn't the final, set a later game's slot to WG-${g.g}.` });
+  });
+  // 2) a winner/loser sent to two places
+  Object.keys(refsTo).forEach(n => {
+    const wg = refsTo[n].filter(r => r.kind === 'WG').map(r => r.by);
+    const lg = refsTo[n].filter(r => r.kind === 'LG').map(r => r.by);
+    if (wg.length > 1) issues.push({ level: 'err', game: +n, msg: `WG-${n} is used by Games ${wg.join(' & ')} — a winner can only advance to one game.` });
+    if (lg.length > 1) issues.push({ level: 'err', game: +n, msg: `LG-${n} is used by Games ${lg.join(' & ')} — a loser can only drop to one game.` });
+  });
+  return issues.sort((a, b) => (a.game || 0) - (b.game || 0) || (a.level === 'err' ? -1 : 1));
+}
+function runBracketCheck() {
+  const box = $('bracketCheck'); if (!box) return;
+  const issues = bracketIssues(rowsToGames().filter(g => g.g != null));
+  if (!issues.length) { box.className = 'bk-check ok'; box.textContent = '✓ Bracket wiring looks good — every game feeds into the next.'; return; }
+  box.className = 'bk-check has';
+  box.innerHTML = `<div class="bk-check-h">⚠ ${issues.length} bracket ${issues.length === 1 ? 'issue' : 'issues'} to review</div>` +
+    issues.map(i => `<div class="bk-row ${i.level}"><span class="tag">${i.level === 'err' ? 'Error' : 'Check'}</span><span>${i.msg}</span></div>`).join('');
+}
+window.__check = runBracketCheck;
+
 function rowEl(g) {
   const tr = document.createElement('tr');
   // show scores blank until a game is actually played (don't seed 0–0)
@@ -341,7 +405,7 @@ function rowEl(g) {
     <td><input type="text" value="${esc(g.home)}" data-f="home" data-ref="${esc(g.home)}" placeholder="Team or LG-3"></td>
     <td><input class="sc" type="number" min="0" value="${hsV}" data-f="hs"></td>
     <td><input type="text" value="${esc(g.field)}" data-f="field" placeholder="Field"></td>
-    <td><button class="del" title="Delete game" onclick="this.closest('tr').remove()">✕</button></td>`;
+    <td><button class="del" title="Delete game" onclick="this.closest('tr').remove(); window.__check&&window.__check()">✕</button></td>`;
   return tr;
 }
 const esc = v => v == null ? '' : String(v).replace(/"/g, '&quot;');
@@ -349,6 +413,7 @@ const esc = v => v == null ? '' : String(v).replace(/"/g, '&quot;');
 window.__addRow = () => {
   const next = current.games.reduce((m,g)=>Math.max(m,g.g||0),0) + 1;
   $('rows').appendChild(rowEl({ g: next }));
+  runBracketCheck();
 };
 
 function collectGames() {
@@ -424,6 +489,7 @@ $('rows').addEventListener('input', (e) => {
     }
   }
   applyResolved();
+  runBracketCheck();
 });
 
 // ───────── Excel import (drag a tournament file → save as a tournament) ─────────
