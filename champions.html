@@ -43,6 +43,24 @@
   .champ-empty { padding: var(--space-5); border: 1px dashed var(--line); border-radius: var(--radius); color: var(--muted); text-align: center; }
   .champ-note-src { color: var(--muted); font-size: var(--text-xs); margin-top: var(--space-5); }
   .hub-loading { padding: var(--space-6); text-align: center; color: var(--muted); font-family: 'Oswald', sans-serif; letter-spacing: .04em; }
+
+  /* photo gallery */
+  .cg-title { font-family: 'Oswald', sans-serif; font-size: var(--text-2xl); color: var(--d27-navy); margin: var(--space-6) 0 var(--space-2); }
+  .cg-sub { color: var(--muted); margin-bottom: var(--space-5); }
+  .cg-year { margin-bottom: var(--space-6); }
+  .cg-year h3 { font-family: 'Oswald', sans-serif; font-size: var(--text-xl); color: var(--d27-navy); margin: 0 0 var(--space-3); padding-bottom: var(--space-2); border-bottom: 2px solid var(--gold); }
+  .cg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: var(--space-4); }
+  .cg-item { display: flex; flex-direction: column; padding: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--surface); cursor: pointer; text-align: left; font: inherit; transition: transform .15s ease, box-shadow .15s ease; }
+  .cg-item:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(0,23,60,.16); }
+  .cg-item img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: var(--d27-sub, #eef2f7); }
+  .cg-cap { padding: 10px 12px; font-size: 12.5px; line-height: 1.35; color: var(--d27-ink, #14213D); }
+  .cg-lb { position: fixed; inset: 0; z-index: 1000; display: none; align-items: center; justify-content: center; background: rgba(0,18,48,.9); padding: 24px; }
+  .cg-lb.open { display: flex; }
+  .cg-lb figure { margin: 0; max-width: 94vw; max-height: 90vh; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .cg-lb img { max-width: 94vw; max-height: 78vh; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,.5); }
+  .cg-lb figcaption { color: #fff; font-size: 14px; text-align: center; max-width: 70ch; }
+  .cg-lb-close { position: absolute; top: 16px; right: 20px; width: 40px; height: 40px; border: none; border-radius: 50%; background: rgba(255,255,255,.16); color: #fff; font-size: 20px; cursor: pointer; }
+  .cg-lb-close:hover { background: rgba(255,255,255,.3); }
 </style>
 </head>
 <body>
@@ -60,6 +78,10 @@
 <main class="container section-tight" id="champions">
   <div class="hub-loading">Loading champions…</div>
 </main>
+
+<section class="container section-tight" id="champPhotos"></section>
+
+<div class="cg-lb" id="cgLightbox"><button class="cg-lb-close" aria-label="Close">✕</button><figure><img id="cgLbImg" alt=""><figcaption id="cgLbCap"></figcaption></figure></div>
 
 <div id="d27-footer"></div>
 
@@ -125,6 +147,44 @@
     } catch (e) {}
 
     out.innerHTML = html || '<div class="champ-empty">No champions on record yet.</div>';
+  })();
+
+  // ── Photo gallery: champions through the years ──
+  (async function(){
+    var box = document.getElementById('champPhotos');
+    try {
+      var res = await fetch('data/champions-photos.json');
+      var photos = (await res.json()).photos || [];
+      if (!photos.length) return;
+      var byYear = {};
+      photos.forEach(function(p){ (byYear[p.year] = byYear[p.year] || []).push(p); });
+      var years = Object.keys(byYear).sort(function(a,b){ return b - a; });
+      var html = '<h2 class="cg-title">📸 Champions Through the Years</h2>' +
+        '<p class="cg-sub">Tournament winners from across District 27 — tap any photo to enlarge.</p>';
+      years.forEach(function(y){
+        html += '<div class="cg-year"><h3>' + y + '</h3><div class="cg-grid">' +
+          byYear[y].map(function(p){
+            return '<button type="button" class="cg-item" data-src="' + esc(p.file) + '" data-cap="' + esc(p.caption) + '">' +
+              '<img src="' + esc(p.file) + '" alt="' + esc(p.caption) + '" loading="lazy">' +
+              '<div class="cg-cap">' + esc(p.caption) + '</div></button>';
+          }).join('') + '</div></div>';
+      });
+      box.innerHTML = html;
+    } catch (e) {}
+  })();
+
+  // ── Lightbox ──
+  (function(){
+    var lb = document.getElementById('cgLightbox'), img = document.getElementById('cgLbImg'), cap = document.getElementById('cgLbCap');
+    function close(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
+    document.getElementById('champPhotos').addEventListener('click', function(e){
+      var it = e.target.closest('.cg-item'); if (!it) return;
+      img.src = it.getAttribute('data-src'); img.alt = it.getAttribute('data-cap') || '';
+      cap.textContent = it.getAttribute('data-cap') || '';
+      lb.classList.add('open'); document.body.style.overflow = 'hidden';
+    });
+    lb.addEventListener('click', function(e){ if (e.target === lb || e.target.closest('.cg-lb-close')) close(); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
   })();
 </script>
 
