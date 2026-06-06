@@ -346,7 +346,7 @@ function tourneyHTML(t, q) {
       ${t.updated ? `<span class="updated"><span class="dot"></span>${updatedLabel(t.updated)}</span>` : ''}
     </div>
     ${outcome.champion ? `<div class="ls-champion"><span class="trophy">🏆</span><div class="ct"><span class="lbl">Tournament Champion</span><span class="team">${outcome.champion}</span></div></div>` : ''}
-    ${teamsPanelHTML(t, filter.tourney !== 'all')}`;
+    ${teamsPanelHTML(t, false)}`;
   for (const k of order) {
     html += `<div class="ls-date">${fmtDate(k)}</div>`;
     byDate[k].sort((a, b) => String(a.time || '').localeCompare(String(b.time || '')));
