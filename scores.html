@@ -42,6 +42,7 @@
   .sc-score { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 17px; color: var(--d27-navy); padding: 0 2px; }
   .sc-vs { color: var(--muted); font-size: 12px; }
   .sc-final { font-size: 10px; background: #ECFDF5; color: #047857; padding: 2px 7px; border-radius: 3px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .sc-final.forfeit { background: #FEF3C7; color: #92400E; }
   .sc-field { font-size: 12px; color: var(--muted); text-align: right; }
   @media (max-width: 640px) { .sc-game { grid-template-columns: 70px 1fr auto; } .sc-field { grid-column: 1 / -1; text-align: left; padding-left: 84px; } }
   .hub-loading { padding: var(--space-6); text-align: center; color: var(--muted); font-family: 'Oswald', sans-serif; letter-spacing: .04em; }
@@ -77,8 +78,10 @@
 <script src="js/d27-chrome.js"></script>
 <script>
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-  function fmtTime(t){ if(!t) return 'TBD'; var p=String(t).split(':'); var h=+p[0], m=p[1]||'00'; var ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+m+' '+ap; }
-  function fmtDate(d){ if(!d||d==='TBD') return 'Date TBD'; var dt=new Date(d+'T12:00:00'); return dt.toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'}); }
+  function clean(v){ if(v==null) return ''; var s=String(v).trim(); return /^(n\/?a|tbd|tba|none|-+)$/i.test(s) ? '' : s; }
+  function fmtTime(t){ t=clean(t); if(!t) return 'TBD'; var p=t.split(':'); var h=+p[0], m=p[1]||'00'; if(isNaN(h)) return 'TBD'; var ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+m+' '+ap; }
+  function fmtDate(d){ d=clean(d); if(!d) return 'Date TBD'; var dt=new Date(d+'T12:00:00'); if(isNaN(dt)) return 'Date TBD'; return dt.toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'}); }
+  function isForfeit(g){ var bye=/^\s*bye\s*$/i.test(String(g.away))||/^\s*bye\s*$/i.test(String(g.home)); return D27scores.played(g) && !bye && !clean(g.date); }
 
   var ALL=[], TAB='all';
   function teamHTML(disp, win){ return '<span class="sc-team'+(win?' win':'')+(disp.tbd?' tbd':'')+'">'+esc(disp.name)+'</span>'; }
@@ -87,12 +90,12 @@
     var match;
     if(played){
       var aWin=g.as>g.hs, hWin=g.hs>g.as;
-      match=teamHTML(A,aWin)+' <span class="sc-score">'+g.as+'</span><span class="sc-vs">–</span><span class="sc-score">'+g.hs+'</span> '+teamHTML(H,hWin)+' <span class="sc-final">Final</span>';
+      match=teamHTML(A,aWin)+' <span class="sc-score">'+g.as+'</span><span class="sc-vs">–</span><span class="sc-score">'+g.hs+'</span> '+teamHTML(H,hWin)+(isForfeit(g)?' <span class="sc-final forfeit">Forfeit</span>':' <span class="sc-final">Final</span>');
     } else {
       match=teamHTML(A,false)+' <span class="sc-vs">vs</span> '+teamHTML(H,false);
     }
     return '<div class="sc-game" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'"><div class="sc-time"><div class="t">'+fmtTime(g.time)+'</div><div class="tag">'+esc(String(g.tourneyKey).replace(/_/g,' '))+'</div></div>'+
-      '<div class="sc-match">'+match+'</div><div class="sc-field">'+esc(g.field||'')+'</div>'+
+      '<div class="sc-match">'+match+'</div><div class="sc-field">'+esc(clean(g.field))+'</div>'+
       '<span class="gm-cue '+(played?'recap':'preview')+'">'+(played?'Recap':'Preview')+' ›</span></div>';
   }
   function render(){

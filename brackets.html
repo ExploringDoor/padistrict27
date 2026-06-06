@@ -310,8 +310,12 @@ function matchHTML(t, g, cls, x, y) {
   const played = isPlayed(g), aWin = played && g.as > g.hs, hWin = played && g.hs > g.as;
   const side = (s, sc, win) => `<div class="bk-side${win ? ' win' : ''}${s.tbd ? ' tbd' : ''}${s.bye ? ' bye' : ''}"><span class="nm">${s.name}${s.via ? `<span class="via">via ${s.via}</span>` : ''}</span><span class="sc">${sc != null ? sc : ''}</span></div>`;
   const tag = cls === 'f' ? '<span class="tag f">🏆 Final</span>' : cls === 'l' ? '<span class="tag l">Losers</span>' : '<span class="tag w">Winners</span>';
-  const when = [g.date ? new Date(g.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : null, g.time ? fmtTime(g.time) : null].filter(Boolean).join(' · ');
-  return `<div class="bk-match acc-${cls}" data-tkey="${t.key}" data-g="${g.g}" style="left:${x}px;top:${y}px"><div class="bk-mtop"><span class="g">Game ${g.g}</span>${tag}</div>${side(A, g.as, aWin)}${side(H, g.hs, hWin)}<div class="bk-mfoot"><span>${when || 'TBD'}</span><span class="gm-cue ${played ? 'recap' : 'preview'}">${played ? 'Recap' : 'Preview'} ›</span></div></div>`;
+  const okStr = v => v && !/^(n\/?a|tbd|tba|none|-+)$/i.test(String(v).trim());
+  const cd = okStr(g.date) ? new Date(g.date + 'T12:00:00') : null;
+  const when = [(cd && !isNaN(cd)) ? cd.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : null, okStr(g.time) ? fmtTime(g.time) : null].filter(Boolean).join(' · ');
+  const forfeit = played && !okStr(g.date) && !/^bye$/i.test(String(g.away).trim()) && !/^bye$/i.test(String(g.home).trim());
+  const foot = forfeit ? 'Forfeit' : (when || 'TBD');
+  return `<div class="bk-match acc-${cls}" data-tkey="${t.key}" data-g="${g.g}" style="left:${x}px;top:${y}px"><div class="bk-mtop"><span class="g">Game ${g.g}</span>${tag}</div>${side(A, g.as, aWin)}${side(H, g.hs, hWin)}<div class="bk-mfoot"><span>${foot}</span><span class="gm-cue ${played ? 'recap' : 'preview'}">${played ? 'Recap' : 'Preview'} ›</span></div></div>`;
 }
 function fmtTime(t) { let [h, m] = t.split(':').map(Number); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return `${h}:${String(m).padStart(2,'0')} ${ap}`; }
 

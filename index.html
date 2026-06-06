@@ -234,8 +234,9 @@
   })();
 
   // Recent scores + upcoming schedule cards
-  function shortDate(d){ if(!d) return 'TBD'; var dt=new Date(d+'T12:00:00'); return dt.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
-  function fmtT(t){ if(!t) return ''; var p=String(t).split(':'); var h=+p[0],m=p[1]||'00'; var ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+m+' '+ap; }
+  function clean(v){ if(v==null) return ''; var s=String(v).trim(); return /^(n\/?a|tbd|tba|none|-+)$/i.test(s) ? '' : s; }
+  function shortDate(d){ d=clean(d); if(!d) return 'TBD'; var dt=new Date(d+'T12:00:00'); if(isNaN(dt)) return 'TBD'; return dt.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
+  function fmtT(t){ t=clean(t); if(!t) return ''; var p=t.split(':'); var h=+p[0],m=p[1]||'00'; if(isNaN(h)) return ''; var ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+m+' '+ap; }
   function hcRow(g, mode){
     var A=D27scores.side(g,'away'), H=D27scores.side(g,'home'), mt;
     var when = mode==='result' ? shortDate(g.date) : (shortDate(g.date)+' · '+fmtT(g.time));

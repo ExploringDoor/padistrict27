@@ -103,12 +103,25 @@
   }
 
   // ── recap template (2–3 sentences) — the fallback when game.recap is empty ──
+  // a forfeit: a finished game between two real teams with no real date (the data
+  // records forfeits with N/A date/time/field and a 6–0 administrative result)
+  function isForfeit(g) {
+    const d = cleanVal(g.date);
+    const dateOk = d && !isNaN(new Date(d + 'T12:00:00'));
+    return isPlayed(g) && !isByeSlot(g.away) && !isByeSlot(g.home) && !dateOk;
+  }
   function recapTemplate(t, g, cls) {
     const next = nextGameOf(t, g.g);
     if (isByeSlot(g.away) || isByeSlot(g.home)) {
       const adv = isByeSlot(g.away) ? g.home : g.away;
       const team = resolveSide(t, adv, new Set()) || sideDisplay(t, adv).name;
       return `${team} drew a bye and advanced${next ? ` to Game ${next.g}` : ''}.`;
+    }
+    if (isForfeit(g)) {
+      const aWin = g.as > g.hs;
+      const win = resolveSide(t, aWin ? g.away : g.home, new Set()) || sideDisplay(t, aWin ? g.away : g.home).name;
+      const lose = resolveSide(t, aWin ? g.home : g.away, new Set()) || sideDisplay(t, aWin ? g.home : g.away).name;
+      return `${win} advanced by forfeit over ${lose}${next ? `, moving on to Game ${next.g}` : ''}.`;
     }
     const A = resolveSide(t, g.away, new Set()) || sideDisplay(t, g.away).name;
     const H = resolveSide(t, g.home, new Set()) || sideDisplay(t, g.home).name;
@@ -201,6 +214,12 @@
         <div class="gm-byewrap"><div class="gm-team">${esc(sideDisplay(t, adv).name)}</div><div class="gm-meta">Advanced on a bye</div></div>
         <div class="gm-sec"><h4>Recap</h4><p class="gm-recap">${esc(text)}</p></div>`;
     }
+    if (isForfeit(g)) {
+      const win = g.as > g.hs ? sideDisplay(t, g.away).name : sideDisplay(t, g.home).name;
+      return `
+        <div class="gm-byewrap"><div class="gm-team">${esc(win)}</div><div class="gm-meta">Won by forfeit</div></div>
+        <div class="gm-sec"><h4>Recap</h4><p class="gm-recap">${esc(text)}</p></div>`;
+    }
     const A = sideDisplay(t, g.away), H = sideDisplay(t, g.home);
     const aWin = g.as > g.hs, hWin = g.hs > g.as;
     return `
@@ -233,11 +252,11 @@
     ensureShell();
     const tn = { ...t, games: normalizeByes(t.games) };       // wire byes like the bracket does
     const gg = (tn.games || []).find(x => x.g === g.g) || g;
-    const cls = classify(tn), played = isPlayed(gg);
+    const cls = classify(tn), played = isPlayed(gg), forfeit = isForfeit(gg);
     overlay.querySelector('.gm-crumb').innerHTML = `${esc(tn.name || tn.key)} &nbsp;·&nbsp; ${sectionLabel(tn, gg, cls)} &nbsp;·&nbsp; Game ${gg.g}`;
     const badge = overlay.querySelector('.gm-badge');
-    badge.textContent = played ? 'Final' : 'Preview';
-    badge.className = 'gm-badge ' + (played ? 'final' : 'preview');
+    badge.textContent = forfeit ? 'Forfeit' : played ? 'Final' : 'Preview';
+    badge.className = 'gm-badge ' + (forfeit ? 'forfeit' : played ? 'final' : 'preview');
     overlay.querySelector('.gm-body').innerHTML = played ? recapHTML(tn, gg, cls) : previewHTML(tn, gg, cls);
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';

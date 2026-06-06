@@ -1263,6 +1263,7 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
   letter-spacing: .08em; text-transform: uppercase; padding: 3px 11px; border-radius: 999px; }
 .gm-badge.preview { background: rgba(255,255,255,.16); color: #fff; }
 .gm-badge.final { background: var(--d27-gold, #C9A227); color: var(--d27-navy, #002D72); }
+.gm-badge.forfeit { background: #FCD34D; color: #6b4d05; }
 .gm-body { padding: 20px 22px 24px; }
 
 /* preview */

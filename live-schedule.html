@@ -99,6 +99,7 @@
   .ls-vs { color: var(--muted); font-size: 12px; font-weight: 600; }
   .ls-score { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--d27-navy); padding: 0 4px; }
   .ls-final { font-size: 10px; background: #ECFDF5; color: #047857; padding: 2px 7px; border-radius: 3px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .ls-final.forfeit { background: #FEF3C7; color: #92400E; }
   .ls-field { font-size: 13px; color: var(--muted); text-align: right; }
   @media (max-width: 640px) { .ls-field { text-align: left; } }
 
@@ -147,17 +148,28 @@ let filter = { sport: 'all', tourney: 'all', q: '' };
 
 const isPlaceholder = (t) => !t || /^(WG|LG)-\d+$/i.test(String(t).trim()) || /if necessary/i.test(String(t)) || /^(WG|LG)-/i.test(String(t).trim());
 
+// drop placeholder junk like "N/A" / "TBD" so it never renders literally
+function clean(v) { if (v == null) return ''; const s = String(v).trim(); return /^(n\/?a|tbd|tba|none|-+)$/i.test(s) ? '' : s; }
 function fmtDate(iso) {
-  if (!iso) return 'Date TBD';
+  iso = clean(iso); if (!iso) return 'Date TBD';
   const d = new Date(iso + 'T12:00:00');
+  if (isNaN(d)) return 'Date TBD';
   return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 }
 function fmtTime(t) {
-  if (!t) return 'TBD';
+  t = clean(t); if (!t) return 'TBD';
   let [h, m] = t.split(':').map(Number);
+  if (isNaN(h)) return 'TBD';
   const ap = h >= 12 ? 'PM' : 'AM';
   h = h % 12 || 12;
   return `${h}:${String(m).padStart(2,'0')} ${ap}`;
+}
+// a forfeit: a finished game between two real teams that has no real date
+// (the data records forfeits with N/A date/time/field and a 6–0 result)
+function isForfeit(g) {
+  const bye = /^\s*bye\s*$/i.test(String(g.away)) || /^\s*bye\s*$/i.test(String(g.home));
+  const played = g.as != null && g.hs != null && (g.as + g.hs) > 0;
+  return played && !bye && !clean(g.date);
 }
 function updatedLabel(iso) {
   if (!iso) return '';
@@ -282,7 +294,7 @@ function gameHTML(t, g) {
       ${teamHTML(A, g.as, g.hs, true)}
       <span class="ls-score">${g.as}</span><span class="ls-vs">–</span><span class="ls-score">${g.hs}</span>
       ${teamHTML(H, g.hs, g.as, true)}
-      <span class="ls-final">Final</span>`;
+      ${isForfeit(g) ? '<span class="ls-final forfeit">Forfeit</span>' : '<span class="ls-final">Final</span>'}`;
   } else {
     match = `${teamHTML(A)} <span class="ls-vs">vs</span> ${teamHTML(H)}`;
   }
@@ -290,7 +302,7 @@ function gameHTML(t, g) {
     <div class="ls-game" data-tkey="${t.key}" data-g="${g.g}">
       <div class="ls-time"><div class="t">${fmtTime(g.time)}</div><div class="g">Game ${g.g}</div></div>
       <div class="ls-match">${match}</div>
-      <div class="ls-field">${g.field || ''}</div>
+      <div class="ls-field">${clean(g.field)}</div>
       <span class="gm-cue ${played ? 'recap' : 'preview'}">${played ? 'Recap' : 'Preview'} ›</span>
     </div>`;
 }
