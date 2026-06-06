@@ -222,6 +222,33 @@ function sideDisplay(t, raw) {
   return { name: (ref.kind === 'WG' ? 'Winner' : 'Loser') + ' G' + ref.g, tbd: true };
 }
 
+// A bye game ("Team vs BYE") auto-advances the non-bye side, but the data often
+// records the game it advances INTO with that team's name (or LG-ref) instead of
+// "WG-<bye>". That leaves nothing pointing at the bye game, so the layout treats
+// it as a dead-end and parks it way off beside the final. Rewrite the first
+// downstream slot that picks the advancer back up into "WG-<bye>" so the bye
+// sits in round 1 and draws a line into the game it feeds — the way the Excel
+// has it. Returns a fresh array; the source games are never mutated. No-op for
+// brackets without byes (every slot is checked, none match).
+function normalizeByes(games) {
+  const isBye = s => /^\s*bye\s*$/i.test(s == null ? '' : String(s));
+  const norm = games.map(g => ({ ...g }));
+  for (const b of norm) {
+    const aBye = isBye(b.away), hBye = isBye(b.home);
+    if (aBye === hBye) continue;                       // not a single-sided bye
+    const advancer = aBye ? b.home : b.away;           // the side that auto-advances
+    if (advancer == null || isBye(advancer)) continue;
+    const key = String(advancer).trim();
+    const consumer = norm
+      .filter(c => c.g > b.g && (String(c.away).trim() === key || String(c.home).trim() === key))
+      .sort((x, y) => x.g - y.g)[0];                   // earliest game that picks it back up
+    if (!consumer) continue;
+    if (String(consumer.away).trim() === key) consumer.away = 'WG-' + b.g;
+    else consumer.home = 'WG-' + b.g;
+  }
+  return norm;
+}
+
 // ── structure: feeders, rounds, bracket-class (W/L/F) ───────────────
 function feeders(g) { const o = []; for (const raw of [g.away, g.home]) { const r = parseRef(raw); if (r.kind === 'WG' || r.kind === 'LG') o.push(r.g); } return o; }
 function computeRounds(t) {
@@ -532,9 +559,12 @@ function printBracket() {
 function renderBracket(t) {
   const out = document.getElementById('output');
   if (!t.games.length) { out.innerHTML = teamsPanelHTML(t, false) + '<div class="bk-empty">No games yet for this tournament.</div>'; renderTitle(t); return; }
-  const cls = classify(t);
-  const outcome = championOutcome(t, cls);
-  const visible = t.games.filter(g => !outcome.hide.has(g.g));
+  // wire bye games up to whatever they feed (a fresh copy — source untouched),
+  // then classify + lay out from that. Title/teams panel still use the original.
+  const tn = { ...t, games: normalizeByes(t.games) };
+  const cls = classify(tn);
+  const outcome = championOutcome(tn, cls);
+  const visible = tn.games.filter(g => !outcome.hide.has(g.g));
 
   let html = '';
   if (outcome.champion) {
@@ -542,7 +572,7 @@ function renderBracket(t) {
   }
   html += teamsPanelHTML(t, false);
   html += '<div class="bk-zoomable" id="bkZoom">';
-  html += combinedCanvas(t, cls, visible);
+  html += combinedCanvas(tn, cls, visible);
   html += '</div>';
   out.innerHTML = html || '<div class="bk-empty">No bracket games.</div>';
   renderTitle(t);
