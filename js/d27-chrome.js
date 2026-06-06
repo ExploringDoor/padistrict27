@@ -44,9 +44,7 @@
       '<button class="nav-toggle" aria-label="Menu" onclick="document.querySelector(\'.nav-links\').classList.toggle(\'open\')">' +
         '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">' +
         '<line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>' +
-      '<ul class="nav-links">' + topLinks + moreHTML +
-        '<li><a href="schedule-admin.html" style="background: var(--d27-gold); color: var(--d27-navy); padding: 6px 14px; border-radius: 4px; font-weight: 700;">Sign In</a></li>' +
-      '</ul>' +
+      '<ul class="nav-links">' + topLinks + moreHTML + '</ul>' +
     '</div></nav>';
 
   var footHTML =
