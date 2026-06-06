@@ -66,7 +66,8 @@
   .ls-teams-table tr:last-child td { border-bottom: none; }
   .ls-teams-table tr:hover td { background: #f8fafc; }
   .ls-teams-table .ts { width: 24px; text-align: center; color: #b0bac8; font-weight: 700; font-size: 12px; }
-  .ls-teams-table .tn { font-weight: 700; color: #1f2937; white-space: nowrap; }
+  .ls-teams-table .tn { font-weight: 700; color: #1f2937; white-space: normal; overflow-wrap: anywhere; line-height: 1.2; }
+  .ls-teams-table .tn .d27-logo, .ls-teams-table .tn .d27-logo-fb { vertical-align: middle; margin-right: 2px; }
   .ls-teams-table .tac { width: 1px; white-space: nowrap; }
   .ls-teams-table .ta { font-size: 10.5px; color: #475569; font-weight: 700; background: #eef2f7; padding: 2px 7px; border-radius: 4px; letter-spacing: .04em; }
   .ls-teams-table .tp { color: #5b6675; width: 99%; white-space: nowrap; padding-left: 14px; }
@@ -407,11 +408,18 @@ function render() {
 }
 
 function escTxt(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-function selectTourneyLS(key) {
+function scrollToSched() {
+  const el = document.getElementById('output'); if (!el) return;
+  const nav = document.querySelector('.nav'); const navH = nav ? nav.offsetHeight : 80;
+  const y = el.getBoundingClientRect().top + window.scrollY - navH - 12;
+  if (y > window.scrollY + 4) window.scrollTo({ top: y, behavior: 'smooth' });
+}
+function selectTourneyLS(key, scroll) {
   filter.tourney = key;
   document.querySelectorAll('.ls-chip').forEach(c => c.classList.toggle('active', c.dataset.key === key));
   if (key !== 'all') location.hash = key;
   render();
+  if (scroll) scrollToSched();
 }
 function initFilters() {
   const picker = document.getElementById('tourneyPicker');
@@ -426,16 +434,18 @@ function initFilters() {
     html += '</div></div>';
   }
   picker.innerHTML = html;
-  picker.querySelectorAll('.ls-chip').forEach(function (c) { c.addEventListener('click', function () { selectTourneyLS(c.dataset.key); }); });
+  picker.querySelectorAll('.ls-chip').forEach(function (c) { c.addEventListener('click', function () { selectTourneyLS(c.dataset.key, true); }); });
   document.getElementById('searchBox').addEventListener('input', e => { filter.q = e.target.value; render(); });
   // Deep-link: ?t=KEY or #KEY (from the Baseball/Softball hub) pre-selects a tournament
   const want = new URLSearchParams(location.search).get('t') || location.hash.replace('#', '');
-  if (want && DATA.tournaments.some(t => t.key === want)) filter.tourney = want;
+  const deep = (want && DATA.tournaments.some(t => t.key === want)) ? want : null;
+  if (deep) filter.tourney = deep;
   document.querySelectorAll('.ls-chip').forEach(c => c.classList.toggle('active', c.dataset.key === filter.tourney));
+  return deep;
 }
 
 D27loadSchedules()
-  .then(d => { DATA = d; D27gameModal.setData(d.tournaments); initFilters(); render(); })
+  .then(d => { DATA = d; D27gameModal.setData(d.tournaments); const deep = initFilters(); render(); if (deep) setTimeout(scrollToSched, 180); })
   .catch(() => { document.getElementById('output').innerHTML = '<div class="ls-empty">Could not load schedule data.</div>'; });
 // click a game → preview (not started) or recap (final)
 document.getElementById('output').addEventListener('click', e => {

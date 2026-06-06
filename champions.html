@@ -65,12 +65,14 @@
 
 <script src="js/d27-data.js"></script>
 <script src="js/d27-bracket.js"></script>
+<script src="js/d27-logos.js"></script>
 <script src="js/d27-chrome.js"></script>
 <script>
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function card(c){
+    var logo = (window.D27logos && D27logos.known(c.team)) ? '<span class="champ-logo">' + D27logos.html(c.team, 44) + '</span>' : '<span class="trophy">🏆</span>';
     return '<div class="champ-card">' +
-      '<span class="trophy">🏆</span>' +
+      logo +
       '<div class="info">' +
         '<div class="tourney">' + esc(c.tournament) + '</div>' +
         '<div class="team">' + esc(c.team) + '</div>' +

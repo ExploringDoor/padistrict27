@@ -91,7 +91,8 @@
   .ls-teams-table tr:last-child td { border-bottom: none; }
   .ls-teams-table tr:hover td { background: #f8fafc; }
   .ls-teams-table .ts { width: 24px; text-align: center; color: #b0bac8; font-weight: 700; font-size: 12px; }
-  .ls-teams-table .tn { font-weight: 700; color: #1f2937; white-space: nowrap; }
+  .ls-teams-table .tn { font-weight: 700; color: #1f2937; white-space: normal; overflow-wrap: anywhere; line-height: 1.2; }
+  .ls-teams-table .tn .d27-logo, .ls-teams-table .tn .d27-logo-fb { vertical-align: middle; margin-right: 2px; }
   .ls-teams-table .tac { width: 1px; white-space: nowrap; }
   .ls-teams-table .ta { font-size: 10.5px; color: #475569; font-weight: 700; background: #eef2f7; padding: 2px 7px; border-radius: 4px; letter-spacing: .04em; }
   .ls-teams-table .tp { color: #5b6675; width: 99%; white-space: nowrap; padding-left: 14px; }
@@ -611,7 +612,13 @@ function updatedLabel(iso) {
 }
 
 function escTxt(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-function selectTourney(key) {
+function scrollToBracket() {
+  const el = document.getElementById('titleband'); if (!el) return;
+  const nav = document.querySelector('.nav'); const navH = nav ? nav.offsetHeight : 80;
+  const y = el.getBoundingClientRect().top + window.scrollY - navH - 12;
+  if (y > window.scrollY + 4) window.scrollTo({ top: y, behavior: 'smooth' });
+}
+function selectTourney(key, scroll) {
   const t = DATA.tournaments.find(x => x.key === key) || DATA.tournaments[0];
   if (!t) return;
   renderBracket(t);
@@ -619,6 +626,7 @@ function selectTourney(key) {
   document.querySelectorAll('.bk-chip').forEach(c => c.classList.toggle('active', c.dataset.key === t.key));
   const vl = document.getElementById('viewSchedLink');
   if (vl) vl.href = 'live-schedule.html#' + encodeURIComponent(t.key);
+  if (scroll) scrollToBracket();
 }
 function initSelect() {
   const picker = document.getElementById('tourneyPicker');
@@ -633,10 +641,10 @@ function initSelect() {
     html += '</div></div>';
   }
   picker.innerHTML = html;
-  picker.querySelectorAll('.bk-chip').forEach(function (c) { c.addEventListener('click', function () { selectTourney(c.dataset.key); }); });
-  const want = new URLSearchParams(location.search).get('t') || location.hash.replace('#', '') || 'BB-12';
-  const found = DATA.tournaments.find(t => t.key === want) || DATA.tournaments[0];
-  if (found) selectTourney(found.key);
+  picker.querySelectorAll('.bk-chip').forEach(function (c) { c.addEventListener('click', function () { selectTourney(c.dataset.key, true); }); });
+  const deep = new URLSearchParams(location.search).get('t') || location.hash.replace('#', '');
+  const found = DATA.tournaments.find(t => t.key === (deep || 'BB-12')) || DATA.tournaments[0];
+  if (found) { selectTourney(found.key, false); if (deep) setTimeout(scrollToBracket, 180); }
 }
 
 D27loadSchedules().then(d => { DATA = d; D27gameModal.setData(d.tournaments); initSelect(); })

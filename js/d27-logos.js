@@ -76,5 +76,6 @@
     if (img.parentNode) img.parentNode.replaceChild(span, img);
   }
 
-  global.D27logos = { html: html, slug: slug, abbr: abbr, base: base, fail: fail };
+  function known(name) { var s = slug(name); return !!(s && ABBR[s]); }   // maps to a real D27 league?
+  global.D27logos = { html: html, slug: slug, abbr: abbr, base: base, fail: fail, known: known };
 })(window);

@@ -136,8 +136,13 @@
     const field = cleanVal(g.field), where = field ? ' at ' + field : '';
     const s1 = `${winner} ${verb} ${loser} ${ws}–${ls}${whenS}${where}.`;
     const c = cls[g.g], dbl = isDoubleElim(cls);
+    const fG = (t.games || []).filter(x => cls[x.g] === 'f').sort((a, b) => a.g - b.g);
+    const champG = fG.length ? fG[0].g : null, wbF = deepestOf(t, cls, 'w'), lbF = deepestOf(t, cls, 'l');
     let s2;
     if (c === 'f') s2 = next ? `${winner} takes Game ${g.g} of the ${t.name} championship.` : `${winner} is the ${t.name} champion.`;
+    else if (next && next.g === champG) s2 = `${winner} advances to the championship game.`;
+    else if (next && next.g === wbF) s2 = `${winner} moves on to the Winners Bracket final.`;
+    else if (next && next.g === lbF) s2 = `${winner} advances to the Losers Bracket final.`;
     else if (next) s2 = `${winner} moves on to Game ${next.g}.`;
     else s2 = `${winner} advances.`;
     let s3 = '';
@@ -167,7 +172,9 @@
     const next = nextGameOf(t, g.g);
     const matchup = `${A.name} and ${H.name}`;
     const when = fmtDate(g.date, { weekday: 'long', month: 'long', day: 'numeric' });
-    const tail = [when ? `on ${when}` : '', cleanVal(g.field) ? `at ${cleanVal(g.field)}` : ''].filter(Boolean).join(' ');
+    const time = fmtTime(g.time);
+    const whenT = when ? when + (time ? ` at ${time}` : '') : '';
+    const tail = [whenT ? `on ${whenT}` : '', cleanVal(g.field) ? `at ${cleanVal(g.field)}` : ''].filter(Boolean).join(' ');
     const ts = tail ? ' ' + tail : '';
 
     // championship / if-necessary get their own framing

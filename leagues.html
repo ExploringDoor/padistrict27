@@ -22,7 +22,8 @@
   .hub-hero p { color: rgba(255,255,255,.82); font-size: var(--text-lg); max-width: 62ch; }
 
   .lg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: var(--space-4); }
-  .lg-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
+  .lg-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease; }
+  .lg-card:hover { transform: translateY(-5px); box-shadow: 0 16px 38px rgba(0,23,60,.18); border-color: var(--d27-navy); }
   .lg-head { padding: var(--space-4); background: var(--surface); display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); border-bottom: 2px solid var(--d27-navy); }
   .lg-head h2 { color: var(--d27-navy); margin: 0; font-size: var(--text-lg); line-height: 1.15; }
   .lg-title { display: flex; align-items: center; gap: 14px; min-width: 0; }

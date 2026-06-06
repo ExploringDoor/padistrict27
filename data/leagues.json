@@ -1,91 +1,150 @@
 {
-  "source": "padistrict27.com/field-locations",
-  "leagues": [
+ "source": "padistrict27.com/field-locations",
+ "leagues": [
+  {
+   "name": "Berwyn-Paoli Little League",
+   "website": "https://www.bpall.org/",
+   "fields": [
     {
-      "name": "Berwyn-Paoli Little League",
-      "website": "https://www.bpall.org/",
-      "fields": [
-        { "name": "Field of Dreams", "address": "915 Howellville Road, Berwyn, PA 19312" }
-      ]
-    },
-    {
-      "name": "Chester Valley Little League",
-      "website": "https://www.chestervalleyll.org/",
-      "fields": [
-        { "name": "1st Ave Field", "address": "1 1st Avenue, Malvern, PA" },
-        { "name": "Lower Field", "address": "128 Mill Road, Malvern, PA" },
-        { "name": "Monument Ave Complex", "address": "500 Monument Ave, Malvern, PA" }
-      ]
-    },
-    {
-      "name": "Coventry Little League",
-      "website": "https://sports.bluesombrero.com/Default.aspx?alias=sports.bluesombrero.com/Coventryll",
-      "fields": [
-        { "name": "Wampler Complex", "address": "333 S. Penn St., Pottstown, PA 19465" }
-      ]
-    },
-    {
-      "name": "Devon-Strafford Little League",
-      "website": "http://www.dsll.org/",
-      "fields": [
-        { "name": "Clarke Field 1 & 2", "address": "100 Old State Road, Berwyn, PA 19312" },
-        { "name": "VFMS 90' Baseball", "address": "105 W. Walker Rd, Wayne, PA 19087" }
-      ]
-    },
-    {
-      "name": "Exton Little League",
-      "website": "http://www.extonlittleleague.org/",
-      "fields": [
-        { "name": "Ship Road Fields", "address": "1425 Ship Road, West Chester, PA 19380" },
-        { "name": "Meadowbrook Manor Park", "address": "410 Swedesford Road, Exton, PA 19341" }
-      ]
-    },
-    {
-      "name": "Great Valley Little League",
-      "website": "https://www.gvll.org/",
-      "fields": [
-        { "name": "GVLL King Road Complex", "address": "1300 King Road, Malvern, PA 19355" }
-      ]
-    },
-    {
-      "name": "Lower Merion Little League",
-      "website": "http://www.lmll.org/",
-      "fields": [
-        { "name": "Ashburn Field", "address": "1799 Youngs Ford Rd., Gladwyne, PA 19035" },
-        { "name": "South Ardmore Park, Field B", "address": "1420 Sussex Rd., Wynnewood, PA 19096" }
-      ]
-    },
-    {
-      "name": "Lower Perkiomen Little League",
-      "website": "https://www.lpll.org/",
-      "fields": [
-        { "name": "Palmer Park", "address": "4060 Creamery Rd, Collegeville, PA 19426" },
-        { "name": "Jeanne Rosset French Memorial Park", "address": "3903 Township Line Rd., Collegeville, PA 19426" }
-      ]
-    },
-    {
-      "name": "Pottsgrove Little League",
-      "website": "http://pottsgrove-little-league.sportssignup.com/",
-      "fields": [
-        { "name": "Teeball Fields", "address": "699 North Pleasantview Road, Pottstown, PA 19464" }
-      ]
-    },
-    {
-      "name": "Pottstown Little League",
-      "website": "https://www.pottstownlittleleague.org/",
-      "fields": [
-        { "name": "Main Complex", "address": "451 Manatawny Street, Pottstown, PA 19464" }
-      ]
-    },
-    {
-      "name": "Radnor-Wayne Little League",
-      "website": "https://rwll.teamsnapsites.com/",
-      "fields": []
-    },
-    {
-      "name": "Upper Providence Little League",
-      "website": "https://www.up-littleleague.org/",
-      "fields": []
+     "name": "Field of Dreams",
+     "address": "915 Howellville Road, Berwyn, PA 19312"
     }
-  ]
+   ]
+  },
+  {
+   "name": "Chester Valley Little League",
+   "website": "https://www.chestervalleyll.org/",
+   "fields": [
+    {
+     "name": "1st Ave Field",
+     "address": "1 1st Avenue, Malvern, PA"
+    },
+    {
+     "name": "Lower Field",
+     "address": "128 Mill Road, Malvern, PA"
+    },
+    {
+     "name": "Monument Ave Complex",
+     "address": "500 Monument Ave, Malvern, PA"
+    }
+   ]
+  },
+  {
+   "name": "Coventry Little League",
+   "website": "https://sports.bluesombrero.com/Default.aspx?alias=sports.bluesombrero.com/Coventryll",
+   "fields": [
+    {
+     "name": "Wampler Complex",
+     "address": "333 S. Penn St., Pottstown, PA 19465"
+    }
+   ]
+  },
+  {
+   "name": "Devon-Strafford Little League",
+   "website": "http://www.dsll.org/",
+   "fields": [
+    {
+     "name": "Clarke Field 1 & 2",
+     "address": "100 Old State Road, Berwyn, PA 19312"
+    },
+    {
+     "name": "VFMS 90' Baseball",
+     "address": "105 W. Walker Rd, Wayne, PA 19087"
+    }
+   ]
+  },
+  {
+   "name": "Exton Little League",
+   "website": "http://www.extonlittleleague.org/",
+   "fields": [
+    {
+     "name": "Ship Road Fields",
+     "address": "1425 Ship Road, West Chester, PA 19380"
+    },
+    {
+     "name": "Meadowbrook Manor Park",
+     "address": "410 Swedesford Road, Exton, PA 19341"
+    }
+   ]
+  },
+  {
+   "name": "Great Valley Little League",
+   "website": "https://www.gvll.org/",
+   "fields": [
+    {
+     "name": "GVLL King Road Complex",
+     "address": "1300 King Road, Malvern, PA 19355"
+    }
+   ]
+  },
+  {
+   "name": "Lower Merion Little League",
+   "website": "http://www.lmll.org/",
+   "fields": [
+    {
+     "name": "Ashburn Field",
+     "address": "1799 Youngs Ford Rd., Gladwyne, PA 19035"
+    },
+    {
+     "name": "South Ardmore Park, Field B",
+     "address": "1420 Sussex Rd., Wynnewood, PA 19096"
+    }
+   ]
+  },
+  {
+   "name": "Lower Perkiomen Little League",
+   "website": "https://www.lpll.org/",
+   "fields": [
+    {
+     "name": "Palmer Park",
+     "address": "4060 Creamery Rd, Collegeville, PA 19426"
+    },
+    {
+     "name": "Jeanne Rosset French Memorial Park",
+     "address": "3903 Township Line Rd., Collegeville, PA 19426"
+    }
+   ]
+  },
+  {
+   "name": "Pottsgrove Little League",
+   "website": "http://pottsgrove-little-league.sportssignup.com/",
+   "fields": [
+    {
+     "name": "Teeball Fields",
+     "address": "699 North Pleasantview Road, Pottstown, PA 19464"
+    }
+   ]
+  },
+  {
+   "name": "Pottstown Little League",
+   "website": "https://www.pottstownlittleleague.org/",
+   "fields": [
+    {
+     "name": "Main Complex",
+     "address": "451 Manatawny Street, Pottstown, PA 19464"
+    }
+   ]
+  },
+  {
+   "name": "Radnor-Wayne Little League",
+   "website": "https://rwll.teamsnapsites.com/",
+   "fields": [
+    {
+     "name": "Encke Park"
+    },
+    {
+     "name": "Tunnell Park"
+    }
+   ]
+  },
+  {
+   "name": "Upper Providence Little League",
+   "website": "https://www.up-littleleague.org/",
+   "fields": [
+    {
+     "name": "MacFarlan Park"
+    }
+   ]
+  }
+ ]
 }
