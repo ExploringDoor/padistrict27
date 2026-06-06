@@ -132,24 +132,58 @@
   }
 
   // ── preview / recap bodies ──
-  function roadRow(t, raw) {
-    const r = parseRef(raw); if (r.kind !== 'WG' && r.kind !== 'LG') return '';
-    const fg = gByNum(t, r.g); if (!fg) return '';
-    const disp = sideDisplay(t, raw);
-    if (isByeSlot(fg.away) || isByeSlot(fg.home)) return `<li><b>${esc(disp.name)}</b> drew a bye <span class="gm-sc">Game ${r.g}</span></li>`;
-    if (isPlayed(fg)) {
-      const fa = resolveSide(t, fg.away, new Set()), fh = resolveSide(t, fg.home, new Set());
-      const fw = fg.as > fg.hs ? fa : fh, fl = fg.as > fg.hs ? fh : fa, sc = `${Math.max(fg.as, fg.hs)}–${Math.min(fg.as, fg.hs)}`;
-      return `<li><b>${esc(disp.name)}</b> ${r.kind === 'WG' ? `won Game ${r.g}${fl ? ' over ' + esc(fl) : ''}` : `lost Game ${r.g}`} <span class="gm-sc">${sc}</span></li>`;
+  const deepestOf = (t, cls, c) => { const r = computeRounds(t); let best = null, bd = -1; for (const g of (t.games || [])) if (cls[g.g] === c && (r[g.g] || 1) > bd) { bd = r[g.g] || 1; best = g.g; } return best; };
+  // A short, interesting write-up: where the game sits in the tournament (opener /
+  // semifinal / final / championship) and what's on the line (who advances where,
+  // what happens to the loser). Built live from the bracket — works for TBD slots.
+  function previewBlurb(t, g, cls) {
+    const A = sideDisplay(t, g.away), H = sideDisplay(t, g.home);
+    if (isByeSlot(g.away) || isByeSlot(g.home)) {
+      const adv = isByeSlot(g.away) ? g.home : g.away, nx = nextGameOf(t, g.g);
+      return `${sideDisplay(t, adv).name} draws a bye and moves on${nx ? ` to Game ${nx.g}` : ''}.`;
     }
-    const fa = sideDisplay(t, fg.away).name, fh = sideDisplay(t, fg.home).name;
-    return `<li class="tbd">${r.kind === 'WG' ? 'Winner' : 'Loser'} of Game ${r.g} — ${esc(fa)} vs ${esc(fh)}</li>`;
+    const dbl = isDoubleElim(cls), c = cls[g.g];
+    const fGames = (t.games || []).filter(x => cls[x.g] === 'f').sort((a, b) => a.g - b.g);
+    const champG = fGames.length ? fGames[0].g : null;
+    const wbF = deepestOf(t, cls, 'w'), lbF = deepestOf(t, cls, 'l');
+    const isR1 = feeders(g).length === 0;
+    const isOpener = isR1 && g.g === Math.min(...(t.games || [{ g: g.g }]).map(x => x.g));
+    const next = nextGameOf(t, g.g);
+    const matchup = `${A.name} and ${H.name}`;
+    const when = fmtDate(g.date, { weekday: 'long', month: 'long', day: 'numeric' });
+    const tail = [when ? `on ${when}` : '', cleanVal(g.field) ? `at ${cleanVal(g.field)}` : ''].filter(Boolean).join(' ');
+    const ts = tail ? ' ' + tail : '';
+
+    // championship / if-necessary get their own framing
+    if (g.g === champG) return `It's the championship — ${matchup} meet for the ${t.name} title${ts}.` + (dbl ? ' The Winners Bracket champ needs one win; the Losers Bracket survivor has to win twice.' : ' Win it all, or go home.');
+    if (c === 'f') return `Winner-take-all: ${matchup} play the if-necessary game to decide the ${t.name} championship${ts}.`;
+
+    // sentence 1 — the stage
+    let s1;
+    if (g.g === wbF) s1 = `${matchup} meet in the Winners Bracket final${ts}.`;
+    else if (g.g === lbF) s1 = `${matchup} meet in the Losers Bracket final${ts}.`;
+    else if (c === 'l') s1 = `${matchup} square off in a Losers Bracket elimination game${ts}.`;
+    else if (isOpener) s1 = `${matchup} ${dbl ? 'get Winners Bracket play started' : `kick off the ${t.name}`}${ts}.`;
+    else if (isR1) s1 = `${matchup} open ${dbl ? 'Winners Bracket play' : `the ${t.name}`}${ts}.`;
+    else s1 = `${matchup} meet in the ${dbl ? 'Winners Bracket' : t.name}${ts}.`;
+
+    // sentence 2 — the stakes
+    let stake;
+    if (!next) stake = `The winner is the ${t.name} champion.`;
+    else if (next.g === champG) stake = `The winner advances to the championship game.`;
+    else if (next.g === wbF) stake = `The winner moves on to the Winners Bracket final.`;
+    else if (next.g === lbF) stake = `The winner advances to the Losers Bracket final.`;
+    else stake = `The winner advances to Game ${next.g}.`;
+    let fate = '';
+    if (c === 'w' && dbl) fate = ` The loser isn't done — they drop to the Losers Bracket for another shot.`;
+    else if (c === 'l') fate = ` The loser is eliminated.`;
+    else if (c === 'w' && !dbl) fate = ` It's win-or-go-home.`;
+    return `${s1} ${stake}${fate}`;
   }
   function previewHTML(t, g, cls) {
     const A = sideDisplay(t, g.away), H = sideDisplay(t, g.home);
     const when = [fmtDate(g.date), fmtTime(g.time)].filter(Boolean).join(' · ');
     const field = cleanVal(g.field);
-    const road = [roadRow(t, g.away), roadRow(t, g.home)].filter(Boolean);
     return `
       <div class="gm-matchup">
         <div class="gm-team ${A.tbd ? 'tbd' : ''}">${esc(A.name)}</div>
@@ -157,7 +191,7 @@
         <div class="gm-team ${H.tbd ? 'tbd' : ''}">${esc(H.name)}</div>
       </div>
       <div class="gm-meta">${when || 'Date &amp; time TBD'}${field ? ` &nbsp;·&nbsp; ${esc(field)}` : ''}</div>
-      ${road.length ? `<div class="gm-sec"><h4>Road to this game</h4><ul class="gm-road">${road.join('')}</ul></div>` : ''}`;
+      <div class="gm-sec"><h4>Preview</h4><p class="gm-recap">${esc(previewBlurb(t, g, cls))}</p></div>`;
   }
   function recapHTML(t, g, cls) {
     const text = (g.recap && String(g.recap).trim()) ? g.recap : recapTemplate(t, g, cls);
