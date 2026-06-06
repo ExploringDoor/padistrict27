@@ -16,7 +16,7 @@
 
 <style>
   /* ── Hero ───────────────────────────────────────────── */
-  .hero {
+  .hp-hero {
     position: relative; min-height: 66vh; display: flex; align-items: flex-end;
     color: var(--d27-white); padding: var(--space-7) 0 calc(var(--space-7) + 30px);
     background:
@@ -25,11 +25,11 @@
       url('assets/d27-vintage-hero.jpg') center 35% / cover no-repeat;
     background-color: #00091a;
   }
-  .hero .container { width: 100%; }
-  .hero .eyebrow { font-family: 'Oswald', sans-serif; font-size: var(--text-sm); letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: var(--space-3); display: inline-flex; align-items: center; gap: 12px; }
-  .hero .eyebrow::before { content: ''; width: 38px; height: 2px; background: var(--gold); }
-  .hero h1 { color: #fff; font-size: clamp(2.6rem, 6.2vw, 4.6rem); line-height: .97; letter-spacing: -.015em; margin: 0 0 var(--space-3); max-width: 15ch; text-shadow: 0 2px 40px rgba(0,0,0,.55); }
-  .hero p { color: rgba(255,255,255,.88); font-size: var(--text-lg); max-width: 50ch; margin-bottom: var(--space-5); }
+  .hp-hero .container { width: 100%; }
+  .hp-hero .eyebrow { font-family: 'Oswald', sans-serif; font-size: var(--text-sm); letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: var(--space-3); display: inline-flex; align-items: center; gap: 12px; }
+  .hp-hero .eyebrow::before { content: ''; width: 38px; height: 2px; background: var(--gold); }
+  .hp-hero h1 { font-family: 'Oswald', sans-serif; font-weight: 700; text-transform: uppercase; color: #fff; font-size: clamp(2.9rem, 7.2vw, 5.4rem); line-height: .9; letter-spacing: .01em; margin: 0 0 var(--space-3); max-width: 13ch; text-shadow: 0 2px 40px rgba(0,0,0,.6); }
+  .hp-hero p { color: rgba(255,255,255,.88); font-size: var(--text-lg); max-width: 50ch; margin-bottom: var(--space-5); }
   .hero-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
   .btn { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; font-size: var(--text-sm); padding: 14px 30px; border-radius: 6px; text-decoration: none; display: inline-block; transition: transform .14s ease, filter .14s ease, background .14s ease; }
   .btn-gold { background: var(--gold); color: var(--d27-navy); }
@@ -90,7 +90,7 @@
 <div id="d27-nav"></div>
 
 <!-- Hero -->
-<header class="hero">
+<header class="hp-hero">
   <div class="container">
     <div class="eyebrow">Baseball &amp; Softball · Est. 1956</div>
     <h1>The 2026<br>Tournament Season</h1>
