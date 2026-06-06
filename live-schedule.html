@@ -87,8 +87,8 @@
   .ls-date { font-family: var(--font-display); font-size: 14px; color: var(--d27-red); letter-spacing: .06em; text-transform: uppercase; font-weight: 600; margin: 18px 0 8px; padding-left: 2px; }
 
   /* Game row */
-  .ls-game { display: grid; grid-template-columns: 70px 1fr 150px; gap: 14px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; }
-  @media (max-width: 640px) { .ls-game { grid-template-columns: 60px 1fr; } .ls-game .ls-field { grid-column: 1 / -1; padding-left: 74px; } }
+  .ls-game { display: grid; grid-template-columns: 70px 1fr minmax(0,150px) auto; gap: 14px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; }
+  @media (max-width: 640px) { .ls-game { grid-template-columns: 60px 1fr auto; } .ls-game .ls-field { grid-column: 1 / -1; padding-left: 74px; } }
   .ls-game .ls-time { text-align: center; }
   .ls-game .ls-time .t { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--d27-navy); line-height: 1.1; }
   .ls-game .ls-time .g { font-size: 10px; color: var(--muted); letter-spacing: .04em; }
@@ -291,6 +291,7 @@ function gameHTML(t, g) {
       <div class="ls-time"><div class="t">${fmtTime(g.time)}</div><div class="g">Game ${g.g}</div></div>
       <div class="ls-match">${match}</div>
       <div class="ls-field">${g.field || ''}</div>
+      <span class="gm-cue ${played ? 'recap' : 'preview'}">${played ? 'Recap' : 'Preview'} ›</span>
     </div>`;
 }
 

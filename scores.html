@@ -29,7 +29,7 @@
   .sc-day-head { font-family: 'Oswald', sans-serif; font-size: var(--text-sm); letter-spacing: .06em; text-transform: uppercase; color: #fff; background: var(--d27-navy); padding: 9px 16px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; }
   .sc-day-head .today { background: var(--d27-gold); color: var(--d27-navy); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px; letter-spacing: .08em; }
   .sc-games { border: 1px solid var(--line); border-top: none; border-radius: 0 0 8px 8px; overflow: hidden; }
-  .sc-game { display: grid; grid-template-columns: 84px 1fr 150px; gap: 14px; align-items: center; padding: 11px 16px; border-bottom: 1px solid var(--line); background: var(--surface); }
+  .sc-game { display: grid; grid-template-columns: 84px 1fr minmax(0,150px) auto; gap: 14px; align-items: center; padding: 11px 16px; border-bottom: 1px solid var(--line); background: var(--surface); }
   .sc-game:last-child { border-bottom: none; }
   .sc-game:hover { background: rgba(0,45,114,.02); }
   .sc-time { text-align: center; }
@@ -43,7 +43,7 @@
   .sc-vs { color: var(--muted); font-size: 12px; }
   .sc-final { font-size: 10px; background: #ECFDF5; color: #047857; padding: 2px 7px; border-radius: 3px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
   .sc-field { font-size: 12px; color: var(--muted); text-align: right; }
-  @media (max-width: 640px) { .sc-game { grid-template-columns: 70px 1fr; } .sc-field { grid-column: 1 / -1; text-align: left; padding-left: 84px; } }
+  @media (max-width: 640px) { .sc-game { grid-template-columns: 70px 1fr auto; } .sc-field { grid-column: 1 / -1; text-align: left; padding-left: 84px; } }
   .hub-loading { padding: var(--space-6); text-align: center; color: var(--muted); font-family: 'Oswald', sans-serif; letter-spacing: .04em; }
 </style>
 </head>
@@ -92,7 +92,8 @@
       match=teamHTML(A,false)+' <span class="sc-vs">vs</span> '+teamHTML(H,false);
     }
     return '<div class="sc-game" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'"><div class="sc-time"><div class="t">'+fmtTime(g.time)+'</div><div class="tag">'+esc(String(g.tourneyKey).replace(/_/g,' '))+'</div></div>'+
-      '<div class="sc-match">'+match+'</div><div class="sc-field">'+esc(g.field||'')+'</div></div>';
+      '<div class="sc-match">'+match+'</div><div class="sc-field">'+esc(g.field||'')+'</div>'+
+      '<span class="gm-cue '+(played?'recap':'preview')+'">'+(played?'Recap':'Preview')+' ›</span></div>';
   }
   function render(){
     var out=document.getElementById('scFeed');

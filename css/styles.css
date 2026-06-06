@@ -1289,4 +1289,12 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
 .gm-recap { font-size: 14.5px; line-height: 1.6; color: var(--d27-ink, #14213D); margin: 0; }
 .gm-byewrap { text-align: center; padding: 6px 0 2px; }
 .gm-byewrap .gm-team { font-family: var(--font-display, 'Oswald'), sans-serif; font-weight: 700; font-size: 20px; color: var(--d27-ink, #14213D); }
+
+/* the "Preview ›" / "Recap ›" cue on every clickable game card */
+.gm-cue { display: inline-flex; align-items: center; gap: 2px; font-family: var(--font-display, 'Oswald'), sans-serif; font-weight: 700; font-size: 10px; letter-spacing: .04em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; white-space: nowrap; line-height: 1; transition: background .12s, filter .12s; }
+.gm-cue.preview { background: rgba(0, 45, 114, .07); color: var(--d27-navy, #002D72); border: 1px solid rgba(0, 45, 114, .22); }
+.gm-cue.recap { background: var(--d27-gold, #C9A227); color: var(--d27-navy, #002D72); }
+[data-g][data-tkey] { cursor: pointer; }
+[data-g][data-tkey]:hover .gm-cue.preview { background: rgba(0, 45, 114, .15); }
+[data-g][data-tkey]:hover .gm-cue.recap { filter: brightness(1.07); }
 @media (max-width: 480px) { .gm-card { max-width: 100%; } .gm-matchup .gm-team { font-size: 17px; } }

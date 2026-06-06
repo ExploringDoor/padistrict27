@@ -245,7 +245,7 @@
     } else {
       mt='<span class="hc-tm">'+esc(A.name)+'</span> <span style="color:var(--muted);font-size:12px">vs</span> <span class="hc-tm">'+esc(H.name)+'</span>';
     }
-    return '<div class="hc-row" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'"><span class="hc-when">'+when+'</span><span class="hc-mt">'+mt+'</span><span class="hc-tag">'+esc(String(g.tourneyKey).replace(/_/g,' '))+'</span></div>';
+    return '<div class="hc-row" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'"><span class="hc-when">'+when+'</span><span class="hc-mt">'+mt+'</span><span class="hc-tag">'+esc(String(g.tourneyKey).replace(/_/g,' '))+'</span><span class="gm-cue '+(mode==='result'?'recap':'preview')+'">'+(mode==='result'?'Recap':'Preview')+' ›</span></div>';
   }
   (async function(){
     try {
