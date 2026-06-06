@@ -135,6 +135,30 @@
   .ct-table a:hover { text-decoration: underline; }
   .ct-table .ct-empty-cell { color: #cbd5e1; }
   .ct-loading, .ct-empty { padding: 30px; text-align: center; color: var(--muted); font-family: var(--font-display); }
+  .ct-bar { flex-wrap: wrap; }
+  .ct-sel { padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px; font: inherit; background: #fff; color: var(--d27-ink); max-width: 220px; }
+  .ct-spacer { flex: 1 1 0; min-width: 0; }
+  .ct-btn { padding: 9px 14px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .ct-btn:hover:not(:disabled) { border-color: var(--d27-navy); }
+  .ct-btn:disabled { opacity: .45; cursor: default; }
+  .ct-add, .ct-save { background: var(--d27-navy); color: #fff; border-color: var(--d27-navy); }
+  .ct-add:hover, .ct-save:hover { filter: brightness(1.1); }
+  .ct-ck { width: 36px; text-align: center; }
+  .ct-tag { font-family: var(--font-display); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; color: var(--d27-navy); background: rgba(0,45,114,.08); padding: 2px 8px; border-radius: 5px; white-space: nowrap; }
+  .ct-actions { white-space: nowrap; text-align: right; }
+  .ct-mini { border: none; background: none; cursor: pointer; font-size: 15px; padding: 3px 6px; border-radius: 5px; line-height: 1; }
+  .ct-mini:hover { background: var(--line); }
+  .ct-modal { position: fixed; inset: 0; z-index: 2000; display: flex; align-items: center; justify-content: center; }
+  .ct-modal-bd { position: absolute; inset: 0; background: rgba(0,18,48,.5); }
+  .ct-modal-card { position: relative; background: #fff; border-radius: 12px; padding: 22px 24px; width: min(460px, 94vw); box-shadow: 0 24px 70px rgba(0,0,0,.35); max-height: 90vh; overflow-y: auto; }
+  .ct-modal-card h3 { margin: 0 0 16px; color: var(--d27-navy); }
+  .ct-form { display: grid; gap: 12px; }
+  .ct-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ct-form label { display: grid; gap: 4px; font-family: var(--font-display); font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .ct-form input, .ct-form select { padding: 9px 11px; border: 1px solid var(--line); border-radius: 7px; font: inherit; color: var(--d27-ink); text-transform: none; letter-spacing: normal; background: #fff; }
+  .ct-form input:focus, .ct-form select:focus { outline: 2px solid var(--d27-navy); outline-offset: -1px; border-color: var(--d27-navy); }
+  .ct-modal-actions { display: flex; gap: 10px; align-items: center; margin-top: 18px; }
+  .ct-modal-status { font-size: 13px; color: var(--muted); }
 </style>
 </head>
 <body>
@@ -232,11 +256,40 @@
 
       <div id="view-contacts" class="hidden">
         <div class="ct-bar">
-          <input type="search" id="ctSearch" placeholder="Search team, manager, email, field…" autocomplete="off" />
+          <select id="ctTourney" class="ct-sel" title="Filter by tournament"><option value="all">All tournaments</option></select>
+          <input type="search" id="ctSearch" placeholder="Search team, manager, email…" autocomplete="off" />
           <span class="ct-count" id="ctCount"></span>
+          <span class="ct-spacer"></span>
+          <button type="button" class="ct-btn ct-copy" id="ctCopy" disabled>📋 Copy emails (0)</button>
+          <button type="button" class="ct-btn ct-add" id="ctAdd">＋ Add contact</button>
         </div>
         <div class="ct-wrap" id="ctTable"><div class="ct-loading">Loading roster…</div></div>
-        <p class="ed-hint">🔒 Private roster — only visible while signed in. Manager contact info for District 27 teams.</p>
+        <p class="ed-hint">🔒 Private roster — only visible while signed in. Tick rows then <b>Copy emails</b>, or filter by tournament. Use ✎ to edit, 🗑 to delete, <b>Add contact</b> for new managers.</p>
+      </div>
+
+      <div class="ct-modal hidden" id="ctModal">
+        <div class="ct-modal-bd" id="ctModalBd"></div>
+        <div class="ct-modal-card">
+          <h3 id="ctModalTitle">Add contact</h3>
+          <div class="ct-form">
+            <label>Team<input id="cf-team" autocomplete="off" /></label>
+            <label>Manager<input id="cf-manager" autocomplete="off" /></label>
+            <div class="ct-form-row">
+              <label>Cell<input id="cf-cell" autocomplete="off" /></label>
+              <label>Email<input id="cf-email" type="email" autocomplete="off" /></label>
+            </div>
+            <div class="ct-form-row">
+              <label>GC Name<input id="cf-gc" autocomplete="off" /></label>
+              <label>Park<input id="cf-park" autocomplete="off" /></label>
+            </div>
+            <label>Tournament<select id="cf-tournament"></select></label>
+          </div>
+          <div class="ct-modal-actions">
+            <button type="button" class="ct-btn" id="ctCancel">Cancel</button>
+            <button type="button" class="ct-btn ct-save" id="ctSaveBtn">Save</button>
+            <span class="ct-modal-status" id="ctModalStatus"></span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -247,7 +300,7 @@
 <script type="module">
 import { isConfigured, db, auth } from './js/firebase-init.js';
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
-import { collection, getDocs, doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
+import { collection, getDocs, doc, setDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 
 const $ = id => document.getElementById(id);
 let TOURNEYS = {};   // key -> {key,name,sport,category,games,...}
@@ -651,10 +704,15 @@ function impHandleFile(file){
   document.addEventListener('keydown', e=>{ if(e.key==='Escape') hide(); });
 })();
 
-// ── Contacts roster (private; reads the auth-only `contacts` collection) ──
+// ── Contacts roster (private; CRUD on the auth-only `contacts` collection) ──
 (function(){
   const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  let loaded = false, all = [];
+  let loaded = false, all = [], filtered = [], editingId = null;
+  const selected = new Set();
+  const byTeam = (a,b)=> String(a.team||'').localeCompare(String(b.team||''));
+  const tourneyName = k => (TOURNEYS[k] && TOURNEYS[k].name) || k || '—';
+  const normCell = s => { if(!s) return ''; const d=String(s).replace(/\D/g,''); return d.length===10 ? '('+d.slice(0,3)+') '+d.slice(3,6)+'-'+d.slice(6) : String(s).trim(); };
+
   function tab(view){
     document.querySelectorAll('.ed-tab').forEach(t=>t.classList.toggle('active', t.dataset.view===view));
     $('view-schedule').classList.toggle('hidden', view!=='schedule');
@@ -663,32 +721,115 @@ function impHandleFile(file){
   }
   document.querySelectorAll('.ed-tab').forEach(t=> t.addEventListener('click', ()=>tab(t.dataset.view)));
 
+  function fillTourneyOptions(){
+    const keys = new Set(Object.keys(TOURNEYS));
+    all.forEach(c=>{ if(c.tournament) keys.add(c.tournament); });
+    const arr = [...keys].sort((a,b)=> tourneyName(a).localeCompare(tourneyName(b)));
+    const opts = arr.map(k=>'<option value="'+esc(k)+'">'+esc(tourneyName(k))+'</option>').join('');
+    $('ctTourney').innerHTML = '<option value="all">All tournaments</option>' + opts;
+    $('cf-tournament').innerHTML = opts || '<option value="">—</option>';
+  }
+
   async function loadContacts(){
     try {
       const snap = await getDocs(collection(db,'contacts'));
-      all = snap.docs.map(d=>d.data()).sort((a,b)=>(a.n||0)-(b.n||0));
-      render(all);
+      all = snap.docs.map(d=>({ id:d.id, ...d.data() })).sort(byTeam);
+      fillTourneyOptions();
+      applyFilter();
     } catch(e){ $('ctTable').innerHTML = '<div class="ct-empty">Could not load contacts — '+esc(e.message||e)+'</div>'; }
   }
+
+  function applyFilter(){
+    const tk = $('ctTourney').value, q = $('ctSearch').value.trim().toLowerCase();
+    filtered = all.filter(c=>{
+      if(tk!=='all' && c.tournament!==tk) return false;
+      if(q && ![c.team,c.manager,c.email,c.gc,c.park].some(v=>String(v||'').toLowerCase().includes(q))) return false;
+      return true;
+    });
+    render();
+  }
+
   const blank = '<span class="ct-empty-cell">—</span>';
-  const td = v => v ? esc(v) : blank;
-  function render(list){
-    if(!list.length){ $('ctTable').innerHTML='<div class="ct-empty">No contacts match.</div>'; $('ctCount').textContent=''; return; }
+  const tdv = v => v ? esc(v) : blank;
+  function render(){
+    const wrap = $('ctTable');
+    if(!filtered.length){ wrap.innerHTML='<div class="ct-empty">No contacts'+($('ctTourney').value!=='all'?' for this tournament yet':'')+'. Click “＋ Add contact”.</div>'; updateBar(); return; }
     const logo = n => window.D27logos ? D27logos.html(n,22) : '';
-    let h = '<table class="ct-table"><thead><tr><th>Team</th><th>Manager</th><th>Cell</th><th>Email</th><th>GC Name</th><th>Park</th></tr></thead><tbody>';
-    list.forEach(c=>{
+    let h = '<table class="ct-table"><thead><tr><th class="ct-ck"><input type="checkbox" id="ctAll" title="Select all"></th><th>Team</th><th>Manager</th><th>Cell</th><th>Email</th><th>GC</th><th>Park</th><th>Tournament</th><th></th></tr></thead><tbody>';
+    filtered.forEach(c=>{
       const tel = c.cell ? '<a href="tel:'+esc(String(c.cell).replace(/[^0-9+]/g,''))+'">'+esc(c.cell)+'</a>' : blank;
       const mail = c.email ? '<a href="mailto:'+esc(c.email)+'">'+esc(c.email)+'</a>' : blank;
-      h += '<tr><td><div class="ct-team">'+logo(c.team)+'<span>'+esc(c.team)+'</span></div></td>'+
-        '<td class="ct-mgr">'+td(c.manager)+'</td><td>'+tel+'</td><td>'+mail+'</td><td>'+td(c.gc)+'</td><td>'+td(c.park)+'</td></tr>';
+      h += '<tr data-id="'+esc(c.id)+'">'+
+        '<td class="ct-ck"><input type="checkbox" class="ct-row-ck"'+(selected.has(c.id)?' checked':'')+(c.email?'':' disabled')+'></td>'+
+        '<td><div class="ct-team">'+logo(c.team)+'<span>'+esc(c.team)+'</span></div></td>'+
+        '<td class="ct-mgr">'+tdv(c.manager)+'</td><td>'+tel+'</td><td>'+mail+'</td><td>'+tdv(c.gc)+'</td><td>'+tdv(c.park)+'</td>'+
+        '<td><span class="ct-tag">'+esc(tourneyName(c.tournament))+'</span></td>'+
+        '<td class="ct-actions"><button class="ct-mini" data-act="edit" title="Edit">✎</button><button class="ct-mini ct-del" data-act="del" title="Delete">🗑</button></td>'+
+        '</tr>';
     });
-    $('ctTable').innerHTML = h + '</tbody></table>';
-    $('ctCount').textContent = list.length + ' team' + (list.length===1?'':'s');
+    wrap.innerHTML = h + '</tbody></table>';
+    updateBar();
   }
-  $('ctSearch').addEventListener('input', e=>{
-    const q = e.target.value.trim().toLowerCase();
-    render(q ? all.filter(c => [c.team,c.manager,c.email,c.gc,c.park,c.abbr].some(v=>String(v||'').toLowerCase().includes(q))) : all);
+
+  function updateBar(){
+    $('ctCount').textContent = filtered.length + ' team' + (filtered.length===1?'':'s');
+    const n = selected.size, btn = $('ctCopy');
+    btn.textContent = '📋 Copy emails ('+n+')'; btn.disabled = n===0;
+    const allck = $('ctAll'); if(allck){ const sel=filtered.filter(c=>c.email); allck.checked = sel.length>0 && sel.every(c=>selected.has(c.id)); }
+  }
+
+  $('ctTable').addEventListener('click', e=>{
+    const act = e.target.closest('[data-act]'); if(!act) return;
+    const c = all.find(x=>x.id===e.target.closest('tr').dataset.id); if(!c) return;
+    act.dataset.act==='edit' ? openModal(c) : delContact(c);
   });
+  $('ctTable').addEventListener('change', e=>{
+    if(e.target.id==='ctAll'){ filtered.forEach(c=>{ if(c.email){ e.target.checked?selected.add(c.id):selected.delete(c.id); } }); render(); return; }
+    if(e.target.classList.contains('ct-row-ck')){ const id=e.target.closest('tr').dataset.id; e.target.checked?selected.add(id):selected.delete(id); updateBar(); }
+  });
+  $('ctTourney').addEventListener('change', applyFilter);
+  $('ctSearch').addEventListener('input', applyFilter);
+
+  $('ctCopy').addEventListener('click', async ()=>{
+    const uniq = [...new Set(all.filter(c=>selected.has(c.id) && c.email).map(c=>c.email))];
+    const text = uniq.join(', ');
+    try { await navigator.clipboard.writeText(text); } catch(e){ const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+    const btn=$('ctCopy'); btn.textContent='✓ Copied '+uniq.length+' email'+(uniq.length===1?'':'s'); setTimeout(updateBar,1500);
+  });
+
+  function openModal(c){
+    editingId = c ? c.id : null;
+    $('ctModalTitle').textContent = c ? 'Edit contact' : 'Add contact';
+    $('cf-team').value=c?c.team||'':''; $('cf-manager').value=c?c.manager||'':''; $('cf-cell').value=c?c.cell||'':'';
+    $('cf-email').value=c?c.email||'':''; $('cf-gc').value=c?c.gc||'':''; $('cf-park').value=c?c.park||'':'';
+    $('cf-tournament').value = (c&&c.tournament) || ($('ctTourney').value!=='all'?$('ctTourney').value:(Object.keys(TOURNEYS)[0]||''));
+    $('ctModalStatus').textContent=''; $('ctModal').classList.remove('hidden'); $('cf-team').focus();
+  }
+  const closeModal = ()=> $('ctModal').classList.add('hidden');
+  $('ctAdd').addEventListener('click', ()=>openModal(null));
+  $('ctCancel').addEventListener('click', closeModal);
+  $('ctModalBd').addEventListener('click', closeModal);
+
+  $('ctSaveBtn').addEventListener('click', async ()=>{
+    const data = { team:$('cf-team').value.trim(), manager:$('cf-manager').value.trim(), cell:normCell($('cf-cell').value.trim()),
+      email:$('cf-email').value.trim(), gc:$('cf-gc').value.trim(), park:$('cf-park').value.trim(), tournament:$('cf-tournament').value };
+    if(!data.team){ $('ctModalStatus').textContent='Team is required.'; return; }
+    $('ctModalStatus').textContent='Saving…';
+    try {
+      const id = editingId || ('c'+Date.now());
+      await setDoc(doc(db,'contacts',id), data, { merge:true });
+      if(editingId){ const i=all.findIndex(x=>x.id===id); if(i>=0) all[i]={id, ...data}; }
+      else all.push({id, ...data});
+      all.sort(byTeam); fillTourneyOptions(); closeModal(); applyFilter();
+    } catch(e){ $('ctModalStatus').textContent='Error: '+(e.message||e); }
+  });
+
+  async function delContact(c){
+    if(!confirm('Delete '+(c.team||'this contact')+'? This cannot be undone.')) return;
+    try { await deleteDoc(doc(db,'contacts',c.id)); all=all.filter(x=>x.id!==c.id); selected.delete(c.id); applyFilter(); }
+    catch(e){ alert('Could not delete: '+(e.message||e)); }
+  }
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !$('ctModal').classList.contains('hidden')) closeModal(); });
 })();
 </script>
 
