@@ -178,21 +178,17 @@
   }
   (async function(){
     var el = document.getElementById('recentChamps');
-    var items = [];
-    try {
-      var data = await window.D27loadSchedules();
-      (data.tournaments || []).forEach(function(t){
-        try { var ch = window.D27bracket.championOutcome(t, window.D27bracket.classify(t)).champion;
-          if (ch) items.push(['2026', { sport: t.sport, team: ch, tournament: t.name }]); } catch(e){}
-      });
-    } catch(e){}
+    var empty = '<div style="color:rgba(255,255,255,.6)">Champions will appear here as tournaments finish.</div>';
     try {
       var res = await fetch('data/champions-history.json');
       var hist = await res.json();
-      (hist.years || []).forEach(function(y){ (y.champions || []).forEach(function(c){ items.push([String(y.year), c]); }); });
-    } catch(e){}
-    el.innerHTML = items.slice(0, 8).map(function(p){ return csCard(p[0], p[1]); }).join('') ||
-      '<div style="color:rgba(255,255,255,.6)">Champions will appear here as tournaments finish.</div>';
+      var y = (hist.years || [])[0];  // most recent season only — the rest live on the Champions page
+      if (y && y.champions && y.champions.length) {
+        el.innerHTML = y.champions.map(function(c){ return csCard(y.year, c); }).join('');
+        var eb = document.querySelector('.champ-band .eyebrow');
+        if (eb) eb.textContent = y.year + ' Season';
+      } else { el.innerHTML = empty; }
+    } catch(e){ el.innerHTML = empty; }
   })();
 </script>
 

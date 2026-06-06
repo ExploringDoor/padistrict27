@@ -328,14 +328,18 @@ function applyResolved(){
 }
 function rowEl(g) {
   const tr = document.createElement('tr');
+  // show scores blank until a game is actually played (don't seed 0–0)
+  const played = (Number(g.as) || 0) + (Number(g.hs) || 0) > 0;
+  const asV = played ? (g.as ?? '') : '';
+  const hsV = played ? (g.hs ?? '') : '';
   tr.innerHTML = `
     <td><input class="gn" type="number" value="${g.g ?? ''}" data-f="g"></td>
     <td><input type="date" value="${g.date ?? ''}" data-f="date"></td>
     <td><input type="time" value="${g.time ?? ''}" data-f="time"></td>
     <td><input type="text" value="${esc(g.away)}" data-f="away" data-ref="${esc(g.away)}" placeholder="Team or WG-5"></td>
-    <td><input class="sc" type="number" value="${g.as ?? ''}" data-f="as"></td>
+    <td><input class="sc" type="number" min="0" value="${asV}" data-f="as"></td>
     <td><input type="text" value="${esc(g.home)}" data-f="home" data-ref="${esc(g.home)}" placeholder="Team or LG-3"></td>
-    <td><input class="sc" type="number" value="${g.hs ?? ''}" data-f="hs"></td>
+    <td><input class="sc" type="number" min="0" value="${hsV}" data-f="hs"></td>
     <td><input type="text" value="${esc(g.field)}" data-f="field" placeholder="Field"></td>
     <td><button class="del" title="Delete game" onclick="this.closest('tr').remove()">✕</button></td>`;
   return tr;
@@ -409,6 +413,16 @@ $('rows').addEventListener('input', (e) => {
   if (el.dataset && (el.dataset.f === 'away' || el.dataset.f === 'home') && !el.readOnly) {
     el.dataset.ref = el.value;
   }
+  // scores: never negative, and once one side is entered the other defaults to 0
+  if (el.dataset && (el.dataset.f === 'as' || el.dataset.f === 'hs')) {
+    if (el.value !== '' && Number(el.value) < 0) el.value = '0';
+    if (el.value !== '') {
+      const tr = el.closest('tr');
+      const otherF = el.dataset.f === 'as' ? 'hs' : 'as';
+      const otherEl = tr && tr.querySelector(`[data-f="${otherF}"]`);
+      if (otherEl && otherEl.value === '') otherEl.value = '0';
+    }
+  }
   applyResolved();
 });
 
@@ -436,8 +450,8 @@ function impExtract(wb, filename){
     const a = row[0];
     if (typeof a === 'number' && Number.isFinite(a)){
       games.push({ g:a, id: meta.key+'-'+impPad2(a), date: xlDate(row[2]), time: xlTime(row[3]),
-        away: impStr(row[5]), as: typeof row[6]==='number' ? row[6] : 0,
-        home: impStr(row[8]), hs: typeof row[9]==='number' ? row[9] : 0, field: impStr(row[11]) });
+        away: impStr(row[5]), as: typeof row[6]==='number' ? row[6] : null,
+        home: impStr(row[8]), hs: typeof row[9]==='number' ? row[9] : null, field: impStr(row[11]) });
     }
     const w = row[22];
     if (typeof w === 'number' && Number.isFinite(w)){
