@@ -56,7 +56,7 @@
       <div class="tcard-body">${rows.join('')}</div>
       <div class="tcard-actions">
         <a class="tbtn primary" href="brackets.html#${esc(t.key)}">🏆 Bracket</a>
-        <a class="tbtn" href="live-schedule.html#${esc(t.key)}">📅 Schedule</a>
+        <a class="tbtn" href="tournament-schedule.html#${esc(t.key)}">📅 Schedule</a>
       </div>
     </div>`;
   }
