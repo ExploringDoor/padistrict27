@@ -7,14 +7,14 @@
 (function () {
   var NAV = [
     ['index.html', 'Home'],
+    ['scores.html', 'Scores'],
+    ['live-schedule.html', 'Schedule'],
     ['baseball.html', 'Baseball'],
     ['softball.html', 'Softball'],
     ['special-games.html', 'Special Games'],
     ['leagues.html', 'Leagues'],
   ];
   var MORE = [
-    ['live-schedule.html', 'Schedule'],
-    ['scores.html', 'Scores'],
     ['brackets.html', 'Brackets'],
     ['champions.html', 'Champions'],
     ['rules.html', 'Rules'],

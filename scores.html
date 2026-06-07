@@ -4,134 +4,207 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#002D72" />
-<title>Scores &amp; Schedule · PA District 27 Little League</title>
-<meta name="description" content="PA District 27 tournament scores and schedule, day by day — every baseball and softball game across all tournaments." />
-
+<title>Scores · PA District 27 Little League</title>
+<meta name="description" content="Final scores from every PA District 27 tournament — baseball and softball — by week and day. Tap a result for the recap and bracket." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
-<script src="config.js"></script>
 <link rel="stylesheet" href="css/styles.css" />
-
-<style>
-  .hub-hero { background: linear-gradient(135deg, rgba(0,27,71,.95) 0%, rgba(0,45,114,.88) 100%), var(--d27-navy); color: var(--d27-white); padding: var(--space-7) 0 var(--space-6); }
-  .hub-hero .crumb { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-bottom: var(--space-3); }
-  .hub-hero .crumb a { color: rgba(255,255,255,.6); text-decoration: none; }
-  .hub-hero h1 { color: var(--d27-white); font-size: clamp(2.25rem, 4vw, var(--text-4xl)); margin-bottom: var(--space-3); }
-  .hub-hero p { color: rgba(255,255,255,.82); font-size: var(--text-lg); max-width: 60ch; }
-
-  .sc-tabs { display: flex; gap: 8px; margin-bottom: var(--space-5); flex-wrap: wrap; }
-  .sc-tab { font-family: 'Oswald', sans-serif; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; font-weight: 600; padding: 9px 20px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--d27-navy); cursor: pointer; }
-  .sc-tab.active { background: var(--d27-navy); color: #fff; border-color: var(--d27-navy); }
-
-  .sc-day { margin-bottom: var(--space-5); }
-  .sc-day-head { font-family: 'Oswald', sans-serif; font-size: var(--text-sm); letter-spacing: .06em; text-transform: uppercase; color: #fff; background: var(--d27-navy); padding: 9px 16px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; }
-  .sc-day-head .today { background: var(--d27-gold); color: var(--d27-navy); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px; letter-spacing: .08em; }
-  .sc-games { border: 1px solid var(--line); border-top: none; border-radius: 0 0 8px 8px; overflow: hidden; }
-  .sc-game { display: grid; grid-template-columns: 84px 1fr minmax(0,150px) auto; gap: 14px; align-items: center; padding: 11px 16px; border-bottom: 1px solid var(--line); background: var(--surface); }
-  .sc-game:last-child { border-bottom: none; }
-  .sc-game:hover { background: rgba(0,45,114,.02); }
-  .sc-time { text-align: center; }
-  .sc-time .t { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 15px; color: var(--d27-navy); line-height: 1.1; }
-  .sc-time .tag { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; margin-top: 1px; }
-  .sc-match { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
-  .sc-team { font-weight: 600; color: var(--d27-ink); display: inline-flex; align-items: center; gap: 6px; }
-  .sc-team.tbd { color: var(--muted); font-weight: 500; }
-  .sc-team.win { color: var(--d27-navy); font-weight: 800; }
-  .sc-score { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 17px; color: var(--d27-navy); padding: 0 2px; }
-  .sc-vs { color: var(--muted); font-size: 12px; }
-  .sc-final { font-size: 10px; background: #ECFDF5; color: #047857; padding: 2px 7px; border-radius: 3px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
-  .sc-final.forfeit { background: #FEF3C7; color: #92400E; }
-  .sc-field { font-size: 12px; color: var(--muted); text-align: right; }
-  @media (max-width: 640px) { .sc-game { grid-template-columns: 70px 1fr auto; } .sc-field { grid-column: 1 / -1; text-align: left; padding-left: 84px; } }
-  .hub-loading { padding: var(--space-6); text-align: center; color: var(--muted); font-family: 'Oswald', sans-serif; letter-spacing: .04em; }
-</style>
-</head>
-<body>
-
-<div id="d27-nav"></div>
-
-<header class="hub-hero">
-  <div class="container">
-    <div class="crumb"><a href="index.html">Home</a> &nbsp;/&nbsp; Scores &amp; Schedule</div>
-    <h1>Scores &amp; Schedule</h1>
-    <p>Every District 27 game, day by day — across all baseball and softball tournaments. Finished games show the result; upcoming games show the matchup.</p>
-  </div>
-</header>
-
-<main class="container section-tight">
-  <div class="sc-tabs" id="scTabs">
-    <button class="sc-tab active" data-tab="all">All</button>
-    <button class="sc-tab" data-tab="results">Results</button>
-    <button class="sc-tab" data-tab="upcoming">Upcoming</button>
-  </div>
-  <div id="scFeed"><div class="hub-loading">Loading games…</div></div>
-</main>
-
-<div id="d27-footer"></div>
-
 <script src="js/d27-data.js"></script>
 <script src="js/d27-bracket.js"></script>
 <script src="js/d27-scores.js"></script>
 <script src="js/d27-logos.js"></script>
 <script src="js/d27-gamemodal.js"></script>
 <script src="js/d27-chrome.js"></script>
+<style>
+  .sv-wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 80px; }
+  .sv-tabs { display: flex; gap: 26px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+  .sv-tab { font-family: var(--font-display); font-size: 26px; font-weight: 700; letter-spacing: .01em; text-transform: uppercase; color: #9aa3af; text-decoration: none; padding: 4px 2px 14px; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+  .sv-tab.active { color: var(--d27-ink, #14213D); border-bottom-color: var(--d27-ink, #14213D); }
+  .sv-weeks-row { display: flex; align-items: stretch; gap: 0; padding: 20px 0 0; }
+  .sv-wk-arrow { flex: none; width: 34px; border: none; background: none; cursor: pointer; font-size: 20px; color: var(--d27-navy); display: flex; align-items: center; justify-content: center; }
+  .sv-wk-arrow:disabled { opacity: .25; cursor: default; }
+  .sv-weeks { display: flex; gap: 30px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 14px; flex: 1; scrollbar-width: none; }
+  .sv-weeks::-webkit-scrollbar { display: none; }
+  .sv-wk { flex: none; text-align: center; background: none; border: none; cursor: pointer; padding: 8px 10px 12px; border-bottom: 2px solid transparent; }
+  .sv-wk .d { display: block; font-family: var(--font-display); font-size: 15px; font-weight: 600; color: #6b7280; white-space: nowrap; }
+  .sv-wk:hover .d { color: var(--d27-navy); }
+  .sv-wk.active { border-bottom-color: var(--d27-navy); }
+  .sv-wk.active .d { color: var(--d27-navy); }
+  .sv-panel { background: #f4f6f9; border-radius: 14px; padding: 22px 22px 26px; margin-top: 8px; }
+  .sv-panel-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+  .sv-panel-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--d27-ink, #14213D); }
+  .sv-panel-title .games { color: #9aa3af; font-weight: 500; font-size: 15px; margin-left: 4px; }
+  .sv-day-pills { display: flex; gap: 12px; flex-wrap: wrap; }
+  .sv-pill { font-family: var(--font-display); font-size: 15px; font-weight: 600; padding: 9px 20px; border-radius: 999px; border: 1.5px solid #d6dbe2; background: #fff; color: #4b5563; cursor: pointer; white-space: nowrap; transition: all .12s ease; }
+  .sv-pill:hover { border-color: var(--d27-navy); }
+  .sv-pill.active { background: var(--d27-navy); color: #fff; border-color: var(--d27-navy); }
+  .sv-tourney-sel { margin-left: auto; padding: 9px 12px; border: 1.5px solid #d6dbe2; border-radius: 8px; font: inherit; font-size: 14px; background: #fff; color: var(--d27-navy); }
+  .sv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px; }
+  .sv-card { background: #fff; border: 1px solid #e7eaef; border-radius: 12px; overflow: hidden; cursor: pointer; transition: box-shadow .15s ease, transform .15s ease; display: flex; flex-direction: column; }
+  .sv-card:hover { box-shadow: 0 14px 30px rgba(0,23,60,.13); transform: translateY(-3px); }
+  .sv-card-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #eef1f5; }
+  .sv-meta { font-family: var(--font-display); font-size: 11.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #9aa3af; line-height: 1.4; }
+  .sv-card-head .sv-meta { flex: none; }
+  .sv-summary { flex: 1; text-align: right; font-family: var(--font-display); font-size: 12.5px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; color: var(--d27-navy); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sv-summary.ff { color: #92400E; }
+  .sv-rows { padding: 6px 16px; }
+  .sv-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; }
+  .sv-row .d27-logo, .sv-row .d27-logo-fb { flex: none; }
+  .sv-team { flex: 1; min-width: 0; font-family: var(--font-display); font-size: 17px; font-weight: 600; color: var(--d27-ink, #14213D); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sv-team.lose { color: #9aa3af; }
+  .sv-score { font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--d27-ink, #14213D); line-height: 1; }
+  .sv-score.lose { color: #b5bcc6; }
+  .sv-card-foot { padding: 11px 16px; border-top: 1px solid #eef1f5; margin-top: auto; }
+  .sv-cta { font-family: var(--font-display); font-size: 13px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; color: var(--gold-deep, #9a7b16); }
+  .sv-empty { padding: 50px 20px; text-align: center; color: #9aa3af; font-family: var(--font-display); }
+  .sv-loading { padding: 60px 20px; text-align: center; color: #9aa3af; font-family: var(--font-display); }
+  @media (max-width: 560px){ .sv-tab{font-size:21px;} .sv-grid{grid-template-columns:1fr;} .sv-tourney-sel{margin-left:0;width:100%;} }
+</style>
+</head>
+<body>
+<div id="d27-nav"></div>
+
+<div class="sv-wrap">
+  <div class="sv-tabs">
+    <a class="sv-tab active" href="scores.html">Scores</a>
+    <a class="sv-tab" href="live-schedule.html">Schedule</a>
+  </div>
+
+  <div class="sv-weeks-row">
+    <button class="sv-wk-arrow" id="svPrev" aria-label="Previous weeks">‹</button>
+    <div class="sv-weeks" id="svWeeks"></div>
+    <button class="sv-wk-arrow" id="svNext" aria-label="More weeks">›</button>
+  </div>
+
+  <div class="sv-panel">
+    <div class="sv-panel-head">
+      <span class="sv-panel-title" id="svTitle">Loading…</span>
+      <div class="sv-day-pills" id="svDays"></div>
+      <select class="sv-tourney-sel" id="svTourney"><option value="all">All tournaments</option></select>
+    </div>
+    <div id="svGrid"><div class="sv-loading">Loading scores…</div></div>
+  </div>
+</div>
+
+<div id="d27-footer"></div>
+
 <script>
-  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-  function clean(v){ if(v==null) return ''; var s=String(v).trim(); return /^(n\/?a|tbd|tba|none|-+)$/i.test(s) ? '' : s; }
-  function fmtTime(t){ t=clean(t); if(!t) return 'TBD'; var p=t.split(':'); var h=+p[0], m=p[1]||'00'; if(isNaN(h)) return 'TBD'; var ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+m+' '+ap; }
-  function fmtDate(d){ d=clean(d); if(!d) return 'Date TBD'; var dt=new Date(d+'T12:00:00'); if(isNaN(dt)) return 'Date TBD'; return dt.toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'}); }
+(function(){
+  var esc=function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); };
+  var clean=function(v){ if(v==null) return ''; var s=String(v).trim(); return /^(n\/?a|tbd|tba|none|-+)$/i.test(s)?'':s; };
+  var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var FMON=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var FDOW=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  function dt(s){ s=clean(s); return s ? new Date(s+'T12:00:00') : null; }
+  function weekStart(s){ var d=dt(s); if(!d) return null; var day=(d.getDay()+6)%7; d.setDate(d.getDate()-day); return d.toISOString().slice(0,10); }
   function isForfeit(g){ if(!D27scores.played(g)) return false; if(g.forfeit!=null) return !!g.forfeit; var bye=/^\s*bye\s*$/i.test(String(g.away))||/^\s*bye\s*$/i.test(String(g.home)); return !bye && !clean(g.date); }
+  function ab(name){ return window.D27logos ? D27logos.abbr(name) : name; }
+  // a real result = played, dated, BOTH teams resolved (not a bye / unresolved bracket slot)
+  function realResult(g){
+    if(!D27scores.played(g) || !clean(g.date)) return false;
+    var A=D27scores.side(g,'away'), H=D27scores.side(g,'home');
+    if(A.tbd||H.tbd) return false;
+    if(/^\s*bye\s*$/i.test(A.name)||/^\s*bye\s*$/i.test(H.name)) return false;
+    return true;
+  }
 
-  var ALL=[], TAB='all';
-  function teamHTML(disp, win){ var logo=(!disp.tbd&&window.D27logos)?D27logos.html(disp.name,18):''; return '<span class="sc-team'+(win?' win':'')+(disp.tbd?' tbd':'')+'">'+logo+esc(disp.name)+'</span>'; }
-  function gameRow(g){
-    var A=D27scores.side(g,'away'), H=D27scores.side(g,'home'), played=D27scores.played(g);
-    var match;
-    if(played){
-      var aWin=g.as>g.hs, hWin=g.hs>g.as;
-      match=teamHTML(A,aWin)+' <span class="sc-score">'+g.as+'</span><span class="sc-vs">–</span><span class="sc-score">'+g.hs+'</span> '+teamHTML(H,hWin)+(isForfeit(g)?' <span class="sc-final forfeit">Forfeit</span>':' <span class="sc-final">Final</span>');
-    } else {
-      match=teamHTML(A,false)+' <span class="sc-vs">vs</span> '+teamHTML(H,false);
-    }
-    return '<div class="sc-game" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'"><div class="sc-time"><div class="t">'+fmtTime(g.time)+'</div><div class="tag">'+esc(String(g.tourneyKey).replace(/_/g,' '))+'</div></div>'+
-      '<div class="sc-match">'+match+'</div><div class="sc-field">'+esc(clean(g.field))+'</div>'+
-      '<span class="gm-cue '+(played?'recap':'preview')+'">'+(played?'Recap':'Preview')+' ›</span></div>';
-  }
-  function render(){
-    var out=document.getElementById('scFeed');
-    var games=ALL.filter(function(g){
-      if(TAB==='results') return D27scores.played(g);
-      if(TAB==='upcoming') return !D27scores.played(g);
-      return true;
+  var DATA=null, TMAP={}, WEEKS=[], state={wk:0, day:null, tourney:'all'};
+
+  function build(){
+    var games=D27scores.allGames(DATA).filter(realResult);   // real results only
+    var byWeek={};
+    games.forEach(function(g){ var w=weekStart(g.date); (byWeek[w]=byWeek[w]||[]).push(g); });
+    WEEKS=Object.keys(byWeek).sort().map(function(w,i){
+      var gs=byWeek[w].sort(function(a,b){ return (a.date+(a.time||'')).localeCompare(b.date+(b.time||'')); });  // chronological
+      var dates=gs.map(function(g){return g.date;}).sort();
+      var lo=dt(dates[0]), hi=dt(dates[dates.length-1]);
+      var range=(MON[lo.getMonth()]+' '+lo.getDate())+(dates[0]!==dates[dates.length-1] ? '–'+(hi.getMonth()!==lo.getMonth()?MON[hi.getMonth()]+' ':'')+hi.getDate() : '');
+      var days={}, dorder=[];
+      gs.forEach(function(g){ if(!days[g.date]){days[g.date]=[];dorder.push(g.date);} days[g.date].push(g); });
+      return { start:w, idx:i, range:range, games:gs, days:days, dayOrder:dorder };
     });
-    var byDate={}, dates=[];
-    games.forEach(function(g){ var d=g.date||'TBD'; if(!byDate[d]){byDate[d]=[];dates.push(d);} byDate[d].push(g); });
-    dates.sort(function(a,b){ return a==='TBD'?1 : b==='TBD'?-1 : a.localeCompare(b); });
-    if(TAB==='results') dates.reverse();  // most recent results first
-    var today=D27scores.todayISO(), html='';
-    dates.forEach(function(d){
-      var gs=byDate[d].sort(function(a,b){ return String(a.time||'').localeCompare(String(b.time||'')); });
-      html+='<div class="sc-day"><div class="sc-day-head"><span>'+fmtDate(d)+'</span>'+(d===today?'<span class="today">Today</span>':'')+'</div><div class="sc-games">'+gs.map(gameRow).join('')+'</div></div>';
-    });
-    out.innerHTML = html || '<div class="hub-loading">No '+(TAB==='results'?'results':TAB==='upcoming'?'upcoming games':'games')+' yet.</div>';
   }
-  document.getElementById('scTabs').addEventListener('click', function(e){
-    var b=e.target.closest('.sc-tab'); if(!b) return;
-    TAB=b.dataset.tab;
-    document.querySelectorAll('.sc-tab').forEach(function(x){ x.classList.toggle('active', x===b); });
-    render();
-  });
-  document.getElementById('scFeed').addEventListener('click', function(e){
-    var card=e.target.closest('.sc-game[data-g]');
-    if(card) D27gameModal.openByKey(card.dataset.tkey, card.dataset.g);
-  });
-  (async function(){
-    try { var data=await D27loadSchedules(); D27gameModal.setData(data.tournaments); ALL=D27scores.allGames(data); render(); }
-    catch(e){ document.getElementById('scFeed').innerHTML='<div class="hub-loading">Could not load games. Please refresh.</div>'; }
-  })();
+
+  function fillTourneys(){
+    var sel=document.getElementById('svTourney');
+    var keys={}; D27scores.allGames(DATA).forEach(function(g){ if(realResult(g)) keys[g.tourneyKey]=1; });
+    var arr=Object.keys(keys).sort(function(a,b){ return (TMAP[a]||a).localeCompare(TMAP[b]||b); });
+    sel.innerHTML='<option value="all">All tournaments</option>'+arr.map(function(k){ return '<option value="'+esc(k)+'">'+esc(TMAP[k]||k)+'</option>'; }).join('');
+  }
+
+  function renderWeeks(){
+    var el=document.getElementById('svWeeks');
+    el.innerHTML=WEEKS.map(function(w){ return '<button class="sv-wk'+(w.idx===state.wk?' active':'')+'" data-wk="'+w.idx+'"><span class="d">'+esc(w.range)+'</span></button>'; }).join('');
+    var active=el.querySelector('.sv-wk.active'); if(active) active.scrollIntoView({block:'nearest',inline:'center'});
+  }
+
+  function curGames(){
+    var w=WEEKS[state.wk]; if(!w) return [];
+    var gs= state.day ? (w.days[state.day]||[]) : w.games;
+    if(state.tourney!=='all') gs=gs.filter(function(g){ return g.tourneyKey===state.tourney; });
+    return gs;
+  }
+
+  function renderPanel(){
+    var w=WEEKS[state.wk]; if(!w) return;
+    var validDays=w.dayOrder.filter(function(d){ return state.tourney==='all' || (w.days[d]||[]).some(function(g){return g.tourneyKey===state.tourney;}); });
+    if(state.day && validDays.indexOf(state.day)<0) state.day=null;
+    if(!state.day && validDays.length) state.day=validDays[validDays.length-1];   // chronological; default to most recent day
+    document.getElementById('svDays').innerHTML=validDays.map(function(d){
+      var dd=dt(d); return '<button class="sv-pill'+(d===state.day?' active':'')+'" data-day="'+d+'">'+MON[dd.getMonth()]+' '+dd.getDate()+'</button>';
+    }).join('');
+    var gs=curGames();
+    var sd=dt(state.day);
+    var dayLbl=sd ? (FDOW[sd.getDay()]+', '+FMON[sd.getMonth()]+' '+sd.getDate()) : w.range;
+    document.getElementById('svTitle').innerHTML=esc(dayLbl)+' <span class="games">'+gs.length+' result'+(gs.length===1?'':'s')+'</span>';
+    renderGrid(gs);
+  }
+
+  function summary(g){
+    var A=D27scores.side(g,'away'), H=D27scores.side(g,'home');
+    var aWin=g.as>g.hs; var w=aWin?A:H; var hi=Math.max(g.as,g.hs), lo=Math.min(g.as,g.hs);
+    if(isForfeit(g)) return '<span class="sv-summary ff">'+esc(ab(w.name))+' wins (forfeit)</span>';
+    var big=(hi-lo)>=10?' wins big':'';
+    return '<span class="sv-summary">'+esc(ab(w.name))+big+', '+hi+'–'+lo+'</span>';
+  }
+  function teamRow(disp, score, win){
+    var logo=window.D27logos?D27logos.html(disp.name,30):'';
+    return '<div class="sv-row">'+logo+'<span class="sv-team'+(win?'':' lose')+'">'+esc(disp.name)+'</span><span class="sv-score'+(win?'':' lose')+'">'+score+'</span></div>';
+  }
+  function card(g){
+    var d=dt(g.date), ff=isForfeit(g);
+    var A=D27scores.side(g,'away'), H=D27scores.side(g,'home');
+    var aWin=g.as>g.hs, hWin=g.hs>g.as;
+    var head='Final · '+(DOW[d.getDay()]+' '+MON[d.getMonth()]+' '+d.getDate()).toUpperCase();
+    return '<div class="sv-card" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'">'+
+      '<div class="sv-card-head"><span class="sv-meta">'+esc(head)+'</span>'+summary(g)+'</div>'+
+      '<div class="sv-rows">'+teamRow(A,g.as,aWin)+teamRow(H,g.hs,hWin)+'</div>'+
+      '<div class="sv-card-foot"><span class="sv-meta">'+esc(TMAP[g.tourneyKey]||g.tourneyKey)+'</span> &nbsp;·&nbsp; <span class="sv-cta">'+(ff?'Forfeit':'Recap')+' ›</span></div></div>';
+  }
+  function renderGrid(gs){
+    var out=document.getElementById('svGrid');
+    if(!gs.length){ out.innerHTML='<div class="sv-empty">No results'+(state.tourney!=='all'?' for this tournament':'')+' this day yet.</div>'; return; }
+    out.innerHTML='<div class="sv-grid">'+gs.map(card).join('')+'</div>';
+  }
+
+  document.getElementById('svWeeks').addEventListener('click',function(e){ var b=e.target.closest('.sv-wk'); if(!b) return; state.wk=+b.dataset.wk; state.day=null; renderWeeks(); renderPanel(); });
+  document.getElementById('svDays').addEventListener('click',function(e){ var b=e.target.closest('.sv-pill'); if(!b) return; state.day=b.dataset.day; renderPanel(); });
+  document.getElementById('svTourney').addEventListener('change',function(e){ state.tourney=e.target.value; renderPanel(); });
+  document.getElementById('svPrev').addEventListener('click',function(){ document.getElementById('svWeeks').scrollBy({left:-240,behavior:'smooth'}); });
+  document.getElementById('svNext').addEventListener('click',function(){ document.getElementById('svWeeks').scrollBy({left:240,behavior:'smooth'}); });
+  document.getElementById('svGrid').addEventListener('click',function(e){ var c=e.target.closest('.sv-card'); if(c) D27gameModal.openByKey(c.dataset.tkey, c.dataset.g); });
+
+  D27loadSchedules().then(function(d){
+    DATA=d; (d.tournaments||[]).forEach(function(t){ TMAP[t.key]=t.name; });
+    D27gameModal.setData(d.tournaments);
+    build();
+    if(!WEEKS.length){ document.getElementById('svGrid').innerHTML='<div class="sv-empty">No final scores yet — check back once games are played.</div>'; document.getElementById('svTitle').textContent=''; return; }
+    state.wk=WEEKS.length-1;   // most recent results first
+    fillTourneys(); renderWeeks(); renderPanel();
+  }).catch(function(){ document.getElementById('svGrid').innerHTML='<div class="sv-empty">Could not load scores.</div>'; });
+})();
 </script>
-
 </body>
 </html>

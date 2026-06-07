@@ -4,455 +4,220 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#002D72" />
-<title>Tournament Schedules · PA District 27 Little League</title>
-<meta name="description" content="Every PA District 27 tournament game — baseball and softball — in one place. Updated by the District directly." />
+<title>Schedule · PA District 27 Little League</title>
+<meta name="description" content="Every PA District 27 tournament game — baseball and softball — by week and day. Tap a game for its preview, recap, and bracket." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/styles.css" />
 <script src="js/d27-data.js"></script>
+<script src="js/d27-bracket.js"></script>
+<script src="js/d27-scores.js"></script>
 <script src="js/d27-logos.js"></script>
 <script src="js/d27-gamemodal.js"></script>
 <script src="js/d27-chrome.js"></script>
 <style>
-  .ls-hero { background: linear-gradient(180deg, var(--d27-navy), var(--d27-navy-dark)); color: #fff; padding: 48px 0 32px; border-bottom: 4px solid var(--d27-gold); }
-  .ls-hero h1 { font-family: var(--font-display); font-size: clamp(32px, 5vw, 52px); margin: 0; letter-spacing: -.01em; }
-  .ls-hero .eyebrow { color: var(--d27-gold); font-family: var(--font-display); letter-spacing: .14em; font-size: 13px; font-weight: 600; }
-  .ls-hero p { color: rgba(255,255,255,.78); max-width: 60ch; margin: 12px 0 0; }
+  .sv-wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 80px; }
 
-  /* Filter bar */
-  .ls-filters { background: var(--surface); border-bottom: 1px solid var(--line); padding: 16px 0; }
-  .ls-filter-top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
-  .ls-filter-title { font-family: var(--font-display); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-  .ls-search { flex: 1; min-width: 180px; padding: 9px 14px; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 14px; }
-  .ls-count { font-size: 13px; color: var(--muted); white-space: nowrap; }
-  .ls-all { margin-bottom: 14px; }
-  .ls-cat { margin-bottom: 12px; }
-  .ls-cat:last-child { margin-bottom: 0; }
-  .ls-cat-label { display: block; font-family: var(--font-display); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--d27-red); margin-bottom: 8px; }
-  .ls-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .ls-chip { font-family: var(--font-display); font-size: 15px; font-weight: 500; letter-spacing: .02em; text-transform: uppercase; color: var(--d27-navy); background: var(--surface); border: 1.5px solid var(--line); border-radius: 8px; padding: 10px 18px; cursor: pointer; transition: all .12s ease; white-space: nowrap; }
-  .ls-chip:hover { border-color: var(--d27-navy); background: var(--d27-sub); }
-  .ls-chip.active { background: var(--d27-navy); color: #fff; border-color: var(--d27-navy); box-shadow: 0 4px 14px rgba(0,45,114,.28); }
+  /* SCORES | SCHEDULE tabs */
+  .sv-tabs { display: flex; gap: 26px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+  .sv-tab { font-family: var(--font-display); font-size: 26px; font-weight: 700; letter-spacing: .01em; text-transform: uppercase; color: #9aa3af; text-decoration: none; padding: 4px 2px 14px; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+  .sv-tab.active { color: var(--d27-ink, #14213D); border-bottom-color: var(--d27-ink, #14213D); }
 
-  main { padding: 24px 0 64px; }
+  /* week selector */
+  .sv-weeks-row { display: flex; align-items: stretch; gap: 0; padding: 20px 0 0; }
+  .sv-wk-arrow { flex: none; width: 34px; border: none; background: none; cursor: pointer; font-size: 20px; color: var(--d27-navy); display: flex; align-items: center; justify-content: center; }
+  .sv-wk-arrow:disabled { opacity: .25; cursor: default; }
+  .sv-weeks { display: flex; gap: 30px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 14px; flex: 1; scrollbar-width: none; }
+  .sv-weeks::-webkit-scrollbar { display: none; }
+  .sv-wk { flex: none; text-align: center; background: none; border: none; cursor: pointer; padding: 8px 10px 12px; border-bottom: 2px solid transparent; }
+  .sv-wk .d { display: block; font-family: var(--font-display); font-size: 15px; font-weight: 600; color: #6b7280; white-space: nowrap; }
+  .sv-wk:hover .d { color: var(--d27-navy); }
+  .sv-wk.active { border-bottom-color: var(--d27-navy); }
+  .sv-wk.active .d { color: var(--d27-navy); }
 
-  /* Category header (matches Jeff's email groupings) */
-  .ls-cat { margin: 8px 0 18px; }
-  .ls-cat-head { font-family: var(--font-display); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--d27-gold); font-weight: 600; background: var(--d27-navy); color: #fff; padding: 10px 16px; border-radius: 8px 8px 0 0; display: flex; align-items: center; gap: 10px; }
-  .ls-cat-head .gold { color: var(--d27-gold); }
-  .ls-cat-head .n { margin-left: auto; font-size: 12px; color: rgba(255,255,255,.7); letter-spacing: .04em; }
-  .ls-cat-body { border: 1px solid var(--line); border-top: none; border-radius: 0 0 8px 8px; padding: 18px; background: rgba(0,45,114,.015); }
+  /* panel under the weeks */
+  .sv-panel { background: #f4f6f9; border-radius: 14px; padding: 22px 22px 26px; margin-top: 8px; }
+  .sv-panel-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+  .sv-panel-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--d27-ink, #14213D); }
+  .sv-panel-title .games { color: #9aa3af; font-weight: 500; font-size: 15px; margin-left: 4px; }
+  .sv-day-pills { display: flex; gap: 12px; flex-wrap: wrap; }
+  .sv-pill { font-family: var(--font-display); font-size: 15px; font-weight: 600; padding: 9px 20px; border-radius: 999px; border: 1.5px solid #d6dbe2; background: #fff; color: #4b5563; cursor: pointer; white-space: nowrap; transition: all .12s ease; }
+  .sv-pill:hover { border-color: var(--d27-navy); }
+  .sv-pill.active { background: var(--d27-navy); color: #fff; border-color: var(--d27-navy); }
+  .sv-tourney-sel { margin-left: auto; padding: 9px 12px; border: 1.5px solid #d6dbe2; border-radius: 8px; font: inherit; font-size: 14px; background: #fff; color: var(--d27-navy); }
 
-  /* Tournament block */
-  .ls-tourney { margin-bottom: 28px; }
-  .ls-champion { display: flex; align-items: center; gap: 16px; background: linear-gradient(120deg, #C9A227, #EBCB5E 45%, #C9A227); color: var(--d27-navy); border-radius: 12px; padding: 14px 22px; margin: 0 0 16px; box-shadow: 0 8px 26px rgba(201,162,39,.4); }
-  .ls-champion .trophy { font-size: 38px; line-height: 1; filter: drop-shadow(0 2px 3px rgba(0,0,0,.18)); }
-  .ls-champion .ct { display: flex; flex-direction: column; line-height: 1.1; }
-  .ls-champion .lbl { font-family: var(--font-display); font-size: 11px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; opacity: .8; }
-  .ls-champion .team { font-family: var(--font-display); font-size: clamp(22px, 4.5vw, 32px); font-weight: 800; letter-spacing: -.01em; margin-top: 2px; }
-  .ls-teams { border: 1px solid #e5e7eb; border-radius: 10px; margin: 0 0 16px; background: #fff; overflow: hidden; }
-  .ls-teams > summary { cursor: pointer; padding: 12px 16px; font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--d27-navy); list-style: none; display: flex; align-items: center; gap: 8px; user-select: none; }
-  .ls-teams > summary::-webkit-details-marker { display: none; }
-  .ls-teams > summary:hover { background: #f8fafc; }
-  .ls-teams .chev { display: inline-block; transition: transform .2s ease; color: var(--d27-gold); font-size: 12px; }
-  .ls-teams[open] > summary .chev { transform: rotate(90deg); }
-  .ls-teams .cnt { color: #6b7280; font-weight: 600; font-size: 12px; }
-  .ls-teams-wrap { padding: 8px 14px 12px; border-top: 1px solid #f1f5f9; }
-  .ls-teams-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 36px; }
-  @media (max-width: 720px) { .ls-teams-cols { grid-template-columns: 1fr; } }
-  .ls-teams-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
-  .ls-teams-table td { padding: 8px 8px; border-bottom: 1px solid #f3f5f8; vertical-align: middle; }
-  .ls-teams-table tr:last-child td { border-bottom: none; }
-  .ls-teams-table tr:hover td { background: #f8fafc; }
-  .ls-teams-table .ts { width: 24px; text-align: center; color: #b0bac8; font-weight: 700; font-size: 12px; }
-  .ls-teams-table .tn { font-weight: 700; color: #1f2937; white-space: normal; overflow-wrap: break-word; word-break: normal; line-height: 1.2; }
-  .ls-teams-table .tn .d27-logo, .ls-teams-table .tn .d27-logo-fb { vertical-align: middle; margin-right: 2px; }
-  .ls-teams-table .tac { width: 1px; white-space: nowrap; }
-  .ls-teams-table .ta { font-size: 10.5px; color: #475569; font-weight: 700; background: #eef2f7; padding: 2px 7px; border-radius: 4px; letter-spacing: .04em; }
-  .ls-teams-table .tp { color: #5b6675; width: 99%; white-space: nowrap; padding-left: 14px; }
-  .ls-teams-table .tp .pin { opacity: .6; margin-right: 4px; font-size: 11px; }
-  .ls-teams-table .muted { color: #cbd5e1; }
-  .ls-tourney:last-child { margin-bottom: 0; }
-  .ls-tourney-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--d27-navy); flex-wrap: wrap; }
-  .ls-tourney-head h2 { font-family: var(--font-display); margin: 0; color: var(--d27-navy); font-size: 22px; }
-  .ls-tourney-head .sport-tag { font-size: 11px; padding: 3px 10px; border-radius: 4px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
-  .ls-tourney-head .sport-tag.bb { background: rgba(0,45,114,.1); color: var(--d27-navy); }
-  .ls-tourney-head .sport-tag.sb { background: rgba(218,41,28,.1); color: var(--d27-red); }
-  .ls-tourney-head .updated { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #047857; background: #ECFDF5; border: 1px solid rgba(4,120,87,.2); padding: 4px 10px; border-radius: 999px; font-weight: 600; }
-  .ls-tourney-head .updated .dot { width: 7px; height: 7px; border-radius: 50%; background: #10B981; }
-  .ls-tourney-head .meta { color: var(--muted); font-size: 13px; }
-  .ls-tourney-head .bracket-link { font-size: 13px; color: var(--d27-navy); font-weight: 600; text-decoration: none; border-bottom: 1px dashed var(--d27-gold); padding-bottom: 1px; }
-  .ls-tourney-head .bracket-link:hover { color: var(--d27-red); }
-
-  /* Date group */
-  .ls-date { font-family: var(--font-display); font-size: 14px; color: var(--d27-red); letter-spacing: .06em; text-transform: uppercase; font-weight: 600; margin: 18px 0 8px; padding-left: 2px; }
-
-  /* Game row */
-  .ls-game { display: grid; grid-template-columns: 70px 1fr minmax(0,150px) auto; gap: 14px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; }
-  @media (max-width: 640px) { .ls-game { grid-template-columns: 60px 1fr auto; } .ls-game .ls-field { grid-column: 1 / -1; padding-left: 74px; } }
-  .ls-game .ls-time { text-align: center; }
-  .ls-game .ls-time .t { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--d27-navy); line-height: 1.1; }
-  .ls-game .ls-time .g { font-size: 10px; color: var(--muted); letter-spacing: .04em; }
-  .ls-game .ls-match { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .ls-team { font-weight: 700; font-size: 15px; color: var(--d27-ink); display: inline-flex; align-items: center; gap: 6px; }
-  .ls-team.tbd { color: var(--muted); font-weight: 600; font-style: italic; }
-  .ls-team.win { color: #047857; }
-  .ls-vs { color: var(--muted); font-size: 12px; font-weight: 600; }
-  .ls-score { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--d27-navy); padding: 0 4px; }
-  .ls-final { font-size: 10px; background: #ECFDF5; color: #047857; padding: 2px 7px; border-radius: 3px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
-  .ls-final.forfeit { background: #FEF3C7; color: #92400E; }
-  .ls-field { font-size: 13px; color: var(--muted); text-align: right; }
-  @media (max-width: 640px) { .ls-field { text-align: left; } }
-
-  .ls-note { background: linear-gradient(90deg, rgba(201,162,39,.06), rgba(0,45,114,.04)); border: 1px solid rgba(0,45,114,.12); border-left: 4px solid var(--d27-gold); border-radius: 6px; padding: 14px 18px; margin-bottom: 24px; font-size: 13px; color: var(--muted); }
-  .ls-note b { color: var(--d27-navy); }
-
-  .ls-empty { text-align: center; color: var(--muted); padding: 48px; font-size: 15px; }
-  .ls-loading { text-align: center; color: var(--muted); padding: 64px; font-family: var(--font-display); letter-spacing: .08em; text-transform: uppercase; }
+  /* card grid */
+  .sv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px; }
+  .sv-card { background: #fff; border: 1px solid #e7eaef; border-radius: 12px; overflow: hidden; cursor: pointer; transition: box-shadow .15s ease, transform .15s ease; display: flex; flex-direction: column; }
+  .sv-card:hover { box-shadow: 0 14px 30px rgba(0,23,60,.13); transform: translateY(-3px); }
+  .sv-card-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #eef1f5; }
+  .sv-meta { font-family: var(--font-display); font-size: 11.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #9aa3af; line-height: 1.4; }
+  .sv-card-head .sv-meta { flex: 1; min-width: 0; }
+  .sv-status { flex: none; font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #9aa3af; white-space: nowrap; }
+  .sv-status.big { color: var(--d27-navy); }
+  .sv-status.ff { color: #92400E; }
+  .sv-summary { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; color: var(--d27-navy); white-space: nowrap; }
+  .sv-summary.ff { color: #92400E; }
+  .sv-rows { padding: 6px 16px; }
+  .sv-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; }
+  .sv-row .d27-logo, .sv-row .d27-logo-fb { flex: none; }
+  .sv-team { flex: 1; min-width: 0; font-family: var(--font-display); font-size: 17px; font-weight: 600; color: var(--d27-ink, #14213D); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sv-team.tbd { color: #9aa3af; font-weight: 500; }
+  .sv-team.lose { color: #9aa3af; }
+  .sv-score { font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--d27-ink, #14213D); line-height: 1; }
+  .sv-score.lose { color: #b5bcc6; }
+  .sv-card-foot { padding: 11px 16px; border-top: 1px solid #eef1f5; margin-top: auto; }
+  .sv-cta { font-family: var(--font-display); font-size: 13px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; color: var(--d27-navy); }
+  .sv-cta.recap { color: var(--gold-deep, #9a7b16); }
+  .sv-empty { padding: 50px 20px; text-align: center; color: #9aa3af; font-family: var(--font-display); }
+  .sv-loading { padding: 60px 20px; text-align: center; color: #9aa3af; font-family: var(--font-display); }
+  @media (max-width: 560px){ .sv-tab{font-size:21px;} .sv-grid{grid-template-columns:1fr;} .sv-tourney-sel{margin-left:0;width:100%;} }
 </style>
 </head>
 <body>
-
 <div id="d27-nav"></div>
 
-<header class="ls-hero">
-  <div class="container">
-    <div class="eyebrow">TOURNAMENT SEASON · SUMMER 2026</div>
-    <h1>D27 Tournament Schedules</h1>
-    <p>Every District 27 tournament — Little League International brackets, Special Games, and championships — in one place. Updated by the District directly.</p>
+<div class="sv-wrap">
+  <div class="sv-tabs">
+    <a class="sv-tab" href="scores.html">Scores</a>
+    <a class="sv-tab active" href="live-schedule.html">Schedule</a>
   </div>
-</header>
 
-<div class="ls-filters">
-  <div class="container">
-    <div class="ls-filter-top">
-      <span class="ls-filter-title">Tournaments</span>
-      <input class="ls-search" id="searchBox" type="text" placeholder="Search team, field, date..." />
-      <span class="ls-count" id="gameCount"></span>
+  <div class="sv-weeks-row">
+    <button class="sv-wk-arrow" id="svPrev" aria-label="Previous weeks">‹</button>
+    <div class="sv-weeks" id="svWeeks"></div>
+    <button class="sv-wk-arrow" id="svNext" aria-label="More weeks">›</button>
+  </div>
+
+  <div class="sv-panel">
+    <div class="sv-panel-head">
+      <span class="sv-panel-title" id="svTitle">Loading…</span>
+      <div class="sv-day-pills" id="svDays"></div>
+      <select class="sv-tourney-sel" id="svTourney"><option value="all">All tournaments</option></select>
     </div>
-    <div class="ls-picker" id="tourneyPicker"></div>
+    <div id="svGrid"><div class="sv-loading">Loading schedule…</div></div>
   </div>
 </div>
-
-<main class="container">
-  <div class="ls-note">
-    <b>This schedule is built directly from the District's tournament files.</b> When a game's score is entered, the matchup automatically flips to show the result — and bracket placeholders (Winner of Game X) resolve to the actual team.
-  </div>
-  <div id="output"><div class="ls-loading">Loading schedules…</div></div>
-</main>
 
 <div id="d27-footer"></div>
 
 <script>
-let DATA = null;
-let filter = { sport: 'all', tourney: 'all', q: '' };
+(function(){
+  var esc = function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); };
+  var clean = function(v){ if(v==null) return ''; var s=String(v).trim(); return /^(n\/?a|tbd|tba|none|-+)$/i.test(s)?'':s; };
+  var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var FMON=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var FDOW=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  function dt(s){ s=clean(s); return s ? new Date(s+'T12:00:00') : null; }
+  function fmtTime(t){ t=clean(t); if(!t) return 'TBD'; var p=t.split(':'); var h=+p[0], m=p[1]||'00'; if(isNaN(h)) return 'TBD'; var ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+m+' '+ap; }
+  function weekStart(s){ var d=dt(s); if(!d) return null; var day=(d.getDay()+6)%7; d.setDate(d.getDate()-day); return d.toISOString().slice(0,10); }
+  function isForfeit(g){ if(!D27scores.played(g)) return false; if(g.forfeit!=null) return !!g.forfeit; var bye=/^\s*bye\s*$/i.test(String(g.away))||/^\s*bye\s*$/i.test(String(g.home)); return !bye && !clean(g.date); }
 
-const isPlaceholder = (t) => !t || /^(WG|LG)-\d+$/i.test(String(t).trim()) || /if necessary/i.test(String(t)) || /^(WG|LG)-/i.test(String(t).trim());
+  var DATA=null, TMAP={}, WEEKS=[], state={wk:0, day:null, tourney:'all'};
 
-// drop placeholder junk like "N/A" / "TBD" so it never renders literally
-function clean(v) { if (v == null) return ''; const s = String(v).trim(); return /^(n\/?a|tbd|tba|none|-+)$/i.test(s) ? '' : s; }
-function fmtDate(iso) {
-  iso = clean(iso); if (!iso) return 'Date TBD';
-  const d = new Date(iso + 'T12:00:00');
-  if (isNaN(d)) return 'Date TBD';
-  return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-}
-function fmtTime(t) {
-  t = clean(t); if (!t) return 'TBD';
-  let [h, m] = t.split(':').map(Number);
-  if (isNaN(h)) return 'TBD';
-  const ap = h >= 12 ? 'PM' : 'AM';
-  h = h % 12 || 12;
-  return `${h}:${String(m).padStart(2,'0')} ${ap}`;
-}
-// a forfeit: a finished game between two real teams that has no real date
-// (the data records forfeits with N/A date/time/field and a 6–0 result)
-function isForfeit(g) {
-  const played = g.as != null && g.hs != null && (g.as + g.hs) > 0;
-  if (!played) return false;
-  if (g.forfeit != null) return !!g.forfeit;                 // explicit flag from the editor
-  const bye = /^\s*bye\s*$/i.test(String(g.away)) || /^\s*bye\s*$/i.test(String(g.home));
-  return !bye && !clean(g.date);
-}
-function updatedLabel(iso) {
-  if (!iso) return '';
-  const dateOnly = iso.length <= 10;
-  const d = new Date(iso + (dateOnly ? 'T12:00:00' : ''));
-  const date = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  if (dateOnly) return 'Updated ' + date;
-  const time = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-  return `Updated ${date} · ${time}`;
-}
-
-// ── auto-resolve WG-/LG- placeholders + champion detection (same engine as the bracket) ──
-function parseRef(s) {
-  if (s == null) return { kind: 'tbd' };
-  const t = String(s).trim();
-  let m = t.match(/^WG-(\d+)$/i); if (m) return { kind: 'WG', g: +m[1] };
-  m = t.match(/^LG-(\d+)$/i);     if (m) return { kind: 'LG', g: +m[1] };
-  if (/if necessary/i.test(t)) return { kind: 'tbd', label: 'If necessary' };
-  if (/^bye$/i.test(t))        return { kind: 'bye' };
-  return { kind: 'team', name: t };
-}
-const gameByNum = (t, n) => t.games.find(g => g.g === n);
-const isPlayed = g => g && g.as != null && g.hs != null && (g.as + g.hs) > 0;
-function resolveSide(t, ref, seen) {
-  seen = seen || new Set();
-  if (ref.kind === 'team') return ref.name;
-  if (ref.kind === 'bye')  return 'BYE';
-  if (ref.kind !== 'WG' && ref.kind !== 'LG') return null;
-  const g = gameByNum(t, ref.g); if (!g || seen.has(ref.g)) return null;
-  seen.add(ref.g);
-  return ref.kind === 'WG' ? winnerName(t, g, seen) : loserName(t, g, seen);
-}
-function winnerName(t, g, seen) { if (!isPlayed(g)) return null; const a = resolveSide(t, parseRef(g.away), new Set(seen)), h = resolveSide(t, parseRef(g.home), new Set(seen)); return g.as > g.hs ? a : g.hs > g.as ? h : null; }
-function loserName(t, g, seen)  { if (!isPlayed(g)) return null; const a = resolveSide(t, parseRef(g.away), new Set(seen)), h = resolveSide(t, parseRef(g.home), new Set(seen)); return g.as > g.hs ? h : g.hs > g.as ? a : null; }
-function sideDisplay(t, raw) {
-  const ref = parseRef(raw);
-  if (ref.kind === 'team') return { name: ref.name };
-  if (ref.kind === 'bye')  return { name: 'BYE', tbd: true };
-  if (ref.kind === 'tbd')  return { name: ref.label || 'TBD', tbd: true };
-  const resolved = resolveSide(t, ref, new Set());
-  if (resolved) return { name: resolved };
-  return { name: (ref.kind === 'WG' ? 'Winner G' : 'Loser G') + ref.g, tbd: true };
-}
-function feeders(g) { const o = []; for (const raw of [g.away, g.home]) { const r = parseRef(raw); if (r.kind === 'WG' || r.kind === 'LG') o.push(r.g); } return o; }
-function computeRounds(t) {
-  const depth = {}, guard = new Set();
-  function d(n) { if (depth[n] != null) return depth[n]; if (guard.has(n)) return 1; guard.add(n); const g = gameByNum(t, n); if (!g) return 1; const f = feeders(g); const r = f.length ? 1 + Math.max(...f.map(d)) : 1; depth[n] = r; return r; }
-  t.games.forEach(g => d(g.g)); return depth;
-}
-// classify each game as 'w' (winners), 'l' (losers) or 'f' (grand final)
-function classify(t) {
-  const pw = {}, guard = new Set();
-  function isPw(n) {
-    if (pw[n] != null) return pw[n];
-    if (guard.has(n)) return true; guard.add(n);
-    const g = gameByNum(t, n); if (!g) { pw[n] = true; return true; }
-    let v = true;
-    for (const raw of [g.away, g.home]) {
-      const r = parseRef(raw);
-      if (r.kind === 'LG') v = false;
-      if (r.kind === 'WG' && !isPw(r.g)) v = false;
-    }
-    pw[n] = v; return v;
-  }
-  t.games.forEach(g => isPw(g.g));
-  const depth = computeRounds(t);
-  let wbFinal = null, wbDepth = -1;
-  for (const g of t.games) if (pw[g.g] && (depth[g.g] || 1) > wbDepth) { wbDepth = depth[g.g] || 1; wbFinal = g.g; }
-  const consumers = {};
-  for (const g of t.games) for (const raw of [g.away, g.home]) { const r = parseRef(raw); if (r.kind === 'WG' || r.kind === 'LG') (consumers[r.g] = consumers[r.g] || []).push(g.g); }
-  const fin = new Set();
-  if (wbFinal != null) {
-    let q = (consumers[wbFinal] || []).filter(n => {
-      const g = gameByNum(t, n);
-      const a = parseRef(g.away), h = parseRef(g.home);
-      return (a.kind === 'WG' && a.g === wbFinal) || (h.kind === 'WG' && h.g === wbFinal);
-    });
-    while (q.length) { const n = q.shift(); if (fin.has(n)) continue; fin.add(n); (consumers[n] || []).forEach(c => q.push(c)); }
-    if (!fin.size) fin.add(wbFinal); // WB final with no follow-on = the championship game (single-elimination)
-  }
-  const cls = {};
-  for (const g of t.games) cls[g.g] = fin.has(g.g) ? 'f' : pw[g.g] ? 'w' : 'l';
-  return cls;
-}
-// who's champion + which "if necessary" games to hide (never played because the winners champ closed it out)
-function championOutcome(t, cls) {
-  const finals = t.games.filter(g => cls[g.g] === 'f').sort((a, b) => a.g - b.g);
-  const hide = new Set();
-  if (!finals.length) return { champion: null, hide };
-  const gf = finals[0];
-  const feederCls = raw => { const r = parseRef(raw); return (r.kind === 'WG' || r.kind === 'LG') ? cls[r.g] : null; };
-  const winnersSide = feederCls(gf.away) === 'w' ? 'away' : feederCls(gf.home) === 'w' ? 'home' : 'away';
-  let champion = null;
-  if (isPlayed(gf)) {
-    const winSide = gf.as > gf.hs ? 'away' : gf.hs > gf.as ? 'home' : null;
-    if (winSide === winnersSide) {
-      champion = resolveSide(t, parseRef(winSide === 'away' ? gf.away : gf.home), new Set());
-      finals.slice(1).forEach(g => hide.add(g.g));
-    } else if (winSide) {
-      const dec = finals[1];
-      if (dec && isPlayed(dec)) {
-        const ds = dec.as > dec.hs ? 'away' : dec.hs > dec.as ? 'home' : null;
-        if (ds) champion = resolveSide(t, parseRef(ds === 'away' ? dec.away : dec.home), new Set());
-      }
-    }
-  }
-  return { champion, hide };
-}
-
-function teamHTML(disp, score, otherScore, played) {
-  if (disp.tbd) return `<span class="ls-team tbd">${disp.name}</span>`;
-  const win = played && score != null && otherScore != null && score > otherScore;
-  const logo = window.D27logos ? D27logos.html(disp.name, 18) : '';
-  return `<span class="ls-team${win ? ' win' : ''}">${logo}${disp.name}</span>`;
-}
-
-function gameHTML(t, g) {
-  const A = sideDisplay(t, g.away), H = sideDisplay(t, g.home);
-  const played = (g.as != null && g.hs != null) && (g.as + g.hs) > 0;
-  let match;
-  if (played) {
-    match = `
-      ${teamHTML(A, g.as, g.hs, true)}
-      <span class="ls-score">${g.as}</span><span class="ls-vs">–</span><span class="ls-score">${g.hs}</span>
-      ${teamHTML(H, g.hs, g.as, true)}
-      ${isForfeit(g) ? '<span class="ls-final forfeit">Forfeit</span>' : '<span class="ls-final">Final</span>'}`;
-  } else {
-    match = `${teamHTML(A)} <span class="ls-vs">vs</span> ${teamHTML(H)}`;
-  }
-  return `
-    <div class="ls-game" data-tkey="${t.key}" data-g="${g.g}">
-      <div class="ls-time"><div class="t">${fmtTime(g.time)}</div><div class="g">Game ${g.g}</div></div>
-      <div class="ls-match">${match}</div>
-      <div class="ls-field">${clean(g.field)}</div>
-      <span class="gm-cue ${played ? 'recap' : 'preview'}">${played ? 'Recap' : 'Preview'} ›</span>
-    </div>`;
-}
-
-// roster + home-field table for a tournament (from the Excel team table)
-function teamsPanelHTML(t, open) {
-  const teams = (t.teams || []).slice().sort((a, b) => (a.n || 0) - (b.n || 0));
-  if (!teams.length) return '';
-  const mkTable = list => `<table class="ls-teams-table"><tbody>${list.map(tm => `
-        <tr>
-          <td class="ts">${tm.n || ''}</td>
-          <td class="tn">${window.D27logos ? D27logos.html(tm.name, 22) : ''} ${tm.name}</td>
-          <td class="tac"><span class="ta">${tm.abbr || ''}</span></td>
-          <td class="tp">${tm.park ? `<span class="pin">📍</span>${tm.park}` : '<span class="muted">—</span>'}</td>
-        </tr>`).join('')}</tbody></table>`;
-  const half = Math.ceil(teams.length / 2);
-  const body = teams.length > 6
-    ? `<div class="ls-teams-cols">${mkTable(teams.slice(0, half))}${mkTable(teams.slice(half))}</div>`
-    : mkTable(teams);
-  return `<details class="ls-teams"${open ? ' open' : ''}>
-      <summary><span class="chev">▸</span> Teams &amp; Fields <span class="cnt">${teams.length} teams</span></summary>
-      <div class="ls-teams-wrap">${body}</div>
-    </details>`;
-}
-
-function tourneyHTML(t, q) {
-  const cls = classify(t);
-  const outcome = championOutcome(t, cls);
-  // drop "if necessary" games that will never be played (winners champ already closed it out)
-  let games = t.games.slice().filter(g => !outcome.hide.has(g.g));
-  if (q) {
-    games = games.filter(g => {
-      const A = sideDisplay(t, g.away).name, H = sideDisplay(t, g.home).name;
-      return [g.away, g.home, A, H, g.field, g.date, fmtDate(g.date)].some(v => String(v || '').toLowerCase().includes(q));
+  function build(){
+    var games=D27scores.allGames(DATA).filter(function(g){ return clean(g.date); });   // dated games only
+    var byWeek={};
+    games.forEach(function(g){ var w=weekStart(g.date); (byWeek[w]=byWeek[w]||[]).push(g); });
+    WEEKS=Object.keys(byWeek).sort().map(function(w,i){
+      var gs=byWeek[w].sort(function(a,b){ return (a.date+ (a.time||'')).localeCompare(b.date+(b.time||'')); });
+      var dates=gs.map(function(g){return g.date;});
+      var lo=dt(dates[0]), hi=dt(dates[dates.length-1]);
+      var range = (MON[lo.getMonth()]+' '+lo.getDate()) + (dates[0]!==dates[dates.length-1] ? '–'+(hi.getMonth()!==lo.getMonth()?MON[hi.getMonth()]+' ':'')+hi.getDate() : '');
+      var days={}, dorder=[];
+      gs.forEach(function(g){ if(!days[g.date]){days[g.date]=[];dorder.push(g.date);} days[g.date].push(g); });
+      return { start:w, idx:i, range:range, games:gs, days:days, dayOrder:dorder };
     });
   }
-  if (!games.length) return { html: '', count: 0 };
-  const liveCount = t.games.length - outcome.hide.size;
 
-  const byDate = {}, order = [];
-  for (const g of games) {
-    const k = g.date || 'TBD';
-    if (!byDate[k]) { byDate[k] = []; order.push(k); }
-    byDate[k].push(g);
-  }
-  order.sort((a, b) => (a === 'TBD' ? 1 : b === 'TBD' ? -1 : a.localeCompare(b)));
-
-  let html = `<section class="ls-tourney">
-    <div class="ls-tourney-head">
-      <h2>${t.name}</h2>
-      <span class="sport-tag ${t.sport === 'Softball' ? 'sb' : 'bb'}">${t.sport}</span>
-      <span class="meta">${liveCount} games</span>
-      <a class="bracket-link" href="brackets.html?t=${t.key}">🏆 Bracket view →</a>
-      ${t.updated ? `<span class="updated"><span class="dot"></span>${updatedLabel(t.updated)}</span>` : ''}
-    </div>
-    ${outcome.champion ? `<div class="ls-champion"><span class="trophy">🏆</span><div class="ct"><span class="lbl">Tournament Champion</span><span class="team">${outcome.champion}</span></div></div>` : ''}
-    ${teamsPanelHTML(t, false)}`;
-  for (const k of order) {
-    html += `<div class="ls-date">${fmtDate(k)}</div>`;
-    byDate[k].sort((a, b) => String(a.time || '').localeCompare(String(b.time || '')));
-    for (const g of byDate[k]) html += gameHTML(t, g);
-  }
-  html += `</section>`;
-  return { html, count: games.length };
-}
-
-function render() {
-  const out = document.getElementById('output');
-  const q = filter.q.toLowerCase().trim();
-  const cats = (DATA.categoryOrder || []).concat(['Other']);
-  let total = 0, html = '';
-
-  for (const cat of cats) {
-    const tourneys = DATA.tournaments.filter(t =>
-      t.category === cat &&
-      (filter.sport === 'all' || t.sport === filter.sport) &&
-      (filter.tourney === 'all' || t.key === filter.tourney)
-    );
-    if (!tourneys.length) continue;
-
-    let body = '', catCount = 0, shownTourneys = 0;
-    for (const t of tourneys) {
-      const r = tourneyHTML(t, q);
-      if (!r.count) continue;
-      body += r.html; catCount += r.count; shownTourneys++;
-    }
-    if (!shownTourneys) continue;
-    total += catCount;
-
-    html += `<div class="ls-cat">
-      <div class="ls-cat-head">📋 <span class="gold">${cat}</span><span class="n">${shownTourneys} tournament${shownTourneys === 1 ? '' : 's'} · ${catCount} games</span></div>
-      <div class="ls-cat-body">${body}</div>
-    </div>`;
+  function pickDefaultWeek(){
+    var today=D27scores.todayISO();
+    for(var i=0;i<WEEKS.length;i++){ if(today>=WEEKS[i].start && (i===WEEKS.length-1 || today<WEEKS[i+1].start)) return i; }
+    for(var j=0;j<WEEKS.length;j++){ if(WEEKS[j].start>=today) return j; }
+    return WEEKS.length?WEEKS.length-1:0;
   }
 
-  out.innerHTML = html || `<div class="ls-empty">No games match your filters.</div>`;
-  document.getElementById('gameCount').textContent = total + ' games';
-}
-
-function escTxt(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-function scrollToSched() {
-  const el = document.getElementById('output'); if (!el) return;
-  const nav = document.querySelector('.nav'); const navH = nav ? nav.offsetHeight : 80;
-  const y = el.getBoundingClientRect().top + window.scrollY - navH - 12;
-  if (y > window.scrollY + 4) window.scrollTo({ top: y, behavior: 'smooth' });
-}
-function selectTourneyLS(key, scroll) {
-  filter.tourney = key;
-  document.querySelectorAll('.ls-chip').forEach(c => c.classList.toggle('active', c.dataset.key === key));
-  if (key !== 'all') location.hash = key;
-  render();
-  if (scroll) scrollToSched();
-}
-function initFilters() {
-  const picker = document.getElementById('tourneyPicker');
-  const byCat = {}; for (const t of DATA.tournaments) (byCat[t.category] = byCat[t.category] || []).push(t);
-  const cats = (DATA.categoryOrder || []).slice();
-  for (const c in byCat) if (cats.indexOf(c) === -1) cats.push(c);
-  let html = '<div class="ls-chips ls-all"><button type="button" class="ls-chip" data-key="all">All Tournaments</button></div>';
-  for (const cat of cats) {
-    if (!byCat[cat]) continue;
-    html += '<div class="ls-cat"><span class="ls-cat-label">' + escTxt(cat) + '</span><div class="ls-chips">';
-    for (const t of byCat[cat]) html += '<button type="button" class="ls-chip" data-key="' + escTxt(t.key) + '">' + escTxt(t.name) + '</button>';
-    html += '</div></div>';
+  function fillTourneys(){
+    var sel=document.getElementById('svTourney');
+    var keys={}; D27scores.allGames(DATA).forEach(function(g){ keys[g.tourneyKey]=1; });
+    var arr=Object.keys(keys).sort(function(a,b){ return (TMAP[a]||a).localeCompare(TMAP[b]||b); });
+    sel.innerHTML='<option value="all">All tournaments</option>'+arr.map(function(k){ return '<option value="'+esc(k)+'">'+esc(TMAP[k]||k)+'</option>'; }).join('');
   }
-  picker.innerHTML = html;
-  picker.querySelectorAll('.ls-chip').forEach(function (c) { c.addEventListener('click', function () { selectTourneyLS(c.dataset.key, true); }); });
-  document.getElementById('searchBox').addEventListener('input', e => { filter.q = e.target.value; render(); });
-  // Deep-link: ?t=KEY or #KEY (from the Baseball/Softball hub) pre-selects a tournament
-  const want = new URLSearchParams(location.search).get('t') || location.hash.replace('#', '');
-  const deep = (want && DATA.tournaments.some(t => t.key === want)) ? want : null;
-  if (deep) filter.tourney = deep;
-  document.querySelectorAll('.ls-chip').forEach(c => c.classList.toggle('active', c.dataset.key === filter.tourney));
-  return deep;
-}
 
-D27loadSchedules()
-  .then(d => { DATA = d; D27gameModal.setData(d.tournaments); const deep = initFilters(); render(); if (deep) setTimeout(scrollToSched, 180); })
-  .catch(() => { document.getElementById('output').innerHTML = '<div class="ls-empty">Could not load schedule data.</div>'; });
-// click a game → preview (not started) or recap (final)
-document.getElementById('output').addEventListener('click', e => {
-  const card = e.target.closest('.ls-game[data-g]');
-  if (card) D27gameModal.openByKey(card.dataset.tkey, card.dataset.g);
-});
+  function renderWeeks(){
+    var el=document.getElementById('svWeeks');
+    el.innerHTML=WEEKS.map(function(w){
+      return '<button class="sv-wk'+(w.idx===state.wk?' active':'')+'" data-wk="'+w.idx+'"><span class="d">'+esc(w.range)+'</span></button>';
+    }).join('');
+    var active=el.querySelector('.sv-wk.active'); if(active) active.scrollIntoView({block:'nearest',inline:'center'});
+  }
+
+  function curGames(){
+    var w=WEEKS[state.wk]; if(!w) return [];
+    var gs = state.day ? (w.days[state.day]||[]) : w.games;
+    if(state.tourney!=='all') gs=gs.filter(function(g){ return g.tourneyKey===state.tourney; });
+    return gs;
+  }
+
+  function renderPanel(){
+    var w=WEEKS[state.wk]; if(!w) return;
+    var validDays=w.dayOrder.filter(function(d){ return state.tourney==='all' || (w.days[d]||[]).some(function(g){return g.tourneyKey===state.tourney;}); });
+    if(state.day && validDays.indexOf(state.day)<0) state.day=null;
+    if(!state.day && validDays.length) state.day=validDays[0];
+    document.getElementById('svDays').innerHTML=validDays.map(function(d){
+      var dd=dt(d); var lbl=MON[dd.getMonth()]+' '+dd.getDate();
+      return '<button class="sv-pill'+(d===state.day?' active':'')+'" data-day="'+d+'">'+lbl+'</button>';
+    }).join('');
+    var gs=curGames();
+    var sd=dt(state.day);
+    var dayLbl=sd ? (FDOW[sd.getDay()]+', '+FMON[sd.getMonth()]+' '+sd.getDate()) : (WEEKS[state.wk]?WEEKS[state.wk].range:'');
+    document.getElementById('svTitle').innerHTML=esc(dayLbl)+' <span class="games">'+gs.length+' game'+(gs.length===1?'':'s')+'</span>';
+    renderGrid(gs);
+  }
+
+  function teamRow(disp, score, win, played){
+    var logo = (!disp.tbd && window.D27logos) ? D27logos.html(disp.name, 30) : '';
+    var sc = played ? '<span class="sv-score'+(win?'':' lose')+'">'+score+'</span>' : '';
+    return '<div class="sv-row">'+logo+'<span class="sv-team'+(disp.tbd?' tbd':'')+(played&&!win?' lose':'')+'">'+esc(disp.name)+'</span>'+sc+'</div>';
+  }
+  function card(g){
+    var d=dt(g.date), played=D27scores.played(g), ff=isForfeit(g);
+    var head=(DOW[d.getDay()]+' '+MON[d.getMonth()]+' '+d.getDate()).toUpperCase()+' · '+fmtTime(g.time)+(clean(g.field)?' · '+esc(clean(g.field)).toUpperCase():'');
+    var A=D27scores.side(g,'away'), H=D27scores.side(g,'home');
+    var aWin=played&&g.as>g.hs, hWin=played&&g.hs>g.as;
+    var cta = played ? '<span class="sv-cta recap">'+(ff?'Forfeit':'Recap')+' ›</span>' : '<span class="sv-cta">Preview ›</span>';
+    var tag = '<span class="sv-meta">'+esc((TMAP[g.tourneyKey]||g.tourneyKey))+'</span>';
+    var margin = played ? Math.abs(g.as-g.hs) : 0;
+    var status = ff ? '<span class="sv-status ff">Forfeit</span>' : (played ? '<span class="sv-status'+(margin>=10?' big':'')+'">'+(margin>=10?'Wins Big':'Final')+'</span>' : '');
+    return '<div class="sv-card" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'">'+
+      '<div class="sv-card-head"><span class="sv-meta">'+head+'</span>'+status+'</div>'+
+      '<div class="sv-rows">'+teamRow(A,g.as,aWin,played)+teamRow(H,g.hs,hWin,played)+'</div>'+
+      '<div class="sv-card-foot">'+tag+' &nbsp;·&nbsp; '+cta+'</div></div>';
+  }
+  function renderGrid(gs){
+    var out=document.getElementById('svGrid');
+    if(!gs.length){ out.innerHTML='<div class="sv-empty">No games'+(state.tourney!=='all'?' for this tournament':'')+' this day.</div>'; return; }
+    out.innerHTML='<div class="sv-grid">'+gs.map(card).join('')+'</div>';
+  }
+
+  document.getElementById('svWeeks').addEventListener('click',function(e){ var b=e.target.closest('.sv-wk'); if(!b) return; state.wk=+b.dataset.wk; state.day=null; renderWeeks(); renderPanel(); });
+  document.getElementById('svDays').addEventListener('click',function(e){ var b=e.target.closest('.sv-pill'); if(!b) return; state.day=b.dataset.day; renderPanel(); });
+  document.getElementById('svTourney').addEventListener('change',function(e){ state.tourney=e.target.value; renderPanel(); });
+  document.getElementById('svPrev').addEventListener('click',function(){ document.getElementById('svWeeks').scrollBy({left:-240,behavior:'smooth'}); });
+  document.getElementById('svNext').addEventListener('click',function(){ document.getElementById('svWeeks').scrollBy({left:240,behavior:'smooth'}); });
+  document.getElementById('svGrid').addEventListener('click',function(e){ var c=e.target.closest('.sv-card'); if(c) D27gameModal.openByKey(c.dataset.tkey, c.dataset.g); });
+
+  D27loadSchedules().then(function(d){
+    DATA=d; (d.tournaments||[]).forEach(function(t){ TMAP[t.key]=t.name; });
+    D27gameModal.setData(d.tournaments);
+    build();
+    if(!WEEKS.length){ document.getElementById('svGrid').innerHTML='<div class="sv-empty">No scheduled games yet.</div>'; document.getElementById('svTitle').textContent=''; return; }
+    state.wk=pickDefaultWeek();
+    fillTourneys(); renderWeeks(); renderPanel();
+  }).catch(function(e){ document.getElementById('svGrid').innerHTML='<div class="sv-empty">Could not load the schedule.</div>'; });
+})();
 </script>
-
 </body>
 </html>
