@@ -5,6 +5,16 @@
 // NAV below — no per-page edits needed.
 // ─────────────────────────────────────────────────────────────────────
 (function () {
+  // Vercel Web Analytics — counts page views / visitors on every page.
+  // (Web Analytics must also be enabled in the Vercel dashboard for this project.)
+  (function () {
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    var s = document.createElement('script');
+    s.defer = true;
+    s.src = '/_vercel/insights/script.js';
+    document.head.appendChild(s);
+  })();
+
   var NAV = [
     ['index.html', 'Home'],
     ['scores.html', 'Scores'],
