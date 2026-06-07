@@ -250,7 +250,8 @@
     overlay.innerHTML = `<div class="gm-card" role="dialog" aria-modal="true">
       <button class="gm-close" aria-label="Close">✕</button>
       <div class="gm-head"><div class="gm-crumb"></div><span class="gm-badge"></span></div>
-      <div class="gm-body"></div></div>`;
+      <div class="gm-body"></div>
+      <div class="gm-foot"><a class="gm-bracket-btn" href="brackets.html">🏆 View full bracket →</a></div></div>`;
     document.body.appendChild(overlay);
     overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
     overlay.querySelector('.gm-close').addEventListener('click', close);
@@ -268,6 +269,9 @@
     badge.textContent = forfeit ? 'Forfeit' : played ? 'Final' : 'Preview';
     badge.className = 'gm-badge ' + (forfeit ? 'forfeit' : played ? 'final' : 'preview');
     overlay.querySelector('.gm-body').innerHTML = played ? recapHTML(tn, gg, cls) : previewHTML(tn, gg, cls);
+    const bb = overlay.querySelector('.gm-bracket-btn');
+    bb.href = 'brackets.html?t=' + encodeURIComponent(tn.key);
+    overlay.querySelector('.gm-foot').style.display = location.pathname.indexOf('brackets') >= 0 ? 'none' : '';
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
