@@ -541,17 +541,54 @@ function collectGames() {
   return games;
 }
 
+// ── AI recaps: generated on save for played games, cached in game.recap ──
+const isRealTeam = s => s && !/^(WG|LG)-\d/i.test(s) && !/^\s*bye\s*$/i.test(s) && !/^\s*(tbd|tba)\s*$/i.test(s);
+function needsRecap(g) {
+  return g.as != null && g.hs != null && (g.as > 0 || g.hs > 0) && g.as !== g.hs &&
+    !g.forfeit && isRealTeam(g.away) && isRealTeam(g.home);
+}
+async function genRecap(g, games) {
+  const aWin = g.as > g.hs, winner = aWin ? g.away : g.home, margin = Math.abs(g.as - g.hs);
+  const maxG = Math.max.apply(null, games.map(x => x.g));
+  const nextG = games.find(x => x.away === 'WG-' + g.g || x.home === 'WG-' + g.g);
+  let stake = '';
+  if (g.g === maxG) stake = `This is the championship game; ${winner} wins the ${current.name} title.`;
+  else if (nextG) stake = `${winner} advances to Game ${nextG.g}${nextG.g === maxG ? ' (the championship)' : ''}.`;
+  const res = await fetch('/api/recap', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tournament: current.name, sport: current.sport, game: g.g,
+      away: g.away, home: g.home, awayScore: g.as, homeScore: g.hs, winner, margin, stake }),
+  });
+  if (!res.ok) throw new Error('recap ' + res.status);
+  const data = await res.json();
+  if (!data.recap) throw new Error('empty');
+  return data.recap;
+}
+
 window.__save = async () => {
   $('saveStatus').textContent = 'Saving…'; $('saveStatus').className = 'status';
   const games = collectGames();
+  // carry forward existing recaps; (re)generate where a played game has none or its score changed
+  const prev = {}; (current.games || []).forEach(g => { prev[g.g] = g; });
+  const toGen = [];
+  games.forEach(g => {
+    const p = prev[g.g];
+    if (p && p.recap) g.recap = p.recap;
+    if (needsRecap(g) && (!g.recap || (p && (p.as !== g.as || p.hs !== g.hs)))) toGen.push(g);
+  });
   try {
+    if (toGen.length) {
+      $('saveStatus').textContent = `Saving… writing ${toGen.length} recap${toGen.length > 1 ? 's' : ''}…`;
+      await Promise.all(toGen.map(async g => { try { g.recap = await genRecap(g, games); } catch (e) { /* fall back to template */ } }));
+    }
     await setDoc(doc(db, 'schedules', current.key), {
       key: current.key, name: current.name, sport: current.sport,
       category: current.category, special: current.special || false,
       games, updated: serverTimestamp(),
     }, { merge: true });
     current.games = games;
-    $('saveStatus').textContent = `✓ Saved · ${games.length} games · live now`;
+    const made = toGen.filter(g => g.recap).length;
+    $('saveStatus').textContent = `✓ Saved · ${games.length} games${made ? ' · ' + made + ' recap' + (made > 1 ? 's' : '') + ' written' : ''} · live now`;
     $('saveStatus').className = 'status ok';
     $('tourneyMeta').textContent = `${current.sport} · ${games.length} games`;
   } catch (e) {
