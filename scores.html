@@ -17,10 +17,22 @@
 <script src="js/d27-gamemodal.js"></script>
 <script src="js/d27-chrome.js"></script>
 <style>
-  .sv-wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 80px; }
-  .sv-tabs { display: flex; gap: 26px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
-  .sv-tab { font-family: var(--font-display); font-size: 26px; font-weight: 700; letter-spacing: .01em; text-transform: uppercase; color: #9aa3af; text-decoration: none; padding: 4px 2px 14px; border-bottom: 3px solid transparent; margin-bottom: -1px; }
-  .sv-tab.active { color: var(--d27-ink, #14213D); border-bottom-color: var(--d27-ink, #14213D); }
+  .sv-wrap { max-width: 1180px; margin: 0 auto; padding: 24px 20px 80px; }
+  /* Hero — matches the other D27 pages */
+  .hub-hero { background: linear-gradient(135deg, rgba(0,27,71,.94) 0%, rgba(0,45,114,.9) 100%), var(--d27-navy); color: var(--d27-white); padding: var(--space-7) 0 var(--space-6); }
+  .hub-hero .crumb { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .14em; color: var(--gold); margin-bottom: var(--space-3); }
+  .hub-hero .crumb a { color: rgba(255,255,255,.6); text-decoration: none; }
+  .hub-hero .crumb a:hover { color: var(--d27-white); }
+  .hub-hero h1 { color: var(--d27-white); font-size: clamp(2.25rem, 4vw, var(--text-4xl)); margin-bottom: var(--space-3); }
+  .hub-hero p { color: rgba(255,255,255,.82); font-size: var(--text-lg); max-width: 60ch; margin-bottom: var(--space-5); }
+  .hub-stats { display: flex; gap: var(--space-6); flex-wrap: wrap; }
+  .hub-stat .n { font-family: 'Oswald', sans-serif; font-size: var(--text-3xl); font-weight: 600; color: var(--gold); display: block; line-height: 1; }
+  .hub-stat .l { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .12em; color: rgba(255,255,255,.7); }
+  /* Scores ⇄ Schedule segmented switch */
+  .sv-switch { display: inline-flex; background: #e9edf2; border-radius: 999px; padding: 4px; gap: 2px; margin-bottom: 20px; }
+  .sv-switch a { padding: 8px 26px; border-radius: 999px; font-family: var(--font-display); font-weight: 600; font-size: 15px; letter-spacing: .03em; text-transform: uppercase; color: #6b7280; text-decoration: none; transition: all .12s ease; }
+  .sv-switch a:hover { color: var(--d27-navy); }
+  .sv-switch a.active { background: #fff; color: var(--d27-navy); box-shadow: 0 1px 4px rgba(0,23,60,.14); }
   .sv-weeks-row { display: flex; align-items: stretch; gap: 0; padding: 20px 0 0; }
   .sv-wk-arrow { flex: none; width: 34px; border: none; background: none; cursor: pointer; font-size: 20px; color: var(--d27-navy); display: flex; align-items: center; justify-content: center; }
   .sv-wk-arrow:disabled { opacity: .25; cursor: default; }
@@ -65,10 +77,19 @@
 <body>
 <div id="d27-nav"></div>
 
+<header class="hub-hero">
+  <div class="container">
+    <div class="crumb"><a href="index.html">Home</a> &nbsp;/&nbsp; Scores</div>
+    <h1>Scores</h1>
+    <p>Final scores from every PA District 27 tournament — baseball and softball. Tap any result for its recap and bracket.</p>
+    <div class="hub-stats" id="svHeroStats"></div>
+  </div>
+</header>
+
 <div class="sv-wrap">
-  <div class="sv-tabs">
-    <a class="sv-tab active" href="scores.html">Scores</a>
-    <a class="sv-tab" href="live-schedule.html">Schedule</a>
+  <div class="sv-switch">
+    <a class="active" href="scores.html">Scores</a>
+    <a href="live-schedule.html">Schedule</a>
   </div>
 
   <div class="sv-weeks-row">
@@ -200,6 +221,7 @@
     DATA=d; (d.tournaments||[]).forEach(function(t){ TMAP[t.key]=t.name; });
     D27gameModal.setData(d.tournaments);
     build();
+    (function(){ var allRes=D27scores.allGames(DATA).filter(realResult); var rt={}; allRes.forEach(function(g){ rt[g.tourneyKey]=1; }); var nT=Object.keys(rt).length; var hs=document.getElementById('svHeroStats'); if(hs) hs.innerHTML='<div class="hub-stat"><span class="n">'+allRes.length+'</span><span class="l">Final Score'+(allRes.length===1?'':'s')+'</span></div><div class="hub-stat"><span class="n">'+nT+'</span><span class="l">Tournament'+(nT===1?'':'s')+'</span></div>'; })();
     if(!WEEKS.length){ document.getElementById('svGrid').innerHTML='<div class="sv-empty">No final scores yet — check back once games are played.</div>'; document.getElementById('svTitle').textContent=''; return; }
     state.wk=WEEKS.length-1;   // most recent results first
     fillTourneys(); renderWeeks(); renderPanel();
