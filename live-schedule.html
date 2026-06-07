@@ -165,7 +165,7 @@
     var w=WEEKS[state.wk]; if(!w) return;
     var validDays=w.dayOrder.filter(function(d){ return state.tourney==='all' || (w.days[d]||[]).some(function(g){return g.tourneyKey===state.tourney;}); });
     if(state.day && validDays.indexOf(state.day)<0) state.day=null;
-    if(!state.day && validDays.length) state.day=validDays[0];
+    if(!state.day && validDays.length){ var tdy=D27scores.todayISO(); state.day=validDays.filter(function(d){return d>=tdy;})[0]||validDays[validDays.length-1]; }
     document.getElementById('svDays').innerHTML=validDays.map(function(d){
       var dd=dt(d); var lbl=MON[dd.getMonth()]+' '+dd.getDate();
       return '<button class="sv-pill'+(d===state.day?' active':'')+'" data-day="'+d+'">'+lbl+'</button>';

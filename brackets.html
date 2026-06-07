@@ -174,7 +174,7 @@
     <span><span class="chip l"></span> Losers bracket</span>
     <span><span class="chip f"></span> Championship</span>
     <div class="bk-tools">
-      <a class="view-link" id="viewSchedLink" href="live-schedule.html">View as schedule →</a>
+      <a class="view-link" id="viewSchedLink" href="tournament-schedule.html">View as schedule →</a>
       <div class="bk-zoomctl">
         <button type="button" id="zoomOut" aria-label="Zoom out">−</button>
         <span id="zoomLabel">100%</span>
@@ -625,7 +625,7 @@ function selectTourney(key, scroll) {
   location.hash = t.key;
   document.querySelectorAll('.bk-chip').forEach(c => c.classList.toggle('active', c.dataset.key === t.key));
   const vl = document.getElementById('viewSchedLink');
-  if (vl) vl.href = 'live-schedule.html#' + encodeURIComponent(t.key);
+  if (vl) vl.href = 'tournament-schedule.html#' + encodeURIComponent(t.key);
   if (scroll) scrollToBracket();
 }
 function initSelect() {
