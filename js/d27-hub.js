@@ -17,24 +17,34 @@
     return `${date} · ${time}`;
   }
 
+  // Local "today" as YYYY-MM-DD (the hub pages don't load d27-scores.js).
+  function todayISO() {
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
   function cardHTML(t, accent) {
     const B = global.D27bracket;
     const total = (t.games || []).length;
     let played = 0, champion = null;
     try { played = B.playedCount(t); champion = B.championOutcome(t, B.classify(t)).champion; } catch (e) {}
 
+    // earliest dated game = the start date; only treat the tournament as live once that date arrives
+    // (so a pre-start bye or forfeit doesn't make an unstarted tournament look "in progress").
+    const startISO = (t.games || []).map(g => g.date).filter(Boolean).sort()[0];
+    const started = !!startISO && todayISO() >= startISO;
+
     let badge;
-    if (champion)      badge = `<span class="tstatus complete">Champion</span>`;
-    else if (played)   badge = `<span class="tstatus live">In Progress</span>`;
-    else if (total)    badge = `<span class="tstatus upcoming">Scheduled</span>`;
-    else               badge = `<span class="tstatus upcoming">TBD</span>`;
+    if (champion)               badge = `<span class="tstatus complete">Champion</span>`;
+    else if (played && started) badge = `<span class="tstatus live">In Progress</span>`;
+    else if (total)             badge = `<span class="tstatus upcoming">Scheduled</span>`;
+    else                        badge = `<span class="tstatus upcoming">TBD</span>`;
 
     const rows = [];
     rows.push(`<div class="tcard-row"><span class="k">Games</span><span class="v"><strong>${total}</strong></span></div>`);
-    if (total) rows.push(`<div class="tcard-row"><span class="k">Played</span><span class="v">${played} of ${total}</span></div>`);
+    if (total) rows.push(`<div class="tcard-row"><span class="k">Played</span><span class="v">${started ? played : 0} of ${total}</span></div>`);
     if (champion) rows.push(`<div class="tcard-row"><span class="k">🏆 Champion</span><span class="v">${esc(champion)}</span></div>`);
-    const startISO = (t.games || []).map(g => g.date).filter(Boolean).sort()[0];
-    if (startISO) rows.push(`<div class="tcard-row"><span class="k">Starts</span><span class="v">${esc(fmtUpdated(startISO))}</span></div>`);
+    if (startISO) rows.push(`<div class="tcard-row"><span class="k">${started ? 'Started' : 'Starts'}</span><span class="v">${esc(fmtUpdated(startISO))}</span></div>`);
     // "Updated" intentionally lives inside the bracket view (green live-pill in the title band), not on the card.
 
     return `<div class="tcard">
