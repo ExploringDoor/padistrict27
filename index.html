@@ -112,6 +112,33 @@
   .hc-empty { color: var(--muted); font-size: var(--text-sm); padding: var(--space-3) 0; }
   @media (max-width: 760px) { .hc-grid { grid-template-columns: 1fr; } }
 
+  /* home game-card sections (match the schedule/scores design) */
+  .hp-sec { margin-top: var(--space-7); }
+  .hp-sec-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-4); flex-wrap: wrap; }
+  .hp-sec h2 { font-family: var(--font-display); font-size: clamp(24px, 3.4vw, 34px); color: var(--d27-navy); margin: 0; letter-spacing: .01em; }
+  .hp-more { font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; font-size: var(--text-sm); color: var(--d27-navy); text-decoration: none; white-space: nowrap; }
+  .hp-more:hover { text-decoration: underline; }
+  .sv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 18px; }
+  .sv-card { background: #fff; border: 1px solid #e7eaef; border-radius: 12px; overflow: hidden; cursor: pointer; transition: box-shadow .15s ease, transform .15s ease; display: flex; flex-direction: column; }
+  .sv-card:hover { box-shadow: 0 14px 30px rgba(0,23,60,.13); transform: translateY(-3px); }
+  .sv-card-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #eef1f5; }
+  .sv-meta { font-family: var(--font-display); font-size: 11.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #9aa3af; line-height: 1.4; }
+  .sv-card-head .sv-meta { flex: 1 1 auto; min-width: 0; }
+  .sv-summary { flex: 0 1 auto; min-width: 0; text-align: right; font-family: var(--font-display); font-size: 12.5px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; color: var(--d27-navy); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sv-summary.ff { color: #92400E; }
+  .sv-rows { padding: 6px 16px; }
+  .sv-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; }
+  .sv-row .d27-logo, .sv-row .d27-logo-fb { flex: none; }
+  .sv-team { flex: 1; min-width: 0; font-family: var(--font-display); font-size: 17px; font-weight: 600; color: var(--d27-ink, #14213D); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sv-team.tbd { color: #9aa3af; font-weight: 500; }
+  .sv-team.lose { color: #9aa3af; }
+  .sv-score { font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--d27-ink, #14213D); line-height: 1; }
+  .sv-score.lose { color: #b5bcc6; }
+  .sv-card-foot { padding: 11px 16px; border-top: 1px solid #eef1f5; margin-top: auto; }
+  .sv-cta { font-family: var(--font-display); font-size: 13px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; color: var(--d27-navy); }
+  .sv-cta.recap { color: var(--gold-deep, #9a7b16); }
+  .hp-empty { padding: 30px; text-align: center; color: var(--muted); font-family: var(--font-display); border: 1px dashed var(--line); border-radius: 12px; }
+
   @media (max-width: 720px) {
     .features { grid-template-columns: 1fr; margin-top: var(--space-5); }
     .quick { grid-template-columns: 1fr 1fr; }
@@ -171,17 +198,15 @@
   </div>
 </section>
 
-<!-- Recent scores + upcoming schedule -->
+<!-- Upcoming schedule + recent scores (card style) -->
 <section class="container home-cards">
-  <div class="hc-grid">
-    <div class="hc-card">
-      <div class="hc-head"><h3>Recent Scores</h3><a href="scores.html">All scores →</a></div>
-      <div id="hcScores" class="hc-list"><div class="hc-empty">Loading…</div></div>
-    </div>
-    <div class="hc-card">
-      <div class="hc-head"><h3>Upcoming</h3><a href="scores.html">Full schedule →</a></div>
-      <div id="hcUpcoming" class="hc-list"><div class="hc-empty">Loading…</div></div>
-    </div>
+  <div class="hp-sec">
+    <div class="hp-sec-head"><h2>Upcoming Schedule</h2><a class="hp-more" href="live-schedule.html">Full Schedule →</a></div>
+    <div id="hpUpcoming"><div class="hp-empty">Loading…</div></div>
+  </div>
+  <div class="hp-sec">
+    <div class="hp-sec-head"><h2>Recent Scores</h2><a class="hp-more" href="scores.html">All Scores →</a></div>
+    <div id="hpScores"><div class="hp-empty">Loading…</div></div>
   </div>
 </section>
 
@@ -284,35 +309,54 @@
     });
   })();
 
-  // Recent scores + upcoming schedule cards
+  // Upcoming + recent game cards (match the schedule/scores card style)
+  var HP_MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var HP_DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], HP_TMAP={};
   function clean(v){ if(v==null) return ''; var s=String(v).trim(); return /^(n\/?a|tbd|tba|none|-+)$/i.test(s) ? '' : s; }
-  function shortDate(d){ d=clean(d); if(!d) return 'TBD'; var dt=new Date(d+'T12:00:00'); if(isNaN(dt)) return 'TBD'; return dt.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
   function fmtT(t){ t=clean(t); if(!t) return ''; var p=t.split(':'); var h=+p[0],m=p[1]||'00'; if(isNaN(h)) return ''; var ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+m+' '+ap; }
-  function hcRow(g, mode){
-    var A=D27scores.side(g,'away'), H=D27scores.side(g,'home'), mt;
-    var when = mode==='result' ? shortDate(g.date) : (shortDate(g.date)+' · '+fmtT(g.time));
+  function hpDate(s){ s=clean(s); if(!s) return 'TBD'; var d=new Date(s+'T12:00:00'); if(isNaN(d)) return 'TBD'; return (HP_DOW[d.getDay()]+' '+HP_MON[d.getMonth()]+' '+d.getDate()).toUpperCase(); }
+  function hpForfeit(g){ if(!D27scores.played(g)) return false; if(g.forfeit!=null) return !!g.forfeit; var bye=/^\s*bye\s*$/i.test(String(g.away))||/^\s*bye\s*$/i.test(String(g.home)); return !bye && !clean(g.date); }
+  function hpReal(g){ if(!D27scores.played(g)||!clean(g.date)) return false; var A=D27scores.side(g,'away'),H=D27scores.side(g,'home'); return !A.tbd&&!H.tbd&&!/^\s*bye\s*$/i.test(A.name)&&!/^\s*bye\s*$/i.test(H.name); }
+  function hpResolved(g){ var A=D27scores.side(g,'away'),H=D27scores.side(g,'home'); return !A.tbd&&!H.tbd&&!/^\s*bye\s*$/i.test(A.name)&&!/^\s*bye\s*$/i.test(H.name); }
+  function hpRow(disp,score,win,played){
+    var logo=(!disp.tbd&&window.D27logos)?D27logos.html(disp.name,28):'';
+    var sc=played?'<span class="sv-score'+(win?'':' lose')+'">'+score+'</span>':'';
+    return '<div class="sv-row">'+logo+'<span class="sv-team'+(disp.tbd?' tbd':'')+(played&&!win?' lose':'')+'">'+esc(disp.name)+'</span>'+sc+'</div>';
+  }
+  function hpCard(g, mode){
+    var A=D27scores.side(g,'away'), H=D27scores.side(g,'home');
+    var tag='<span class="sv-meta">'+esc(HP_TMAP[g.tourneyKey]||String(g.tourneyKey).replace(/_/g,' '))+'</span>';
     if(mode==='result'){
-      var aWin=g.as>g.hs, hWin=g.hs>g.as;
-      mt='<span class="hc-tm'+(aWin?' win':'')+'">'+esc(A.name)+'</span> <span class="hc-sc">'+g.as+'</span>–<span class="hc-sc">'+g.hs+'</span> <span class="hc-tm'+(hWin?' win':'')+'">'+esc(H.name)+'</span>';
-    } else {
-      mt='<span class="hc-tm">'+esc(A.name)+'</span> <span style="color:var(--muted);font-size:12px">vs</span> <span class="hc-tm">'+esc(H.name)+'</span>';
+      var aWin=g.as>g.hs, hWin=g.hs>g.as, hi=Math.max(g.as,g.hs), lo=Math.min(g.as,g.hs), w=aWin?A:H;
+      var ab=window.D27logos?D27logos.abbr(w.name):w.name;
+      var summary=hpForfeit(g)?'<span class="sv-summary ff">'+esc(ab)+' wins (FF)</span>':'<span class="sv-summary">'+esc(ab)+((hi-lo)>=10?' wins big':'')+', '+hi+'–'+lo+'</span>';
+      return '<div class="sv-card" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'">'+
+        '<div class="sv-card-head"><span class="sv-meta">FINAL · '+hpDate(g.date)+'</span>'+summary+'</div>'+
+        '<div class="sv-rows">'+hpRow(A,g.as,aWin,true)+hpRow(H,g.hs,hWin,true)+'</div>'+
+        '<div class="sv-card-foot">'+tag+' &nbsp;·&nbsp; <span class="sv-cta recap">Recap ›</span></div></div>';
     }
-    return '<div class="hc-row" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'"><span class="hc-when">'+when+'</span><span class="hc-mt">'+mt+'</span><span class="hc-tag">'+esc(String(g.tourneyKey).replace(/_/g,' '))+'</span><span class="gm-cue '+(mode==='result'?'recap':'preview')+'">'+(mode==='result'?'Recap':'Preview')+' ›</span></div>';
+    var head=hpDate(g.date)+' · '+fmtT(g.time)+(clean(g.field)?' · '+esc(clean(g.field)).toUpperCase():'');
+    return '<div class="sv-card" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'">'+
+      '<div class="sv-card-head"><span class="sv-meta">'+head+'</span></div>'+
+      '<div class="sv-rows">'+hpRow(A,g.as,false,false)+hpRow(H,g.hs,false,false)+'</div>'+
+      '<div class="sv-card-foot">'+tag+' &nbsp;·&nbsp; <span class="sv-cta">Preview ›</span></div></div>';
   }
   (async function(){
     try {
       var data = await D27loadSchedules();
       if (window.D27gameModal) D27gameModal.setData(data.tournaments);
-      var recent = D27scores.recentResults(data, 5), up = D27scores.upcoming(data, 5);
-      document.getElementById('hcScores').innerHTML = recent.length ? recent.map(function(g){return hcRow(g,'result');}).join('') : '<div class="hc-empty">No results yet — the season hasn\'t started.</div>';
-      document.getElementById('hcUpcoming').innerHTML = up.length ? up.map(function(g){return hcRow(g,'upcoming');}).join('') : '<div class="hc-empty">Schedule coming soon.</div>';
+      (data.tournaments||[]).forEach(function(t){ HP_TMAP[t.key]=t.name; });
+      var recent = D27scores.recentResults(data, 30).filter(hpReal).slice(0,4);
+      var up = D27scores.upcoming(data, 30).filter(hpResolved).slice(0,4);
+      document.getElementById('hpUpcoming').innerHTML = up.length ? '<div class="sv-grid">'+up.map(function(g){return hpCard(g,'upcoming');}).join('')+'</div>' : '<div class="hp-empty">Schedule coming soon.</div>';
+      document.getElementById('hpScores').innerHTML = recent.length ? '<div class="sv-grid">'+recent.map(function(g){return hpCard(g,'result');}).join('')+'</div>' : '<div class="hp-empty">No results yet — the season hasn\'t started.</div>';
       document.querySelector('.home-cards').addEventListener('click', function(e){
-        var row = e.target.closest('.hc-row[data-g]');
-        if (row && window.D27gameModal) D27gameModal.openByKey(row.dataset.tkey, row.dataset.g);
+        var card = e.target.closest('.sv-card[data-g]');
+        if (card && window.D27gameModal) D27gameModal.openByKey(card.dataset.tkey, card.dataset.g);
       });
     } catch(e){
-      document.getElementById('hcScores').innerHTML='<div class="hc-empty">Could not load scores.</div>';
-      document.getElementById('hcUpcoming').innerHTML='<div class="hc-empty">Could not load schedule.</div>';
+      document.getElementById('hpUpcoming').innerHTML='<div class="hp-empty">Could not load schedule.</div>';
+      document.getElementById('hpScores').innerHTML='<div class="hp-empty">Could not load scores.</div>';
     }
   })();
 </script>
