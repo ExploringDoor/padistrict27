@@ -69,6 +69,7 @@
         '<p style="color: rgba(255,255,255,.55); font-size: var(--text-xs); margin-top: 12px;">Jeff Bennett — District Administrator<br><a href="mailto:' + CONTACT + '">' + CONTACT + '</a></p></div>' +
       '<div><h5>Tournaments</h5><ul>' +
         '<li><a href="baseball.html">Baseball</a></li><li><a href="softball.html">Softball</a></li>' +
+        '<li><a href="special-games.html">Special Games</a></li>' +
         '<li><a href="live-schedule.html">Schedules</a></li><li><a href="brackets.html">Brackets</a></li>' +
         '<li><a href="champions.html">Champions</a></li></ul></div>' +
       '<div><h5>District</h5><ul>' +
@@ -81,7 +82,7 @@
         '<li><a href="schedule-admin.html">Sign In</a></li></ul></div>' +
     '</div><div class="footer-bottom">' +
       '<div>© 2026 PA District 27 Little League. All rights reserved.</div>' +
-      '<div><span class="credit">Built by Mainline Web Design · Adam Miller</span></div>' +
+      '<div><span class="credit">Built by <a href="https://mainline-webdesign.com/" target="_blank" rel="noopener">Mainline Web Design</a></span></div>' +
     '</div></div></footer>';
 
   function inject() {
