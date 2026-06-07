@@ -39,7 +39,7 @@
      "as": 0,
      "home": "Lower Merion",
      "hs": 0,
-     "field": "Lower Merion"
+     "field": "LM-Ashburn Field"
     },
     {
      "g": 4,
@@ -253,7 +253,7 @@
      "n": 6,
      "name": "Lower Merion",
      "abbr": "LM",
-     "park": "Lower Merion"
+     "park": "LM-Ashburn Field"
     },
     {
      "n": 7,
@@ -321,7 +321,7 @@
      "as": 0,
      "home": "Lower Merion",
      "hs": 0,
-     "field": "Lower Merion"
+     "field": "LM-Ashburn Field"
     },
     {
      "g": 4,
@@ -420,7 +420,7 @@
      "as": 0,
      "home": "LG-9",
      "hs": 0,
-     "field": "Lower Merion"
+     "field": "LM-Ashburn Field"
     },
     {
      "g": 13,
@@ -513,7 +513,7 @@
      "n": 6,
      "name": "Lower Merion",
      "abbr": "LM",
-     "park": "Lower Merion"
+     "park": "LM-Ashburn Field"
     },
     {
      "n": 7,
@@ -619,7 +619,7 @@
      "as": 0,
      "home": "LG-3",
      "hs": 0,
-     "field": "Lower Merion"
+     "field": "LM-Ashburn Field"
     },
     {
      "g": 8,
@@ -630,7 +630,7 @@
      "as": 0,
      "home": "LG-4",
      "hs": 0,
-     "field": "Lower Merion"
+     "field": "LM-Ashburn Field"
     },
     {
      "g": 9,
@@ -789,7 +789,7 @@
      "n": 6,
      "name": "Lower Merion",
      "abbr": "LM",
-     "park": "Lower Merion"
+     "park": "LM-Ashburn Field"
     },
     {
      "n": 7,
@@ -1881,7 +1881,7 @@
      "as": 0,
      "home": "WG-14",
      "hs": 0,
-     "field": "Lower Merion"
+     "field": "LM-Ashburn Field"
     },
     {
      "g": 22,
@@ -1892,7 +1892,7 @@
      "as": 0,
      "home": "WG-16",
      "hs": 0,
-     "field": "Lower Merion"
+     "field": "LM-Ashburn Field"
     },
     {
      "g": 23,
@@ -2047,7 +2047,7 @@
      "n": 9,
      "name": "Lower Merion",
      "abbr": "LM",
-     "park": "Lower Merion"
+     "park": "LM-Ashburn Field"
     },
     {
      "n": 10,
