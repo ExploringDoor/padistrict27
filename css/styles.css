@@ -170,6 +170,14 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
   padding-block: var(--space-6);
 }
 
+/* Hero photo readability on phones: the title/description go full-width on mobile,
+   so add a uniform navy wash over the hero image (desktop keeps its left-to-right gradient). */
+@media (max-width: 760px) {
+  .hub-hero { position: relative; }
+  .hub-hero > * { position: relative; z-index: 1; }
+  .hub-hero::after { content: ''; position: absolute; inset: 0; z-index: 0; background: rgba(4,16,42,.5); pointer-events: none; }
+}
+
 
 /* ── Top nav ────────────────────────────────────────────────────────── */
 .nav {
