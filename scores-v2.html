@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#002D72" />
 <meta name="robots" content="noindex" />
-<title>Schedule (preview) · PA District 27</title>
+<title>Scores (preview) · PA District 27</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -19,13 +19,9 @@
 <style>
   .sv-wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 80px; }
   .sv-draft { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; border-radius: 8px; padding: 8px 14px; font-size: 13px; font-weight: 600; margin-bottom: 18px; }
-
-  /* SCORES | SCHEDULE tabs */
   .sv-tabs { display: flex; gap: 26px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
   .sv-tab { font-family: var(--font-display); font-size: 26px; font-weight: 700; letter-spacing: .01em; text-transform: uppercase; color: #9aa3af; text-decoration: none; padding: 4px 2px 14px; border-bottom: 3px solid transparent; margin-bottom: -1px; }
   .sv-tab.active { color: var(--d27-ink, #14213D); border-bottom-color: var(--d27-ink, #14213D); }
-
-  /* week selector */
   .sv-weeks-row { display: flex; align-items: stretch; gap: 0; padding: 20px 0 0; }
   .sv-wk-arrow { flex: none; width: 34px; border: none; background: none; cursor: pointer; font-size: 20px; color: var(--d27-navy); display: flex; align-items: center; justify-content: center; }
   .sv-wk-arrow:disabled { opacity: .25; cursor: default; }
@@ -36,8 +32,6 @@
   .sv-wk:hover .d { color: var(--d27-navy); }
   .sv-wk.active { border-bottom-color: var(--d27-navy); }
   .sv-wk.active .d { color: var(--d27-navy); }
-
-  /* panel under the weeks */
   .sv-panel { background: #f4f6f9; border-radius: 14px; padding: 22px 22px 26px; margin-top: 8px; }
   .sv-panel-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
   .sv-panel-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--d27-ink, #14213D); }
@@ -47,30 +41,23 @@
   .sv-pill:hover { border-color: var(--d27-navy); }
   .sv-pill.active { background: var(--d27-navy); color: #fff; border-color: var(--d27-navy); }
   .sv-tourney-sel { margin-left: auto; padding: 9px 12px; border: 1.5px solid #d6dbe2; border-radius: 8px; font: inherit; font-size: 14px; background: #fff; color: var(--d27-navy); }
-
-  /* card grid */
   .sv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px; }
   .sv-card { background: #fff; border: 1px solid #e7eaef; border-radius: 12px; overflow: hidden; cursor: pointer; transition: box-shadow .15s ease, transform .15s ease; display: flex; flex-direction: column; }
   .sv-card:hover { box-shadow: 0 14px 30px rgba(0,23,60,.13); transform: translateY(-3px); }
   .sv-card-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #eef1f5; }
   .sv-meta { font-family: var(--font-display); font-size: 11.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #9aa3af; line-height: 1.4; }
-  .sv-card-head .sv-meta { flex: 1; min-width: 0; }
-  .sv-status { flex: none; font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #9aa3af; white-space: nowrap; }
-  .sv-status.big { color: var(--d27-navy); }
-  .sv-status.ff { color: #92400E; }
-  .sv-summary { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; color: var(--d27-navy); white-space: nowrap; }
+  .sv-card-head .sv-meta { flex: none; }
+  .sv-summary { flex: 1; text-align: right; font-family: var(--font-display); font-size: 12.5px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; color: var(--d27-navy); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sv-summary.ff { color: #92400E; }
   .sv-rows { padding: 6px 16px; }
   .sv-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; }
   .sv-row .d27-logo, .sv-row .d27-logo-fb { flex: none; }
   .sv-team { flex: 1; min-width: 0; font-family: var(--font-display); font-size: 17px; font-weight: 600; color: var(--d27-ink, #14213D); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .sv-team.tbd { color: #9aa3af; font-weight: 500; }
   .sv-team.lose { color: #9aa3af; }
   .sv-score { font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--d27-ink, #14213D); line-height: 1; }
   .sv-score.lose { color: #b5bcc6; }
   .sv-card-foot { padding: 11px 16px; border-top: 1px solid #eef1f5; margin-top: auto; }
-  .sv-cta { font-family: var(--font-display); font-size: 13px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; color: var(--d27-navy); }
-  .sv-cta.recap { color: var(--gold-deep, #9a7b16); }
+  .sv-cta { font-family: var(--font-display); font-size: 13px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; color: var(--gold-deep, #9a7b16); }
   .sv-empty { padding: 50px 20px; text-align: center; color: #9aa3af; font-family: var(--font-display); }
   .sv-loading { padding: 60px 20px; text-align: center; color: #9aa3af; font-family: var(--font-display); }
   @media (max-width: 560px){ .sv-tab{font-size:21px;} .sv-grid{grid-template-columns:1fr;} .sv-tourney-sel{margin-left:0;width:100%;} }
@@ -80,11 +67,11 @@
 <div id="d27-nav"></div>
 
 <div class="sv-wrap">
-  <div class="sv-draft">🔒 Draft preview — this is the redesigned schedule. Not linked anywhere public until you approve it.</div>
+  <div class="sv-draft">🔒 Draft preview — redesigned scores page. Not linked anywhere public until you approve it.</div>
 
   <div class="sv-tabs">
-    <a class="sv-tab" href="scores-v2.html">Scores</a>
-    <a class="sv-tab active" href="schedule-v2.html">Schedule</a>
+    <a class="sv-tab active" href="scores-v2.html">Scores</a>
+    <a class="sv-tab" href="schedule-v2.html">Schedule</a>
   </div>
 
   <div class="sv-weeks-row">
@@ -99,7 +86,7 @@
       <div class="sv-day-pills" id="svDays"></div>
       <select class="sv-tourney-sel" id="svTourney"><option value="all">All tournaments</option></select>
     </div>
-    <div id="svGrid"><div class="sv-loading">Loading schedule…</div></div>
+    <div id="svGrid"><div class="sv-loading">Loading scores…</div></div>
   </div>
 </div>
 
@@ -107,116 +94,105 @@
 
 <script>
 (function(){
-  var esc = function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); };
-  var clean = function(v){ if(v==null) return ''; var s=String(v).trim(); return /^(n\/?a|tbd|tba|none|-+)$/i.test(s)?'':s; };
+  var esc=function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); };
+  var clean=function(v){ if(v==null) return ''; var s=String(v).trim(); return /^(n\/?a|tbd|tba|none|-+)$/i.test(s)?'':s; };
   var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   var FMON=['January','February','March','April','May','June','July','August','September','October','November','December'];
   var FDOW=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   function dt(s){ s=clean(s); return s ? new Date(s+'T12:00:00') : null; }
-  function fmtTime(t){ t=clean(t); if(!t) return 'TBD'; var p=t.split(':'); var h=+p[0], m=p[1]||'00'; if(isNaN(h)) return 'TBD'; var ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+m+' '+ap; }
   function weekStart(s){ var d=dt(s); if(!d) return null; var day=(d.getDay()+6)%7; d.setDate(d.getDate()-day); return d.toISOString().slice(0,10); }
   function isForfeit(g){ if(!D27scores.played(g)) return false; if(g.forfeit!=null) return !!g.forfeit; var bye=/^\s*bye\s*$/i.test(String(g.away))||/^\s*bye\s*$/i.test(String(g.home)); return !bye && !clean(g.date); }
+  function ab(name){ return window.D27logos ? D27logos.abbr(name) : name; }
+  // a real result = played, dated, BOTH teams resolved (not a bye / unresolved bracket slot)
+  function realResult(g){
+    if(!D27scores.played(g) || !clean(g.date)) return false;
+    var A=D27scores.side(g,'away'), H=D27scores.side(g,'home');
+    if(A.tbd||H.tbd) return false;
+    if(/^\s*bye\s*$/i.test(A.name)||/^\s*bye\s*$/i.test(H.name)) return false;
+    return true;
+  }
 
   var DATA=null, TMAP={}, WEEKS=[], state={wk:0, day:null, tourney:'all'};
 
   function build(){
-    var games=D27scores.allGames(DATA).filter(function(g){ return clean(g.date); });   // dated games only
-    // group by week-start
+    var games=D27scores.allGames(DATA).filter(realResult);   // real results only
     var byWeek={};
     games.forEach(function(g){ var w=weekStart(g.date); (byWeek[w]=byWeek[w]||[]).push(g); });
     WEEKS=Object.keys(byWeek).sort().map(function(w,i){
-      var gs=byWeek[w].sort(function(a,b){ return (a.date+ (a.time||'')).localeCompare(b.date+(b.time||'')); });
-      var dates=gs.map(function(g){return g.date;});
+      var gs=byWeek[w].sort(function(a,b){ return (b.date+(b.time||'')).localeCompare(a.date+(a.time||'')); });  // newest first
+      var dates=gs.map(function(g){return g.date;}).sort();
       var lo=dt(dates[0]), hi=dt(dates[dates.length-1]);
-      var range = (MON[lo.getMonth()]+' '+lo.getDate()) + (dates[0]!==dates[dates.length-1] ? '–'+(hi.getMonth()!==lo.getMonth()?MON[hi.getMonth()]+' ':'')+hi.getDate() : '');
+      var range=(MON[lo.getMonth()]+' '+lo.getDate())+(dates[0]!==dates[dates.length-1] ? '–'+(hi.getMonth()!==lo.getMonth()?MON[hi.getMonth()]+' ':'')+hi.getDate() : '');
       var days={}, dorder=[];
       gs.forEach(function(g){ if(!days[g.date]){days[g.date]=[];dorder.push(g.date);} days[g.date].push(g); });
+      dorder.sort(function(a,b){ return b.localeCompare(a); });   // newest day first
       return { start:w, idx:i, range:range, games:gs, days:days, dayOrder:dorder };
     });
   }
 
-  function pickDefaultWeek(){
-    var today=D27scores.todayISO();
-    for(var i=0;i<WEEKS.length;i++){ if(today>=WEEKS[i].start && (i===WEEKS.length-1 || today<WEEKS[i+1].start)) return i; }
-    // else first upcoming, else last
-    for(var j=0;j<WEEKS.length;j++){ if(WEEKS[j].start>=today) return j; }
-    return WEEKS.length?WEEKS.length-1:0;
-  }
-
   function fillTourneys(){
     var sel=document.getElementById('svTourney');
-    var keys={}; D27scores.allGames(DATA).forEach(function(g){ keys[g.tourneyKey]=1; });
+    var keys={}; D27scores.allGames(DATA).forEach(function(g){ if(realResult(g)) keys[g.tourneyKey]=1; });
     var arr=Object.keys(keys).sort(function(a,b){ return (TMAP[a]||a).localeCompare(TMAP[b]||b); });
     sel.innerHTML='<option value="all">All tournaments</option>'+arr.map(function(k){ return '<option value="'+esc(k)+'">'+esc(TMAP[k]||k)+'</option>'; }).join('');
   }
 
   function renderWeeks(){
     var el=document.getElementById('svWeeks');
-    el.innerHTML=WEEKS.map(function(w){
-      return '<button class="sv-wk'+(w.idx===state.wk?' active':'')+'" data-wk="'+w.idx+'"><span class="d">'+esc(w.range)+'</span></button>';
-    }).join('');
+    el.innerHTML=WEEKS.map(function(w){ return '<button class="sv-wk'+(w.idx===state.wk?' active':'')+'" data-wk="'+w.idx+'"><span class="d">'+esc(w.range)+'</span></button>'; }).join('');
     var active=el.querySelector('.sv-wk.active'); if(active) active.scrollIntoView({block:'nearest',inline:'center'});
   }
 
   function curGames(){
     var w=WEEKS[state.wk]; if(!w) return [];
-    var gs = state.day ? (w.days[state.day]||[]) : w.games;
+    var gs= state.day ? (w.days[state.day]||[]) : w.games;
     if(state.tourney!=='all') gs=gs.filter(function(g){ return g.tourneyKey===state.tourney; });
     return gs;
   }
 
   function renderPanel(){
     var w=WEEKS[state.wk]; if(!w) return;
-    // default day = first day with games (respecting tournament filter)
     var validDays=w.dayOrder.filter(function(d){ return state.tourney==='all' || (w.days[d]||[]).some(function(g){return g.tourneyKey===state.tourney;}); });
     if(state.day && validDays.indexOf(state.day)<0) state.day=null;
-    if(!state.day && validDays.length) state.day=validDays[0];
+    if(!state.day && validDays.length) state.day=validDays[0];   // dayOrder is newest-first
     document.getElementById('svDays').innerHTML=validDays.map(function(d){
-      var dd=dt(d); var lbl=MON[dd.getMonth()]+' '+dd.getDate();
-      return '<button class="sv-pill'+(d===state.day?' active':'')+'" data-day="'+d+'">'+lbl+'</button>';
+      var dd=dt(d); return '<button class="sv-pill'+(d===state.day?' active':'')+'" data-day="'+d+'">'+MON[dd.getMonth()]+' '+dd.getDate()+'</button>';
     }).join('');
     var gs=curGames();
     var sd=dt(state.day);
-    var dayLbl=sd ? (FDOW[sd.getDay()]+', '+FMON[sd.getMonth()]+' '+sd.getDate()) : (WEEKS[state.wk]?WEEKS[state.wk].range:'');
-    document.getElementById('svTitle').innerHTML=esc(dayLbl)+' <span class="games">'+gs.length+' game'+(gs.length===1?'':'s')+'</span>';
+    var dayLbl=sd ? (FDOW[sd.getDay()]+', '+FMON[sd.getMonth()]+' '+sd.getDate()) : w.range;
+    document.getElementById('svTitle').innerHTML=esc(dayLbl)+' <span class="games">'+gs.length+' result'+(gs.length===1?'':'s')+'</span>';
     renderGrid(gs);
   }
 
   function summary(g){
-    if(isForfeit(g)) return '<span class="sv-summary ff">Forfeit</span>';
-    if(!D27scores.played(g)) return '';
     var A=D27scores.side(g,'away'), H=D27scores.side(g,'home');
     var aWin=g.as>g.hs; var w=aWin?A:H; var hi=Math.max(g.as,g.hs), lo=Math.min(g.as,g.hs);
-    var big=(hi-lo)>=10 ? ' WINS BIG' : '';
-    return '<span class="sv-summary">'+esc((w.name||'').toUpperCase())+big+', '+hi+'–'+lo+'</span>';
+    if(isForfeit(g)) return '<span class="sv-summary ff">'+esc(ab(w.name))+' wins (forfeit)</span>';
+    var big=(hi-lo)>=10?' wins big':'';
+    return '<span class="sv-summary">'+esc(ab(w.name))+big+', '+hi+'–'+lo+'</span>';
   }
-  function teamRow(disp, score, win, played){
-    var logo = (!disp.tbd && window.D27logos) ? D27logos.html(disp.name, 30) : '';
-    var sc = played ? '<span class="sv-score'+(win?'':' lose')+'">'+score+'</span>' : '';
-    return '<div class="sv-row">'+logo+'<span class="sv-team'+(disp.tbd?' tbd':'')+(played&&!win?' lose':'')+'">'+esc(disp.name)+'</span>'+sc+'</div>';
+  function teamRow(disp, score, win){
+    var logo=window.D27logos?D27logos.html(disp.name,30):'';
+    return '<div class="sv-row">'+logo+'<span class="sv-team'+(win?'':' lose')+'">'+esc(disp.name)+'</span><span class="sv-score'+(win?'':' lose')+'">'+score+'</span></div>';
   }
   function card(g){
-    var d=dt(g.date), played=D27scores.played(g), ff=isForfeit(g);
-    var head=(DOW[d.getDay()]+' '+MON[d.getMonth()]+' '+d.getDate()).toUpperCase()+' · '+fmtTime(g.time)+(clean(g.field)?' · '+esc(clean(g.field)).toUpperCase():'');
+    var d=dt(g.date), ff=isForfeit(g);
     var A=D27scores.side(g,'away'), H=D27scores.side(g,'home');
-    var aWin=played&&g.as>g.hs, hWin=played&&g.hs>g.as;
-    var cta = played ? '<span class="sv-cta recap">'+(ff?'Forfeit':'Recap')+' ›</span>' : '<span class="sv-cta">Preview ›</span>';
-    var tag = '<span class="sv-meta">'+esc((TMAP[g.tourneyKey]||g.tourneyKey))+'</span>';
-    var margin = played ? Math.abs(g.as-g.hs) : 0;
-    var status = ff ? '<span class="sv-status ff">Forfeit</span>' : (played ? '<span class="sv-status'+(margin>=10?' big':'')+'">'+(margin>=10?'Wins Big':'Final')+'</span>' : '');
+    var aWin=g.as>g.hs, hWin=g.hs>g.as;
+    var head='Final · '+(DOW[d.getDay()]+' '+MON[d.getMonth()]+' '+d.getDate()).toUpperCase();
     return '<div class="sv-card" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'">'+
-      '<div class="sv-card-head"><span class="sv-meta">'+head+'</span>'+status+'</div>'+
-      '<div class="sv-rows">'+teamRow(A,g.as,aWin,played)+teamRow(H,g.hs,hWin,played)+'</div>'+
-      '<div class="sv-card-foot">'+tag+' &nbsp;·&nbsp; '+cta+'</div></div>';
+      '<div class="sv-card-head"><span class="sv-meta">'+esc(head)+'</span>'+summary(g)+'</div>'+
+      '<div class="sv-rows">'+teamRow(A,g.as,aWin)+teamRow(H,g.hs,hWin)+'</div>'+
+      '<div class="sv-card-foot"><span class="sv-meta">'+esc(TMAP[g.tourneyKey]||g.tourneyKey)+'</span> &nbsp;·&nbsp; <span class="sv-cta">'+(ff?'Forfeit':'Recap')+' ›</span></div></div>';
   }
   function renderGrid(gs){
     var out=document.getElementById('svGrid');
-    if(!gs.length){ out.innerHTML='<div class="sv-empty">No games'+(state.tourney!=='all'?' for this tournament':'')+' this day.</div>'; return; }
+    if(!gs.length){ out.innerHTML='<div class="sv-empty">No results'+(state.tourney!=='all'?' for this tournament':'')+' this day yet.</div>'; return; }
     out.innerHTML='<div class="sv-grid">'+gs.map(card).join('')+'</div>';
   }
 
-  // events
   document.getElementById('svWeeks').addEventListener('click',function(e){ var b=e.target.closest('.sv-wk'); if(!b) return; state.wk=+b.dataset.wk; state.day=null; renderWeeks(); renderPanel(); });
   document.getElementById('svDays').addEventListener('click',function(e){ var b=e.target.closest('.sv-pill'); if(!b) return; state.day=b.dataset.day; renderPanel(); });
   document.getElementById('svTourney').addEventListener('change',function(e){ state.tourney=e.target.value; renderPanel(); });
@@ -228,10 +204,10 @@
     DATA=d; (d.tournaments||[]).forEach(function(t){ TMAP[t.key]=t.name; });
     D27gameModal.setData(d.tournaments);
     build();
-    if(!WEEKS.length){ document.getElementById('svGrid').innerHTML='<div class="sv-empty">No scheduled games yet.</div>'; document.getElementById('svTitle').textContent=''; return; }
-    state.wk=pickDefaultWeek();
+    if(!WEEKS.length){ document.getElementById('svGrid').innerHTML='<div class="sv-empty">No final scores yet — check back once games are played.</div>'; document.getElementById('svTitle').textContent=''; return; }
+    state.wk=WEEKS.length-1;   // most recent results first
     fillTourneys(); renderWeeks(); renderPanel();
-  }).catch(function(e){ document.getElementById('svGrid').innerHTML='<div class="sv-empty">Could not load the schedule.</div>'; });
+  }).catch(function(){ document.getElementById('svGrid').innerHTML='<div class="sv-empty">Could not load scores.</div>'; });
 })();
 </script>
 </body>
