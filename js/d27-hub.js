@@ -35,7 +35,7 @@
     if (champion) rows.push(`<div class="tcard-row"><span class="k">🏆 Champion</span><span class="v">${esc(champion)}</span></div>`);
     const startISO = (t.games || []).map(g => g.date).filter(Boolean).sort()[0];
     if (startISO) rows.push(`<div class="tcard-row"><span class="k">Starts</span><span class="v">${esc(fmtUpdated(startISO))}</span></div>`);
-    if (t.updated) rows.push(`<div class="tcard-row"><span class="k">Updated</span><span class="v">${esc(fmtUpdated(t.updated))}</span></div>`);
+    // "Updated" intentionally lives inside the bracket view (green live-pill in the title band), not on the card.
 
     return `<div class="tcard">
       <div class="tcard-banner ${accent || ''}">
