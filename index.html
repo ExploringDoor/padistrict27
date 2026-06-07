@@ -90,8 +90,9 @@
   .leagues-strip .eyebrow { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); letter-spacing: .16em; text-transform: uppercase; color: var(--d27-red); }
   .leagues-strip h2 { color: var(--d27-navy); margin: 4px 0 0; }
   .lg-chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 880px; margin: 0 auto; }
-  .lg-chips a { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: .04em; font-size: var(--text-sm); font-weight: 500; color: var(--d27-navy); background: var(--surface); border: 1px solid var(--line); padding: 9px 18px; border-radius: 999px; text-decoration: none; transition: all .12s ease; }
-  .lg-chips a:hover { background: var(--d27-navy); color: #fff; border-color: var(--d27-navy); text-decoration: none; }
+  .lg-chips a { display: inline-flex; align-items: center; gap: 8px; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: .04em; font-size: var(--text-sm); font-weight: 500; color: var(--d27-navy); background: var(--surface); border: 1px solid var(--line); padding: 7px 16px 7px 9px; border-radius: 999px; text-decoration: none; transition: all .12s ease; }
+  .lg-chips a:hover { border-color: var(--d27-navy); box-shadow: 0 5px 14px rgba(0,45,114,.16); transform: translateY(-2px); text-decoration: none; }
+  .lg-chips a .d27-logo, .lg-chips a .d27-logo-fb { flex: none; }
 
   /* Home: recent scores + upcoming cards */
   .home-cards { padding: var(--space-6) 0 0; }
@@ -272,6 +273,15 @@
     });
     lb.addEventListener('click', function(e){ if (e.target === lb || e.target.closest('.cs-lb-close')) close(); });
     document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
+  })();
+
+  // Member-league chips: drop each league's logo in front of its name
+  (function(){
+    if (!window.D27logos) return;
+    document.querySelectorAll('.lg-chips a').forEach(function(a){
+      var name = a.textContent.trim();
+      if (name) a.insertAdjacentHTML('afterbegin', D27logos.html(name, 20));
+    });
   })();
 
   // Recent scores + upcoming schedule cards
