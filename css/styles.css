@@ -278,13 +278,13 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
     border-bottom: 3px solid var(--d27-red);
   }
   .nav-links.open a {
+    display: block;
     padding: 15px var(--space-5);
     font-size: 17px;
   }
-  /* on the vertical mobile menu, don't use the bottom-underline (looks like a strikethrough) */
-  .nav-links.open a:hover,
-  .nav-links.open a[aria-current="page"] { border-bottom: none; background: rgba(255,255,255,.07); }
-  .nav-links.open a[aria-current="page"] { box-shadow: inset 4px 0 0 var(--d27-red); color: #fff; }
+  /* on the vertical mobile menu: no underline/strikethrough, no red bar — just a clean highlight on the current page */
+  .nav-links.open a:hover { border-bottom: none; }
+  .nav-links.open a[aria-current="page"] { border-bottom: none; color: #fff; background: rgba(255,255,255,.10); }
 }
 
 /* "More" dropdown menu (injected nav) */
