@@ -120,13 +120,12 @@
     var byWeek={};
     games.forEach(function(g){ var w=weekStart(g.date); (byWeek[w]=byWeek[w]||[]).push(g); });
     WEEKS=Object.keys(byWeek).sort().map(function(w,i){
-      var gs=byWeek[w].sort(function(a,b){ return (b.date+(b.time||'')).localeCompare(a.date+(a.time||'')); });  // newest first
+      var gs=byWeek[w].sort(function(a,b){ return (a.date+(a.time||'')).localeCompare(b.date+(b.time||'')); });  // chronological
       var dates=gs.map(function(g){return g.date;}).sort();
       var lo=dt(dates[0]), hi=dt(dates[dates.length-1]);
       var range=(MON[lo.getMonth()]+' '+lo.getDate())+(dates[0]!==dates[dates.length-1] ? '–'+(hi.getMonth()!==lo.getMonth()?MON[hi.getMonth()]+' ':'')+hi.getDate() : '');
       var days={}, dorder=[];
       gs.forEach(function(g){ if(!days[g.date]){days[g.date]=[];dorder.push(g.date);} days[g.date].push(g); });
-      dorder.sort(function(a,b){ return b.localeCompare(a); });   // newest day first
       return { start:w, idx:i, range:range, games:gs, days:days, dayOrder:dorder };
     });
   }
@@ -155,7 +154,7 @@
     var w=WEEKS[state.wk]; if(!w) return;
     var validDays=w.dayOrder.filter(function(d){ return state.tourney==='all' || (w.days[d]||[]).some(function(g){return g.tourneyKey===state.tourney;}); });
     if(state.day && validDays.indexOf(state.day)<0) state.day=null;
-    if(!state.day && validDays.length) state.day=validDays[0];   // dayOrder is newest-first
+    if(!state.day && validDays.length) state.day=validDays[validDays.length-1];   // chronological; default to most recent day
     document.getElementById('svDays').innerHTML=validDays.map(function(d){
       var dd=dt(d); return '<button class="sv-pill'+(d===state.day?' active':'')+'" data-day="'+d+'">'+MON[dd.getMonth()]+' '+dd.getDate()+'</button>';
     }).join('');
