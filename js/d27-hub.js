@@ -22,6 +22,11 @@
     const d = new Date();
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
+  // A tournament is "live" only once its first dated game arrives (so pre-start byes/forfeits don't count).
+  function tournamentStarted(t) {
+    const s = (t.games || []).map(g => g.date).filter(Boolean).sort()[0];
+    return !!s && todayISO() >= s;
+  }
 
   function cardHTML(t, accent) {
     const B = global.D27bracket;
@@ -32,7 +37,7 @@
     // earliest dated game = the start date; only treat the tournament as live once that date arrives
     // (so a pre-start bye or forfeit doesn't make an unstarted tournament look "in progress").
     const startISO = (t.games || []).map(g => g.date).filter(Boolean).sort()[0];
-    const started = !!startISO && todayISO() >= startISO;
+    const started = tournamentStarted(t);
 
     let badge;
     if (champion)               badge = `<span class="tstatus complete">Champion</span>`;
@@ -88,7 +93,7 @@
       const seen = {}, statsList = [];
       built.forEach(b => b.list.forEach(t => { if (!seen[t.key]) { seen[t.key] = 1; statsList.push(t); } }));
       const totalGames = statsList.reduce((s, t) => s + ((t.games || []).length), 0);
-      const playedGames = statsList.reduce((s, t) => { try { return s + global.D27bracket.playedCount(t); } catch (e) { return s; } }, 0);
+      const playedGames = statsList.reduce((s, t) => { try { return s + (tournamentStarted(t) ? global.D27bracket.playedCount(t) : 0); } catch (e) { return s; } }, 0);
       statsEl.innerHTML =
         `<div class="hub-stat"><span class="n">${statsList.length}</span><span class="l">Tournaments</span></div>` +
         `<div class="hub-stat"><span class="n">${totalGames}</span><span class="l">Games</span></div>` +
