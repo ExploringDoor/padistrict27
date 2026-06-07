@@ -36,7 +36,7 @@ module.exports = async function handler(req, res) {
     "You are a friendly sportswriter for a youth Little League district (kids' baseball and softball). " +
     "Write a SHORT, upbeat recap of ONE tournament game — 2 to 3 sentences, plain text, no headline, no markdown. " +
     "Rules: use the exact final score; name the winning and losing teams; keep it warm, positive and family-friendly; " +
-    "do NOT invent player names, stats, innings, or any detail not provided; " +
+    "do NOT invent ANY specific detail not provided — no player names, no stats, no innings, no day of the week, no date, no weather, nothing beyond the facts given (light generic praise like 'solid all-around game' is fine, invented facts are not); " +
     "if a 'Stake' is given (advancing / championship), work it in naturally; " +
     "if no stake is given, do not speculate about what comes next or about elimination.";
 
