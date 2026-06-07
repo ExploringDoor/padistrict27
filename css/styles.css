@@ -259,10 +259,9 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
   border: 0;
   color: var(--d27-white);
   cursor: pointer;
-  padding: 6px 10px;
-  font-size: 30px;
-  line-height: 1;
+  padding: 8px 8px;
 }
+.nav-toggle svg { width: 32px; height: 32px; }
 
 @media (max-width: 900px) {
   .nav-links { display: none; }
@@ -282,6 +281,10 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
     padding: 15px var(--space-5);
     font-size: 17px;
   }
+  /* on the vertical mobile menu, don't use the bottom-underline (looks like a strikethrough) */
+  .nav-links.open a:hover,
+  .nav-links.open a[aria-current="page"] { border-bottom: none; background: rgba(255,255,255,.07); }
+  .nav-links.open a[aria-current="page"] { box-shadow: inset 4px 0 0 var(--d27-red); color: #fff; }
 }
 
 /* "More" dropdown menu (injected nav) */
