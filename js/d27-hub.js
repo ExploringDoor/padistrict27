@@ -33,6 +33,8 @@
     rows.push(`<div class="tcard-row"><span class="k">Games</span><span class="v"><strong>${total}</strong></span></div>`);
     if (total) rows.push(`<div class="tcard-row"><span class="k">Played</span><span class="v">${played} of ${total}</span></div>`);
     if (champion) rows.push(`<div class="tcard-row"><span class="k">🏆 Champion</span><span class="v">${esc(champion)}</span></div>`);
+    const startISO = (t.games || []).map(g => g.date).filter(Boolean).sort()[0];
+    if (startISO) rows.push(`<div class="tcard-row"><span class="k">Starts</span><span class="v">${esc(fmtUpdated(startISO))}</span></div>`);
     if (t.updated) rows.push(`<div class="tcard-row"><span class="k">Updated</span><span class="v">${esc(fmtUpdated(t.updated))}</span></div>`);
 
     return `<div class="tcard">

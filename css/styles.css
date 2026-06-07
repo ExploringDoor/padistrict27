@@ -167,7 +167,7 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
   padding: var(--space-8) 0;
 }
 .section-tight {
-  padding: var(--space-6) 0;
+  padding-block: var(--space-6);
 }
 
 
@@ -259,7 +259,9 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
   border: 0;
   color: var(--d27-white);
   cursor: pointer;
-  padding: var(--space-2);
+  padding: 6px 10px;
+  font-size: 30px;
+  line-height: 1;
 }
 
 @media (max-width: 900px) {
@@ -277,8 +279,8 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
     border-bottom: 3px solid var(--d27-red);
   }
   .nav-links.open a {
-    padding: var(--space-3) var(--space-5);
-    border-bottom: 1px solid rgba(255,255,255,.08);
+    padding: 15px var(--space-5);
+    font-size: 17px;
   }
 }
 
@@ -316,8 +318,8 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
   .nav-more.open .nav-dropdown { display: block; }
   .nav-dropdown a {
     color: rgba(255,255,255,.85); border-radius: 0;
-    padding: var(--space-3) var(--space-5) var(--space-3) calc(var(--space-5) + 18px);
-    border-bottom: 1px solid rgba(255,255,255,.08);
+    padding: 14px var(--space-5) 14px calc(var(--space-5) + 18px);
+    font-size: 16px;
   }
   .nav-dropdown a:hover,
   .nav-dropdown a[aria-current="page"] { color: var(--d27-white); background: rgba(0,0,0,.25); }

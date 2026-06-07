@@ -56,6 +56,8 @@
   .bk-zoomctl button:hover { background: var(--d27-sub); }
   .bk-zoomctl span { min-width: 48px; text-align: center; font-size: 12px; font-weight: 700; color: var(--d27-navy); border-left: 1px solid var(--line); border-right: 1px solid var(--line); height: 30px; line-height: 30px; }
   .bk-tool-btn { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 0 13px; height: 30px; font-size: 12px; font-weight: 700; color: var(--d27-navy); cursor: pointer; font-family: var(--font-display); letter-spacing: .03em; text-transform: uppercase; }
+  /* On phones the CSS-zoom controls break the scrollable bracket — hide them; pinch-zoom + scroll instead. */
+  @media (max-width: 700px) { .bk-zoomctl, #zoomFit, #printBracket { display: none; } }
   .bk-tool-btn:hover { background: var(--d27-navy); color: #fff; }
   @media print {
     @page { size: landscape; margin: 0.4in; }
@@ -95,7 +97,7 @@
   .ls-teams-table .tn .d27-logo, .ls-teams-table .tn .d27-logo-fb { vertical-align: middle; margin-right: 2px; }
   .ls-teams-table .tac { width: 1px; white-space: nowrap; }
   .ls-teams-table .ta { font-size: 10.5px; color: #475569; font-weight: 700; background: #eef2f7; padding: 2px 7px; border-radius: 4px; letter-spacing: .04em; }
-  .ls-teams-table .tp { color: #5b6675; width: 99%; white-space: nowrap; padding-left: 14px; }
+  .ls-teams-table .tp { color: #5b6675; width: 99%; white-space: normal; overflow-wrap: break-word; padding-left: 14px; }
   .ls-teams-table .tp .pin { opacity: .6; margin-right: 4px; font-size: 11px; }
   .ls-teams-table .muted { color: #cbd5e1; }
 
