@@ -303,13 +303,32 @@
           .ch-item .ch-meta span { color: var(--muted); font-size: 12px; }
           .ch-item .ch-del { position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; border: none; border-radius: 6px; background: rgba(0,0,0,.55); color: #fff; cursor: pointer; font-size: 14px; }
           .ch-item .ch-del:hover { background: var(--d27-red); }
+          .ch-awaiting { margin-bottom: 18px; }
+          .ch-await-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+          .ch-await-head h4 { margin: 0; color: var(--d27-navy); font-family: var(--font-display); font-size: 16px; }
+          .ch-await-head span { color: var(--muted); font-size: 12px; font-weight: 700; }
+          .ch-await-done { color: #047857; font-size: 13px; background: #ECFDF5; border: 1px solid rgba(4,120,87,.25); border-radius: 8px; padding: 12px 14px; }
+          .ch-await-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+          .ch-await-card { display: flex; align-items: center; gap: 10px; background: #FFFBEB; border: 1px solid var(--gold, #C9A227); border-left: 4px solid var(--gold, #C9A227); border-radius: 8px; padding: 10px 12px; }
+          .ch-await-logo { width: 30px; height: 30px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+          .ch-await-logo img { width: 30px; height: 30px; object-fit: contain; }
+          .ch-await-meta { flex: 1; min-width: 0; }
+          .ch-await-meta b { display: block; color: var(--d27-navy); font-size: 14px; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+          .ch-await-meta span { display: block; color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+          .ch-await-btn { flex-shrink: 0; background: var(--d27-navy); color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; }
+          .ch-await-btn:hover { background: var(--d27-red); }
+          .ch-form-title { font-family: var(--font-display); font-weight: 700; color: var(--d27-navy); font-size: 15px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+          .ch-drop.flash { animation: chFlash 1.3s ease; }
+          @keyframes chFlash { 0%,100% { border-color: var(--line); background: transparent; } 35% { border-color: var(--gold, #C9A227); background: #FFFBEB; } }
           @media (max-width: 560px){ .ch-grid2 { grid-template-columns: 1fr; } }
         </style>
         <div class="ch-intro">
           <h3>🏆 Champion Photos</h3>
           <p>Add a tournament winner's team photo — it appears on the public <a href="champions.html" target="_blank">Champions page</a> right away. Large photos are resized automatically.</p>
         </div>
+        <div class="ch-awaiting" id="chAwaiting"></div>
         <div class="ch-form">
+          <div class="ch-form-title" id="chFormTitle">Add a champion photo</div>
           <div class="ch-grid2">
             <label>Year<input id="ch-year" inputmode="numeric" value="2026" autocomplete="off" /></label>
             <label>Winning team<input id="ch-team" placeholder="e.g. Lower Perk (TN Volunteers)" autocomplete="off" /></label>
@@ -361,6 +380,7 @@
 </main>
 
 <script src="js/d27-logos.js"></script>
+<script src="js/d27-bracket.js"></script>
 <script type="module">
 import { isConfigured, db, auth } from './js/firebase-init.js';
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
@@ -938,7 +958,9 @@ function impHandleFile(file){
 // ── Champion photos (CRUD on the public-read / auth-write `champions` collection) ──
 (function(){
   const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  let loaded = false, all = [], pending = null;   // pending = { dataUrl, w, h, bytes }
+  let loaded = false, all = [], pending = null, pendingTkey = null, staticPhotos = null;   // pending = { dataUrl, w, h, bytes }
+  const norm = s => String(s==null?'':s).toLowerCase().replace(/\s+/g,' ').trim();
+  const seasonOf = t => { const ds = (t.games||[]).map(g=>g.date).filter(Boolean).sort(); const m = String(ds[ds.length-1]||'').match(/^(\d{4})/); return m ? m[1] : String((window.LEAGUE_CONFIG && LEAGUE_CONFIG.season && LEAGUE_CONFIG.season.year) || 2026); };
 
   // Resize/compress a chosen image to a JPEG data URL comfortably under Firestore's 1 MB doc limit.
   function processImage(file){
@@ -983,10 +1005,11 @@ function impHandleFile(file){
     cap.value = (team && title) ? ('Congrats to '+team+' on winning the '+(year?year+' ':'')+title+'!') : '';
   }
   function resetForm(){
-    pending = null;
+    pending = null; pendingTkey = null;
     $('ch-file').value=''; $('chPreview').classList.add('hidden'); $('chPreview').innerHTML='';
     $('ch-team').value=''; $('ch-title').value=''; $('ch-caption').value=''; delete $('ch-caption').dataset.touched;
     $('ch-sport').value=''; $('chSave').disabled = true;
+    if ($('chFormTitle')) $('chFormTitle').textContent = 'Add a champion photo';
   }
 
   async function save(){
@@ -1000,10 +1023,11 @@ function impHandleFile(file){
       img: pending.dataUrl,
       createdAt: serverTimestamp()
     };
+    if (pendingTkey) rec.tkey = pendingTkey;
     try{
       await setDoc(doc(collection(db,'champions')), rec);
       setStatus('✓ Added — live on the Champions page', 'ok');
-      resetForm(); await reload();
+      resetForm(); await reload(); renderAwaiting();
     }catch(e){
       const perm = /permission|insufficient/i.test(e.message||'');
       setStatus('Save failed — ' + (perm ? 'the Firestore rule for “champions” isn’t published yet.' : (e.message||e)), 'err');
@@ -1032,6 +1056,69 @@ function impHandleFile(file){
     $('chList').innerHTML = h + '</div>';
   }
 
+  // ── Crowned champions ↔ photos: surface bracket winners that still need a photo ──
+  async function loadStaticManifest(){
+    if (staticPhotos) return staticPhotos;
+    try { staticPhotos = ((await (await fetch('data/champions-photos.json')).json()).photos) || []; }
+    catch (e) { staticPhotos = []; }
+    return staticPhotos;
+  }
+  function crownedChampions(){
+    const B = window.D27bracket; if (!B) return [];
+    const out = [];
+    Object.keys(TOURNEYS).forEach(function(k){
+      const t = TOURNEYS[k];
+      try {
+        const champ = B.championOutcome(t, B.classify(t)).champion;
+        if (champ) out.push({ key: k, team: champ, tournament: t.name || k, sport: t.sport || (/SB|Softball/i.test(t.name || '') ? 'Softball' : 'Baseball'), year: seasonOf(t) });
+      } catch (e) {}
+    });
+    return out;
+  }
+  function existingKeys(){
+    const keys = {};
+    const add = p => { if (!p) return; if (p.year && p.team) keys[String(p.year) + '|' + norm(p.team) + '|' + norm(p.title || '')] = 1; if (p.tkey) keys['tk:' + p.tkey] = 1; };
+    all.forEach(add); (staticPhotos || []).forEach(add);
+    return keys;
+  }
+  function hasPhoto(c, keys){ return !!(keys[c.year + '|' + norm(c.team) + '|' + norm(c.tournament)] || keys['tk:' + c.key]); }
+  function renderAwaiting(){
+    const box = $('chAwaiting'); if (!box) return;
+    const crowned = crownedChampions();
+    if (!crowned.length){ box.innerHTML = ''; return; }
+    const keys = existingKeys();
+    const todo = crowned.filter(c => !hasPhoto(c, keys));
+    const done = crowned.length - todo.length;
+    if (!todo.length){
+      box.innerHTML = '<div class="ch-await-head"><h4>🏆 Crowned champions</h4></div>' +
+        '<div class="ch-await-done">✓ All ' + crowned.length + ' crowned champion' + (crowned.length === 1 ? '' : 's') + ' have a photo. New winners appear here automatically as brackets finish.</div>';
+      return;
+    }
+    let h = '<div class="ch-await-head"><h4>🏆 Champions ready for a photo</h4><span>' + todo.length + ' waiting' + (done ? ' · ' + done + ' done' : '') + '</span></div><div class="ch-await-grid">';
+    todo.forEach(function(c){
+      const logo = (window.D27logos && D27logos.known(c.team)) ? D27logos.html(c.team, 30) : '🏆';
+      h += '<div class="ch-await-card">' +
+        '<span class="ch-await-logo">' + logo + '</span>' +
+        '<div class="ch-await-meta"><b>' + esc(c.team) + '</b><span>' + esc(c.tournament) + '</span></div>' +
+        '<button type="button" class="ch-await-btn" data-key="' + esc(c.key) + '">📷 Add photo</button>' +
+      '</div>';
+    });
+    box.innerHTML = h + '</div>';
+  }
+  function pickChampion(c){
+    $('ch-year').value = c.year;
+    $('ch-team').value = c.team;
+    $('ch-title').value = c.tournament;
+    $('ch-sport').value = (c.sport === 'Softball' || c.sport === 'Baseball') ? c.sport : '';
+    delete $('ch-caption').dataset.touched; autoCaption();
+    pendingTkey = c.key;
+    if ($('chFormTitle')) $('chFormTitle').textContent = '📷 Add a photo for ' + c.team;
+    refreshSave();
+    const drop = $('chDrop');
+    drop.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    drop.classList.remove('flash'); void drop.offsetWidth; drop.classList.add('flash');
+  }
+
   if ($('ch-file')){
     $('ch-file').addEventListener('change', e=> onFile(e.target.files[0]));
     const drop = $('chDrop');
@@ -1041,15 +1128,20 @@ function impHandleFile(file){
     ['ch-year','ch-team','ch-title'].forEach(id=> $(id).addEventListener('input', ()=>{ autoCaption(); refreshSave(); }));
     $('ch-caption').addEventListener('input', ()=>{ $('ch-caption').dataset.touched='1'; });
     $('chSave').addEventListener('click', save);
+    $('chAwaiting').addEventListener('click', function(e){
+      const btn = e.target.closest('.ch-await-btn'); if (!btn) return;
+      const c = crownedChampions().find(x => x.key === btn.dataset.key);
+      if (c) pickChampion(c);
+    });
     $('chList').addEventListener('click', async e=>{
       const btn = e.target.closest('[data-act="del"]'); if (!btn) return;
       const item = btn.closest('.ch-item'), id = item.dataset.id;
       if (!confirm('Delete this champion photo? It will be removed from the Champions page.')) return;
-      try{ await deleteDoc(doc(db,'champions',id)); all = all.filter(x=>x.id!==id); renderList(); }
+      try{ await deleteDoc(doc(db,'champions',id)); all = all.filter(x=>x.id!==id); renderList(); renderAwaiting(); }
       catch(err){ alert('Delete failed: ' + (err.message||err)); }
     });
   }
-  window.__champLoad = ()=>{ if (loaded) return; loaded = true; reload(); };
+  window.__champLoad = async ()=>{ if (loaded) return; loaded = true; await loadStaticManifest(); await reload(); renderAwaiting(); };
 })();
 </script>
 
