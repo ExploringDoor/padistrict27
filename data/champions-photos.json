@@ -1,6 +1,13 @@
 {
  "photos": [
   {
+   "year": "2026",
+   "caption": "Congrats to Lower Perk (TN Volunteers) on winning the 2026 Softball Major Championship!",
+   "file": "assets/champions/2026-01.jpg",
+   "team": "Lower Perk (TN Volunteers)",
+   "title": "Softball Major Championship"
+  },
+  {
    "year": "2025",
    "caption": "Congrats to Chester Valley on winning the BB-JR Championship!",
    "file": "assets/champions/2025-01.jpg",
