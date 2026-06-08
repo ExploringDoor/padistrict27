@@ -55,7 +55,24 @@
         const sd = await sres.json();
         const teamMap = {};
         (sd.tournaments || []).forEach(st => { if (st.key && st.teams && st.teams.length) teamMap[st.key] = st.teams; });
-        tournaments.forEach(t => { if ((!t.teams || !t.teams.length) && teamMap[t.key]) t.teams = teamMap[t.key]; });
+        // Placeholders that are never real roster teams (bracket refs, byes, "if necessary" games).
+        const ph = n => { n = String(n == null ? '' : n).trim(); return !n || /^(wg|lg)-\d/i.test(n) || /^(bye|tbd|tba)$/i.test(n) || /^if necessary/i.test(n); };
+        tournaments.forEach(t => {
+          if ((!t.teams || !t.teams.length) && teamMap[t.key]) t.teams = teamMap[t.key];
+          // Team NAMES are edited live in the games (admin editor); the seed roster only carries the
+          // home-field (park). Reconcile each roster entry to its current game name so the Teams &
+          // Fields panel matches the brackets/schedule after a rename — the park rides along.
+          if (t.teams && t.teams.length && t.games && t.games.length) {
+            const gnames = [], seen = {};
+            t.games.forEach(g => ['away', 'home'].forEach(s => { const n = g[s]; if (!ph(n) && !seen[n]) { seen[n] = 1; gnames.push(n); } }));
+            const snames = t.teams.map(x => x.name);
+            const orphans = t.teams.filter(x => !ph(x.name) && gnames.indexOf(x.name) < 0); // roster name no longer in the games
+            const extras = gnames.filter(n => snames.indexOf(n) < 0);                       // game name not in the roster
+            if (orphans.length && orphans.length === extras.length && orphans.length <= 4) {
+              orphans.forEach((o, i) => { o.name = extras[i]; }); // rename in place; keep park/abbr
+            }
+          }
+        });
       } catch (e) { /* teams are optional — ignore if the static file is unreachable */ }
       return { tournaments, categoryOrder: CATEGORY_ORDER, source: 'firebase' };
     } catch (e) {
