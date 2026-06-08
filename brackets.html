@@ -621,7 +621,7 @@ function renderTitle(t) {
       <div class="tt">
         <div class="eyebrow">${(t.category || '').toUpperCase()}</div>
         <h1>${t.name}</h1>
-        <div class="sub">${t.sport} · ${elim} · ${t.games.length} games</div>
+        <div class="sub">${t.sport} · ${elim} · ${t.games.length} game${t.games.length === 1 ? '' : 's'}</div>
       </div>
       ${t.updated ? `<span class="updated"><span class="dot"></span>${updatedLabel(t.updated)}</span>` : ''}
     </div>`;

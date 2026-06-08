@@ -47,7 +47,7 @@
 
     const rows = [];
     rows.push(`<div class="tcard-row"><span class="k">Games</span><span class="v"><strong>${total}</strong></span></div>`);
-    if (total) rows.push(`<div class="tcard-row"><span class="k">Played</span><span class="v">${started ? played : 0} of ${total}</span></div>`);
+    if (total) rows.push(`<div class="tcard-row"><span class="k">Played</span><span class="v">${(started || champion) ? played : 0} of ${total}</span></div>`);
     if (champion) rows.push(`<div class="tcard-row"><span class="k">🏆 Champion</span><span class="v">${esc(champion)}</span></div>`);
     if (startISO) rows.push(`<div class="tcard-row"><span class="k">${started ? 'Started' : 'Starts'}</span><span class="v">${esc(fmtUpdated(startISO))}</span></div>`);
     // "Updated" intentionally lives inside the bracket view (green live-pill in the title band), not on the card.
