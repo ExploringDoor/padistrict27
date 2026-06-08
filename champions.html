@@ -93,18 +93,42 @@
   function sportOf(p){ return /SB-|Softball/.test(p.title || p.tournament || '') ? 'Softball' : 'Baseball'; }
   var CURRENT_SEASON = (window.LEAGUE_CONFIG && LEAGUE_CONFIG.season && LEAGUE_CONFIG.season.year) || 2026;
 
-  // One renderer for both sections. With a photo (c.file) the card becomes a button that
+  var FS_BASE = 'https://firestore.googleapis.com/v1/projects/d27-schedules/databases/(default)/documents';
+  var FS_KEY = 'AIzaSyBu_Qd5AUWVSUB6vHP39-zzZgTpbC7s0Fs';
+  function pid(p){ return p.file || ('fs:' + p.champId); }
+  // Uploaded champion photos live in Firestore. We list only their metadata here; the full image
+  // is fetched on click (keeps the page light no matter how many accumulate).
+  async function loadFsChampions(){
+    try {
+      var mask = ['year','team','title','caption','sport'].map(function(f){ return '&mask.fieldPaths=' + f; }).join('');
+      var data = await fetch(FS_BASE + '/champions?key=' + FS_KEY + '&pageSize=300' + mask).then(function(r){ return r.ok ? r.json() : {}; });
+      return (data.documents || []).map(function(d){
+        var f = d.fields || {}, gv = function(k){ return f[k] ? (f[k].stringValue != null ? f[k].stringValue : f[k].integerValue) : ''; };
+        return { champId: d.name.split('/').pop(), year: gv('year'), team: gv('team'), title: gv('title'), caption: gv('caption'), sport: gv('sport') };
+      });
+    } catch (e) { return []; }
+  }
+  async function champImgSrc(id){
+    try {
+      var d = await fetch(FS_BASE + '/champions/' + id + '?key=' + FS_KEY + '&mask.fieldPaths=img').then(function(r){ return r.json(); });
+      return (d.fields && d.fields.img && d.fields.img.stringValue) || '';
+    } catch (e) { return ''; }
+  }
+
+  // One renderer for both sections. With a photo (static c.file OR uploaded c.champId) the card becomes a button that
   // opens the lightbox; without one it's a plain card.
   function card(c){
     var logo = (window.D27logos && D27logos.known(c.team)) ? '<span class="champ-logo">' + D27logos.html(c.team, 44) + '</span>' : '<span class="trophy">🏆</span>';
+    var clickable = c.file || c.champId;
     var info = '<div class="info">' +
         '<div class="tourney">' + esc(c.tournament) + '</div>' +
         '<div class="team">' + esc(c.team) + '</div>' +
-        (c.file ? '<div class="note cg-view">📷 Click to view photo</div>' : (c.note ? '<div class="note">' + esc(c.note) + '</div>' : '')) +
+        (clickable ? '<div class="note cg-view">📷 Click to view photo</div>' : (c.note ? '<div class="note">' + esc(c.note) + '</div>' : '')) +
       '</div>';
     var sport = '<span class="sport ' + (c.sport === 'Softball' ? 'sb' : 'bb') + '">' + esc(c.sport) + '</span>';
-    if (c.file) {
-      return '<button type="button" class="champ-card cg-card" data-src="' + esc(c.file) + '" data-cap="' + esc(c.caption || '') + '">' + logo + info + sport + '</button>';
+    if (clickable) {
+      var ref = c.file ? 'data-src="' + esc(c.file) + '"' : 'data-champ-id="' + esc(c.champId) + '"';
+      return '<button type="button" class="champ-card cg-card" ' + ref + ' data-cap="' + esc(c.caption || '') + '">' + logo + info + sport + '</button>';
     }
     return '<div class="champ-card">' + logo + info + sport + '</div>';
   }
@@ -122,6 +146,7 @@
     // The photo archive — used to enrich current-season cards AND to build the gallery.
     var photos = [];
     try { photos = ((await (await fetch('data/champions-photos.json')).json()).photos) || []; } catch (e) {}
+    photos = photos.concat(await loadFsChampions());   // + admin-uploaded champions from Firestore
 
     // ── Current-season champions, pulled live from the tournament data ──
     var attached = {};
@@ -137,7 +162,7 @@
       // attach this season's photo to its champion so the card opens the team photo
       live.forEach(function(c){
         var p = photos.find(function(x){ return Number(x.year) === CURRENT_SEASON && norm(x.team) === norm(c.team); });
-        if (p) { c.file = p.file; c.caption = p.caption; attached[p.file] = 1; }
+        if (p) { c.file = p.file; c.champId = p.champId; c.caption = p.caption; attached[pid(p)] = 1; }
       });
       out.innerHTML = live.length
         ? yearSection(CURRENT_SEASON, live, true)
@@ -153,7 +178,7 @@
     if (photos.length) {
       var byYear = {}, seen = {};
       photos.forEach(function(p){
-        if (attached[p.file]) return;                        // already shown in the current-season section
+        if (attached[pid(p)]) return;                        // already shown in the current-season section
         var k = p.year + '|' + p.team + '|' + p.title;       // collapse alternate shots of one win
         if (seen[k]) return; seen[k] = 1;
         (byYear[p.year] = byYear[p.year] || []).push(p);
@@ -166,7 +191,7 @@
           ghtml += '<section class="champ-year"><div class="champ-year-head"><h2>' + y + '</h2>' +
             '<span class="tag">' + byYear[y].length + ' champion' + (byYear[y].length === 1 ? '' : 's') + '</span></div>' +
             '<div class="champ-grid">' +
-            byYear[y].map(function(p){ return card({ sport: sportOf(p), tournament: p.title, team: p.team || p.caption, file: p.file, caption: p.caption }); }).join('') +
+            byYear[y].map(function(p){ return card({ sport: sportOf(p), tournament: p.title, team: p.team || p.caption, file: p.file, champId: p.champId, caption: p.caption }); }).join('') +
             '</div></section>';
         });
         box.innerHTML = ghtml;
@@ -178,11 +203,13 @@
   (function(){
     var lb = document.getElementById('cgLightbox'), img = document.getElementById('cgLbImg'), cap = document.getElementById('cgLbCap');
     function close(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
-    document.addEventListener('click', function(e){
+    document.addEventListener('click', async function(e){
       var it = e.target.closest('.cg-card'); if (!it) return;
-      img.src = it.getAttribute('data-src'); img.alt = it.getAttribute('data-cap') || '';
-      cap.textContent = it.getAttribute('data-cap') || '';
+      cap.textContent = it.getAttribute('data-cap') || ''; img.alt = it.getAttribute('data-cap') || '';
       lb.classList.add('open'); document.body.style.overflow = 'hidden';
+      var src = it.getAttribute('data-src');
+      if (src) { img.src = src; }
+      else { var id = it.getAttribute('data-champ-id'); img.removeAttribute('src'); if (id) { var b = await champImgSrc(id); if (b) img.src = b; } }
     });
     lb.addEventListener('click', function(e){ if (e.target === lb || e.target.closest('.cg-lb-close')) close(); });
     document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });

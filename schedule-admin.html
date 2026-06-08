@@ -226,6 +226,7 @@
       <div class="ed-tabs">
         <button type="button" class="ed-tab active" data-view="schedule">📅 Schedule Editor</button>
         <button type="button" class="ed-tab" data-view="contacts">📇 Contacts</button>
+        <button type="button" class="ed-tab" data-view="champions">🏆 Champions</button>
       </div>
       <div id="view-schedule">
       <div class="ed-toolbar">
@@ -265,6 +266,69 @@
         </div>
         <div class="ct-wrap" id="ctTable"><div class="ct-loading">Loading roster…</div></div>
         <p class="ed-hint">🔒 Private roster — only visible while signed in. Tick rows then <b>Copy emails</b>, or filter by tournament. Use ✎ to edit, 🗑 to delete, <b>Add contact</b> for new managers.</p>
+      </div>
+
+      <div id="view-champions" class="hidden">
+        <style>
+          .ch-intro h3 { margin: 0 0 4px; color: var(--d27-navy); font-family: var(--font-display); }
+          .ch-intro p { margin: 0 0 18px; color: var(--muted); font-size: 14px; }
+          .ch-intro a { color: var(--accent); font-weight: 600; }
+          .ch-form { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; max-width: 760px; }
+          .ch-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+          .ch-form label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+          .ch-form input, .ch-form select { width: 100%; margin-top: 4px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 14px; box-sizing: border-box; }
+          .ch-wide { margin-top: 12px; }
+          .ch-drop { display: flex; align-items: center; gap: 14px; margin-top: 14px; padding: 18px; border: 2px dashed var(--line); border-radius: 8px; cursor: pointer; transition: border-color .15s, background .15s; }
+          .ch-drop:hover, .ch-drop.drag { border-color: var(--d27-navy); background: rgba(0,45,114,.03); }
+          .ch-drop .ch-ico { font-size: 28px; }
+          .ch-drop .ch-tx { display: flex; flex-direction: column; }
+          .ch-drop .ch-tx b { color: var(--d27-ink); font-size: 15px; }
+          .ch-drop .ch-tx span { color: var(--muted); font-size: 13px; }
+          .ch-preview { margin-top: 14px; display: flex; align-items: center; gap: 14px; }
+          .ch-preview img { width: 160px; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); }
+          .ch-preview span { color: var(--muted); font-size: 13px; }
+          .ch-actions { margin-top: 16px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+          .ch-save { background: var(--d27-navy); color: #fff; border: none; padding: 12px 20px; border-radius: 6px; font-family: var(--font-display); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+          .ch-save:disabled { opacity: .5; cursor: not-allowed; }
+          .ch-status { font-size: 13px; color: var(--muted); }
+          .ch-status.ok { color: #047857; font-weight: 600; }
+          .ch-status.err { color: var(--d27-red); font-weight: 600; }
+          .ch-list { margin-top: 24px; }
+          .ch-loading, .ch-empty { color: var(--muted); font-size: 14px; padding: 16px 0; }
+          .ch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+          .ch-item { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+          .ch-item img { width: 100%; height: 150px; object-fit: cover; display: block; }
+          .ch-item .ch-meta { padding: 10px 12px; }
+          .ch-item .ch-meta b { display: block; color: var(--d27-navy); font-family: var(--font-display); font-size: 15px; line-height: 1.15; }
+          .ch-item .ch-meta span { color: var(--muted); font-size: 12px; }
+          .ch-item .ch-del { position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; border: none; border-radius: 6px; background: rgba(0,0,0,.55); color: #fff; cursor: pointer; font-size: 14px; }
+          .ch-item .ch-del:hover { background: var(--d27-red); }
+          @media (max-width: 560px){ .ch-grid2 { grid-template-columns: 1fr; } }
+        </style>
+        <div class="ch-intro">
+          <h3>🏆 Champion Photos</h3>
+          <p>Add a tournament winner's team photo — it appears on the public <a href="champions.html" target="_blank">Champions page</a> right away. Large photos are resized automatically.</p>
+        </div>
+        <div class="ch-form">
+          <div class="ch-grid2">
+            <label>Year<input id="ch-year" inputmode="numeric" value="2026" autocomplete="off" /></label>
+            <label>Winning team<input id="ch-team" placeholder="e.g. Lower Perk (TN Volunteers)" autocomplete="off" /></label>
+            <label>Tournament<input id="ch-title" placeholder="e.g. Softball Major Championship" autocomplete="off" /></label>
+            <label>Sport<select id="ch-sport"><option value="">Auto-detect</option><option>Baseball</option><option>Softball</option></select></label>
+          </div>
+          <label class="ch-wide">Caption<input id="ch-caption" placeholder="Congrats to … on winning the …!" autocomplete="off" /></label>
+          <label class="ch-drop" id="chDrop">
+            <input type="file" id="ch-file" accept="image/*" hidden />
+            <span class="ch-ico">📷</span>
+            <span class="ch-tx"><b>Choose a photo</b><span>or drag it here · JPG or PNG</span></span>
+          </label>
+          <div class="ch-preview hidden" id="chPreview"></div>
+          <div class="ch-actions">
+            <button type="button" class="ch-save" id="chSave" disabled>Add champion photo</button>
+            <span class="ch-status" id="chStatus"></span>
+          </div>
+        </div>
+        <div class="ch-list" id="chList"><div class="ch-loading">Loading champion photos…</div></div>
       </div>
 
       <div class="ct-modal hidden" id="ctModal">
@@ -754,7 +818,9 @@ function impHandleFile(file){
     document.querySelectorAll('.ed-tab').forEach(t=>t.classList.toggle('active', t.dataset.view===view));
     $('view-schedule').classList.toggle('hidden', view!=='schedule');
     $('view-contacts').classList.toggle('hidden', view!=='contacts');
+    $('view-champions').classList.toggle('hidden', view!=='champions');
     if(view==='contacts' && !loaded){ loaded=true; loadContacts(); }
+    if(view==='champions' && window.__champLoad){ window.__champLoad(); }
   }
   document.querySelectorAll('.ed-tab').forEach(t=> t.addEventListener('click', ()=>tab(t.dataset.view)));
 
@@ -867,6 +933,123 @@ function impHandleFile(file){
     catch(e){ alert('Could not delete: '+(e.message||e)); }
   }
   document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !$('ctModal').classList.contains('hidden')) closeModal(); });
+})();
+
+// ── Champion photos (CRUD on the public-read / auth-write `champions` collection) ──
+(function(){
+  const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let loaded = false, all = [], pending = null;   // pending = { dataUrl, w, h, bytes }
+
+  // Resize/compress a chosen image to a JPEG data URL comfortably under Firestore's 1 MB doc limit.
+  function processImage(file){
+    return new Promise((resolve, reject)=>{
+      const url = URL.createObjectURL(file), im = new Image();
+      im.onload = ()=>{
+        URL.revokeObjectURL(url);
+        let w = im.naturalWidth, h = im.naturalHeight;
+        const MAXW = 1100;
+        if (w > MAXW){ h = Math.round(h * MAXW / w); w = MAXW; }
+        const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+        cv.getContext('2d').drawImage(im, 0, 0, w, h);
+        let q = 0.82, dataUrl = cv.toDataURL('image/jpeg', q);
+        while (dataUrl.length > 720000 && q > 0.4){ q -= 0.1; dataUrl = cv.toDataURL('image/jpeg', q); }
+        resolve({ dataUrl, w, h, bytes: dataUrl.length });
+      };
+      im.onerror = ()=>{ URL.revokeObjectURL(url); reject(new Error('Could not read that image file')); };
+      im.src = url;
+    });
+  }
+
+  const setStatus = (msg, cls)=>{ const s=$('chStatus'); s.textContent=msg||''; s.className='ch-status'+(cls?' '+cls:''); };
+
+  async function onFile(file){
+    if (!file) return;
+    if (!/^image\//.test(file.type)){ setStatus('Please choose an image (JPG or PNG).','err'); return; }
+    setStatus('Processing image…');
+    try{
+      pending = await processImage(file);
+      $('chPreview').innerHTML = '<img src="'+pending.dataUrl+'" alt=""><span>'+pending.w+'×'+pending.h+' · '+Math.round(pending.bytes/1024)+' KB</span>';
+      $('chPreview').classList.remove('hidden');
+      setStatus(''); refreshSave();
+    }catch(e){ setStatus(e.message || 'Could not process image', 'err'); }
+  }
+
+  function refreshSave(){
+    $('chSave').disabled = !(pending && $('ch-year').value.trim() && $('ch-team').value.trim() && $('ch-title').value.trim());
+  }
+  function autoCaption(){
+    const cap = $('ch-caption'); if (cap.dataset.touched) return;
+    const team=$('ch-team').value.trim(), title=$('ch-title').value.trim(), year=$('ch-year').value.trim();
+    cap.value = (team && title) ? ('Congrats to '+team+' on winning the '+(year?year+' ':'')+title+'!') : '';
+  }
+  function resetForm(){
+    pending = null;
+    $('ch-file').value=''; $('chPreview').classList.add('hidden'); $('chPreview').innerHTML='';
+    $('ch-team').value=''; $('ch-title').value=''; $('ch-caption').value=''; delete $('ch-caption').dataset.touched;
+    $('ch-sport').value=''; $('chSave').disabled = true;
+  }
+
+  async function save(){
+    if ($('chSave').disabled) return;
+    $('chSave').disabled = true; setStatus('Saving…');
+    const team=$('ch-team').value.trim(), title=$('ch-title').value.trim(), year=$('ch-year').value.trim();
+    const rec = {
+      year, team, title,
+      caption: $('ch-caption').value.trim() || ('Congrats to '+team+' on winning the '+(year?year+' ':'')+title+'!'),
+      sport: $('ch-sport').value || (/SB-|Softball/i.test(title) ? 'Softball' : 'Baseball'),
+      img: pending.dataUrl,
+      createdAt: serverTimestamp()
+    };
+    try{
+      await setDoc(doc(collection(db,'champions')), rec);
+      setStatus('✓ Added — live on the Champions page', 'ok');
+      resetForm(); await reload();
+    }catch(e){
+      const perm = /permission|insufficient/i.test(e.message||'');
+      setStatus('Save failed — ' + (perm ? 'the Firestore rule for “champions” isn’t published yet.' : (e.message||e)), 'err');
+      $('chSave').disabled = false;
+    }
+  }
+
+  async function reload(){
+    try{
+      const snap = await getDocs(collection(db,'champions'));
+      all = snap.docs.map(d=>({ id:d.id, ...d.data() }))
+        .sort((a,b)=> String(b.year).localeCompare(String(a.year)) || String(a.title||'').localeCompare(String(b.title||'')));
+      renderList();
+    }catch(e){ $('chList').innerHTML = '<div class="ch-empty">Could not load champion photos — '+esc(e.message||e)+'</div>'; }
+  }
+  function renderList(){
+    if (!all.length){ $('chList').innerHTML = '<div class="ch-empty">No champion photos uploaded yet. Add one above. (Your historical photos still appear on the Champions page.)</div>'; return; }
+    let h = '<div class="ch-grid">';
+    all.forEach(c=>{
+      h += '<div class="ch-item" data-id="'+esc(c.id)+'">'+
+        (c.img ? '<img src="'+esc(c.img)+'" alt="">' : '') +
+        '<div class="ch-meta"><b>'+esc(c.team)+'</b><span>'+esc(c.year)+' · '+esc(c.title)+'</span></div>'+
+        '<button class="ch-del" data-act="del" title="Delete">🗑</button>'+
+      '</div>';
+    });
+    $('chList').innerHTML = h + '</div>';
+  }
+
+  if ($('ch-file')){
+    $('ch-file').addEventListener('change', e=> onFile(e.target.files[0]));
+    const drop = $('chDrop');
+    ['dragover','dragenter'].forEach(ev=> drop.addEventListener(ev, e=>{ e.preventDefault(); drop.classList.add('drag'); }));
+    ['dragleave','dragend'].forEach(ev=> drop.addEventListener(ev, e=>{ e.preventDefault(); drop.classList.remove('drag'); }));
+    drop.addEventListener('drop', e=>{ e.preventDefault(); drop.classList.remove('drag'); const f = e.dataTransfer.files[0]; if (f) onFile(f); });
+    ['ch-year','ch-team','ch-title'].forEach(id=> $(id).addEventListener('input', ()=>{ autoCaption(); refreshSave(); }));
+    $('ch-caption').addEventListener('input', ()=>{ $('ch-caption').dataset.touched='1'; });
+    $('chSave').addEventListener('click', save);
+    $('chList').addEventListener('click', async e=>{
+      const btn = e.target.closest('[data-act="del"]'); if (!btn) return;
+      const item = btn.closest('.ch-item'), id = item.dataset.id;
+      if (!confirm('Delete this champion photo? It will be removed from the Champions page.')) return;
+      try{ await deleteDoc(doc(db,'champions',id)); all = all.filter(x=>x.id!==id); renderList(); }
+      catch(err){ alert('Delete failed: ' + (err.message||err)); }
+    });
+  }
+  window.__champLoad = ()=>{ if (loaded) return; loaded = true; reload(); };
 })();
 </script>
 
