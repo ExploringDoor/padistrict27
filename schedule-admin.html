@@ -752,7 +752,35 @@ function impExtract(wb, filename){
     }
   }
   games.sort((a,b)=>a.g-b.g); teams.sort((a,b)=>a.n-b.n);
+  linkDecidedWinners(games);   // turn a hard-coded already-decided winner into its WG- ref (survives re-import)
   return { meta, games, teams };
+}
+
+// If the Excel hard-codes the winner of an already-decided game into a LATER game's slot (instead of
+// "WG-N"), convert it to the ref — so the bracket positions/advances correctly and a re-import won't
+// re-break it. Only touches bracket files (those that use WG-/LG- refs somewhere); round-robin / plain
+// schedules with no refs are left exactly as-is.
+function linkDecidedWinners(games){
+  const ref = s => /^(WG|LG)-\d+$/i.test(String(s == null ? '' : s).trim());
+  if (!games.some(g => ref(g.away) || ref(g.home))) return games;
+  const realTeam = s => s && !ref(s) && !/^\s*(bye|tbd|tba|if necessary)\s*$/i.test(String(s));
+  const norm = s => String(s == null ? '' : s).toLowerCase().replace(/\s+/g, ' ').trim();
+  const played = g => g.as != null && g.hs != null && (g.as + g.hs) > 0;
+  const winnerOf = g => played(g) ? (g.as > g.hs ? g.away : g.hs > g.as ? g.home : null) : null;
+  const referenced = new Set();
+  games.forEach(g => ['away', 'home'].forEach(s => { const m = /^WG-(\d+)$/i.exec(String(g[s] || '')); if (m) referenced.add(+m[1]); }));
+  games.slice().sort((a, b) => a.g - b.g).forEach(E => {
+    if (referenced.has(E.g)) return;            // this game's winner is already referenced as WG-E
+    const w = winnerOf(E); if (!realTeam(w)) return;
+    for (const G of games.filter(g => g.g > E.g).sort((a, b) => a.g - b.g)) {
+      let hit = false;
+      for (const side of ['away', 'home']) {
+        if (realTeam(G[side]) && norm(G[side]) === norm(w)) { G[side] = 'WG-' + E.g; referenced.add(E.g); hit = true; break; }
+      }
+      if (hit) break;
+    }
+  });
+  return games;
 }
 let impPending = null;
 function impPreview(p){
