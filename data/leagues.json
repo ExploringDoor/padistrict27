@@ -106,22 +106,16 @@
    ]
   },
   {
-   "name": "Pottsgrove Little League",
+   "name": "Pottsgrove-Pottstown Little League",
    "website": "https://clubs.bluesombrero.com/Default.aspx?tabid=1288670",
    "fields": [
     {
-     "name": "Teeball Fields",
-     "address": "699 North Pleasantview Road, Pottstown, PA 19464"
-    }
-   ]
-  },
-  {
-   "name": "Pottstown Little League",
-   "website": "https://clubs.bluesombrero.com/Default.aspx?tabid=1288670",
-   "fields": [
-    {
-     "name": "Main Complex",
+     "name": "Pottstown Main Complex",
      "address": "451 Manatawny Street, Pottstown, PA 19464"
+    },
+    {
+     "name": "Pottsgrove Teeball Fields",
+     "address": "699 North Pleasantview Road, Pottstown, PA 19464"
     }
    ]
   },

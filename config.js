@@ -17,7 +17,7 @@
     id: 'd27',
     name: 'D27',
     fullName: 'PA District 27 Little League',
-    tagline: 'Serving 10,000 baseball & softball players across 12 member leagues',
+    tagline: 'Serving 10,000 baseball & softball players across 11 member leagues',
     motto: 'One Team. One Little League.',
     counties: ['Chester', 'Delaware', 'Montgomery'],
     facebook: 'https://www.facebook.com/padistrict27llbs/',
@@ -140,18 +140,15 @@
         theme: { primary: '#002B5C', accent: '#FD5A1E' }
       },
       {
-        slug: 'pottsgrove', name: 'Pottsgrove LL', short: 'PGLL',
+        // Pottstown + Pottsgrove merged in 2021 into one league (PGP). One entry, one joint website.
+        slug: 'pgp', name: 'Pottsgrove-Pottstown LL', short: 'PGP',
         town: 'Pottstown, PA', county: 'Montgomery',
-        site: 'http://pottsgrove-little-league.sportssignup.com',
-        fields: [{ name: 'Teeball Fields', addr: '699 North Pleasantview Road, Pottstown, PA 19464' }],
-        theme: { primary: '#27251F', accent: '#FDB827' }
-      },
-      {
-        slug: 'pottstown', name: 'Pottstown LL', short: 'PLL',
-        town: 'Pottstown, PA', county: 'Montgomery',
-        site: 'https://www.pottstownlittleleague.org',
-        fields: [{ name: 'Main Complex', addr: '451 Manatawny Street, Pottstown, PA 19464' }],
-        theme: { primary: '#BD3039', accent: '#0C2340' }
+        site: 'https://clubs.bluesombrero.com/Default.aspx?tabid=1288670',
+        fields: [
+          { name: 'Pottstown Main Complex', addr: '451 Manatawny Street, Pottstown, PA 19464' },
+          { name: 'Pottsgrove Teeball Fields', addr: '699 North Pleasantview Road, Pottstown, PA 19464' }
+        ],
+        theme: { primary: '#0C2340', accent: '#BD3039' }
       },
       {
         slug: 'radnor-wayne', name: 'Radnor-Wayne LL', short: 'RWLL',
