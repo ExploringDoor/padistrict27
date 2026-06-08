@@ -15,6 +15,19 @@
     document.head.appendChild(s);
   })();
 
+  // Favicon — the D27 crest (browser tab / bookmark icon) on every page.
+  [['icon', '/favicon-32.png', 'image/png', '32x32'],
+   ['icon', '/favicon-16.png', 'image/png', '16x16'],
+   ['icon', '/favicon.ico', 'image/x-icon', null],
+   ['apple-touch-icon', '/apple-touch-icon.png', null, null]
+  ].forEach(function (d) {
+    var l = document.createElement('link');
+    l.rel = d[0]; l.href = d[1];
+    if (d[2]) l.type = d[2];
+    if (d[3]) l.setAttribute('sizes', d[3]);
+    document.head.appendChild(l);
+  });
+
   var NAV = [
     ['index.html', 'Home'],
     ['scores.html', 'Scores'],
