@@ -425,7 +425,25 @@ function combinedCanvas(t, cls, visible) {
   let losersMaxCol = 0;
   if (L.length) {
     const posL = layoutSection(t, L);
-    for (const k in posL) { pos[k] = { x: posL[k].x, y: posL[k].y + losersOffsetY, h: posL[k].h, col: posL[k].col }; losersMaxCol = Math.max(losersMaxCol, posL[k].col); }
+    // Align the losers bracket under the winners game whose loser feeds its first round: a first-round
+    // losers game that takes the loser of a winners game in column C lands at column C — so e.g. a
+    // 3-team bracket's single losers game sits under Game 2 instead of orphaned at the far left.
+    const wcol = {}; for (const g of W) wcol[g.g] = posW[g.g].col;
+    const Lset = new Set(L.map(g => g.g));
+    let offCol = 0;
+    for (const g of L) {
+      let wMax = 0, hasL = false;
+      for (const raw of [g.away, g.home]) {
+        const r = parseRef(raw);
+        if (r.kind === 'WG' || r.kind === 'LG') {
+          if (Lset.has(r.g)) hasL = true;                                  // fed by another losers game
+          else if (r.kind === 'LG' && wcol[r.g] != null) wMax = Math.max(wMax, wcol[r.g]); // takes a winners loser
+        }
+      }
+      if (wMax && !hasL) offCol = Math.max(offCol, wMax - posL[g.g].col);  // first-round losers game
+    }
+    const dx = Math.max(0, offCol) * (CARD_W + COL_GAP);
+    for (const k in posL) { pos[k] = { x: posL[k].x + dx, y: posL[k].y + losersOffsetY, h: posL[k].h, col: posL[k].col + offCol }; losersMaxCol = Math.max(losersMaxCol, posL[k].col + offCol); }
   }
 
   // Championship column(s): to the right of BOTH brackets. Each final game
