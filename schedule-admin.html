@@ -305,6 +305,8 @@
           .gn-chip.warn { background: #b45309; cursor: pointer; }
           .gn-chip button { background: none; border: none; color: #fff; cursor: pointer; font-size: 15px; line-height: 1; padding: 0 2px; }
           .gn-chip button:hover { color: #fecaca; }
+          .gn-chip .gn-plus1 { font-size: 11px; font-weight: 700; background: rgba(255,255,255,.18); border-radius: 8px; padding: 1px 6px; }
+          .gn-chip .gn-plus1:hover { background: rgba(255,255,255,.34); color: #fff; }
           .gn-frows { border: 1px solid var(--line); border-radius: 8px; background: #fff; margin-top: 4px; max-height: 220px; overflow-y: auto; }
           .gn-frow { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-bottom: 1px solid var(--line); font-size: 13px; }
           .gn-frow:last-child { border-bottom: none; }
@@ -1306,11 +1308,15 @@ function impHandleFile(file){
   let selTeams=[], fieldRows=[], dates=[], times=[];
   let built=false, pending=null;
 
+  // League name only — drop "(Arena)"-style qualifiers and a trailing " 2" so the
+  // picker shows clean league names (Adam: teams are just the league name).
+  function cleanLeague(name){ return String(name||'').replace(/\s*\([^)]*\)\s*/g,' ').replace(/\s+/g,' ').trim().replace(/\s+\d+$/,'').trim(); }
   function aggregate(){
     const tMap={}, fSet={};
+    const add=raw=>{ const n=cleanLeague(raw); if(n && !tMap[norm(n)]) tMap[norm(n)]={name:n,park:''}; return n; };
     for(const k in TOURNEYS){ const t=TOURNEYS[k]||{};
-      (t.teams||[]).forEach(tm=>{ const n=String(tm.name||'').trim(); if(n){ if(!tMap[norm(n)]) tMap[norm(n)]={name:n,park:String(tm.park||'').trim()}; else if(tm.park&&!tMap[norm(n)].park) tMap[norm(n)].park=String(tm.park).trim(); } if(String(tm.park||'').trim()) fSet[String(tm.park).trim()]=1; });
-      (t.games||[]).forEach(g=>{ ['away','home'].forEach(s=>{ const v=String(g[s]||'').trim(); if(v && !isRef(v) && !/^(bye|tbd|tba)$/i.test(v) && !tMap[norm(v)]) tMap[norm(v)]={name:v,park:''}; }); if(String(g.field||'').trim()) fSet[String(g.field).trim()]=1; });
+      (t.teams||[]).forEach(tm=>{ const raw=String(tm.name||'').trim(); if(raw){ const n=add(raw); if(n && tm.park && !tMap[norm(n)].park) tMap[norm(n)].park=String(tm.park).trim(); } if(String(tm.park||'').trim()) fSet[String(tm.park).trim()]=1; });
+      (t.games||[]).forEach(g=>{ ['away','home'].forEach(s=>{ const raw=String(g[s]||'').trim(); if(raw && !isRef(raw) && !/^(bye|tbd|tba)$/i.test(raw)) add(raw); }); if(String(g.field||'').trim()) fSet[String(g.field).trim()]=1; });
     }
     KNOWN_TEAMS=Object.values(tMap); KNOWN_FIELDS=Object.keys(fSet);
   }
@@ -1322,8 +1328,9 @@ function impHandleFile(file){
     KNOWN_TEAMS.sort((a,b)=>a.name.localeCompare(b.name));
     box.innerHTML = KNOWN_TEAMS.length ? KNOWN_TEAMS.map(t=>'<label><input type="checkbox" data-team="'+esc(t.name)+'"'+(sel.has(norm(t.name))?' checked':'')+'> '+esc(t.name)+'</label>').join('') : '<div class="gn-none">No saved teams yet — add them below.</div>';
   }
-  function renderSelTeams(){ const box=$('gnTeamSel'); if(!box) return; box.innerHTML = selTeams.map((t,i)=>'<span class="gn-chip"><span class="num">'+(i+1)+'</span>'+esc(t.name)+'<button type="button" data-rmteam="'+i+'">×</button></span>').join(''); }
+  function renderSelTeams(){ const box=$('gnTeamSel'); if(!box) return; box.innerHTML = selTeams.map((t,i)=>'<span class="gn-chip"><span class="num">'+(i+1)+'</span>'+esc(t.name)+'<button type="button" class="gn-plus1" data-dupteam="'+i+'" title="add another team from this league">+1</button><button type="button" data-rmteam="'+i+'">×</button></span>').join(''); }
   function toggleTeam(name){ const i=selTeams.findIndex(t=>norm(t.name)===norm(name)); if(i>=0) selTeams.splice(i,1); else selTeams.push({name, park:knownPark(name)}); renderSelTeams(); }
+  function addAnother(i){ const t=selTeams[i]; if(!t) return; const base=cleanLeague(t.name)||t.name; const taken=new Set(selTeams.map(x=>norm(x.name))); let n=2; while(taken.has(norm(base+' '+n))) n++; selTeams.push({name: base+' '+n, park: t.park||''}); renderSelTeams(); }
   function addTeam(name, park){ if(!name) return; if(!selTeams.some(t=>norm(t.name)===norm(name))) selTeams.push({name, park:park||knownPark(name)}); if(!KNOWN_TEAMS.some(t=>norm(t.name)===norm(name))) KNOWN_TEAMS.push({name, park:park||''}); renderTeamPick(); renderSelTeams(); }
 
   function renderFieldRows(){ const box=$('gnFieldRows'); if(!box) return; box.innerHTML = fieldRows.length ? fieldRows.map((f,i)=>'<div class="gn-frow'+(f.on?'':' off')+'"><input type="checkbox" data-fchk="'+i+'"'+(f.on?' checked':'')+'><span class="nm">'+esc(f.name)+'</span><button type="button" class="gn-lights'+(f.lights?'':' off')+'" data-flight="'+i+'">'+(f.lights?'💡 Lights':'🌑 No lights')+'</button></div>').join('') : '<div class="gn-none" style="padding:10px">No saved fields — add them below.</div>'; }
@@ -1342,7 +1349,7 @@ function impHandleFile(file){
     renderTeamPick(); renderSelTeams(); renderFieldRows(); renderDates(); renderTimes();
     if(built) return; built=true;
     $('gnTeamPick').addEventListener('change', e=>{ const cb=e.target.closest('input[data-team]'); if(cb) toggleTeam(cb.dataset.team); });
-    $('gnTeamSel').addEventListener('click', e=>{ const b=e.target.closest('[data-rmteam]'); if(b){ const t=selTeams[+b.dataset.rmteam]; selTeams.splice(+b.dataset.rmteam,1); if(t) [...$('gnTeamPick').querySelectorAll('input[data-team]')].forEach(cb=>{ if(norm(cb.dataset.team)===norm(t.name)) cb.checked=false; }); renderSelTeams(); } });
+    $('gnTeamSel').addEventListener('click', e=>{ const dup=e.target.closest('[data-dupteam]'); if(dup){ addAnother(+dup.dataset.dupteam); return; } const b=e.target.closest('[data-rmteam]'); if(b){ const t=selTeams[+b.dataset.rmteam]; selTeams.splice(+b.dataset.rmteam,1); if(t) [...$('gnTeamPick').querySelectorAll('input[data-team]')].forEach(cb=>{ if(norm(cb.dataset.team)===norm(t.name)) cb.checked=false; }); renderSelTeams(); } });
     $('gnTeamAddBtn').addEventListener('click', ()=>{ const inp=$('gnTeamAdd'), p=inp.value.split('|').map(x=>x.trim()); if(p[0]) addTeam(p[0], p[1]||''); inp.value=''; });
     $('gnTeamAdd').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); $('gnTeamAddBtn').click(); } });
     $('gnFieldRows').addEventListener('change', e=>{ const cb=e.target.closest('input[data-fchk]'); if(cb){ fieldRows[+cb.dataset.fchk].on=cb.checked; const r=cb.closest('.gn-frow'); if(r) r.classList.toggle('off', !cb.checked); } });
