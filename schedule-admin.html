@@ -288,6 +288,9 @@
           .gn-ptable td { padding: 5px 9px; border-bottom: 1px solid var(--line); }
           .gn-ptable tr:hover td { background: rgba(0,45,114,.02); }
           .gn-ptable .ref { color: var(--accent); font-weight: 600; }
+          .gn-ptable input.gn-pe, .gn-ptable select.gn-pe { padding: 3px 5px; font-size: 12px; border: 1px solid var(--line); border-radius: 4px; margin: 0; width: auto; box-sizing: border-box; background: #fff; }
+          .gn-ptable input[type=date].gn-pe { width: 132px; } .gn-ptable input[type=time].gn-pe { width: 100px; } .gn-ptable select.gn-pf { max-width: 165px; }
+          .gn-edithint { font-size: 12px; color: var(--muted); margin: 12px 0 2px; }
           .gn-block { margin-top: 14px; }
           .gn-two { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 14px; }
           .gn-hint2 { font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--muted); font-size: 11px; }
@@ -346,7 +349,7 @@
           </div>
           <div class="gn-grid3">
             <div><label>Sport</label><select id="gnSport"><option>Baseball</option><option>Softball</option></select></div>
-            <div><label>Category</label><input id="gnCat" list="gnCatList" placeholder="Pick or type a category" autocomplete="off"><datalist id="gnCatList"></datalist></div>
+            <div><label>Category</label><select id="gnCat"></select><input id="gnCatCustom" class="hidden" placeholder="Type a new category" autocomplete="off" style="margin-top:6px"></div>
             <div><label>Format</label><select id="gnFormat"><option value="single">Single elimination</option><option value="double">Double elimination</option></select></div>
           </div>
           <div class="gn-block">
@@ -1493,11 +1496,12 @@ function impHandleFile(file){
 
   // cleanLeague kept for the "+1" base-name logic (drop "(Arena)" + trailing " 2").
   function cleanLeague(name){ return String(name||'').replace(/\s*\([^)]*\)\s*/g,' ').replace(/\s+/g,' ').trim().replace(/\s+\d+$/,'').trim(); }
+  const goodField = v => { const s=String(v||'').trim(); return !!s && !/^(n\/a|na|tbd|tba|none|-+|\.+)$/i.test(s); };
   function aggregate(){   // fields only — the team list is the 11 leagues (loadLeagues)
     const fSet={};
     for(const k in TOURNEYS){ const t=TOURNEYS[k]||{};
-      (t.teams||[]).forEach(tm=>{ if(String(tm.park||'').trim()) fSet[String(tm.park).trim()]=1; });
-      (t.games||[]).forEach(g=>{ if(String(g.field||'').trim()) fSet[String(g.field).trim()]=1; });
+      (t.teams||[]).forEach(tm=>{ if(goodField(tm.park)) fSet[String(tm.park).trim()]=1; });
+      (t.games||[]).forEach(g=>{ if(goodField(g.field)) fSet[String(g.field).trim()]=1; });
     }
     KNOWN_FIELDS=Object.keys(fSet);
   }
@@ -1528,10 +1532,11 @@ function impHandleFile(file){
   function renderTimes(){ const box=$('gnTimeChips'); if(!box) return; times.sort((a,b)=>a.value.localeCompare(b.value)); box.innerHTML = times.map((t,i)=>'<span class="gn-chip'+(t.needsLights?' warn':'')+'" data-tgltime="'+i+'" title="click to toggle needs-lights">'+esc(fmtTime(t.value))+(t.needsLights?' ⚠':'')+'<button type="button" data-rmtime="'+i+'">×</button></span>').join(''); }
 
   window.__genInit = function(){
-    const cat=$('gnCat'), catList=$('gnCatList');
-    if(catList && !catList.dataset.filled){ catList.innerHTML=IMP_CATEGORIES.map(c=>'<option value="'+esc(c)+'">').join(''); catList.dataset.filled='1'; if(cat && !cat.value) cat.value=IMP_CATEGORIES[0]; }
+    const cat=$('gnCat'), catCustom=$('gnCatCustom');
+    if(cat && !cat.dataset.filled){ cat.innerHTML=IMP_CATEGORIES.map(c=>'<option value="'+esc(c)+'">'+esc(c)+'</option>').join('')+'<option value="__custom__">➕ Add a category…</option>'; cat.dataset.filled='1'; }
+    if(cat && !cat.dataset.wiredc){ cat.dataset.wiredc='1'; cat.addEventListener('change', ()=>{ const c=cat.value==='__custom__'; if(catCustom){ catCustom.classList.toggle('hidden', !c); if(c){ catCustom.value=''; catCustom.focus(); } } }); }
     const sp=$('gnSport');
-    if(sp && !sp.dataset.wired){ sp.dataset.wired='1'; const sync=()=>{ const want=sp.value==='Softball'?'LL International — Softball':'LL International — Baseball'; const cur=(cat?cat.value:'').trim(); if(cat && (!cur || /^LL International — (Baseball|Softball)$/.test(cur))) cat.value=want; }; sp.addEventListener('change', sync); sync(); }
+    if(sp && !sp.dataset.wired){ sp.dataset.wired='1'; const sync=()=>{ const want=sp.value==='Softball'?'LL International — Softball':'LL International — Baseball'; if(cat && cat.value!=='__custom__' && (!cat.value || /^LL International — (Baseball|Softball)$/.test(cat.value))){ cat.value=want; if(catCustom) catCustom.classList.add('hidden'); } }; sp.addEventListener('change', sync); sync(); }
     aggregate(); loadLeagues();
     KNOWN_FIELDS.forEach(n=>{ if(!fieldRows.some(f=>norm(f.name)===norm(n))) fieldRows.push({name:n,lights:true,on:false,champOnly:false,offDates:[],offTimes:[]}); });
     if(!times.length) times=[{value:'18:00', needsLights:true}];
@@ -1562,6 +1567,7 @@ function impHandleFile(file){
     $('gnTimeAddBtn').addEventListener('click', ()=>{ const v=$('gnTimeAdd').value; if(v && !times.some(t=>t.value===v)){ times.push({value:v, needsLights:(+String(v).split(':')[0])>=18}); renderTimes(); } });
     $('gnDateChips').addEventListener('click', e=>{ const b=e.target.closest('[data-rmdate]'); if(b){ dates.splice(+b.dataset.rmdate,1); renderDates(); } });
     $('gnTimeChips').addEventListener('click', e=>{ const rm=e.target.closest('[data-rmtime]'); if(rm){ times.splice(+rm.dataset.rmtime,1); renderTimes(); return; } const ch=e.target.closest('[data-tgltime]'); if(ch){ const t=times[+ch.dataset.tgltime]; t.needsLights=!t.needsLights; renderTimes(); } });
+    $('gnPreviewBox').addEventListener('change', e=>{ const el=e.target.closest('[data-pgi]'); if(el && pending && pending.games[+el.dataset.pgi]){ pending.games[+el.dataset.pgi][el.dataset.pf]=el.value; } });
   };
 
   window.__genPreview = function(){
@@ -1570,10 +1576,12 @@ function impHandleFile(file){
     const name=$('gnName').value.trim();
     let key=$('gnKey').value.trim().replace(/\s+/g,'-');
     if(!key && name) key=name.replace(/[^A-Za-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
-    const sport=$('gnSport').value, category=$('gnCat').value, format=$('gnFormat').value;
+    const sport=$('gnSport').value, format=$('gnFormat').value;
+    const catSel=$('gnCat').value, category = catSel==='__custom__' ? $('gnCatCustom').value.trim() : catSel;
     const fields=fieldRows.filter(f=>f.on).map(f=>({name:f.name, lights:f.lights, champOnly:f.champOnly, offDates:f.offDates, offTimes:f.offTimes}));
     if(!name) return fail('Enter a display name.');
     if(!key) return fail('Enter a key (short id).');
+    if(!category) return fail('Pick or type a category.');
     if(selTeams.length<2) return fail('Select at least 2 teams.');
     if(!window.D27gen) return fail('Generator not loaded — refresh the page.');
     let out;
@@ -1587,8 +1595,10 @@ function impHandleFile(file){
     const box=$('gnPreviewBox'); box.classList.remove('hidden');
     const exists=!!TOURNEYS[p.key];
     const fmt=p.format==='double'?'Double elimination':'Single elimination';
-    const rows=p.games.map(g=>'<tr><td>G'+g.g+'</td><td>'+esc(g.date||'—')+'</td><td>'+esc(g.time?fmtTime(g.time):'—')+'</td><td class="'+(isRef(g.away)?'ref':'')+'">'+esc(g.away)+'</td><td class="'+(isRef(g.home)?'ref':'')+'">'+esc(g.home)+'</td><td>'+esc(g.field||'—')+'</td></tr>').join('');
-    box.innerHTML='<h4 class="gn-ph">Preview — '+esc(p.name)+'</h4><div class="gn-status"><b>'+p.games.length+'</b> games · <b>'+p.teams.length+'</b> teams · '+fmt+' · key <b>'+esc(p.key)+'</b></div>'+(exists?'<div class="gn-warn">⚠ A tournament with key <b>'+esc(p.key)+'</b> already exists — publishing will replace it.</div>':'')+'<table class="gn-ptable"><thead><tr><th>#</th><th>Date</th><th>Time</th><th>Away</th><th>Home</th><th>Field</th></tr></thead><tbody>'+rows+'</tbody></table><div class="gn-actions"><button type="button" class="gn-btn" id="gnPublish">✅ Publish — make it live</button><button type="button" class="gn-btn alt" id="gnCancel">Cancel</button><span class="gn-status" id="gnPubStatus"></span></div>';
+    const fchosen=fieldRows.filter(f=>f.on).map(f=>f.name);
+    const fopts=cur=>{ const all=['']; fchosen.forEach(f=>{ if(all.indexOf(f)<0) all.push(f); }); if(cur && all.indexOf(cur)<0) all.push(cur); return all.map(f=>'<option value="'+esc(f)+'"'+(f===cur?' selected':'')+'>'+(f?esc(f):'— none —')+'</option>').join(''); };
+    const rows=p.games.map((g,i)=>'<tr><td>G'+g.g+'</td><td><input type="date" class="gn-pe" data-pgi="'+i+'" data-pf="date" value="'+esc(g.date||'')+'"></td><td><input type="time" class="gn-pe" data-pgi="'+i+'" data-pf="time" value="'+esc(g.time||'')+'"></td><td class="'+(isRef(g.away)?'ref':'')+'">'+esc(g.away)+'</td><td class="'+(isRef(g.home)?'ref':'')+'">'+esc(g.home)+'</td><td><select class="gn-pe gn-pf" data-pgi="'+i+'" data-pf="field">'+fopts(g.field||'')+'</select></td></tr>').join('');
+    box.innerHTML='<h4 class="gn-ph">Preview — '+esc(p.name)+'</h4><div class="gn-status"><b>'+p.games.length+'</b> games · <b>'+p.teams.length+'</b> teams · '+fmt+' · key <b>'+esc(p.key)+'</b></div>'+(exists?'<div class="gn-warn">⚠ A tournament with key <b>'+esc(p.key)+'</b> already exists — publishing will replace it.</div>':'')+'<div class="gn-edithint">✏️ Set the exact date / time / field for any game below, then publish.</div><table class="gn-ptable"><thead><tr><th>#</th><th>Date</th><th>Time</th><th>Away</th><th>Home</th><th>Field</th></tr></thead><tbody>'+rows+'</tbody></table><div class="gn-actions"><button type="button" class="gn-btn" id="gnPublish">✅ Publish — make it live</button><button type="button" class="gn-btn alt" id="gnCancel">Cancel</button><span class="gn-status" id="gnPubStatus"></span></div>';
     $('gnPublish').onclick=window.__genPublish; $('gnCancel').onclick=()=>{ pending=null; box.classList.add('hidden'); };
     box.scrollIntoView({behavior:'smooth', block:'nearest'});
   }
