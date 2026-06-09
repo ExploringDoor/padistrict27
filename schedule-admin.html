@@ -315,6 +315,15 @@
           .gn-frow.off .nm { color: var(--muted); }
           .gn-lights { border: 1px solid var(--gold, #C9A227); background: #FEF9C3; color: #92400e; border-radius: 14px; padding: 3px 10px; cursor: pointer; font-size: 11px; font-weight: 600; white-space: nowrap; }
           .gn-lights.off { background: #1e293b; border-color: #1e293b; color: #cbd5e1; }
+          .gn-champ { border: 1px solid var(--line); background: #fff; color: var(--muted); border-radius: 14px; padding: 3px 10px; cursor: pointer; font-size: 11px; font-weight: 600; white-space: nowrap; }
+          .gn-champ.on { background: #FEF3C7; border-color: var(--gold, #C9A227); color: #92400e; }
+          .gn-limits { border: 1px solid var(--line); background: #fff; color: var(--muted); border-radius: 14px; padding: 3px 9px; cursor: pointer; font-size: 11px; font-weight: 700; white-space: nowrap; }
+          .gn-limits:hover { border-color: var(--d27-navy); color: var(--d27-navy); }
+          .gn-fset { background: #F8FAFC; border: 1px solid var(--line); border-top: none; padding: 8px 12px; }
+          .gn-fset-row { display: flex; align-items: center; flex-wrap: wrap; gap: 5px; margin: 4px 0; }
+          .gn-fset-row b { color: var(--muted); font-weight: 700; font-size: 11px; margin-right: 4px; }
+          .gn-mini { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 2px 8px; cursor: pointer; font-size: 11px; color: var(--d27-ink); }
+          .gn-mini.off { background: #FEE2E2; border-color: var(--d27-red); color: var(--d27-red); text-decoration: line-through; }
           @media (max-width: 720px) { .gn-grid, .gn-grid3, .gn-cols, .gn-two { grid-template-columns: 1fr; } }
         </style>
         <div class="gn-intro">
@@ -1333,7 +1342,9 @@ function impHandleFile(file){
   function addAnother(i){ const t=selTeams[i]; if(!t) return; const base=cleanLeague(t.name)||t.name; const taken=new Set(selTeams.map(x=>norm(x.name))); let n=2; while(taken.has(norm(base+' '+n))) n++; selTeams.push({name: base+' '+n, park: t.park||''}); renderSelTeams(); }
   function addTeam(name, park){ if(!name) return; if(!selTeams.some(t=>norm(t.name)===norm(name))) selTeams.push({name, park:park||knownPark(name)}); if(!KNOWN_TEAMS.some(t=>norm(t.name)===norm(name))) KNOWN_TEAMS.push({name, park:park||''}); renderTeamPick(); renderSelTeams(); }
 
-  function renderFieldRows(){ const box=$('gnFieldRows'); if(!box) return; box.innerHTML = fieldRows.length ? fieldRows.map((f,i)=>'<div class="gn-frow'+(f.on?'':' off')+'"><input type="checkbox" data-fchk="'+i+'"'+(f.on?' checked':'')+'><span class="nm">'+esc(f.name)+'</span><button type="button" class="gn-lights'+(f.lights?'':' off')+'" data-flight="'+i+'">'+(f.lights?'💡 Lights':'🌑 No lights')+'</button></div>').join('') : '<div class="gn-none" style="padding:10px">No saved fields — add them below.</div>'; }
+  function renderFieldRows(){ const box=$('gnFieldRows'); if(!box) return; box.innerHTML = fieldRows.length ? fieldRows.map((f,i)=>{ const lim=(f.offDates||[]).length+(f.offTimes||[]).length; return '<div class="gn-frow'+(f.on?'':' off')+'"><input type="checkbox" data-fchk="'+i+'"'+(f.on?' checked':'')+'><span class="nm">'+esc(f.name)+'</span><button type="button" class="gn-lights'+(f.lights?'':' off')+'" data-flight="'+i+'">'+(f.lights?'💡 Lights':'🌑 No lights')+'</button><button type="button" class="gn-champ'+(f.champOnly?' on':'')+'" data-fchamp="'+i+'" title="hosts only the championship game">'+(f.champOnly?'🏆 Champ only':'🏆 Champ')+'</button><button type="button" class="gn-limits" data-flimits="'+i+'" title="mark unavailable days/times">⚙'+(lim?' '+lim:'')+'</button></div>'; }).join('') : '<div class="gn-none" style="padding:10px">No saved fields — add them below.</div>'; }
+  function fieldPanel(i){ const f=fieldRows[i]; const dch=dates.length?dates.map(d=>'<span class="gn-mini'+((f.offDates||[]).indexOf(d)>=0?' off':'')+'" data-foff-date="'+esc(d)+'">'+esc(d)+'</span>').join(''):'<span class="gn-none">add dates first</span>'; const tch=times.length?times.map(t=>'<span class="gn-mini'+((f.offTimes||[]).indexOf(t.value)>=0?' off':'')+'" data-foff-time="'+esc(t.value)+'">'+esc(fmtTime(t.value))+'</span>').join(''):'<span class="gn-none">add times first</span>'; return '<div class="gn-fset" data-fset="'+i+'"><div class="gn-fset-row"><b>Off days:</b> '+dch+'</div><div class="gn-fset-row"><b>Off times:</b> '+tch+'</div></div>'; }
+  function updateLimitsBadge(i){ const b=$('gnFieldRows').querySelector('[data-flimits="'+i+'"]'); if(b){ const f=fieldRows[i]; const n=(f.offDates||[]).length+(f.offTimes||[]).length; b.textContent='⚙'+(n?' '+n:''); } }
   function renderDates(){ const box=$('gnDateChips'); if(!box) return; dates.sort(); box.innerHTML = dates.map((d,i)=>'<span class="gn-chip">'+esc(d)+'<button type="button" data-rmdate="'+i+'">×</button></span>').join(''); }
   function renderTimes(){ const box=$('gnTimeChips'); if(!box) return; times.sort((a,b)=>a.value.localeCompare(b.value)); box.innerHTML = times.map((t,i)=>'<span class="gn-chip'+(t.needsLights?' warn':'')+'" data-tgltime="'+i+'" title="click to toggle needs-lights">'+esc(fmtTime(t.value))+(t.needsLights?' ⚠':'')+'<button type="button" data-rmtime="'+i+'">×</button></span>').join(''); }
 
@@ -1344,7 +1355,7 @@ function impHandleFile(file){
     if(sp && !sp.dataset.wired){ sp.dataset.wired='1'; const sync=()=>{ const want=sp.value==='Softball'?'LL International — Softball':'LL International — Baseball'; const cur=(cat?cat.value:'').trim(); if(cat && (!cur || /^LL International — (Baseball|Softball)$/.test(cur))) cat.value=want; }; sp.addEventListener('change', sync); sync(); }
     aggregate();
     selTeams.forEach(t=>{ if(!KNOWN_TEAMS.some(k=>norm(k.name)===norm(t.name))) KNOWN_TEAMS.push({name:t.name,park:t.park}); });
-    KNOWN_FIELDS.forEach(n=>{ if(!fieldRows.some(f=>norm(f.name)===norm(n))) fieldRows.push({name:n,lights:true,on:false}); });
+    KNOWN_FIELDS.forEach(n=>{ if(!fieldRows.some(f=>norm(f.name)===norm(n))) fieldRows.push({name:n,lights:true,on:false,champOnly:false,offDates:[],offTimes:[]}); });
     if(!times.length) times=[{value:'18:00', needsLights:true}];
     renderTeamPick(); renderSelTeams(); renderFieldRows(); renderDates(); renderTimes();
     if(built) return; built=true;
@@ -1353,8 +1364,14 @@ function impHandleFile(file){
     $('gnTeamAddBtn').addEventListener('click', ()=>{ const inp=$('gnTeamAdd'), p=inp.value.split('|').map(x=>x.trim()); if(p[0]) addTeam(p[0], p[1]||''); inp.value=''; });
     $('gnTeamAdd').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); $('gnTeamAddBtn').click(); } });
     $('gnFieldRows').addEventListener('change', e=>{ const cb=e.target.closest('input[data-fchk]'); if(cb){ fieldRows[+cb.dataset.fchk].on=cb.checked; const r=cb.closest('.gn-frow'); if(r) r.classList.toggle('off', !cb.checked); } });
-    $('gnFieldRows').addEventListener('click', e=>{ const b=e.target.closest('[data-flight]'); if(b){ const f=fieldRows[+b.dataset.flight]; f.lights=!f.lights; b.classList.toggle('off', !f.lights); b.textContent=f.lights?'💡 Lights':'🌑 No lights'; } });
-    $('gnFieldAddBtn').addEventListener('click', ()=>{ const inp=$('gnFieldAdd'), v=inp.value.trim(); if(v){ const ex=fieldRows.find(f=>norm(f.name)===norm(v)); if(ex) ex.on=true; else fieldRows.push({name:v,lights:true,on:true}); renderFieldRows(); } inp.value=''; });
+    $('gnFieldRows').addEventListener('click', e=>{
+      const lt=e.target.closest('[data-flight]'); if(lt){ const f=fieldRows[+lt.dataset.flight]; f.lights=!f.lights; lt.classList.toggle('off', !f.lights); lt.textContent=f.lights?'💡 Lights':'🌑 No lights'; return; }
+      const ch=e.target.closest('[data-fchamp]'); if(ch){ const f=fieldRows[+ch.dataset.fchamp]; f.champOnly=!f.champOnly; ch.classList.toggle('on', f.champOnly); ch.textContent=f.champOnly?'🏆 Champ only':'🏆 Champ'; return; }
+      const lim=e.target.closest('[data-flimits]'); if(lim){ const i=+lim.dataset.flimits, row=lim.closest('.gn-frow'), nx=row.nextElementSibling; if(nx && nx.classList.contains('gn-fset')) nx.remove(); else row.insertAdjacentHTML('afterend', fieldPanel(i)); return; }
+      const doff=e.target.closest('[data-foff-date]'); if(doff){ const i=+doff.closest('[data-fset]').dataset.fset, dt=doff.dataset.foffDate, arr=fieldRows[i].offDates, j=arr.indexOf(dt); if(j>=0) arr.splice(j,1); else arr.push(dt); doff.classList.toggle('off'); updateLimitsBadge(i); return; }
+      const toff=e.target.closest('[data-foff-time]'); if(toff){ const i=+toff.closest('[data-fset]').dataset.fset, tv=toff.dataset.foffTime, arr=fieldRows[i].offTimes, j=arr.indexOf(tv); if(j>=0) arr.splice(j,1); else arr.push(tv); toff.classList.toggle('off'); updateLimitsBadge(i); return; }
+    });
+    $('gnFieldAddBtn').addEventListener('click', ()=>{ const inp=$('gnFieldAdd'), v=inp.value.trim(); if(v){ const ex=fieldRows.find(f=>norm(f.name)===norm(v)); if(ex) ex.on=true; else fieldRows.push({name:v,lights:true,on:true,champOnly:false,offDates:[],offTimes:[]}); renderFieldRows(); } inp.value=''; });
     $('gnFieldAdd').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); $('gnFieldAddBtn').click(); } });
     $('gnDateAddBtn').addEventListener('click', ()=>{ const v=$('gnDateAdd').value; if(v && !dates.includes(v)){ dates.push(v); renderDates(); } });
     $('gnTimeAddBtn').addEventListener('click', ()=>{ const v=$('gnTimeAdd').value; if(v && !times.some(t=>t.value===v)){ times.push({value:v, needsLights:(+String(v).split(':')[0])>=18}); renderTimes(); } });
@@ -1369,7 +1386,7 @@ function impHandleFile(file){
     let key=$('gnKey').value.trim().replace(/\s+/g,'-');
     if(!key && name) key=name.replace(/[^A-Za-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
     const sport=$('gnSport').value, category=$('gnCat').value, format=$('gnFormat').value;
-    const fields=fieldRows.filter(f=>f.on).map(f=>({name:f.name, lights:f.lights}));
+    const fields=fieldRows.filter(f=>f.on).map(f=>({name:f.name, lights:f.lights, champOnly:f.champOnly, offDates:f.offDates, offTimes:f.offTimes}));
     if(!name) return fail('Enter a display name.');
     if(!key) return fail('Enter a key (short id).');
     if(selTeams.length<2) return fail('Select at least 2 teams.');
@@ -1398,7 +1415,7 @@ function impHandleFile(file){
       await setDoc(doc(db,'schedules',pending.key), { key:pending.key, name:pending.name, sport:pending.sport, category:pending.category, special:pending.special, games:pending.games, teams:pending.teams, updated:serverTimestamp() });
       st.className='gn-status ok'; st.textContent='✓ Published · live now';
       const key=pending.key; pending=null;
-      $('gnName').value=''; $('gnKey').value=''; selTeams=[]; dates=[]; fieldRows.forEach(f=>f.on=false);
+      $('gnName').value=''; $('gnKey').value=''; selTeams=[]; dates=[]; fieldRows.forEach(f=>{ f.on=false; f.champOnly=false; f.offDates=[]; f.offTimes=[]; });
       renderTeamPick(); renderSelTeams(); renderFieldRows(); renderDates();
       await loadAll();
       const sel=$('tourneySelect'); if(sel){ sel.value=key; sel.dispatchEvent(new Event('change')); }

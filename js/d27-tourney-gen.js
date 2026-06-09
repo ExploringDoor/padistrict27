@@ -137,15 +137,23 @@
     var teams = (opts && opts.teams) || [], startG = (opts && opts.startGame) || 1;
     if (teams.length < 2) return [];
     var wb = buildWinners(teams, startG);
-    if ((opts.format || 'single') !== 'double') return wb.games;     // single-elim
+    if ((opts.format || 'single') !== 'double') {                    // single-elim
+      if (wb.games.length) wb.games[wb.games.length - 1].champ = true; // last game = the final
+      return wb.games;
+    }
     var lb = buildLosers(wb.waves, wb.lastG + 1);
     var fin = buildFinal(wb.wbChampRef, lb.lbChampRef, lb.lastG + 1);
+    fin.games.forEach(function (g) { g.champ = true; });             // grand final + reset
     return wb.games.concat(lb.games, fin.games);
   }
 
   // Normalize inputs: a field is { name, lights } (lights default true); a time is
   // { value:'HH:MM', needsLights } (defaults to needing lights at/after 6:00 PM).
-  function normField(f) { return typeof f === 'string' ? { name: f, lights: true } : { name: (f && f.name) || '', lights: !(f && f.lights === false) }; }
+  function normField(f) {
+    if (typeof f === 'string') return { name: f, lights: true, champOnly: false, offDates: [], offTimes: [] };
+    return { name: (f && f.name) || '', lights: !(f && f.lights === false), champOnly: !!(f && f.champOnly),
+             offDates: (f && f.offDates) || [], offTimes: (f && f.offTimes) || [] };
+  }
   function normTime(t) {
     if (t && typeof t === 'object') return { value: t.value || '18:00', needsLights: !!t.needsLights };
     var h = parseInt(String(t).split(':')[0], 10);
@@ -155,20 +163,38 @@
   // ── Draft scheduler: assign date / time / field per game ─────────────
   // Games are grouped by dependency depth (round); each round starts on the next
   // available date and fills that day's valid (field × time) slots, spilling to the
-  // following date when a round has more games than a day can hold. A game is never
-  // dated before the games that feed it, and an UNLIT field never takes a night game.
+  // following date when a round outgrows a day. Constraints honored: a game is never
+  // dated before its feeders; an UNLIT field never takes a night game; a field is
+  // skipped on its unavailable dates/times; CHAMPIONSHIP games go on champ-only fields
+  // (and other games stay off them).
   function scheduleGames(games, opts) {
     opts = opts || {};
     var dates = (opts.dates || []).filter(Boolean);
     var times = (opts.times && opts.times.length ? opts.times : ['18:00']).map(normTime);
     var fields = (opts.fields && opts.fields.length ? opts.fields : ['']).map(normField);
     if (!times.length) times = [{ value: '18:00', needsLights: false }];
-    if (!fields.length) fields = [{ name: '', lights: true }];
+    if (!fields.length) fields = [normField('')];
 
-    // valid slots for a single day, earliest time first — skip night×unlit combos
-    var daySlots = [];
-    times.forEach(function (t) { fields.forEach(function (f) { if (f.lights || !t.needsLights) daySlots.push({ field: f.name, time: t.value }); }); });
-    if (!daySlots.length) daySlots.push({ field: fields[0].name, time: times[0].value });
+    var champFields = fields.filter(function (f) { return f.champOnly; });
+    var regFields = fields.filter(function (f) { return !f.champOnly; });
+    if (!regFields.length) regFields = fields;   // every field is champ-only → use all
+
+    // valid (field × time) slots for ONE date from a field pool — honors lights,
+    // per-field unavailable dates, and per-field unavailable times.
+    function slotsFor(date, pool) {
+      var s = [];
+      times.forEach(function (t) {
+        pool.forEach(function (f) {
+          if (!f.lights && t.needsLights) return;
+          if (f.offDates.indexOf(date) >= 0) return;
+          if (f.offTimes.indexOf(t.value) >= 0) return;
+          s.push({ field: f.name, time: t.value });
+        });
+      });
+      return s;
+    }
+    function dateAt(i) { return dates.length ? dates[Math.min(i, dates.length - 1)] : ''; }
+    var fallback = { field: (regFields[0] || {}).name || '', time: (times[0] || {}).value || '' };
 
     var byNum = {}; games.forEach(function (g) { byNum[g.g] = g; });
     var memo = {};
@@ -185,19 +211,33 @@
     var rounds = [];
     games.forEach(function (g) { var d = memo[g.g]; (rounds[d] = rounds[d] || []).push(g); });
 
+    var hasChamp = champFields.length > 0;
     var dateIdx = 0;
     for (var d = 1; d < rounds.length; d++) {
       var rg = rounds[d]; if (!rg || !rg.length) continue;
       rg.sort(function (a, b) { return a.g - b.g; });
-      var slot = 0;
-      rg.forEach(function (g) {
-        if (slot >= daySlots.length) { dateIdx++; slot = 0; }   // round bigger than a day → spill
-        var s = daySlots[slot];
-        g.date = dates.length ? dates[Math.min(dateIdx, dates.length - 1)] : '';
-        g.time = s.time; g.field = s.field;
-        slot++;
+      var regular = hasChamp ? rg.filter(function (g) { return !g.champ; }) : rg;
+      var slots = slotsFor(dateAt(dateIdx), regFields), slot = 0;
+      regular.forEach(function (g) {
+        var safety = 0;
+        while (slot >= slots.length) {
+          dateIdx++; slot = 0; slots = slotsFor(dateAt(dateIdx), regFields);
+          if (++safety > dates.length + 6) { slots = [fallback]; break; }
+        }
+        var s = slots[slot] || fallback;
+        g.date = dateAt(dateIdx); g.time = s.time; g.field = s.field; slot++;
       });
       dateIdx++;
+    }
+
+    // championship game(s) → a champ-only field, on the last date
+    if (hasChamp) {
+      var lastDate = dateAt(dates.length ? dates.length - 1 : 0);
+      var cSlots = slotsFor(lastDate, champFields), ci = 0;
+      games.filter(function (g) { return g.champ; }).sort(function (a, b) { return a.g - b.g; }).forEach(function (g) {
+        var s = cSlots[ci] || cSlots[cSlots.length - 1] || { field: champFields[0].name, time: (times[0] || {}).value || '' };
+        g.date = lastDate; g.field = s.field; g.time = s.time; ci++;
+      });
     }
     return games;
   }
@@ -220,6 +260,7 @@
       if (g.date === undefined) g.date = '';
       if (g.time === undefined) g.time = '';
       if (g.field === undefined) g.field = '';
+      delete g.champ;   // scheduling hint only — never persisted
     });
 
     var teams = rawTeams.map(function (t, i) {
