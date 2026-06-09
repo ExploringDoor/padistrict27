@@ -143,17 +143,32 @@
     return wb.games.concat(lb.games, fin.games);
   }
 
+  // Normalize inputs: a field is { name, lights } (lights default true); a time is
+  // { value:'HH:MM', needsLights } (defaults to needing lights at/after 6:00 PM).
+  function normField(f) { return typeof f === 'string' ? { name: f, lights: true } : { name: (f && f.name) || '', lights: !(f && f.lights === false) }; }
+  function normTime(t) {
+    if (t && typeof t === 'object') return { value: t.value || '18:00', needsLights: !!t.needsLights };
+    var h = parseInt(String(t).split(':')[0], 10);
+    return { value: String(t), needsLights: !isNaN(h) && h >= 18 };
+  }
+
   // ── Draft scheduler: assign date / time / field per game ─────────────
-  // Games are grouped by dependency depth (round); each round lands on the next
-  // available date, and games within a round spread across the fields and time
-  // slots. A game is never dated before the games that feed it.
+  // Games are grouped by dependency depth (round); each round starts on the next
+  // available date and fills that day's valid (field × time) slots, spilling to the
+  // following date when a round has more games than a day can hold. A game is never
+  // dated before the games that feed it, and an UNLIT field never takes a night game.
   function scheduleGames(games, opts) {
     opts = opts || {};
     var dates = (opts.dates || []).filter(Boolean);
-    var times = (opts.times && opts.times.length ? opts.times : ['18:00']).filter(Boolean);
-    var fields = (opts.fields && opts.fields.length ? opts.fields : ['']);
-    if (!times.length) times = ['18:00'];
-    if (!fields.length) fields = [''];
+    var times = (opts.times && opts.times.length ? opts.times : ['18:00']).map(normTime);
+    var fields = (opts.fields && opts.fields.length ? opts.fields : ['']).map(normField);
+    if (!times.length) times = [{ value: '18:00', needsLights: false }];
+    if (!fields.length) fields = [{ name: '', lights: true }];
+
+    // valid slots for a single day, earliest time first — skip night×unlit combos
+    var daySlots = [];
+    times.forEach(function (t) { fields.forEach(function (f) { if (f.lights || !t.needsLights) daySlots.push({ field: f.name, time: t.value }); }); });
+    if (!daySlots.length) daySlots.push({ field: fields[0].name, time: times[0].value });
 
     var byNum = {}; games.forEach(function (g) { byNum[g.g] = g; });
     var memo = {};
@@ -174,11 +189,13 @@
     for (var d = 1; d < rounds.length; d++) {
       var rg = rounds[d]; if (!rg || !rg.length) continue;
       rg.sort(function (a, b) { return a.g - b.g; });
-      var date = dates.length ? dates[Math.min(dateIdx, dates.length - 1)] : '';
-      rg.forEach(function (g, i) {
-        g.date = date;
-        g.field = fields[i % fields.length];
-        g.time = times[Math.floor(i / fields.length) % times.length];
+      var slot = 0;
+      rg.forEach(function (g) {
+        if (slot >= daySlots.length) { dateIdx++; slot = 0; }   // round bigger than a day → spill
+        var s = daySlots[slot];
+        g.date = dates.length ? dates[Math.min(dateIdx, dates.length - 1)] : '';
+        g.time = s.time; g.field = s.field;
+        slot++;
       });
       dateIdx++;
     }
