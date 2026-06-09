@@ -77,6 +77,22 @@
   .bk-champion .ct .team { font-family: var(--font-display); font-size: clamp(30px, 6vw, 58px); font-weight: 700; line-height: 1; letter-spacing: -.01em; margin-top: 2px; }
   .bk-champion .ct .word { font-family: var(--font-display); font-size: clamp(18px, 3vw, 26px); font-weight: 700; letter-spacing: .12em; }
 
+  /* Neon light traveling around the champion banner (SVG stroke-dashoffset comet) */
+  .bk-champion .bk-neon { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 14px; pointer-events: none; z-index: 1; overflow: visible; }
+  .bk-champion .trophy, .bk-champion .bk-trophy-img, .bk-champion .ct { z-index: 2; }
+  .bk-champion .bk-neon .bk-neon-rail { fill: none; stroke: rgba(0,45,114,.16); stroke-width: 1; }
+  .bk-champion .bk-neon .bk-neon-glow { fill: none; stroke: #EBCB5E; stroke-width: 3.4; stroke-linecap: round; stroke-dasharray: 60 540; filter: url(#bkNeonBlur); opacity: .85; animation: bkNeonTravel 4.4s linear infinite; }
+  .bk-champion .bk-neon .bk-neon-core { fill: none; stroke: #F4FBFF; stroke-width: 1.6; stroke-linecap: round; stroke-dasharray: 38 562; animation: bkNeonTravel 4.4s linear infinite; filter: drop-shadow(0 0 3px #8FE9FF) drop-shadow(0 0 6px rgba(143,233,255,.6)); }
+  @keyframes bkNeonTravel { to { stroke-dashoffset: -600; } }
+  .bk-champion .bk-trophy-img { width: 62px; height: 62px; object-fit: contain; display: block; position: relative; flex: none; filter: drop-shadow(0 2px 4px rgba(0,45,114,.35)); }
+  .bk-champion .ct .tourn { font-family: var(--font-display); letter-spacing: .14em; font-size: 14px; font-weight: 700; text-transform: uppercase; opacity: .92; margin-bottom: 2px; }
+  @media (prefers-reduced-motion: reduce) {
+    .bk-champion { animation: none; }
+    .bk-champion .bk-neon .bk-neon-glow, .bk-champion .bk-neon .bk-neon-core { animation: none; stroke-dasharray: none; stroke-dashoffset: 0; }
+    .bk-champion .bk-neon .bk-neon-glow { opacity: .5; }
+    .bk-champion .bk-neon .bk-neon-core { opacity: .8; }
+  }
+
   /* Teams & Fields panel (collapsible roster + home fields) */
   .ls-teams { border: 1px solid #e5e7eb; border-radius: 10px; margin: 18px 0 6px; background: #fff; overflow: hidden; }
   .ls-teams > summary { cursor: pointer; padding: 12px 16px; font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--d27-navy); list-style: none; display: flex; align-items: center; gap: 8px; user-select: none; }
@@ -603,7 +619,21 @@ function renderBracket(t) {
 
   let html = '';
   if (outcome.champion) {
-    html += `<div class="bk-champion"><span class="trophy">🏆</span><div class="ct"><div class="lbl">★ Tournament Champion ★</div><div class="team">${outcome.champion}</div><div class="word">Champion</div></div></div>`;
+    html += `<div class="bk-champion">` +
+      `<svg class="bk-neon" viewBox="0 0 1000 200" preserveAspectRatio="none" aria-hidden="true" focusable="false">` +
+        `<defs><filter id="bkNeonBlur" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3"/></filter></defs>` +
+        `<rect class="bk-neon-rail" pathLength="600" x="2.5" y="2.5" width="995" height="195" rx="55" ry="55" vector-effect="non-scaling-stroke"/>` +
+        `<rect class="bk-neon-glow" pathLength="600" x="2.5" y="2.5" width="995" height="195" rx="55" ry="55" vector-effect="non-scaling-stroke"/>` +
+        `<rect class="bk-neon-core" pathLength="600" x="2.5" y="2.5" width="995" height="195" rx="55" ry="55" vector-effect="non-scaling-stroke"/>` +
+      `</svg>` +
+      `<img class="bk-trophy-img" src="assets/d27-trophy.png" alt="champion trophy" onerror="this.onerror=null;this.outerHTML='<span class=&quot;trophy&quot;>🏆</span>'">` +
+      `<div class="ct">` +
+        `<div class="tourn">${escTxt(t.name)}</div>` +
+        `<div class="lbl">★ Tournament Champion ★</div>` +
+        `<div class="team">${escTxt(outcome.champion)}</div>` +
+        `<div class="word">Champion</div>` +
+      `</div>` +
+    `</div>`;
   }
   html += teamsPanelHTML(t, false);
   html += '<div class="bk-zoomable" id="bkZoom">';
