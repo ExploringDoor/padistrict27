@@ -227,6 +227,7 @@
         <button type="button" class="ed-tab active" data-view="schedule">📅 Schedule Editor</button>
         <button type="button" class="ed-tab" data-view="contacts">📇 Contacts</button>
         <button type="button" class="ed-tab" data-view="champions">🏆 Champions</button>
+        <button type="button" class="ed-tab" data-view="create">➕ Create</button>
       </div>
       <div id="view-schedule">
       <div class="ed-toolbar">
@@ -254,6 +255,63 @@
         <span class="status" id="saveStatus"></span>
       </div>
       </div><!-- /view-schedule -->
+
+      <div id="view-create" class="hidden">
+        <style>
+          .gn-intro h3 { margin: 0 0 4px; color: var(--d27-navy); font-family: var(--font-display); }
+          .gn-intro p { margin: 0 0 18px; color: var(--muted); font-size: 14px; max-width: 720px; }
+          .gn-form { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; max-width: 920px; }
+          .gn-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+          .gn-grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 12px; }
+          .gn-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 12px; }
+          .gn-form label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+          .gn-form input, .gn-form select, .gn-form textarea { width: 100%; margin-top: 4px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 14px; box-sizing: border-box; }
+          .gn-form textarea { min-height: 132px; resize: vertical; font-family: ui-monospace, Menlo, monospace; font-size: 13px; line-height: 1.5; }
+          .gn-wide { margin-top: 12px; }
+          .gn-actions { margin-top: 16px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+          .gn-btn { background: var(--d27-navy); color: #fff; border: none; padding: 12px 20px; border-radius: 6px; font-family: var(--font-display); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+          .gn-btn.alt { background: #fff; color: var(--d27-navy); border: 1px solid var(--d27-navy); }
+          .gn-btn:disabled { opacity: .5; cursor: not-allowed; }
+          .gn-status { font-size: 13px; color: var(--muted); }
+          .gn-status.ok { color: #047857; font-weight: 600; }
+          .gn-status.err { color: var(--d27-red); font-weight: 600; }
+          .gn-preview { margin-top: 20px; }
+          .gn-ph { margin: 0 0 4px; color: var(--d27-navy); font-family: var(--font-display); font-size: 17px; }
+          .gn-warn { margin-top: 12px; background: #FFFBEB; border: 1px solid var(--gold, #C9A227); border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #92400e; }
+          .gn-ptable { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+          .gn-ptable th { background: var(--d27-navy); color: #fff; padding: 7px 9px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+          .gn-ptable td { padding: 5px 9px; border-bottom: 1px solid var(--line); }
+          .gn-ptable tr:hover td { background: rgba(0,45,114,.02); }
+          .gn-ptable .ref { color: var(--accent); font-weight: 600; }
+          @media (max-width: 720px) { .gn-grid, .gn-grid3, .gn-cols { grid-template-columns: 1fr; } }
+        </style>
+        <div class="gn-intro">
+          <h3>➕ Create a tournament</h3>
+          <p>Enter the teams, fields, and dates — D27 builds the full bracket (matchups, byes, and the winner-advances wiring) plus a draft schedule. Review it below, then publish. You can fine-tune any game afterward in the Schedule Editor.</p>
+        </div>
+        <div class="gn-form">
+          <div class="gn-grid">
+            <div><label>Display name</label><input id="gnName" placeholder="e.g. Majors Baseball Championship" autocomplete="off"></div>
+            <div><label>Key — short id, no spaces</label><input id="gnKey" placeholder="e.g. BB-Majors" autocomplete="off"></div>
+          </div>
+          <div class="gn-grid3">
+            <div><label>Sport</label><select id="gnSport"><option>Baseball</option><option>Softball</option></select></div>
+            <div><label>Category</label><select id="gnCat"></select></div>
+            <div><label>Format</label><select id="gnFormat"><option value="single">Single elimination</option><option value="double">Double elimination</option></select></div>
+          </div>
+          <div class="gn-cols">
+            <div><label>Teams — one per line, seed order</label><textarea id="gnTeams" placeholder="Upper Providence&#10;GVE&#10;Lower Merion&#10;&#10;Optional home field:&#10;Radnor | RW-Encke Field"></textarea></div>
+            <div><label>Fields — one per line</label><textarea id="gnFields" placeholder="GV-King Road&#10;UP-MacFarlan Park&#10;LM-S. Ardmore Park"></textarea></div>
+            <div><label>Dates — one per line (YYYY-MM-DD)</label><textarea id="gnDates" placeholder="2026-06-22&#10;2026-06-24&#10;2026-06-26&#10;2026-06-28"></textarea></div>
+          </div>
+          <div class="gn-wide"><label>Game times — optional, comma or new-line separated</label><input id="gnTimes" placeholder="18:00, 19:30   (default 18:00)" autocomplete="off"></div>
+          <div class="gn-actions">
+            <button type="button" class="gn-btn" onclick="window.__genPreview && window.__genPreview()">⚡ Generate preview</button>
+            <span class="gn-status" id="gnStatus"></span>
+          </div>
+        </div>
+        <div class="gn-preview hidden" id="gnPreviewBox"></div>
+      </div><!-- /view-create -->
 
       <div id="view-contacts" class="hidden">
         <div class="ct-bar">
@@ -381,6 +439,7 @@
 
 <script src="js/d27-logos.js"></script>
 <script src="js/d27-bracket.js"></script>
+<script src="js/d27-tourney-gen.js"></script>
 <script type="module">
 import { isConfigured, db, auth } from './js/firebase-init.js';
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
@@ -867,8 +926,10 @@ function impHandleFile(file){
     $('view-schedule').classList.toggle('hidden', view!=='schedule');
     $('view-contacts').classList.toggle('hidden', view!=='contacts');
     $('view-champions').classList.toggle('hidden', view!=='champions');
+    $('view-create').classList.toggle('hidden', view!=='create');
     if(view==='contacts' && !loaded){ loaded=true; loadContacts(); }
     if(view==='champions' && window.__champLoad){ window.__champLoad(); }
+    if(view==='create' && window.__genInit){ window.__genInit(); }
   }
   document.querySelectorAll('.ed-tab').forEach(t=> t.addEventListener('click', ()=>tab(t.dataset.view)));
 
@@ -1170,6 +1231,85 @@ function impHandleFile(file){
     });
   }
   window.__champLoad = async ()=>{ if (loaded) return; loaded = true; await loadStaticManifest(); await reload(); renderAwaiting(); };
+})();
+
+// ── Create Tournament wizard ──────────────────────────────────────────
+// Teams + fields + dates → full single/double-elim bracket (D27gen) → review → publish.
+(function(){
+  const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const lines = s => String(s||'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+  const csv = s => String(s||'').split(/[\n,]/).map(x=>x.trim()).filter(Boolean);
+  const isRef = s => /^(WG|LG)-\d+$/i.test(String(s||'')) || /if necessary/i.test(String(s||''));
+  const parseTeam = ln => { const p = ln.split('|').map(x=>x.trim()); return p[1] ? { name:p[0], park:p[1] } : p[0]; };
+  let pending = null;
+
+  window.__genInit = function(){
+    const cat = $('gnCat');
+    if (cat && !cat.dataset.filled){ cat.innerHTML = IMP_CATEGORIES.map(c=>'<option>'+esc(c)+'</option>').join(''); cat.dataset.filled='1'; }
+    const sp = $('gnSport');
+    if (sp && !sp.dataset.wired){
+      sp.dataset.wired='1';
+      const sync = ()=>{ const want = sp.value==='Softball' ? 'LL International — Softball' : 'LL International — Baseball';
+        if (cat && [...cat.options].some(o=>o.value===want || o.textContent===want)) cat.value = want; };
+      sp.addEventListener('change', sync); sync();
+    }
+  };
+
+  window.__genPreview = function(){
+    const st = $('gnStatus'); st.className='gn-status'; st.textContent='';
+    const fail = m => { st.className='gn-status err'; st.textContent=m; };
+    const name = $('gnName').value.trim();
+    let key = $('gnKey').value.trim().replace(/\s+/g,'-');
+    if (!key && name) key = name.replace(/[^A-Za-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+    const sport=$('gnSport').value, category=$('gnCat').value, format=$('gnFormat').value;
+    const teams=lines($('gnTeams').value).map(parseTeam), fields=lines($('gnFields').value), dates=lines($('gnDates').value), times=csv($('gnTimes').value);
+    if (!name) return fail('Enter a display name.');
+    if (!key) return fail('Enter a key (short id).');
+    if (teams.length < 2) return fail('Enter at least 2 teams (one per line).');
+    const badDate = dates.find(d=>!/^\d{4}-\d{2}-\d{2}$/.test(d));
+    if (badDate) return fail('Dates must be YYYY-MM-DD — got "'+badDate+'".');
+    if (!window.D27gen) return fail('Generator not loaded — refresh the page.');
+    let out;
+    try { out = window.D27gen.generateTournament({ key, format, teams, fields, dates, times }); }
+    catch(e){ return fail('Generate failed: '+(e.message||e)); }
+    pending = { key, name, sport, category, special: category==='D27 Special Games', games: out.games, teams: out.teams, format };
+    render(pending);
+  };
+
+  function render(p){
+    const box = $('gnPreviewBox'); box.classList.remove('hidden');
+    const exists = !!TOURNEYS[p.key];
+    const fmt = p.format==='double' ? 'Double elimination' : 'Single elimination';
+    const rows = p.games.map(g=>'<tr><td>G'+g.g+'</td><td>'+esc(g.date||'—')+'</td><td>'+esc(g.time||'—')+'</td>'+
+      '<td class="'+(isRef(g.away)?'ref':'')+'">'+esc(g.away)+'</td><td class="'+(isRef(g.home)?'ref':'')+'">'+esc(g.home)+'</td><td>'+esc(g.field||'—')+'</td></tr>').join('');
+    box.innerHTML =
+      '<h4 class="gn-ph">Preview — '+esc(p.name)+'</h4>'+
+      '<div class="gn-status"><b>'+p.games.length+'</b> games · <b>'+p.teams.length+'</b> teams · '+fmt+' · key <b>'+esc(p.key)+'</b></div>'+
+      (exists?'<div class="gn-warn">⚠ A tournament with key <b>'+esc(p.key)+'</b> already exists — publishing will replace it.</div>':'')+
+      '<table class="gn-ptable"><thead><tr><th>#</th><th>Date</th><th>Time</th><th>Away</th><th>Home</th><th>Field</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+      '<div class="gn-actions"><button type="button" class="gn-btn" id="gnPublish">✅ Publish — make it live</button>'+
+      '<button type="button" class="gn-btn alt" id="gnCancel">Cancel</button><span class="gn-status" id="gnPubStatus"></span></div>';
+    $('gnPublish').onclick = window.__genPublish;
+    $('gnCancel').onclick = ()=>{ pending=null; box.classList.add('hidden'); };
+    box.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+
+  window.__genPublish = async function(){
+    if (!pending) return;
+    const st = $('gnPubStatus'); st.className='gn-status'; st.textContent='Publishing…';
+    try {
+      await setDoc(doc(db,'schedules',pending.key), {
+        key:pending.key, name:pending.name, sport:pending.sport, category:pending.category,
+        special:pending.special, games:pending.games, teams:pending.teams, updated:serverTimestamp(),
+      });
+      st.className='gn-status ok'; st.textContent='✓ Published · live now';
+      const key = pending.key; pending=null;
+      ['gnName','gnKey','gnTeams','gnFields','gnDates','gnTimes'].forEach(id=>{ if($(id)) $(id).value=''; });
+      await loadAll();
+      const sel=$('tourneySelect'); if (sel){ sel.value=key; sel.dispatchEvent(new Event('change')); }
+      setTimeout(()=>{ $('gnPreviewBox').classList.add('hidden'); const b=document.querySelector('.ed-tab[data-view="schedule"]'); if(b) b.click(); }, 1500);
+    } catch(e){ st.className='gn-status err'; st.textContent='Error: '+(e.message||e); }
+  };
 })();
 </script>
 
