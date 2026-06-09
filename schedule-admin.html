@@ -231,6 +231,7 @@
         <button type="button" class="ed-tab" data-view="champions">🏆 Champions</button>
         <button type="button" class="ed-tab" data-view="create">➕ Create</button>
         <button type="button" class="ed-tab" data-view="codes">🔑 Team Codes</button>
+        <button type="button" class="ed-tab" data-view="inbox">📥 Score Inbox</button>
       </div>
       <div id="view-schedule">
       <div class="ed-toolbar">
@@ -410,6 +411,38 @@
         <div id="codesTable"></div>
         <p class="ed-hint">4-digit codes, saved automatically. 🎲 regenerates one (the old code stops working).</p>
       </div><!-- /view-codes -->
+
+      <div id="view-inbox" class="hidden">
+        <style>
+          .ib-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+          .ib-head h3 { margin: 0 0 4px; color: var(--d27-navy); font-family: var(--font-display); }
+          .ib-head p { margin: 0; color: var(--muted); font-size: 14px; max-width: 520px; }
+          .ib-mode { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--d27-ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 9px 13px; cursor: pointer; white-space: nowrap; }
+          .ib-mode input { width: auto; margin: 0; }
+          .ib-empty { color: var(--muted); font-size: 14px; padding: 20px 0; }
+          .ib-card { border: 1px solid var(--line); border-left: 4px solid var(--line); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; background: #fff; max-width: 760px; }
+          .ib-card.ib-agreed { border-left-color: #10B981; background: #F0FDF4; }
+          .ib-card.ib-conflict { border-left-color: var(--d27-red); background: #FEF2F2; }
+          .ib-card.ib-single { border-left-color: var(--gold, #C9A227); }
+          .ib-gl { font-weight: 700; color: var(--d27-navy); font-size: 14px; margin-bottom: 8px; }
+          .ib-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: var(--line); color: var(--muted); margin-left: 8px; white-space: nowrap; }
+          .ib-badge.ok { background: #D1FAE5; color: #047857; }
+          .ib-badge.warn { background: #FEE2E2; color: var(--d27-red); }
+          .ib-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 7px 0; border-top: 1px dashed var(--line); }
+          .ib-row:first-of-type { border-top: none; }
+          .ib-rscore { font-size: 14px; color: var(--d27-ink); }
+          .ib-rscore b { color: var(--d27-navy); font-size: 17px; }
+          .ib-by { font-size: 12px; color: var(--muted); flex: 1; min-width: 120px; }
+          .ib-app { background: #10B981; color: #fff; border: none; border-radius: 6px; padding: 7px 13px; font-weight: 700; font-size: 12px; cursor: pointer; }
+          .ib-app:disabled { opacity: .6; }
+          .ib-dis { background: #FEE2E2; color: var(--d27-red); border: none; border-radius: 6px; width: 30px; height: 30px; cursor: pointer; font-weight: 700; }
+        </style>
+        <div class="ib-head">
+          <div><h3>📥 Score Inbox</h3><p>Scores submitted by managers, waiting for your OK. Approve to post it to the bracket + schedule, or dismiss it.</p></div>
+          <label class="ib-mode"><input type="checkbox" id="ibAuto"> Auto-apply when both teams agree</label>
+        </div>
+        <div id="ibList"><div class="ib-empty">Loading…</div></div>
+      </div><!-- /view-inbox -->
 
       <div id="view-contacts" class="hidden">
         <div class="ct-bar">
@@ -1040,10 +1073,12 @@ function impHandleFile(file){
     $('view-champions').classList.toggle('hidden', view!=='champions');
     $('view-create').classList.toggle('hidden', view!=='create');
     $('view-codes').classList.toggle('hidden', view!=='codes');
+    $('view-inbox').classList.toggle('hidden', view!=='inbox');
     if(view==='contacts' && !loaded){ loaded=true; loadContacts(); }
     if(view==='champions' && window.__champLoad){ window.__champLoad(); }
     if(view==='create' && window.__genInit){ window.__genInit(); }
     if(view==='codes' && window.__codesInit){ window.__codesInit(); }
+    if(view==='inbox' && window.__inboxLoad){ window.__inboxLoad(); }
   }
   document.querySelectorAll('.ed-tab').forEach(t=> t.addEventListener('click', ()=>tab(t.dataset.view)));
 
@@ -1391,6 +1426,55 @@ function impHandleFile(file){
     sel.addEventListener('change', ()=>{ if(sel.value) loadPins(sel.value); else { curKey=null; renderCodes(); } });
     $('codesGenBtn').addEventListener('click', ()=>{ if(!curKey){ const st=$('codesStatus'); st.textContent='Pick a tournament first.'; st.className='cd-status err'; return; } teamsOf(curKey).forEach(t=>{ if(!pins[t]) pins[t]=rand4(); }); renderCodes(); savePins(); });
     $('codesTable').addEventListener('click', e=>{ const b=e.target.closest('[data-regen]'); if(b){ pins[b.dataset.regen]=rand4(); renderCodes(); savePins(); } });
+  };
+})();
+
+// ── Score Inbox (review manager-submitted scores) ────────────────────
+(function(){
+  const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const norm = s => String(s||'').toLowerCase().replace(/\s+/g,' ').trim();
+  let SUBS=[], mode='approve', wired=false;
+
+  async function loadConfig(){ try{ const s=await getDoc(doc(db,'config','scoreSubmission')); if(s.exists()) mode=s.data().mode||'approve'; }catch(e){} }
+  async function loadSubs(){ try{ const snap=await getDocs(collection(db,'submissions')); SUBS=[]; snap.forEach(d=>SUBS.push(Object.assign({id:d.id}, d.data()))); }catch(e){ SUBS=[]; } }
+  function gameOf(s){ const t=TOURNEYS[s.tournamentKey]; return t ? (t.games||[]).find(x=>x.g===s.g) : null; }
+  function groupSubs(){ const g={}; SUBS.forEach(s=>{ const k=s.tournamentKey+'|'+s.g; (g[k]=g[k]||[]).push(s); }); return g; }
+  function agreement(list){ if(list.length<2) return 'single'; const teams=new Set(list.map(s=>norm(s.team))); const scores=new Set(list.map(s=>s.as+'-'+s.hs)); if(teams.size>=2 && scores.size===1) return 'agreed'; if(scores.size>1) return 'conflict'; return 'single'; }
+
+  async function applyScore(s){
+    const t=TOURNEYS[s.tournamentKey]; if(!t) return;
+    const games=(t.games||[]).map(g=> g.g===s.g ? Object.assign({}, g, {as:s.as, hs:s.hs}) : g);
+    await setDoc(doc(db,'schedules',s.tournamentKey), { games, updated: serverTimestamp() }, { merge:true });
+    t.games=games;
+    const del=SUBS.filter(x=>x.tournamentKey===s.tournamentKey && x.g===s.g);
+    await Promise.all(del.map(x=>deleteDoc(doc(db,'submissions',x.id))));
+    SUBS=SUBS.filter(x=>!(x.tournamentKey===s.tournamentKey && x.g===s.g));
+  }
+  function render(){
+    const box=$('ibList'); if(!box) return;
+    const groups=groupSubs(), keys=Object.keys(groups);
+    if(!keys.length){ box.innerHTML='<div class="ib-empty">No pending scores right now. 🎉</div>'; return; }
+    box.innerHTML=keys.map(k=>{
+      const list=groups[k], st=agreement(list), g=gameOf(list[0]);
+      const t=TOURNEYS[list[0].tournamentKey], nm=t?(t.name||list[0].tournamentKey):list[0].tournamentKey, matchup=g?(esc(g.away)+' vs '+esc(g.home)):'';
+      const badge = st==='agreed'?'<span class="ib-badge ok">✓ both teams agree</span>' : st==='conflict'?'<span class="ib-badge warn">⚠ teams disagree</span>' : '<span class="ib-badge">1 report</span>';
+      const rows=list.map(s=>'<div class="ib-row"><span class="ib-rscore">'+esc(g?g.away:'Away')+' <b>'+s.as+'</b> – <b>'+s.hs+'</b> '+esc(g?g.home:'Home')+'</span><span class="ib-by">by '+esc(s.by||'—')+' · '+esc(s.team)+'</span><button class="ib-app" data-app="'+s.id+'">✓ Approve</button><button class="ib-dis" data-dis="'+s.id+'" title="dismiss">✕</button></div>').join('');
+      return '<div class="ib-card ib-'+st+'"><div class="ib-gl">'+esc(nm)+' · Game '+list[0].g+(matchup?' — '+matchup:'')+badge+'</div>'+rows+'</div>';
+    }).join('');
+  }
+  async function autoApply(){ if(mode!=='auto') return; const groups=groupSubs(); for(const k of Object.keys(groups)){ if(agreement(groups[k])==='agreed'){ try{ await applyScore(groups[k][0]); }catch(e){} } } }
+
+  window.__inboxLoad = async function(){
+    const box=$('ibList'); if(box) box.innerHTML='<div class="ib-empty">Loading…</div>';
+    await loadConfig(); await loadSubs();
+    const cb=$('ibAuto'); if(cb) cb.checked=(mode==='auto');
+    await autoApply(); render();
+    if(wired) return; wired=true;
+    $('ibList').addEventListener('click', async e=>{
+      const ap=e.target.closest('[data-app]'); if(ap){ const s=SUBS.find(x=>x.id===ap.dataset.app); if(s){ ap.textContent='…'; ap.disabled=true; try{ await applyScore(s); render(); if(typeof loadAll==='function') loadAll(); }catch(err){ alert('Apply failed: '+(err.message||err)); render(); } } return; }
+      const di=e.target.closest('[data-dis]'); if(di){ try{ await deleteDoc(doc(db,'submissions',di.dataset.dis)); SUBS=SUBS.filter(x=>x.id!==di.dataset.dis); render(); }catch(err){ alert('Dismiss failed: '+(err.message||err)); } return; }
+    });
+    $('ibAuto').addEventListener('change', async ()=>{ mode=$('ibAuto').checked?'auto':'approve'; try{ await setDoc(doc(db,'config','scoreSubmission'), {mode}); }catch(e){} await autoApply(); render(); });
   };
 })();
 
