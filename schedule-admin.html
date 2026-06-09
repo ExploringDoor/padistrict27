@@ -31,6 +31,8 @@
   .ed-err { background: #FEE2E2; color: var(--d27-red); border-radius: 6px; padding: 10px 12px; font-size: 13px; margin-top: 12px; display: none; }
 
   .ed-toolbar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 22px 0 14px; }
+  .ed-del { margin-left: auto; background: #fff; color: var(--d27-red); border: 1px solid var(--d27-red); border-radius: 6px; padding: 7px 14px; font-weight: 700; font-size: 13px; cursor: pointer; }
+  .ed-del:hover { background: var(--d27-red); color: #fff; }
   .ed-toolbar select { padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 14px; background: var(--surface); min-width: 250px; }
   .ed-toolbar .meta { color: var(--muted); font-size: 13px; }
   .ed-toolbar .links { margin-left: auto; display: flex; gap: 10px; }
@@ -237,6 +239,7 @@
           <a id="schedLink" href="live-schedule.html" target="_blank">View schedule ↗</a>
           <a id="brkLink" href="brackets.html" target="_blank">View bracket ↗</a>
         </div>
+        <button type="button" class="ed-del" onclick="window.__delTourney()">🗑 Delete tournament</button>
       </div>
 
       <div id="bracketCheck" class="bk-check"></div>
@@ -323,7 +326,7 @@
           </div>
           <div class="gn-grid3">
             <div><label>Sport</label><select id="gnSport"><option>Baseball</option><option>Softball</option></select></div>
-            <div><label>Category</label><select id="gnCat"></select></div>
+            <div><label>Category</label><input id="gnCat" list="gnCatList" placeholder="Pick or type a category" autocomplete="off"><datalist id="gnCatList"></datalist></div>
             <div><label>Format</label><select id="gnFormat"><option value="single">Single elimination</option><option value="double">Double elimination</option></select></div>
           </div>
           <div class="gn-block">
@@ -700,6 +703,20 @@ function rowEl(g) {
   return tr;
 }
 const esc = v => v == null ? '' : String(v).replace(/"/g, '&quot;');
+
+window.__delTourney = async () => {
+  if (!current) { alert('Pick a tournament first.'); return; }
+  const nm = (current.name || current.key || '').trim();
+  const typed = prompt('⚠ Permanently delete "' + nm + '" and ALL its games?\nThis cannot be undone.\n\nType the tournament name exactly to confirm:');
+  if (typed == null) return;
+  if (typed.trim() !== nm) { alert('That didn\'t match "' + nm + '" — nothing was deleted.'); return; }
+  try {
+    await deleteDoc(doc(db, 'schedules', current.key));
+    current = null;
+    await loadAll();
+    alert('✓ Deleted "' + nm + '".');
+  } catch (e) { alert('Delete failed: ' + (e.message || e)); }
+};
 
 window.__addRow = () => {
   const next = current.games.reduce((m,g)=>Math.max(m,g.g||0),0) + 1;
@@ -1314,10 +1331,10 @@ function impHandleFile(file){
   function renderTimes(){ const box=$('gnTimeChips'); if(!box) return; times.sort((a,b)=>a.value.localeCompare(b.value)); box.innerHTML = times.map((t,i)=>'<span class="gn-chip'+(t.needsLights?' warn':'')+'" data-tgltime="'+i+'" title="click to toggle needs-lights">'+esc(fmtTime(t.value))+(t.needsLights?' ⚠':'')+'<button type="button" data-rmtime="'+i+'">×</button></span>').join(''); }
 
   window.__genInit = function(){
-    const cat=$('gnCat');
-    if(cat && !cat.dataset.filled){ cat.innerHTML=IMP_CATEGORIES.map(c=>'<option>'+esc(c)+'</option>').join(''); cat.dataset.filled='1'; }
+    const cat=$('gnCat'), catList=$('gnCatList');
+    if(catList && !catList.dataset.filled){ catList.innerHTML=IMP_CATEGORIES.map(c=>'<option value="'+esc(c)+'">').join(''); catList.dataset.filled='1'; if(cat && !cat.value) cat.value=IMP_CATEGORIES[0]; }
     const sp=$('gnSport');
-    if(sp && !sp.dataset.wired){ sp.dataset.wired='1'; const sync=()=>{ const want=sp.value==='Softball'?'LL International — Softball':'LL International — Baseball'; if(cat&&[...cat.options].some(o=>o.value===want||o.textContent===want)) cat.value=want; }; sp.addEventListener('change', sync); sync(); }
+    if(sp && !sp.dataset.wired){ sp.dataset.wired='1'; const sync=()=>{ const want=sp.value==='Softball'?'LL International — Softball':'LL International — Baseball'; const cur=(cat?cat.value:'').trim(); if(cat && (!cur || /^LL International — (Baseball|Softball)$/.test(cur))) cat.value=want; }; sp.addEventListener('change', sync); sync(); }
     aggregate();
     selTeams.forEach(t=>{ if(!KNOWN_TEAMS.some(k=>norm(k.name)===norm(t.name))) KNOWN_TEAMS.push({name:t.name,park:t.park}); });
     KNOWN_FIELDS.forEach(n=>{ if(!fieldRows.some(f=>norm(f.name)===norm(n))) fieldRows.push({name:n,lights:true,on:false}); });

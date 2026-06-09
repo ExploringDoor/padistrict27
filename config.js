@@ -67,7 +67,7 @@
     // from their public sites.
     leagues: [
       {
-        slug: 'berwyn-paoli', name: 'Berwyn-Paoli LL', short: 'BPLL',
+        slug: 'berwyn-paoli', name: 'Berwyn/Paoli LL', short: 'BPLL',
         town: 'Berwyn, PA', county: 'Chester',
         site: 'https://www.bpall.org',
         fields: [{ name: 'Field of Dreams', addr: '915 Howellville Road, Berwyn, PA 19312' }],
