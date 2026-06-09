@@ -289,6 +289,8 @@
           .gn-block { margin-top: 14px; }
           .gn-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
           .gn-hint2 { font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--muted); font-size: 11px; }
+          .gn-hint3 { color: var(--muted); font-size: 11px; margin-top: 7px; }
+          .gn-to { color: var(--muted); font-size: 12px; align-self: center; }
           .gn-pick { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1px; max-height: 200px; overflow-y: auto; border: 1px solid var(--line); border-radius: 8px; padding: 8px; background: #fff; margin-top: 4px; }
           .gn-pick label { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--d27-ink); cursor: pointer; padding: 5px 6px; border-radius: 5px; margin: 0; }
           .gn-pick label:hover { background: rgba(0,45,114,.05); }
@@ -356,12 +358,13 @@
           </div>
           <div class="gn-two">
             <div class="gn-block">
-              <label>Dates <span class="gn-hint2">— pick from the calendar</span></label>
-              <div class="gn-addrow"><input type="date" id="gnDateAdd"><button type="button" class="gn-add" id="gnDateAddBtn">+ Add date</button></div>
+              <label>Tournament days <span class="gn-hint2">— the day(s) games are played</span></label>
+              <div class="gn-addrow"><input type="date" id="gnDateFrom" title="first day"><span class="gn-to">to</span><input type="date" id="gnDateTo" title="last day (optional)"><button type="button" class="gn-add" id="gnDateAddBtn">+ Add</button></div>
+              <div class="gn-hint3">One day? Just fill the first box. Several days? Set both and it adds every day in between.</div>
               <div class="gn-chips" id="gnDateChips"></div>
             </div>
             <div class="gn-block">
-              <label>Game times <span class="gn-hint2">— AM/PM; ⚠ = needs lights (click a chip to toggle)</span></label>
+              <label>Game start times <span class="gn-hint2">— times a game can start each day; ⚠ = needs lights</span></label>
               <div class="gn-addrow"><input type="time" id="gnTimeAdd"><button type="button" class="gn-add" id="gnTimeAddBtn">+ Add time</button></div>
               <div class="gn-chips" id="gnTimeChips"></div>
             </div>
@@ -1315,6 +1318,7 @@ function impHandleFile(file){
   const isRef = s => /^(WG|LG)-\d+$/i.test(String(s||'')) || /if necessary/i.test(String(s||''));
   const norm = s => String(s||'').toLowerCase().replace(/\s+/g,' ').trim();
   const fmtTime = t => { const p=String(t||'').split(':'); let h=+p[0]; const m=p[1]||'00'; if(isNaN(h)) return String(t||''); const ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+m+' '+ap; };
+  const nextDay = iso => { const p=String(iso).split('-').map(Number); return new Date(Date.UTC(p[0],p[1]-1,p[2]+1)).toISOString().slice(0,10); };
 
   let KNOWN_TEAMS=[], KNOWN_FIELDS=[];
   let selTeams=[], fieldRows=[], dates=[], times=[];
@@ -1381,7 +1385,7 @@ function impHandleFile(file){
     });
     $('gnFieldAddBtn').addEventListener('click', ()=>{ const inp=$('gnFieldAdd'), v=inp.value.trim(); if(v){ const ex=fieldRows.find(f=>norm(f.name)===norm(v)); if(ex) ex.on=true; else fieldRows.push({name:v,lights:true,on:true,champOnly:false,offDates:[],offTimes:[]}); renderFieldRows(); } inp.value=''; });
     $('gnFieldAdd').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); $('gnFieldAddBtn').click(); } });
-    $('gnDateAddBtn').addEventListener('click', ()=>{ const v=$('gnDateAdd').value; if(v && !dates.includes(v)){ dates.push(v); renderDates(); } });
+    $('gnDateAddBtn').addEventListener('click', ()=>{ const from=$('gnDateFrom').value, to=$('gnDateTo').value; if(!from) return; const add=d=>{ if(!dates.includes(d)) dates.push(d); }; if(to && to>=from){ let cur=from, guard=0; while(cur<=to && guard<400){ add(cur); cur=nextDay(cur); guard++; } } else add(from); $('gnDateFrom').value=''; $('gnDateTo').value=''; renderDates(); });
     $('gnTimeAddBtn').addEventListener('click', ()=>{ const v=$('gnTimeAdd').value; if(v && !times.some(t=>t.value===v)){ times.push({value:v, needsLights:(+String(v).split(':')[0])>=18}); renderTimes(); } });
     $('gnDateChips').addEventListener('click', e=>{ const b=e.target.closest('[data-rmdate]'); if(b){ dates.splice(+b.dataset.rmdate,1); renderDates(); } });
     $('gnTimeChips').addEventListener('click', e=>{ const rm=e.target.closest('[data-rmtime]'); if(rm){ times.splice(+rm.dataset.rmtime,1); renderTimes(); return; } const ch=e.target.closest('[data-tgltime]'); if(ch){ const t=times[+ch.dataset.tgltime]; t.needsLights=!t.needsLights; renderTimes(); } });
