@@ -15,6 +15,20 @@
     document.head.appendChild(s);
   })();
 
+  // Google Analytics 4 — paste your Measurement ID below to switch it on (blank = off).
+  // Get it at analytics.google.com → Admin → Data Streams → your web stream (looks like G-XXXXXXXXXX).
+  var GA_ID = '';
+  if (GA_ID) {
+    var gaScript = document.createElement('script');
+    gaScript.async = true;
+    gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(gaScript);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+  }
+
   // Favicon — the D27 crest (browser tab / bookmark icon) on every page.
   [['icon', '/favicon-32.png', 'image/png', '32x32'],
    ['icon', '/favicon-16.png', 'image/png', '16x16'],
