@@ -324,6 +324,9 @@
           .gn-fset-row b { color: var(--muted); font-weight: 700; font-size: 11px; margin-right: 4px; }
           .gn-mini { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 2px 8px; cursor: pointer; font-size: 11px; color: var(--d27-ink); }
           .gn-mini.off { background: #FEE2E2; border-color: var(--d27-red); color: var(--d27-red); text-decoration: line-through; }
+          .gn-offtadd { width: auto; margin: 0; padding: 2px 6px; font-size: 11px; }
+          .gn-offtbtn { background: #fff; color: var(--d27-navy); border: 1px solid var(--d27-navy); border-radius: 10px; padding: 2px 9px; font-size: 11px; font-weight: 700; cursor: pointer; }
+          .gn-offtbtn:hover { background: var(--d27-navy); color: #fff; }
           @media (max-width: 720px) { .gn-grid, .gn-grid3, .gn-cols, .gn-two { grid-template-columns: 1fr; } }
         </style>
         <div class="gn-intro">
@@ -1317,18 +1320,22 @@ function impHandleFile(file){
   let selTeams=[], fieldRows=[], dates=[], times=[];
   let built=false, pending=null;
 
-  // League name only — drop "(Arena)"-style qualifiers and a trailing " 2" so the
-  // picker shows clean league names (Adam: teams are just the league name).
+  // cleanLeague kept for the "+1" base-name logic (drop "(Arena)" + trailing " 2").
   function cleanLeague(name){ return String(name||'').replace(/\s*\([^)]*\)\s*/g,' ').replace(/\s+/g,' ').trim().replace(/\s+\d+$/,'').trim(); }
-  function aggregate(){
-    const tMap={}, fSet={};
-    const add=raw=>{ const n=cleanLeague(raw); if(n && !tMap[norm(n)]) tMap[norm(n)]={name:n,park:''}; return n; };
+  function aggregate(){   // fields only — the team list is the 11 leagues (loadLeagues)
+    const fSet={};
     for(const k in TOURNEYS){ const t=TOURNEYS[k]||{};
-      (t.teams||[]).forEach(tm=>{ const raw=String(tm.name||'').trim(); if(raw){ const n=add(raw); if(n && tm.park && !tMap[norm(n)].park) tMap[norm(n)].park=String(tm.park).trim(); } if(String(tm.park||'').trim()) fSet[String(tm.park).trim()]=1; });
-      (t.games||[]).forEach(g=>{ ['away','home'].forEach(s=>{ const raw=String(g[s]||'').trim(); if(raw && !isRef(raw) && !/^(bye|tbd|tba)$/i.test(raw)) add(raw); }); if(String(g.field||'').trim()) fSet[String(g.field).trim()]=1; });
+      (t.teams||[]).forEach(tm=>{ if(String(tm.park||'').trim()) fSet[String(tm.park).trim()]=1; });
+      (t.games||[]).forEach(g=>{ if(String(g.field||'').trim()) fSet[String(g.field).trim()]=1; });
     }
-    KNOWN_TEAMS=Object.values(tMap); KNOWN_FIELDS=Object.keys(fSet);
+    KNOWN_FIELDS=Object.keys(fSet);
   }
+  // The team picker is exactly the 11 D27 leagues (full names, no initials), read
+  // from data/leagues.json with a hardcoded fallback. Teams ARE leagues.
+  const LEAGUE_FALLBACK=['Berwyn/Paoli','Chester Valley','Coventry','Devon-Strafford','Exton','Great Valley','Lower Merion','Lower Perkiomen','Pottsgrove-Pottstown','Radnor-Wayne','Upper Providence'];
+  let leaguesLoaded=false;
+  function setLeagues(names){ KNOWN_TEAMS=names.map(n=>({name:n,park:''})); renderTeamPick(); }
+  async function loadLeagues(){ if(leaguesLoaded) return; leaguesLoaded=true; setLeagues(LEAGUE_FALLBACK); try{ const r=await fetch('data/leagues.json'); const j=await r.json(); const names=(j.leagues||[]).map(l=>String(l.name||'').replace(/\s*little league\s*$/i,'').trim()).filter(Boolean); if(names.length) setLeagues(names); }catch(e){} }
   function knownPark(name){ const k=KNOWN_TEAMS.find(t=>norm(t.name)===norm(name)); return k?k.park:''; }
 
   function renderTeamPick(){
@@ -1343,7 +1350,8 @@ function impHandleFile(file){
   function addTeam(name, park){ if(!name) return; if(!selTeams.some(t=>norm(t.name)===norm(name))) selTeams.push({name, park:park||knownPark(name)}); if(!KNOWN_TEAMS.some(t=>norm(t.name)===norm(name))) KNOWN_TEAMS.push({name, park:park||''}); renderTeamPick(); renderSelTeams(); }
 
   function renderFieldRows(){ const box=$('gnFieldRows'); if(!box) return; box.innerHTML = fieldRows.length ? fieldRows.map((f,i)=>{ const lim=(f.offDates||[]).length+(f.offTimes||[]).length; return '<div class="gn-frow'+(f.on?'':' off')+'"><input type="checkbox" data-fchk="'+i+'"'+(f.on?' checked':'')+'><span class="nm">'+esc(f.name)+'</span><button type="button" class="gn-lights'+(f.lights?'':' off')+'" data-flight="'+i+'">'+(f.lights?'💡 Lights':'🌑 No lights')+'</button><button type="button" class="gn-champ'+(f.champOnly?' on':'')+'" data-fchamp="'+i+'" title="hosts only the championship game">'+(f.champOnly?'🏆 Champ only':'🏆 Champ')+'</button><button type="button" class="gn-limits" data-flimits="'+i+'" title="mark unavailable days/times">⚙'+(lim?' '+lim:'')+'</button></div>'; }).join('') : '<div class="gn-none" style="padding:10px">No saved fields — add them below.</div>'; }
-  function fieldPanel(i){ const f=fieldRows[i]; const dch=dates.length?dates.map(d=>'<span class="gn-mini'+((f.offDates||[]).indexOf(d)>=0?' off':'')+'" data-foff-date="'+esc(d)+'">'+esc(d)+'</span>').join(''):'<span class="gn-none">add dates first</span>'; const tch=times.length?times.map(t=>'<span class="gn-mini'+((f.offTimes||[]).indexOf(t.value)>=0?' off':'')+'" data-foff-time="'+esc(t.value)+'">'+esc(fmtTime(t.value))+'</span>').join(''):'<span class="gn-none">add times first</span>'; return '<div class="gn-fset" data-fset="'+i+'"><div class="gn-fset-row"><b>Off days:</b> '+dch+'</div><div class="gn-fset-row"><b>Off times:</b> '+tch+'</div></div>'; }
+  function fieldPanel(i){ const f=fieldRows[i]; const dch=dates.length?dates.map(d=>'<span class="gn-mini'+((f.offDates||[]).indexOf(d)>=0?' off':'')+'" data-foff-date="'+esc(d)+'">'+esc(d)+'</span>').join(''):'<span class="gn-none">add dates first</span>'; const gt=times.map(t=>t.value); const tch=times.map(t=>'<span class="gn-mini'+((f.offTimes||[]).indexOf(t.value)>=0?' off':'')+'" data-foff-time="'+esc(t.value)+'">'+esc(fmtTime(t.value))+'</span>').join(''); const manual=(f.offTimes||[]).filter(v=>gt.indexOf(v)<0).map(v=>'<span class="gn-mini off" data-foff-time="'+esc(v)+'">'+esc(fmtTime(v))+' ✕</span>').join(''); const add='<input type="time" class="gn-offtadd" data-offtadd="'+i+'"><button type="button" class="gn-offtbtn" data-offtbtn="'+i+'">+ off-time</button>'; return '<div class="gn-fset" data-fset="'+i+'"><div class="gn-fset-row"><b>Off days:</b> '+dch+'</div><div class="gn-fset-row"><b>Off times:</b> '+tch+manual+' '+add+'</div></div>'; }
+  function refreshPanel(i){ const p=$('gnFieldRows').querySelector('[data-fset="'+i+'"]'); if(p) p.outerHTML=fieldPanel(i); updateLimitsBadge(i); }
   function updateLimitsBadge(i){ const b=$('gnFieldRows').querySelector('[data-flimits="'+i+'"]'); if(b){ const f=fieldRows[i]; const n=(f.offDates||[]).length+(f.offTimes||[]).length; b.textContent='⚙'+(n?' '+n:''); } }
   function renderDates(){ const box=$('gnDateChips'); if(!box) return; dates.sort(); box.innerHTML = dates.map((d,i)=>'<span class="gn-chip">'+esc(d)+'<button type="button" data-rmdate="'+i+'">×</button></span>').join(''); }
   function renderTimes(){ const box=$('gnTimeChips'); if(!box) return; times.sort((a,b)=>a.value.localeCompare(b.value)); box.innerHTML = times.map((t,i)=>'<span class="gn-chip'+(t.needsLights?' warn':'')+'" data-tgltime="'+i+'" title="click to toggle needs-lights">'+esc(fmtTime(t.value))+(t.needsLights?' ⚠':'')+'<button type="button" data-rmtime="'+i+'">×</button></span>').join(''); }
@@ -1353,8 +1361,7 @@ function impHandleFile(file){
     if(catList && !catList.dataset.filled){ catList.innerHTML=IMP_CATEGORIES.map(c=>'<option value="'+esc(c)+'">').join(''); catList.dataset.filled='1'; if(cat && !cat.value) cat.value=IMP_CATEGORIES[0]; }
     const sp=$('gnSport');
     if(sp && !sp.dataset.wired){ sp.dataset.wired='1'; const sync=()=>{ const want=sp.value==='Softball'?'LL International — Softball':'LL International — Baseball'; const cur=(cat?cat.value:'').trim(); if(cat && (!cur || /^LL International — (Baseball|Softball)$/.test(cur))) cat.value=want; }; sp.addEventListener('change', sync); sync(); }
-    aggregate();
-    selTeams.forEach(t=>{ if(!KNOWN_TEAMS.some(k=>norm(k.name)===norm(t.name))) KNOWN_TEAMS.push({name:t.name,park:t.park}); });
+    aggregate(); loadLeagues();
     KNOWN_FIELDS.forEach(n=>{ if(!fieldRows.some(f=>norm(f.name)===norm(n))) fieldRows.push({name:n,lights:true,on:false,champOnly:false,offDates:[],offTimes:[]}); });
     if(!times.length) times=[{value:'18:00', needsLights:true}];
     renderTeamPick(); renderSelTeams(); renderFieldRows(); renderDates(); renderTimes();
@@ -1368,8 +1375,9 @@ function impHandleFile(file){
       const lt=e.target.closest('[data-flight]'); if(lt){ const f=fieldRows[+lt.dataset.flight]; f.lights=!f.lights; lt.classList.toggle('off', !f.lights); lt.textContent=f.lights?'💡 Lights':'🌑 No lights'; return; }
       const ch=e.target.closest('[data-fchamp]'); if(ch){ const f=fieldRows[+ch.dataset.fchamp]; f.champOnly=!f.champOnly; ch.classList.toggle('on', f.champOnly); ch.textContent=f.champOnly?'🏆 Champ only':'🏆 Champ'; return; }
       const lim=e.target.closest('[data-flimits]'); if(lim){ const i=+lim.dataset.flimits, row=lim.closest('.gn-frow'), nx=row.nextElementSibling; if(nx && nx.classList.contains('gn-fset')) nx.remove(); else row.insertAdjacentHTML('afterend', fieldPanel(i)); return; }
-      const doff=e.target.closest('[data-foff-date]'); if(doff){ const i=+doff.closest('[data-fset]').dataset.fset, dt=doff.dataset.foffDate, arr=fieldRows[i].offDates, j=arr.indexOf(dt); if(j>=0) arr.splice(j,1); else arr.push(dt); doff.classList.toggle('off'); updateLimitsBadge(i); return; }
-      const toff=e.target.closest('[data-foff-time]'); if(toff){ const i=+toff.closest('[data-fset]').dataset.fset, tv=toff.dataset.foffTime, arr=fieldRows[i].offTimes, j=arr.indexOf(tv); if(j>=0) arr.splice(j,1); else arr.push(tv); toff.classList.toggle('off'); updateLimitsBadge(i); return; }
+      const doff=e.target.closest('[data-foff-date]'); if(doff){ const i=+doff.closest('[data-fset]').dataset.fset, dt=doff.dataset.foffDate, arr=fieldRows[i].offDates, j=arr.indexOf(dt); if(j>=0) arr.splice(j,1); else arr.push(dt); refreshPanel(i); return; }
+      const toff=e.target.closest('[data-foff-time]'); if(toff){ const i=+toff.closest('[data-fset]').dataset.fset, tv=toff.dataset.foffTime, arr=fieldRows[i].offTimes, j=arr.indexOf(tv); if(j>=0) arr.splice(j,1); else arr.push(tv); refreshPanel(i); return; }
+      const ota=e.target.closest('[data-offtbtn]'); if(ota){ const i=+ota.dataset.offtbtn, inp=$('gnFieldRows').querySelector('[data-offtadd="'+i+'"]'), v=inp&&inp.value; if(v && fieldRows[i].offTimes.indexOf(v)<0) fieldRows[i].offTimes.push(v); refreshPanel(i); return; }
     });
     $('gnFieldAddBtn').addEventListener('click', ()=>{ const inp=$('gnFieldAdd'), v=inp.value.trim(); if(v){ const ex=fieldRows.find(f=>norm(f.name)===norm(v)); if(ex) ex.on=true; else fieldRows.push({name:v,lights:true,on:true,champOnly:false,offDates:[],offTimes:[]}); renderFieldRows(); } inp.value=''; });
     $('gnFieldAdd').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); $('gnFieldAddBtn').click(); } });
