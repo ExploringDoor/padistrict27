@@ -74,10 +74,14 @@
     const gf = finals[0];
     const feederCls = raw => { const r = parseRef(raw); return (r.kind === 'WG' || r.kind === 'LG') ? cls[r.g] : null; };
     const winnersSide = feederCls(gf.away) === 'w' ? 'away' : feederCls(gf.home) === 'w' ? 'home' : 'away';
+    // A true double-elim grand final has a losers-bracket finalist on one side.
+    // A single-elim final (no losers feeder either side) is simply won outright —
+    // crown whoever wins, regardless of which slot they're in.
+    const isGrandFinal = feederCls(gf.away) === 'l' || feederCls(gf.home) === 'l';
     let champion = null;
     if (isPlayed(gf)) {
       const winSide = gf.as > gf.hs ? 'away' : gf.hs > gf.as ? 'home' : null;
-      if (winSide === winnersSide) {
+      if (winSide && (!isGrandFinal || winSide === winnersSide)) {
         champion = resolveSide(t, parseRef(winSide === 'away' ? gf.away : gf.home), new Set());
         finals.slice(1).forEach(g => hide.add(g.g));
       } else if (winSide) {

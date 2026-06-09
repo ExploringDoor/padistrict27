@@ -508,10 +508,12 @@ function championOutcome(t, cls) {
   const gf = finals[0];
   const feederCls = raw => { const r = parseRef(raw); return (r.kind === 'WG' || r.kind === 'LG') ? cls[r.g] : null; };
   const winnersSide = feederCls(gf.away) === 'w' ? 'away' : feederCls(gf.home) === 'w' ? 'home' : 'away';
+  // Single-elim final (no losers-bracket finalist on either side) is won outright.
+  const isGrandFinal = feederCls(gf.away) === 'l' || feederCls(gf.home) === 'l';
   let champion = null;
   if (isPlayed(gf)) {
     const winSide = gf.as > gf.hs ? 'away' : gf.hs > gf.as ? 'home' : null;
-    if (winSide === winnersSide) {
+    if (winSide && (!isGrandFinal || winSide === winnersSide)) {
       // winners-bracket champ won → tournament over, if-necessary not played
       champion = resolveSide(t, parseRef(winSide === 'away' ? gf.away : gf.home), new Set());
       finals.slice(1).forEach(g => hide.add(g.g));
