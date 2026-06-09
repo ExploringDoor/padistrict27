@@ -307,6 +307,8 @@
           .gn-chip.warn { background: #b45309; cursor: pointer; }
           .gn-chip button { background: none; border: none; color: #fff; cursor: pointer; font-size: 15px; line-height: 1; padding: 0 2px; }
           .gn-chip button:hover { color: #fecaca; }
+          .gn-chip .gn-mv { font-size: 12px; opacity: .75; padding: 0 1px; }
+          .gn-chip .gn-mv:hover { opacity: 1; }
           .gn-chip .gn-plus1 { font-size: 11px; font-weight: 700; background: rgba(255,255,255,.18); border-radius: 8px; padding: 1px 6px; }
           .gn-chip .gn-plus1:hover { background: rgba(255,255,255,.34); color: #fff; }
           .gn-frows { border: 1px solid var(--line); border-radius: 8px; background: #fff; margin-top: 4px; max-height: 220px; overflow-y: auto; }
@@ -346,9 +348,9 @@
             <div><label>Format</label><select id="gnFormat"><option value="single">Single elimination</option><option value="double">Double elimination</option></select></div>
           </div>
           <div class="gn-block">
-            <label>Teams <span class="gn-hint2">— click to add; first selected is the top seed (gets any bye)</span></label>
+            <label>Teams <span class="gn-hint2">— first = top seed (gets any bye); reorder with ↑↓ or 🎲 Shuffle</span></label>
             <div class="gn-pick" id="gnTeamPick"></div>
-            <div class="gn-addrow"><input id="gnTeamAdd" placeholder="Add a team not in the list  (optional: Name | Home Field)" autocomplete="off"><button type="button" class="gn-add" id="gnTeamAddBtn">+ Add</button></div>
+            <div class="gn-addrow"><input id="gnTeamAdd" placeholder="Add a team not in the list  (optional: Name | Home Field)" autocomplete="off"><button type="button" class="gn-add" id="gnTeamAddBtn">+ Add</button><button type="button" class="gn-add" id="gnShuffleBtn" title="randomize the seed order — and the byes">🎲 Shuffle</button></div>
             <div class="gn-chips" id="gnTeamSel"></div>
           </div>
           <div class="gn-block">
@@ -1348,7 +1350,7 @@ function impHandleFile(file){
     KNOWN_TEAMS.sort((a,b)=>a.name.localeCompare(b.name));
     box.innerHTML = KNOWN_TEAMS.length ? KNOWN_TEAMS.map(t=>'<label><input type="checkbox" data-team="'+esc(t.name)+'"'+(sel.has(norm(t.name))?' checked':'')+'> '+esc(t.name)+'</label>').join('') : '<div class="gn-none">No saved teams yet — add them below.</div>';
   }
-  function renderSelTeams(){ const box=$('gnTeamSel'); if(!box) return; box.innerHTML = selTeams.map((t,i)=>'<span class="gn-chip"><span class="num">'+(i+1)+'</span>'+esc(t.name)+'<button type="button" class="gn-plus1" data-dupteam="'+i+'" title="add another team from this league">+1</button><button type="button" data-rmteam="'+i+'">×</button></span>').join(''); }
+  function renderSelTeams(){ const box=$('gnTeamSel'); if(!box) return; const n=selTeams.length; box.innerHTML = selTeams.map((t,i)=>'<span class="gn-chip"><span class="num">'+(i+1)+'</span>'+esc(t.name)+(i>0?'<button type="button" class="gn-mv" data-upteam="'+i+'" title="move up (toward top seed / bye)">↑</button>':'')+(i<n-1?'<button type="button" class="gn-mv" data-downteam="'+i+'" title="move down">↓</button>':'')+'<button type="button" class="gn-plus1" data-dupteam="'+i+'" title="add another team from this league">+1</button><button type="button" data-rmteam="'+i+'">×</button></span>').join(''); }
   function toggleTeam(name){ const i=selTeams.findIndex(t=>norm(t.name)===norm(name)); if(i>=0) selTeams.splice(i,1); else selTeams.push({name, park:knownPark(name)}); renderSelTeams(); }
   function addAnother(i){ const t=selTeams[i]; if(!t) return; const base=cleanLeague(t.name)||t.name; const taken=new Set(selTeams.map(x=>norm(x.name))); let n=2; while(taken.has(norm(base+' '+n))) n++; selTeams.push({name: base+' '+n, park: t.park||''}); renderSelTeams(); }
   function addTeam(name, park){ if(!name) return; if(!selTeams.some(t=>norm(t.name)===norm(name))) selTeams.push({name, park:park||knownPark(name)}); if(!KNOWN_TEAMS.some(t=>norm(t.name)===norm(name))) KNOWN_TEAMS.push({name, park:park||''}); renderTeamPick(); renderSelTeams(); }
@@ -1371,7 +1373,13 @@ function impHandleFile(file){
     renderTeamPick(); renderSelTeams(); renderFieldRows(); renderDates(); renderTimes();
     if(built) return; built=true;
     $('gnTeamPick').addEventListener('change', e=>{ const cb=e.target.closest('input[data-team]'); if(cb) toggleTeam(cb.dataset.team); });
-    $('gnTeamSel').addEventListener('click', e=>{ const dup=e.target.closest('[data-dupteam]'); if(dup){ addAnother(+dup.dataset.dupteam); return; } const b=e.target.closest('[data-rmteam]'); if(b){ const t=selTeams[+b.dataset.rmteam]; selTeams.splice(+b.dataset.rmteam,1); if(t) [...$('gnTeamPick').querySelectorAll('input[data-team]')].forEach(cb=>{ if(norm(cb.dataset.team)===norm(t.name)) cb.checked=false; }); renderSelTeams(); } });
+    $('gnTeamSel').addEventListener('click', e=>{
+      const up=e.target.closest('[data-upteam]'); if(up){ const i=+up.dataset.upteam; if(i>0){ const t=selTeams.splice(i,1)[0]; selTeams.splice(i-1,0,t); renderSelTeams(); } return; }
+      const dn=e.target.closest('[data-downteam]'); if(dn){ const i=+dn.dataset.downteam; if(i<selTeams.length-1){ const t=selTeams.splice(i,1)[0]; selTeams.splice(i+1,0,t); renderSelTeams(); } return; }
+      const dup=e.target.closest('[data-dupteam]'); if(dup){ addAnother(+dup.dataset.dupteam); return; }
+      const b=e.target.closest('[data-rmteam]'); if(b){ const t=selTeams[+b.dataset.rmteam]; selTeams.splice(+b.dataset.rmteam,1); if(t) [...$('gnTeamPick').querySelectorAll('input[data-team]')].forEach(cb=>{ if(norm(cb.dataset.team)===norm(t.name)) cb.checked=false; }); renderSelTeams(); }
+    });
+    $('gnShuffleBtn').addEventListener('click', ()=>{ for(let i=selTeams.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const tmp=selTeams[i]; selTeams[i]=selTeams[j]; selTeams[j]=tmp; } renderSelTeams(); });
     $('gnTeamAddBtn').addEventListener('click', ()=>{ const inp=$('gnTeamAdd'), p=inp.value.split('|').map(x=>x.trim()); if(p[0]) addTeam(p[0], p[1]||''); inp.value=''; });
     $('gnTeamAdd').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); $('gnTeamAddBtn').click(); } });
     $('gnFieldRows').addEventListener('change', e=>{ const cb=e.target.closest('input[data-fchk]'); if(cb){ fieldRows[+cb.dataset.fchk].on=cb.checked; const r=cb.closest('.gn-frow'); if(r) r.classList.toggle('off', !cb.checked); } });
