@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Submit a Score · PA District 27 Little League</title>
+<meta name="description" content="Managers: report your game's final score to PA District 27. Your District Administrator reviews every submission before it posts." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<script src="config.js"></script>
+<link rel="stylesheet" href="css/styles.css" />
+
+<style>
+  .ss-hero { background: linear-gradient(135deg, rgba(0,27,71,.95), rgba(0,45,114,.88)), var(--d27-navy); color:#fff; padding: var(--space-6) 0; }
+  .ss-hero .crumb { font-family:'Oswald',sans-serif; font-size:var(--text-xs); text-transform:uppercase; letter-spacing:.14em; color:var(--gold); margin-bottom:var(--space-2); }
+  .ss-hero .crumb a { color:rgba(255,255,255,.6); text-decoration:none; }
+  .ss-hero h1 { color:#fff; font-size:clamp(1.9rem,4vw,var(--text-3xl,2rem)); margin-bottom:var(--space-2); }
+  .ss-hero p { color:rgba(255,255,255,.82); font-size:var(--text-lg); max-width:60ch; }
+  .ss-wrap { max-width: 560px; margin: var(--space-6) auto var(--space-7); padding: 0 var(--space-4); }
+  .ss-card { background: var(--surface,#fff); border:1px solid var(--line); border-radius: var(--radius,12px); padding: var(--space-5); box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  .ss-card label { display:block; font-family:'Oswald',sans-serif; font-size:var(--text-xs); text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:600; margin: var(--space-4) 0 6px; }
+  .ss-card select, .ss-card input { width:100%; padding:11px 13px; border:1px solid var(--line); border-radius:7px; font:inherit; font-size:var(--text-base,15px); box-sizing:border-box; background:#fff; color:var(--d27-ink); }
+  .ss-scores { display:grid; grid-template-columns:1fr auto 1fr; gap:10px; align-items:end; }
+  .ss-scores .vs { padding-bottom:12px; color:var(--muted); font-weight:700; font-size:20px; }
+  .ss-scores input { text-align:center; font-size:22px; font-weight:700; }
+  .ss-mini { font-size:var(--text-xs); color:var(--d27-navy); font-weight:600; margin-bottom:4px; text-align:center; min-height:1.2em; }
+  .ss-sub { display:block; margin-top:var(--space-5); width:100%; background:var(--d27-navy); color:#fff; border:none; padding:14px; border-radius:8px; font-family:'Oswald',sans-serif; font-weight:700; letter-spacing:.05em; text-transform:uppercase; font-size:var(--text-base,15px); cursor:pointer; }
+  .ss-sub:hover { background:var(--d27-navy-dark,#001b47); }
+  .ss-sub:disabled { opacity:.5; cursor:not-allowed; }
+  .ss-msg { margin-top:var(--space-4); padding:12px 14px; border-radius:8px; font-size:var(--text-sm); display:none; }
+  .ss-msg.ok { display:block; background:#ECFDF5; border:1px solid rgba(4,120,87,.3); color:#047857; font-weight:600; }
+  .ss-msg.err { display:block; background:#FEF2F2; border:1px solid rgba(220,38,38,.3); color:var(--d27-red); font-weight:600; }
+  .ss-msg.work { display:block; background:var(--d27-sub,#f1f5f9); border:1px solid var(--line); color:var(--muted); }
+  .ss-note { color:var(--muted); font-size:var(--text-sm); margin-top:var(--space-3); }
+</style>
+</head>
+<body>
+
+<div id="d27-nav"></div>
+
+<header class="ss-hero">
+  <div class="container">
+    <div class="crumb"><a href="index.html">Home</a> &nbsp;/&nbsp; Submit a Score</div>
+    <h1>📝 Submit a Score</h1>
+    <p>Managers: report your game's final score. Your District Administrator reviews every submission before it posts to the site.</p>
+  </div>
+</header>
+
+<main class="ss-wrap">
+  <div class="ss-card">
+    <form id="ssForm" autocomplete="off">
+      <label for="ssTourney">Tournament</label>
+      <select id="ssTourney"><option value="">Loading…</option></select>
+
+      <label for="ssTeam">Your team</label>
+      <select id="ssTeam"><option value="">— pick the tournament first —</option></select>
+
+      <label for="ssPin">Your team code</label>
+      <input id="ssPin" inputmode="numeric" maxlength="6" placeholder="4-digit code from your DA" />
+
+      <label for="ssGame">Which game?</label>
+      <select id="ssGame"><option value="">— pick your team first —</option></select>
+
+      <label>Final score</label>
+      <div class="ss-scores">
+        <div><div class="ss-mini" id="ssAwayName">Away</div><input id="ssAway" type="number" min="0" inputmode="numeric" /></div>
+        <div class="vs">–</div>
+        <div><div class="ss-mini" id="ssHomeName">Home</div><input id="ssHome" type="number" min="0" inputmode="numeric" /></div>
+      </div>
+
+      <label for="ssBy">Your name <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--muted)">(so your DA knows who reported it)</span></label>
+      <input id="ssBy" placeholder="e.g. Coach Smith" />
+
+      <button type="submit" class="ss-sub" id="ssSubmit">Submit score</button>
+      <div class="ss-msg" id="ssMsg"></div>
+      <p class="ss-note">Don't have a code? Ask your District Administrator — each team has its own.</p>
+    </form>
+  </div>
+</main>
+
+<div id="d27-footer"></div>
+
+<script src="js/d27-chrome.js"></script>
+<script type="module">
+import { db } from './js/firebase-init.js';
+import { collection, getDocs, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
+
+const $ = id => document.getElementById(id);
+const isRef = s => /^(WG|LG)-\d+$/i.test(String(s||''));
+const norm = s => String(s||'').toLowerCase().replace(/\s+/g,' ').trim();
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let TOURNEYS = {};
+
+(async function(){
+  try {
+    const snap = await getDocs(collection(db,'schedules'));
+    snap.forEach(d=>{ TOURNEYS[d.id]=d.data(); });
+  } catch(e){ $('ssTourney').innerHTML='<option value="">Couldn\'t load — refresh the page</option>'; return; }
+  const keys = Object.keys(TOURNEYS).sort((a,b)=>String(TOURNEYS[a].name||a).localeCompare(String(TOURNEYS[b].name||b)));
+  $('ssTourney').innerHTML = '<option value="">— pick a tournament —</option>' + keys.map(k=>'<option value="'+esc(k)+'">'+esc(TOURNEYS[k].name||k)+'</option>').join('');
+})();
+
+function teamsOf(key){
+  const t=TOURNEYS[key]||{}, seen={}, out=[];
+  (t.teams||[]).forEach(tm=>{ const n=String(tm.name||'').trim(); if(n&&!seen[norm(n)]){seen[norm(n)]=1;out.push(n);} });
+  (t.games||[]).forEach(g=>['away','home'].forEach(s=>{ const v=String(g[s]||'').trim(); if(v&&!isRef(v)&&!/^(bye|tbd|tba|if necessary)$/i.test(v)&&!seen[norm(v)]){seen[norm(v)]=1;out.push(v);} }));
+  return out.sort((a,b)=>a.localeCompare(b));
+}
+function gamesOf(key, team){
+  return ((TOURNEYS[key]||{}).games||[]).filter(g=> norm(g.away)===norm(team) || norm(g.home)===norm(team)).sort((a,b)=>(a.g||0)-(b.g||0));
+}
+function setNames(a,h){ $('ssAwayName').textContent=a||'Away'; $('ssHomeName').textContent=h||'Home'; }
+
+$('ssTourney').addEventListener('change', ()=>{
+  const k=$('ssTourney').value, teams = k?teamsOf(k):[];
+  $('ssTeam').innerHTML = teams.length ? '<option value="">— pick your team —</option>'+teams.map(t=>'<option value="'+esc(t)+'">'+esc(t)+'</option>').join('') : '<option value="">— no teams listed —</option>';
+  $('ssGame').innerHTML='<option value="">— pick your team first —</option>'; setNames('','');
+});
+$('ssTeam').addEventListener('change', ()=>{
+  const k=$('ssTourney').value, team=$('ssTeam').value, games=(k&&team)?gamesOf(k,team):[];
+  $('ssGame').innerHTML = games.length ? '<option value="">— pick your game —</option>'+games.map(g=>'<option value="'+g.g+'">Game '+g.g+' — '+esc(g.away)+' vs '+esc(g.home)+(g.date?' · '+esc(g.date):'')+'</option>').join('') : '<option value="">— no named games yet —</option>';
+  setNames('','');
+});
+$('ssGame').addEventListener('change', ()=>{
+  const k=$('ssTourney').value, gn=+$('ssGame').value, g=((TOURNEYS[k]||{}).games||[]).find(x=>x.g===gn);
+  setNames(g?g.away:'', g?g.home:'');
+});
+
+$('ssForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const msg=$('ssMsg'); const fail=m=>{ msg.className='ss-msg err'; msg.textContent=m; };
+  const key=$('ssTourney').value, team=$('ssTeam').value, pin=$('ssPin').value.trim(), gn=+$('ssGame').value;
+  const as=parseInt($('ssAway').value,10), hs=parseInt($('ssHome').value,10);
+  if(!key||!team) return fail('Pick your tournament and team.');
+  if(!pin) return fail('Enter your team code.');
+  if(!gn) return fail('Pick which game you\'re reporting.');
+  if(isNaN(as)||isNaN(hs)||as<0||hs<0) return fail('Enter both scores as numbers.');
+  $('ssSubmit').disabled=true; msg.className='ss-msg work'; msg.textContent='Submitting…';
+  try {
+    await addDoc(collection(db,'submissions'), { tournamentKey:key, team, pin, g:gn, as, hs, by:$('ssBy').value.trim(), createdAt:serverTimestamp(), status:'pending' });
+    msg.className='ss-msg ok'; msg.textContent='✓ Thanks! Your score is in and waiting for the District to review it.';
+    $('ssForm').reset(); setNames('','');
+    $('ssTeam').innerHTML='<option value="">— pick the tournament first —</option>';
+    $('ssGame').innerHTML='<option value="">— pick your team first —</option>';
+  } catch(err){
+    if(/permission|insufficient|denied/i.test(String(err && (err.message||err)))) fail('That code didn\'t match your team — double-check the code your DA gave you.');
+    else fail('Couldn\'t submit: '+(err && (err.message||err)));
+  } finally { $('ssSubmit').disabled=false; }
+});
+</script>
+</body>
+</html>
