@@ -15,9 +15,9 @@
     document.head.appendChild(s);
   })();
 
-  // Google Analytics 4 — paste your Measurement ID below to switch it on (blank = off).
-  // Get it at analytics.google.com → Admin → Data Streams → your web stream (looks like G-XXXXXXXXXX).
-  var GA_ID = '';
+  // Google Analytics 4 — set GA_ID to the Measurement ID to switch it on (blank = off).
+  // From analytics.google.com → Admin → Data Streams → web stream (looks like G-XXXXXXXXXX).
+  var GA_ID = 'G-EX74L9L3WG';
   if (GA_ID) {
     var gaScript = document.createElement('script');
     gaScript.async = true;
