@@ -29,6 +29,9 @@
     gtag('config', GA_ID);
   }
 
+  // Cosmetic FX — scroll reveals, count-up stats, champion confetti
+  (function () { var s = document.createElement('script'); s.defer = true; s.src = 'js/d27-fx.js'; document.head.appendChild(s); })();
+
   // Favicon — the D27 crest (browser tab / bookmark icon) on every page.
   [['icon', '/favicon-32.png', 'image/png', '32x32'],
    ['icon', '/favicon-16.png', 'image/png', '16x16'],
