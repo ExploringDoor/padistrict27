@@ -230,6 +230,7 @@
         <button type="button" class="ed-tab" data-view="contacts">📇 Contacts</button>
         <button type="button" class="ed-tab" data-view="champions">🏆 Champions</button>
         <button type="button" class="ed-tab" data-view="create">➕ Create</button>
+        <button type="button" class="ed-tab" data-view="codes">🔑 Team Codes</button>
       </div>
       <div id="view-schedule">
       <div class="ed-toolbar">
@@ -379,6 +380,37 @@
         <div class="gn-preview hidden" id="gnPreviewBox"></div>
       </div><!-- /view-create -->
 
+      <div id="view-codes" class="hidden">
+        <style>
+          .cd-intro h3 { margin: 0 0 4px; color: var(--d27-navy); font-family: var(--font-display); }
+          .cd-intro p { margin: 0 0 18px; color: var(--muted); font-size: 14px; max-width: 720px; }
+          .cd-intro a { color: var(--accent); font-weight: 600; }
+          .cd-bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+          .cd-bar select { padding: 9px 12px; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 14px; min-width: 260px; }
+          .cd-gen { background: var(--d27-navy); color: #fff; border: none; padding: 10px 16px; border-radius: 6px; font-family: var(--font-display); font-weight: 700; letter-spacing: .03em; text-transform: uppercase; font-size: 12px; cursor: pointer; }
+          .cd-status { font-size: 13px; color: var(--muted); } .cd-status.ok { color: #047857; font-weight: 600; } .cd-status.err { color: var(--d27-red); font-weight: 600; }
+          .cd-table { width: 100%; max-width: 560px; border-collapse: collapse; font-size: 14px; }
+          .cd-table th { background: var(--d27-navy); color: #fff; text-align: left; padding: 8px 12px; font-family: var(--font-display); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+          .cd-table td { padding: 7px 12px; border-bottom: 1px solid var(--line); }
+          .cd-code { font-family: ui-monospace, Menlo, monospace; font-size: 18px; font-weight: 700; color: var(--d27-navy); letter-spacing: 2px; }
+          .cd-none { color: var(--muted); font-weight: 400; letter-spacing: 0; }
+          .cd-regen { background: #fff; border: 1px solid var(--line); border-radius: 6px; width: 34px; height: 30px; cursor: pointer; font-size: 14px; }
+          .cd-regen:hover { border-color: var(--d27-navy); }
+          .cd-empty { color: var(--muted); font-size: 14px; padding: 14px 0; }
+        </style>
+        <div class="cd-intro">
+          <h3>🔑 Team Codes</h3>
+          <p>Generate a private code for each team in a tournament, then give each manager their code. They enter it on the <a href="submit-score.html" target="_blank">Submit a Score</a> page to report their games — only someone with the code can submit for that team.</p>
+        </div>
+        <div class="cd-bar">
+          <select id="codesTourney"></select>
+          <button type="button" class="cd-gen" id="codesGenBtn">Generate missing codes</button>
+          <span class="cd-status" id="codesStatus"></span>
+        </div>
+        <div id="codesTable"></div>
+        <p class="ed-hint">4-digit codes, saved automatically. 🎲 regenerates one (the old code stops working).</p>
+      </div><!-- /view-codes -->
+
       <div id="view-contacts" class="hidden">
         <div class="ct-bar">
           <select id="ctTourney" class="ct-sel" title="Filter by tournament"><option value="all">All tournaments</option></select>
@@ -509,7 +541,7 @@
 <script type="module">
 import { isConfigured, db, auth } from './js/firebase-init.js';
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
-import { collection, getDocs, doc, setDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
+import { collection, getDocs, doc, getDoc, setDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 
 const $ = id => document.getElementById(id);
 let TOURNEYS = {};   // key -> {key,name,sport,category,games,...}
@@ -1007,9 +1039,11 @@ function impHandleFile(file){
     $('view-contacts').classList.toggle('hidden', view!=='contacts');
     $('view-champions').classList.toggle('hidden', view!=='champions');
     $('view-create').classList.toggle('hidden', view!=='create');
+    $('view-codes').classList.toggle('hidden', view!=='codes');
     if(view==='contacts' && !loaded){ loaded=true; loadContacts(); }
     if(view==='champions' && window.__champLoad){ window.__champLoad(); }
     if(view==='create' && window.__genInit){ window.__genInit(); }
+    if(view==='codes' && window.__codesInit){ window.__codesInit(); }
   }
   document.querySelectorAll('.ed-tab').forEach(t=> t.addEventListener('click', ()=>tab(t.dataset.view)));
 
@@ -1311,6 +1345,53 @@ function impHandleFile(file){
     });
   }
   window.__champLoad = async ()=>{ if (loaded) return; loaded = true; await loadStaticManifest(); await reload(); renderAwaiting(); };
+})();
+
+// ── Team Codes (per-team PINs that gate score submission) ────────────
+(function(){
+  const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const norm = s => String(s||'').toLowerCase().replace(/\s+/g,' ').trim();
+  const isRef = s => /^(WG|LG)-\d+$/i.test(String(s||''));
+  let curKey=null, pins={}, built=false;
+
+  function teamsOf(key){
+    const t=TOURNEYS[key]||{}, seen={}, out=[];
+    (t.teams||[]).forEach(tm=>{ const n=String(tm.name||'').trim(); if(n && !seen[norm(n)]){ seen[norm(n)]=1; out.push(n); } });
+    (t.games||[]).forEach(g=>['away','home'].forEach(s=>{ const v=String(g[s]||'').trim(); if(v && !isRef(v) && !/^(bye|tbd|tba|if necessary)$/i.test(v) && !seen[norm(v)]){ seen[norm(v)]=1; out.push(v); } }));
+    return out.sort((a,b)=>a.localeCompare(b));
+  }
+  const rand4 = ()=> String(Math.floor(1000+Math.random()*9000));
+
+  function renderCodes(){
+    const box=$('codesTable'); if(!box) return;
+    if(!curKey){ box.innerHTML='<div class="cd-empty">Pick a tournament above to set its team codes.</div>'; return; }
+    const teams=teamsOf(curKey);
+    if(!teams.length){ box.innerHTML='<div class="cd-empty">No teams in this tournament yet.</div>'; return; }
+    box.innerHTML='<table class="cd-table"><thead><tr><th>Team</th><th>Code</th><th></th></tr></thead><tbody>'+
+      teams.map(t=>'<tr><td>'+esc(t)+'</td><td class="cd-code">'+(pins[t]?esc(pins[t]):'<span class="cd-none">— none —</span>')+'</td><td><button type="button" class="cd-regen" data-regen="'+esc(t)+'" title="generate / regenerate">🎲</button></td></tr>').join('')+
+      '</tbody></table>';
+  }
+  async function loadPins(key){
+    curKey=key; pins={}; renderCodes();
+    try{ const snap=await getDoc(doc(db,'pins',key)); if(snap.exists()) pins=(snap.data().teams)||{}; }catch(e){}
+    renderCodes();
+  }
+  async function savePins(){
+    if(!curKey) return;
+    const st=$('codesStatus'); st.textContent='Saving…'; st.className='cd-status';
+    try{ await setDoc(doc(db,'pins',curKey), { teams: pins, updated: serverTimestamp() }); st.textContent='✓ Saved'; st.className='cd-status ok'; }
+    catch(e){ st.textContent='Error: '+(e.message||e)+' (have you published the Firestore rules?)'; st.className='cd-status err'; }
+  }
+  window.__codesInit = function(){
+    const sel=$('codesTourney'); if(!sel) return;
+    const prev=sel.value;
+    sel.innerHTML='<option value="">— pick a tournament —</option>'+Object.keys(TOURNEYS).sort((a,b)=>String(TOURNEYS[a].name||a).localeCompare(String(TOURNEYS[b].name||b))).map(k=>'<option value="'+esc(k)+'">'+esc(TOURNEYS[k].name||k)+'</option>').join('');
+    if(prev) sel.value=prev;
+    if(built) return; built=true;
+    sel.addEventListener('change', ()=>{ if(sel.value) loadPins(sel.value); else { curKey=null; renderCodes(); } });
+    $('codesGenBtn').addEventListener('click', ()=>{ if(!curKey){ const st=$('codesStatus'); st.textContent='Pick a tournament first.'; st.className='cd-status err'; return; } teamsOf(curKey).forEach(t=>{ if(!pins[t]) pins[t]=rand4(); }); renderCodes(); savePins(); });
+    $('codesTable').addEventListener('click', e=>{ const b=e.target.closest('[data-regen]'); if(b){ pins[b.dataset.regen]=rand4(); renderCodes(); savePins(); } });
+  };
 })();
 
 // ── Create Tournament wizard ──────────────────────────────────────────
