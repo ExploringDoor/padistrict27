@@ -8,7 +8,7 @@
 <meta name="description" content="Live PA District 27 tournament brackets — winners auto-advance as games finish." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Saira+Condensed:wght@600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/styles.css" />
 <script src="js/d27-data.js"></script>
 <script src="js/d27-logos.js"></script>
@@ -86,6 +86,9 @@
   @keyframes bkNeonTravel { to { stroke-dashoffset: -600; } }
   .bk-champion .bk-trophy-img { height: clamp(120px, 23vw, 172px); width: auto; object-fit: contain; display: block; position: relative; flex: none; filter: drop-shadow(0 3px 7px rgba(0,45,114,.45)); }
   .bk-champion .ct .tourn { font-family: var(--font-display); letter-spacing: .14em; font-size: 14px; font-weight: 700; text-transform: uppercase; opacity: .92; }
+  /* Banner font: Saira Condensed (Adam's pick) */
+  .bk-champion .ct .team { font-family: 'Saira Condensed', sans-serif; font-weight: 800; font-size: clamp(32px, 6.6vw, 62px); letter-spacing: .005em; }
+  .bk-champion .ct .lbl, .bk-champion .ct .tourn { font-family: 'Saira Condensed', sans-serif; }
   @media (prefers-reduced-motion: reduce) {
     .bk-champion { animation: none; }
     .bk-champion .bk-neon .bk-neon-glow, .bk-champion .bk-neon .bk-neon-core { animation: none; stroke-dasharray: none; stroke-dashoffset: 0; }
