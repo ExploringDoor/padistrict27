@@ -627,12 +627,6 @@ function renderBracket(t) {
   let html = '';
   if (outcome.champion) {
     html += `<div class="bk-champion">` +
-      `<svg class="bk-neon" viewBox="0 0 1000 200" preserveAspectRatio="none" aria-hidden="true" focusable="false">` +
-        `<defs><filter id="bkNeonBlur" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3"/></filter></defs>` +
-        `<rect class="bk-neon-rail" pathLength="600" x="2.5" y="2.5" width="995" height="195" rx="55" ry="55" vector-effect="non-scaling-stroke"/>` +
-        `<rect class="bk-neon-glow" pathLength="600" x="2.5" y="2.5" width="995" height="195" rx="55" ry="55" vector-effect="non-scaling-stroke"/>` +
-        `<rect class="bk-neon-core" pathLength="600" x="2.5" y="2.5" width="995" height="195" rx="55" ry="55" vector-effect="non-scaling-stroke"/>` +
-      `</svg>` +
       `<img class="bk-trophy-img" src="assets/d27-trophy.png?v=3" alt="champion trophy" onerror="this.onerror=null;this.outerHTML='<span class=&quot;trophy&quot;>🏆</span>'">` +
       `<div class="ct">` +
         `<div class="tourn">${escTxt(t.name)}</div>` +
