@@ -115,7 +115,36 @@
       '<div><span class="credit">Built by <a href="https://mainline-webdesign.com/" target="_blank" rel="noopener">Mainline Web Design</a></span></div>' +
     '</div></div></footer>';
 
+  // ── Site-wide weather banner: auto-shows when a game is postponed today/tomorrow ──
+  var ALERT_DISMISS_KEY = 'd27-alert-dismissed';
+  function alertSig(msg){ var s=0, t=String(msg||''); for(var i=0;i<t.length;i++){ s=(s*31+t.charCodeAt(i))|0; } return String(s); }
+  function alertDismissed(sig){ try { return localStorage.getItem(ALERT_DISMISS_KEY)===sig; } catch(e){ return false; } }
+  function renderAlert(message, href){
+    var sig=alertSig(message);
+    if(!message || alertDismissed(sig)) return;
+    if(document.querySelector('.d27-alert')) return;
+    var bar=document.createElement('div');
+    bar.className='d27-alert'; bar.setAttribute('role','alert');
+    bar.innerHTML='<div class="d27-alert-inner"><span class="ico">⛈️</span><span class="msg">'+message+(href?' <a href="'+href+'">Check game status ›</a>':'')+'</span><button class="x" aria-label="Dismiss">×</button></div>';
+    document.body.insertBefore(bar, document.body.firstChild);
+    bar.querySelector('.x').addEventListener('click', function(){ try{ localStorage.setItem(ALERT_DISMISS_KEY, sig); }catch(e){} bar.remove(); });
+  }
+  function showWeatherBanner(){
+    if(typeof window.D27loadSchedules!=='function') return;
+    window.D27loadSchedules().then(function(data){
+      var now=new Date();
+      var iso=function(dt){ return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0'); };
+      var today=iso(now), tmrw=iso(new Date(now.getTime()+864e5));
+      var n=0;
+      (data.tournaments||[]).forEach(function(t){ (t.games||[]).forEach(function(g){
+        if(g.status==='ppd' && g.date && g.date>=today && g.date<=tmrw) n++;
+      }); });
+      if(n) renderAlert(n+' game'+(n>1?'s':'')+' postponed for weather.', 'live-schedule.html');
+    }).catch(function(){});
+  }
+
   function inject() {
+    showWeatherBanner();
     var n = document.getElementById('d27-nav'); if (n) n.outerHTML = navHTML;
     var f = document.getElementById('d27-footer'); if (f) f.outerHTML = footHTML;
     var more = document.querySelector('.nav-more');

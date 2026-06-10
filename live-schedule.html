@@ -68,6 +68,9 @@
   .sv-status { flex: none; font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #9aa3af; white-space: nowrap; }
   .sv-status.big { color: var(--d27-navy); }
   .sv-status.ff { color: #92400E; }
+  .sv-status.ppd { color: #B45309; }
+  .sv-card.ppd { background: #FFFBF5; }
+  .sv-makeup { display: block; font-size: 10px; font-weight: 600; letter-spacing: .02em; color: #9aa3af; text-transform: none; margin-top: 1px; }
   .sv-summary { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; color: var(--d27-navy); white-space: nowrap; }
   .sv-summary.ff { color: #92400E; }
   .sv-rows { padding: 6px 16px; }
@@ -134,6 +137,9 @@
   function fmtTime(t){ t=clean(t); if(!t) return 'TBD'; var p=t.split(':'); var h=+p[0], m=p[1]||'00'; if(isNaN(h)) return 'TBD'; var ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+m+' '+ap; }
   function weekStart(s){ var d=dt(s); if(!d) return null; var day=(d.getDay()+6)%7; d.setDate(d.getDate()-day); return d.toISOString().slice(0,10); }
   function isForfeit(g){ if(!D27scores.played(g)) return false; if(g.forfeit!=null) return !!g.forfeit; var bye=/^\s*bye\s*$/i.test(String(g.away))||/^\s*bye\s*$/i.test(String(g.home)); return !bye && !clean(g.date); }
+  function isPpd(g){ return !!(g && g.status==='ppd'); }
+  function ppdLabel(g){ return 'POSTPONED · ' + (g && g.ppdReason==='field' ? 'Field Closed' : 'Rain'); }
+  function ppdMakeup(g){ var m=clean(g&&g.makeupDate); if(!m) return ''; var d=new Date(m+'T12:00:00'); return isNaN(d)?'':'Makeup '+d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
 
   var DATA=null, TMAP={}, WEEKS=[], state={wk:0, day:null, tourney:'all'};
 
@@ -203,15 +209,17 @@
     return '<div class="sv-row">'+logo+'<span class="sv-team'+(disp.tbd?' tbd':'')+(played&&!win?' lose':'')+'">'+esc(disp.name)+'</span>'+sc+'</div>';
   }
   function card(g){
-    var d=dt(g.date), played=D27scores.played(g), ff=isForfeit(g);
+    var ppd=isPpd(g);
+    var d=dt(g.date), played=!ppd&&D27scores.played(g), ff=!ppd&&isForfeit(g);
     var head=(DOW[d.getDay()]+' '+MON[d.getMonth()]+' '+d.getDate()).toUpperCase()+' · '+fmtTime(g.time)+(clean(g.field)?' · '+esc(clean(g.field)).toUpperCase():'');
     var A=D27scores.side(g,'away'), H=D27scores.side(g,'home');
     var aWin=played&&g.as>g.hs, hWin=played&&g.hs>g.as;
-    var cta = played ? '<span class="sv-cta recap">'+(ff?'Forfeit':'Recap')+' ›</span>' : '<span class="sv-cta">Preview ›</span>';
+    var cta = ppd ? '<span class="sv-cta">Details ›</span>' : (played ? '<span class="sv-cta recap">'+(ff?'Forfeit':'Recap')+' ›</span>' : '<span class="sv-cta">Preview ›</span>');
     var tag = '<span class="sv-meta">'+esc((TMAP[g.tourneyKey]||g.tourneyKey))+'</span>';
     var margin = played ? Math.abs(g.as-g.hs) : 0;
-    var status = ff ? '<span class="sv-status ff">Forfeit</span>' : (played ? '<span class="sv-status'+(margin>=10?' big':'')+'">'+(margin>=10?'Wins Big':'Final')+'</span>' : '');
-    return '<div class="sv-card" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'">'+
+    var status = ppd ? '<span class="sv-status ppd">'+esc(ppdLabel(g))+(ppdMakeup(g)?'<span class="sv-makeup">'+esc(ppdMakeup(g))+'</span>':'')+'</span>'
+      : (ff ? '<span class="sv-status ff">Forfeit</span>' : (played ? '<span class="sv-status'+(margin>=10?' big':'')+'">'+(margin>=10?'Wins Big':'Final')+'</span>' : ''));
+    return '<div class="sv-card'+(ppd?' ppd':'')+'" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'">'+
       '<div class="sv-card-head"><span class="sv-meta">'+head+'</span>'+status+'</div>'+
       '<div class="sv-rows">'+teamRow(A,g.as,aWin,played)+teamRow(H,g.hs,hWin,played)+'</div>'+
       '<div class="sv-card-foot">'+tag+' &nbsp;·&nbsp; '+cta+'</div></div>';

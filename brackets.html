@@ -168,6 +168,7 @@
   .bk-mfoot { height: 40px; box-sizing: border-box; padding: 3px 10px; font-size: 10px; color: var(--muted); border-top: 1px dashed var(--line); display: flex; flex-direction: column; justify-content: center; gap: 1px; }
   .bk-mfoot .fin { color: #047857; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
   .bk-when { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
+  .bk-when.ppd { color: #B45309; font-weight: 700; }
   .bk-frow { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
   .bk-field { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
 
@@ -337,10 +338,12 @@ function matchHTML(t, g, cls, x, y) {
   const okStr = v => v && !/^(n\/?a|tbd|tba|none|-+)$/i.test(String(v).trim());
   const cd = okStr(g.date) ? new Date(g.date + 'T12:00:00') : null;
   const when = [(cd && !isNaN(cd)) ? cd.toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric' }) : null, okStr(g.time) ? fmtTime(g.time) : null].filter(Boolean).join(' · ');
-  const forfeit = played && (g.forfeit != null ? !!g.forfeit : (!okStr(g.date) && !/^bye$/i.test(String(g.away).trim()) && !/^bye$/i.test(String(g.home).trim())));
-  const whenText = forfeit ? 'Forfeit' : (when || 'TBD');
+  const ppd = g.status === 'ppd';
+  const forfeit = !ppd && played && (g.forfeit != null ? !!g.forfeit : (!okStr(g.date) && !/^bye$/i.test(String(g.away).trim()) && !/^bye$/i.test(String(g.home).trim())));
+  const mk = (ppd && okStr(g.makeupDate)) ? new Date(g.makeupDate + 'T12:00:00') : null;
+  const whenText = ppd ? ('POSTPONED · ' + (g.ppdReason === 'field' ? 'Field Closed' : 'Rain') + (mk && !isNaN(mk) ? ' · Makeup ' + mk.toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '')) : (forfeit ? 'Forfeit' : (when || 'TBD'));
   const field = okStr(g.field) ? String(g.field) : '';
-  return `<div class="bk-match acc-${cls}" data-tkey="${t.key}" data-g="${g.g}" style="left:${x}px;top:${y}px"><div class="bk-mtop"><span class="g">Game ${g.g}</span>${tag}</div>${side(A, g.as, aWin)}${side(H, g.hs, hWin)}<div class="bk-mfoot"><div class="bk-when">${whenText}</div><div class="bk-frow"><span class="bk-field">${field ? '📍 ' + field : ''}</span><span class="gm-cue ${played ? 'recap' : 'preview'}">${played ? 'Recap' : 'Preview'} ›</span></div></div></div>`;
+  return `<div class="bk-match acc-${cls}" data-tkey="${t.key}" data-g="${g.g}" style="left:${x}px;top:${y}px"><div class="bk-mtop"><span class="g">Game ${g.g}</span>${tag}</div>${side(A, g.as, aWin)}${side(H, g.hs, hWin)}<div class="bk-mfoot"><div class="bk-when${ppd ? ' ppd' : ''}">${whenText}</div><div class="bk-frow"><span class="bk-field">${field ? '📍 ' + field : ''}</span><span class="gm-cue ${played ? 'recap' : 'preview'}">${played ? 'Recap' : 'Preview'} ›</span></div></div></div>`;
 }
 function fmtTime(t) { let [h, m] = t.split(':').map(Number); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return `${h}:${String(m).padStart(2,'0')} ${ap}`; }
 

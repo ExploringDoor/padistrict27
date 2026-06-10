@@ -1290,6 +1290,16 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
 .gm-badge.preview { background: rgba(255,255,255,.16); color: #fff; }
 .gm-badge.final { background: var(--d27-gold, #C9A227); color: var(--d27-navy, #002D72); }
 .gm-badge.forfeit { background: #FCD34D; color: #6b4d05; }
+.gm-badge.ppd { background: #F59E0B; color: #fff; }
+.gm-ppd-note { text-align: center; color: #B45309; font-size: 13px; font-weight: 600; margin-top: 8px; }
+.d27-alert { background: #F59E0B; color: var(--d27-navy); font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: .03em; border-bottom: 2px solid #B45309; }
+.d27-alert-inner { max-width: var(--container, 1200px); margin: 0 auto; display: flex; align-items: center; gap: 12px; padding: 9px 20px; }
+.d27-alert .ico { font-size: 16px; line-height: 1; flex: none; }
+.d27-alert .msg { flex: 1 1 auto; }
+.d27-alert .msg a { color: var(--d27-navy); text-decoration: underline; font-weight: 700; }
+.d27-alert .x { flex: none; background: rgba(0,45,114,.12); border: none; color: var(--d27-navy); width: 26px; height: 26px; border-radius: 50%; cursor: pointer; font-size: 16px; line-height: 1; font-weight: 700; }
+.d27-alert .x:hover { background: rgba(0,45,114,.22); }
+@media (max-width: 600px) { .d27-alert { font-size: 12px; } .d27-alert-inner { padding: 8px 14px; gap: 9px; } }
 .gm-body { padding: 20px 22px 18px; }
 .gm-foot { padding: 0 22px 22px; }
 .gm-bracket-btn { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; padding: 13px; background: var(--d27-navy, #002D72); color: #fff; border-radius: 10px; font-family: var(--font-display, 'Oswald'), sans-serif; font-size: 14px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; text-decoration: none; transition: filter .12s ease, transform .12s ease; }

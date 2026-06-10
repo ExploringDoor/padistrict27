@@ -113,6 +113,8 @@
     const dateOk = d && !isNaN(new Date(d + 'T12:00:00'));
     return !isByeSlot(g.away) && !isByeSlot(g.home) && !dateOk;
   }
+  function isPpd(g){ return !!(g && g.status === 'ppd'); }
+  function ppdLabel(g){ return 'POSTPONED · ' + (g && g.ppdReason === 'field' ? 'Field Closed' : 'Rain'); }
   function recapTemplate(t, g, cls) {
     const next = nextGameOf(t, g.g);
     if (isByeSlot(g.away) || isByeSlot(g.home)) {
@@ -266,12 +268,13 @@
     ensureShell();
     const tn = { ...t, games: normalizeByes(t.games) };       // wire byes like the bracket does
     const gg = (tn.games || []).find(x => x.g === g.g) || g;
-    const cls = classify(tn), played = isPlayed(gg), forfeit = isForfeit(gg);
+    const cls = classify(tn), ppd = isPpd(gg), played = !ppd && isPlayed(gg), forfeit = !ppd && isForfeit(gg);
     overlay.querySelector('.gm-crumb').innerHTML = `${esc(tn.name || tn.key)} &nbsp;·&nbsp; ${sectionLabel(tn, gg, cls)} &nbsp;·&nbsp; Game ${gg.g}`;
     const badge = overlay.querySelector('.gm-badge');
-    badge.textContent = forfeit ? 'Forfeit' : played ? 'Final' : 'Preview';
-    badge.className = 'gm-badge ' + (forfeit ? 'forfeit' : played ? 'final' : 'preview');
-    overlay.querySelector('.gm-body').innerHTML = played ? recapHTML(tn, gg, cls) : previewHTML(tn, gg, cls);
+    badge.textContent = ppd ? 'Postponed' : forfeit ? 'Forfeit' : played ? 'Final' : 'Preview';
+    badge.className = 'gm-badge ' + (ppd ? 'ppd' : forfeit ? 'forfeit' : played ? 'final' : 'preview');
+    overlay.querySelector('.gm-body').innerHTML = (played ? recapHTML(tn, gg, cls) : previewHTML(tn, gg, cls))
+      + (ppd ? '<div class="gm-ppd-note">' + esc(ppdLabel(gg)) + (function(){ var m=cleanVal(gg.makeupDate); if(!m) return ''; var d=new Date(m+'T12:00:00'); return isNaN(d)?'':' — makeup '+d.toLocaleDateString('en-US',{month:'long',day:'numeric'}); })() + '</div>' : '');
     const bb = overlay.querySelector('.gm-bracket-btn');
     bb.href = 'brackets.html?t=' + encodeURIComponent(tn.key);
     overlay.querySelector('.gm-foot').style.display = location.pathname.indexOf('brackets') >= 0 ? 'none' : '';

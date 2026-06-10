@@ -127,6 +127,21 @@
   .ed-tab-muted { margin-left: auto; padding-left: 16px; font-size: 12px; font-weight: 500; color: #b0b6c0; opacity: .6; border-left: 1px solid var(--line); border-radius: 0; transition: opacity .15s, color .15s; }
   .ed-tab-muted:hover { opacity: 1; }
   .ed-tab-muted.active { opacity: 1; color: var(--d27-navy); }
+  /* rain-out / postpone */
+  .ed-table select.st { width: 124px; padding: 6px; border: 1px solid var(--line); border-radius: 5px; font: inherit; font-size: 12px; background: var(--surface); box-sizing: border-box; }
+  .ed-table input.mk { width: 124px; margin-top: 4px; font-size: 11px; padding: 5px 6px; }
+  .ed-table tr.ppd td { background: #FFF7ED; }
+  .ed-table tr.ppd select.st { color: #9A3412; font-weight: 600; border-color: #FDBA74; }
+  .cf-panel { background: linear-gradient(90deg, rgba(234,88,12,.06), rgba(0,45,114,.03)); border: 1px solid rgba(0,45,114,.14); border-left: 4px solid #EA580C; border-radius: 8px; padding: 14px 18px; margin: 14px 0 0; }
+  .cf-panel h3 { font-family: var(--font-display); margin: 0 0 4px; color: var(--d27-navy); font-size: 15px; }
+  .cf-panel .cf-row { display: flex; gap: 10px; align-items: end; flex-wrap: wrap; margin-top: 8px; }
+  .cf-panel label { display: block; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+  .cf-panel select, .cf-panel input { padding: 8px 10px; border: 1px solid var(--line); border-radius: 5px; font: inherit; font-size: 13px; background: var(--surface); box-sizing: border-box; }
+  .cf-panel .cf-apply { background: #EA580C; color: #fff; border: none; padding: 9px 16px; border-radius: 6px; font-family: var(--font-display); font-weight: 700; letter-spacing: .03em; text-transform: uppercase; cursor: pointer; font-size: 12px; }
+  .cf-panel .cf-undo { background: #fff; color: var(--d27-navy); border: 1px solid var(--d27-navy); padding: 9px 16px; border-radius: 6px; font-family: var(--font-display); font-weight: 700; letter-spacing: .03em; text-transform: uppercase; cursor: pointer; font-size: 12px; }
+  .cf-panel .cf-status { font-size: 12px; color: var(--muted); align-self: center; }
+  .cf-panel .cf-status.ok { color: #047857; font-weight: 700; }
+  .cf-panel .cf-status.err { color: var(--d27-red); font-weight: 700; }
 
   /* contacts roster */
   .ct-bar { display: flex; align-items: center; gap: 12px; margin: 20px 0 14px; }
@@ -251,11 +266,24 @@
         <button type="button" class="ed-del" onclick="window.__delTourney()">🗑 Delete tournament</button>
       </div>
 
+      <div class="cf-panel">
+        <h3>🌧 Rain out / Close a field</h3>
+        <p class="ed-hint">Postpones <b>every game</b> at the chosen field on the chosen date. Set a makeup date per game in its row (optional), then <b>💾 Save Changes</b> to publish. You can also postpone a single game with the <b>Status</b> dropdown in its row.</p>
+        <div class="cf-row">
+          <div><label>Field</label><select id="cfField"></select></div>
+          <div><label>Date</label><select id="cfDate"></select></div>
+          <div><label>Reason</label><select id="cfReason"><option value="rain">Rain out</option><option value="field">Field closed</option></select></div>
+          <button type="button" class="cf-apply" onclick="window.__closeField()">Postpone all</button>
+          <button type="button" class="cf-undo" onclick="window.__reopenField()">Un-close</button>
+          <span class="cf-status" id="cfStatus"></span>
+        </div>
+      </div>
+
       <div id="bracketCheck" class="bk-check"></div>
 
       <div class="ed-table-wrap">
         <table class="ed-table">
-          <thead><tr><th>G#</th><th>Date</th><th>Time</th><th>Away team</th><th></th><th>Home team</th><th></th><th>Field</th><th>Forfeit</th><th></th></tr></thead>
+          <thead><tr><th>G#</th><th>Date</th><th>Time</th><th>Away team</th><th></th><th>Home team</th><th></th><th>Field</th><th>Status</th><th>Forfeit</th><th></th></tr></thead>
           <tbody id="rows"></tbody>
         </table>
       </div>
@@ -660,6 +688,7 @@ function renderRows() {
   current.games.slice().sort((a,b)=>a.g-b.g).forEach(g => tb.appendChild(rowEl(g)));
   applyResolved();
   runBracketCheck();
+  fillCloseFieldOpts();
 }
 
 // ── auto-advance: show the resolved team in the slot, keep WG/LG underneath ──
@@ -779,6 +808,8 @@ function looksForfeit(g) {
 }
 function rowEl(g) {
   const tr = document.createElement('tr');
+  if (g.status === 'ppd') tr.classList.add('ppd');
+  const stV = (g.status === 'ppd') ? ('ppd:' + (g.ppdReason || 'rain')) : '';
   // show scores blank until a game is actually played (don't seed 0–0)
   const played = (Number(g.as) || 0) + (Number(g.hs) || 0) > 0;
   const asV = played ? (g.as ?? '') : '';
@@ -792,11 +823,50 @@ function rowEl(g) {
     <td><input type="text" value="${esc(g.home)}" data-f="home" data-ref="${esc(g.home)}" placeholder="Team or LG-3"></td>
     <td><input class="sc" type="number" min="0" value="${hsV}" data-f="hs"></td>
     <td><input type="text" value="${esc(g.field)}" data-f="field" placeholder="Field"></td>
+    <td>
+      <select class="st" data-f="status" title="Game status">
+        <option value=""${stV===''?' selected':''}>Scheduled</option>
+        <option value="ppd:rain"${stV==='ppd:rain'?' selected':''}>Rain out</option>
+        <option value="ppd:field"${stV==='ppd:field'?' selected':''}>Field closed</option>
+      </select>
+      <input class="mk" type="date" data-f="makeupDate" value="${g.makeupDate ?? ''}" title="Makeup date"${stV?'':' style="display:none"'}>
+    </td>
     <td class="ff"><input type="checkbox" data-f="forfeit" title="Mark this game a forfeit" ${looksForfeit(g) ? 'checked' : ''}></td>
     <td><button class="del" title="Delete game" onclick="this.closest('tr').remove(); window.__check&&window.__check()">✕</button></td>`;
   return tr;
 }
 const esc = v => v == null ? '' : String(v).replace(/"/g, '&quot;');
+
+// ── Rain out / Close a field: bulk-postpone every game at a field on a date ──
+function fillCloseFieldOpts() {
+  const fSel = $('cfField'), dSel = $('cfDate');
+  if (!fSel || !dSel || !current) return;
+  const fields = [...new Set((current.games || []).map(g => g.field).filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b)));
+  const dates  = [...new Set((current.games || []).map(g => g.date).filter(Boolean))].sort();
+  fSel.innerHTML = fields.map(f => `<option value="${esc(f)}">${esc(f)}</option>`).join('') || '<option value="">— no fields —</option>';
+  dSel.innerHTML = dates.map(d => `<option value="${esc(d)}">${esc(d)}</option>`).join('')  || '<option value="">— no dates —</option>';
+}
+function __cfApply(reopen) {
+  const field = $('cfField').value, date = $('cfDate').value, reason = $('cfReason').value;
+  const st = $('cfStatus');
+  if (!field || !date) { st.textContent = 'Pick a field and a date first.'; st.className = 'cf-status err'; return; }
+  let n = 0;
+  $('rows').querySelectorAll('tr').forEach(tr => {
+    const fEl = tr.querySelector('[data-f="field"]'), dEl = tr.querySelector('[data-f="date"]');
+    if (!fEl || !dEl || fEl.value !== field || dEl.value !== date) return;
+    const sel = tr.querySelector('[data-f="status"]'), mk = tr.querySelector('[data-f="makeupDate"]');
+    if (!sel) return;
+    sel.value = reopen ? '' : ('ppd:' + reason);
+    tr.classList.toggle('ppd', !reopen);
+    if (mk) { mk.style.display = reopen ? 'none' : ''; if (reopen) mk.value = ''; }
+    n++;
+  });
+  if (!n) { st.textContent = 'No games match that field on that date.'; st.className = 'cf-status err'; return; }
+  st.textContent = (reopen ? '✓ Reopened ' : '✓ Postponed ') + n + ' game' + (n>1?'s':'') + ' — 💾 Save to publish.';
+  st.className = 'cf-status ok';
+}
+window.__closeField  = () => __cfApply(false);
+window.__reopenField = () => __cfApply(true);
 
 window.__delTourney = async () => {
   if (!current) { alert('Pick a tournament first.'); return; }
@@ -833,6 +903,7 @@ function collectGames() {
       home: ref('home') || null, hs: num(get('hs')),
       field: get('field') || null,
       forfeit: !!(tr.querySelector('[data-f="forfeit"]') || {}).checked,
+      ...(function(){ const r=(tr.querySelector('[data-f="status"]')||{}).value||''; const p=r.indexOf('ppd:')===0; return p ? { status:'ppd', ppdReason:r.split(':')[1], makeupDate:(get('makeupDate')||null) } : {}; })(),
     });
   });
   games.sort((a,b)=>a.g-b.g);
@@ -843,7 +914,7 @@ function collectGames() {
 const isRealTeam = s => s && !/^(WG|LG)-\d/i.test(s) && !/^\s*bye\s*$/i.test(s) && !/^\s*(tbd|tba)\s*$/i.test(s);
 function needsRecap(g) {
   return g.as != null && g.hs != null && (g.as > 0 || g.hs > 0) && g.as !== g.hs &&
-    !g.forfeit && isRealTeam(g.away) && isRealTeam(g.home);
+    !g.forfeit && g.status !== 'ppd' && isRealTeam(g.away) && isRealTeam(g.home);
 }
 async function genRecap(g, games) {
   const aWin = g.as > g.hs, winner = aWin ? g.away : g.home, margin = Math.abs(g.as - g.hs);
@@ -915,6 +986,12 @@ window.__seed = async () => {
 // keep data-ref in sync when an editable team field is changed, then re-resolve
 $('rows').addEventListener('input', (e) => {
   const el = e.target;
+  if (el.dataset && el.dataset.f === 'status') {
+    const tr = el.closest('tr'); const ppd = String(el.value).indexOf('ppd:') === 0;
+    if (tr) tr.classList.toggle('ppd', ppd);
+    const mk = tr && tr.querySelector('[data-f="makeupDate"]');
+    if (mk) mk.style.display = ppd ? '' : 'none';
+  }
   if (el.dataset && (el.dataset.f === 'away' || el.dataset.f === 'home') && !el.readOnly) {
     el.dataset.ref = el.value;
   }

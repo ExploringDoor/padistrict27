@@ -13,6 +13,7 @@
     return out;
   }
   function played(g) { return g.as != null && g.hs != null && (g.as + g.hs) > 0; }
+  function isPpd(g) { return !!(g && g.status === 'ppd'); }
   function side(g, which) {
     const raw = which === 'away' ? g.away : g.home;
     try { return global.D27bracket.sideDisplay(g._t, raw); }
@@ -38,5 +39,5 @@
       .sort((a, b) => (a.date || '').localeCompare(b.date || '') || String(a.time || '').localeCompare(String(b.time || '')))
       .slice(0, limit || 6);
   }
-  global.D27scores = { allGames, played, side, todayISO, recentResults, upcoming };
+  global.D27scores = { allGames, played, isPpd, side, todayISO, recentResults, upcoming };
 })(window);

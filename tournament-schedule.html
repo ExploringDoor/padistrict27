@@ -103,6 +103,8 @@
   .ls-score { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--d27-navy); padding: 0 4px; }
   .ls-final { font-size: 10px; background: #ECFDF5; color: #047857; padding: 2px 7px; border-radius: 3px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
   .ls-final.forfeit { background: #FEF3C7; color: #92400E; }
+  .ls-final.ppd { background: #FEF3C7; color: #B45309; }
+  .ls-makeup { font-size: 10px; color: var(--muted); margin-left: 6px; }
   .ls-field { font-size: 13px; color: var(--muted); text-align: right; }
   @media (max-width: 640px) { .ls-field { text-align: left; } }
 
@@ -177,6 +179,9 @@ function isForfeit(g) {
   const bye = /^\s*bye\s*$/i.test(String(g.away)) || /^\s*bye\s*$/i.test(String(g.home));
   return !bye && !clean(g.date);
 }
+const isPPD = g => !!(g && g.status === 'ppd');
+const ppdLabel = g => 'POSTPONED · ' + (g && g.ppdReason === 'field' ? 'Field Closed' : 'Rain');
+function ppdMakeupTxt(g){ const m=clean(g && g.makeupDate); if(!m) return ''; const d=new Date(m+'T12:00:00'); return isNaN(d)?'':'Makeup '+d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
 function updatedLabel(iso) {
   if (!iso) return '';
   const dateOnly = iso.length <= 10;
@@ -296,9 +301,14 @@ function teamHTML(disp, score, otherScore, played) {
 
 function gameHTML(t, g) {
   const A = sideDisplay(t, g.away), H = sideDisplay(t, g.home);
-  const played = (g.as != null && g.hs != null) && (g.as + g.hs) > 0;
+  const ppd = isPPD(g);
+  const played = !ppd && (g.as != null && g.hs != null) && (g.as + g.hs) > 0;
   let match;
-  if (played) {
+  if (ppd) {
+    const mk = ppdMakeupTxt(g);
+    match = `${teamHTML(A)} <span class="ls-vs">vs</span> ${teamHTML(H)}
+      <span class="ls-final ppd">${ppdLabel(g)}</span>${mk ? `<span class="ls-makeup">${mk}</span>` : ''}`;
+  } else if (played) {
     match = `
       ${teamHTML(A, g.as, g.hs, true)}
       <span class="ls-score">${g.as}</span><span class="ls-vs">–</span><span class="ls-score">${g.hs}</span>
@@ -312,7 +322,7 @@ function gameHTML(t, g) {
       <div class="ls-time"><div class="t">${fmtTime(g.time)}</div><div class="g">Game ${g.g}</div></div>
       <div class="ls-match">${match}</div>
       <div class="ls-field">${clean(g.field)}</div>
-      <span class="gm-cue ${played ? 'recap' : 'preview'}">${played ? 'Recap' : 'Preview'} ›</span>
+      <span class="gm-cue ${played ? 'recap' : 'preview'}">${ppd ? 'Details' : (played ? 'Recap' : 'Preview')} ›</span>
     </div>`;
 }
 
