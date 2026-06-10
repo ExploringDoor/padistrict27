@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Game Alerts · PA District 27 Little League</title>
+<meta name="description" content="Sign up for PA District 27 game alerts — get a text or email the moment a game is rained out, a field closes, or a makeup is scheduled." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<script src="config.js"></script>
+<link rel="stylesheet" href="css/styles.css" />
+
+<style>
+  .hub-hero { background: linear-gradient(135deg, rgba(0,27,71,.95) 0%, rgba(245,158,11,.34) 100%), var(--d27-navy); color: var(--d27-white); padding: var(--space-7) 0 var(--space-6); }
+  .hub-hero .crumb { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-bottom: var(--space-3); }
+  .hub-hero .crumb a { color: rgba(255,255,255,.6); text-decoration: none; }
+  .hub-hero h1 { color: var(--d27-white); font-size: clamp(2.25rem, 4vw, var(--text-4xl)); margin-bottom: var(--space-3); }
+  .hub-hero p { color: rgba(255,255,255,.82); font-size: var(--text-lg); max-width: 60ch; }
+
+  .al-card { background: var(--surface); border: 1px solid var(--line); border-top: 5px solid #F59E0B; border-radius: var(--radius); padding: 28px 28px 24px; max-width: 540px; margin: 0 auto; box-shadow: var(--shadow-lg); }
+  .al-card h2 { margin: 0 0 4px; color: var(--d27-navy); font-size: var(--text-2xl); }
+  .al-sub { color: var(--muted); margin: 0 0 20px; }
+  .al-card label.fld { display: block; font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+  .al-card label.fld input { display: block; width: 100%; margin-top: 5px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 9px; font: inherit; font-size: 16px; box-sizing: border-box; color: var(--d27-ink); }
+  .al-card label.fld input:focus { outline: 2px solid var(--d27-navy); outline-offset: -1px; border-color: var(--d27-navy); }
+  .al-channels { display: flex; gap: 18px; flex-wrap: wrap; margin: 4px 0 14px; }
+  .al-ck { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--d27-ink); cursor: pointer; font-size: 15px; }
+  .al-ck input { width: 18px; height: 18px; }
+  .al-consent { font-size: 12px; color: var(--muted); line-height: 1.5; margin: 0 0 18px; }
+  .al-submit { width: 100%; background: var(--d27-navy); color: #fff; border: none; padding: 14px; border-radius: 10px; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: .03em; text-transform: uppercase; cursor: pointer; transition: filter .12s ease; }
+  .al-submit:hover { filter: brightness(1.12); }
+  .al-submit:disabled { opacity: .55; cursor: default; }
+  .al-status { margin-top: 12px; font-size: 14px; text-align: center; min-height: 18px; }
+  .al-status.err { color: var(--d27-red); font-weight: 600; }
+  .al-done { text-align: center; max-width: 540px; margin: 0 auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 48px 28px; box-shadow: var(--shadow-lg); }
+  .al-done .big { font-size: 52px; display: block; margin-bottom: 10px; }
+  .al-done h2 { color: var(--d27-navy); margin: 0 0 8px; }
+  .al-done p { color: var(--muted); max-width: 42ch; margin: 0 auto; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div id="d27-nav"></div>
+
+<header class="hub-hero">
+  <div class="container">
+    <div class="crumb"><a href="index.html">Home</a> &nbsp;/&nbsp; Game Alerts</div>
+    <h1>🔔 Game Alerts</h1>
+    <p>Get a text or email the moment a game is rained out, a field is closed, or a makeup date is set — no more guessing or refreshing.</p>
+  </div>
+</header>
+
+<main class="container section-tight">
+  <div class="al-card" id="alForm">
+    <h2>Sign up for alerts</h2>
+    <p class="al-sub">Tournament postponements only — we won't spam you.</p>
+    <label class="fld">Name (optional)<input type="text" id="alName" placeholder="Your name" autocomplete="name"></label>
+    <label class="fld">Email<input type="email" id="alEmail" placeholder="you@email.com" autocomplete="email"></label>
+    <label class="fld">Mobile number<input type="tel" id="alPhone" placeholder="(610) 555-0123" autocomplete="tel"></label>
+    <div class="al-channels">
+      <label class="al-ck"><input type="checkbox" id="alEmailOpt" checked> 📧 Email alerts</label>
+      <label class="al-ck"><input type="checkbox" id="alSmsOpt"> 📱 Text alerts</label>
+    </div>
+    <p class="al-consent">By selecting <b>Text alerts</b> you agree to receive automated text messages from PA District 27 Little League about game status. Msg &amp; data rates may apply. Reply <b>STOP</b> to unsubscribe at any time.</p>
+    <button type="button" class="al-submit" id="alSubmit">Sign me up</button>
+    <div class="al-status" id="alStatus"></div>
+  </div>
+
+  <div class="al-done hidden" id="alDone">
+    <span class="big">✅</span>
+    <h2>You're all set!</h2>
+    <p>You'll get an alert whenever a game is postponed. Check <a href="weather.html">Game Status</a> anytime to see what's affected.</p>
+  </div>
+</main>
+
+<div id="d27-footer"></div>
+
+<script src="js/d27-chrome.js"></script>
+<script>
+(function(){
+  var FS = 'https://firestore.googleapis.com/v1/projects/d27-schedules/databases/(default)/documents/subscribers';
+  var KEY = 'AIzaSyBu_Qd5AUWVSUB6vHP39-zzZgTpbC7s0Fs';
+  var $ = function(id){ return document.getElementById(id); };
+  var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function subscribe(d){
+    var body = { fields: {
+      name:      { stringValue: d.name || '' },
+      email:     { stringValue: d.email || '' },
+      phone:     { stringValue: d.phone || '' },
+      email_opt: { booleanValue: !!d.email_opt },
+      sms_opt:   { booleanValue: !!d.sms_opt },
+      created:   { timestampValue: new Date().toISOString() }
+    } };
+    return fetch(FS + '?key=' + KEY, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) })
+      .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); });
+  }
+
+  $('alSubmit').addEventListener('click', function(){
+    var name = $('alName').value.trim();
+    var email = $('alEmail').value.trim();
+    var phone = $('alPhone').value.trim();
+    var emailOpt = $('alEmailOpt').checked, smsOpt = $('alSmsOpt').checked;
+    var st = $('alStatus'); st.className = 'al-status'; st.textContent = '';
+
+    if(!emailOpt && !smsOpt){ st.className='al-status err'; st.textContent='Pick at least one — email or text.'; return; }
+    if(emailOpt && !emailRe.test(email)){ st.className='al-status err'; st.textContent='Enter a valid email for email alerts.'; return; }
+    if(smsOpt && phone.replace(/\D/g,'').length < 10){ st.className='al-status err'; st.textContent='Enter a valid mobile number for text alerts.'; return; }
+
+    var btn = $('alSubmit'); btn.disabled = true; st.textContent = 'Signing you up…';
+    subscribe({ name:name, email:email, phone:phone, email_opt:emailOpt, sms_opt:smsOpt })
+      .then(function(){ $('alForm').classList.add('hidden'); $('alDone').classList.remove('hidden'); window.scrollTo({top:0,behavior:'smooth'}); })
+      .catch(function(){ btn.disabled=false; st.className='al-status err'; st.textContent='Hmm, that didn’t go through — please try again in a moment.'; });
+  });
+})();
+</script>
+
+</body>
+</html>

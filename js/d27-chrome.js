@@ -56,6 +56,7 @@
   ];
   var MORE = [
     ['weather.html', 'Game Status'],
+    ['alerts.html', 'Game Alerts'],
     ['brackets.html', 'Brackets'],
     ['champions.html', 'Champions'],
     ['rules.html', 'Rules'],
