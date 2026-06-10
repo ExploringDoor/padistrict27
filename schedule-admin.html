@@ -124,7 +124,8 @@
   .ed-tab:hover { color: var(--d27-navy); }
   .ed-tab.active { color: var(--d27-navy); border-bottom-color: var(--d27-navy); }
   /* de-emphasized Contacts tab — far right, muted/smaller, subtle divider */
-  .ed-tab-muted { margin-left: auto; padding-left: 16px; font-size: 12px; font-weight: 500; color: #b0b6c0; opacity: .6; border-left: 1px solid var(--line); border-radius: 0; transition: opacity .15s, color .15s; }
+  .ed-tab-muted { padding-left: 16px; font-size: 12px; font-weight: 500; color: #b0b6c0; opacity: .6; border-left: 1px solid var(--line); border-radius: 0; transition: opacity .15s, color .15s; }
+  .ed-tab-sec { margin-left: auto; }
   .ed-tab-muted:hover { opacity: 1; }
   .ed-tab-muted.active { opacity: 1; color: var(--d27-navy); }
   /* rain-out / postpone */
@@ -250,9 +251,10 @@
       <div class="ed-tabs">
         <button type="button" class="ed-tab active" data-view="schedule">📅 Schedule Editor</button>
         <button type="button" class="ed-tab" data-view="champions">🏆 Champions</button>
-        <button type="button" class="ed-tab" data-view="create">➕ Create</button>
         <button type="button" class="ed-tab" data-view="codes">🔑 Team Codes</button>
         <button type="button" class="ed-tab" data-view="inbox">📥 Score Inbox</button>
+        <button type="button" class="ed-tab ed-tab-sec ed-tab-muted" data-view="create">➕ Create</button>
+        <button type="button" class="ed-tab" data-view="subscribers">🔔 Subscribers</button>
         <button type="button" class="ed-tab ed-tab-muted" data-view="contacts">📇 Contacts</button>
       </div>
       <div id="view-schedule">
@@ -493,6 +495,16 @@
         </div>
         <div class="ct-wrap" id="ctTable"><div class="ct-loading">Loading roster…</div></div>
         <p class="ed-hint">🔒 Private roster — only visible while signed in. Tick rows then <b>Copy emails</b>, or filter by tournament. Use ✎ to edit, 🗑 to delete, <b>Add contact</b> for new managers.</p>
+      </div>
+
+      <div id="view-subscribers" class="hidden">
+        <div class="ct-bar">
+          <span class="ct-count" id="subCount">Loading…</span>
+          <span class="ct-spacer"></span>
+          <button type="button" class="ct-btn ct-add" id="subCsv">⤓ Download CSV</button>
+        </div>
+        <div class="ct-wrap" id="subTable"><div class="ct-loading">Loading subscribers…</div></div>
+        <p class="ed-hint">🔒 Private — everyone who signed up at <b>Game Alerts</b>. Export the CSV to import into your email/text service later. (Sending isn't wired up yet — this is just the list.)</p>
       </div>
 
       <div id="view-champions" class="hidden">
@@ -1148,7 +1160,7 @@ function impHandleFile(file){
 // ── Contacts roster (private; CRUD on the auth-only `contacts` collection) ──
 (function(){
   const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  let loaded = false, all = [], filtered = [], editingId = null;
+  let loaded = false, all = [], filtered = [], editingId = null, subLoaded = false, subs = [];
   const selected = new Set();
   const byTeam = (a,b)=> String(a.team||'').localeCompare(String(b.team||''));
   const tourneyName = k => (TOURNEYS[k] && TOURNEYS[k].name) || k || '—';
@@ -1162,7 +1174,9 @@ function impHandleFile(file){
     $('view-create').classList.toggle('hidden', view!=='create');
     $('view-codes').classList.toggle('hidden', view!=='codes');
     $('view-inbox').classList.toggle('hidden', view!=='inbox');
+    $('view-subscribers').classList.toggle('hidden', view!=='subscribers');
     if(view==='contacts' && !loaded){ loaded=true; loadContacts(); }
+    if(view==='subscribers' && !subLoaded){ subLoaded=true; loadSubscribers(); }
     if(view==='champions' && window.__champLoad){ window.__champLoad(); }
     if(view==='create' && window.__genInit){ window.__genInit(); }
     if(view==='codes' && window.__codesInit){ window.__codesInit(); }
@@ -1278,6 +1292,39 @@ function impHandleFile(file){
     try { await deleteDoc(doc(db,'contacts',c.id)); all=all.filter(x=>x.id!==c.id); selected.delete(c.id); applyFilter(); }
     catch(e){ alert('Could not delete: '+(e.message||e)); }
   }
+
+  // ── Subscribers (Game Alerts signups) — read-only list + CSV export ──
+  function subTs(t){ try { return t && t.toDate ? t.toDate().getTime() : (t ? new Date(t).getTime() : 0); } catch(e){ return 0; } }
+  function subDate(t){ try { const d = t && t.toDate ? t.toDate() : (t ? new Date(t) : null); return d && !isNaN(d) ? d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—'; } catch(e){ return '—'; } }
+  async function loadSubscribers(){
+    try {
+      const snap = await getDocs(collection(db,'subscribers'));
+      subs = snap.docs.map(d=>({ id:d.id, ...d.data() })).sort((a,b)=> subTs(b.created)-subTs(a.created));
+      renderSubs();
+    } catch(e){ $('subTable').innerHTML = '<div class="ct-empty">Could not load subscribers — '+esc(e.message||e)+'</div>'; }
+  }
+  function renderSubs(){
+    $('subCount').textContent = subs.length + ' subscriber' + (subs.length===1?'':'s');
+    $('subCsv').disabled = subs.length===0;
+    const wrap = $('subTable');
+    if(!subs.length){ wrap.innerHTML = '<div class="ct-empty">No signups yet — share the <a href="alerts.html" target="_blank">Game Alerts</a> page.</div>'; return; }
+    let h = '<table class="ct-table"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Alerts</th><th>Signed up</th></tr></thead><tbody>';
+    subs.forEach(s=>{
+      const ch = [s.email_opt?'📧 Email':'', s.sms_opt?'📱 Text':''].filter(Boolean).join(', ') || blank;
+      const mail = s.email ? '<a href="mailto:'+esc(s.email)+'">'+esc(s.email)+'</a>' : blank;
+      const tel = s.phone ? '<a href="tel:'+esc(String(s.phone).replace(/[^0-9+]/g,''))+'">'+esc(s.phone)+'</a>' : blank;
+      h += '<tr><td class="ct-mgr">'+(s.name?esc(s.name):blank)+'</td><td>'+mail+'</td><td>'+tel+'</td><td>'+ch+'</td><td>'+esc(subDate(s.created))+'</td></tr>';
+    });
+    wrap.innerHTML = h + '</tbody></table>';
+  }
+  function csvCell(v){ v = v==null?'':String(v); return /[",\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; }
+  $('subCsv').addEventListener('click', ()=>{
+    if(!subs.length) return;
+    const rows = [['Name','Email','Phone','Email alerts','Text alerts','Signed up']];
+    subs.forEach(s=> rows.push([s.name||'', s.email||'', s.phone||'', s.email_opt?'yes':'no', s.sms_opt?'yes':'no', subDate(s.created)]));
+    const csv = rows.map(r=>r.map(csvCell).join(',')).join('\r\n');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download = 'd27-subscribers.csv'; a.click(); URL.revokeObjectURL(a.href);
+  });
   document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !$('ctModal').classList.contains('hidden')) closeModal(); });
 })();
 
