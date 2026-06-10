@@ -68,7 +68,7 @@
   }
 
   /* Champion banner */
-  .bk-champion { background: linear-gradient(120deg, #C9A227, #EBCB5E 45%, #C9A227); color: var(--d27-navy); border-radius: 14px; padding: 24px 30px; margin: 20px 0 10px; display: flex; align-items: center; justify-content: center; gap: 26px; box-shadow: 0 10px 34px rgba(201,162,39,.45); position: relative; overflow: hidden; animation: champShine 3s ease-in-out infinite; }
+  .bk-champion { background: linear-gradient(120deg, #C9A227, #EBCB5E 45%, #C9A227); color: var(--d27-navy); border-radius: 14px; padding: 13px 30px; margin: 20px 0 10px; display: flex; align-items: center; justify-content: center; gap: 26px; box-shadow: 0 10px 34px rgba(201,162,39,.45); position: relative; overflow: hidden; animation: champShine 3s ease-in-out infinite; }
   @keyframes champShine { 50% { box-shadow: 0 10px 44px rgba(201,162,39,.7); } }
   .bk-champion::after { content: ''; position: absolute; right: -30px; top: -40px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(255,255,255,.4), transparent 60%); pointer-events: none; }
   .bk-champion .trophy { font-size: 60px; line-height: 1; position: relative; }
@@ -84,7 +84,7 @@
   .bk-champion .bk-neon .bk-neon-glow { fill: none; stroke: #EBCB5E; stroke-width: 3.4; stroke-linecap: round; stroke-dasharray: 60 540; filter: url(#bkNeonBlur); opacity: .85; animation: bkNeonTravel 4.4s linear infinite; }
   .bk-champion .bk-neon .bk-neon-core { fill: none; stroke: #F4FBFF; stroke-width: 1.6; stroke-linecap: round; stroke-dasharray: 38 562; animation: bkNeonTravel 4.4s linear infinite; filter: drop-shadow(0 0 3px #8FE9FF) drop-shadow(0 0 6px rgba(143,233,255,.6)); }
   @keyframes bkNeonTravel { to { stroke-dashoffset: -600; } }
-  .bk-champion .bk-trophy-img { width: clamp(74px, 13vw, 106px); height: clamp(74px, 13vw, 106px); object-fit: contain; display: block; position: relative; flex: none; filter: drop-shadow(0 3px 7px rgba(0,45,114,.45)); }
+  .bk-champion .bk-trophy-img { height: clamp(120px, 23vw, 172px); width: auto; object-fit: contain; display: block; position: relative; flex: none; filter: drop-shadow(0 3px 7px rgba(0,45,114,.45)); }
   .bk-champion .ct .tourn { font-family: var(--font-display); letter-spacing: .14em; font-size: 14px; font-weight: 700; text-transform: uppercase; opacity: .92; }
   @media (prefers-reduced-motion: reduce) {
     .bk-champion { animation: none; }
@@ -626,12 +626,11 @@ function renderBracket(t) {
         `<rect class="bk-neon-glow" pathLength="600" x="2.5" y="2.5" width="995" height="195" rx="55" ry="55" vector-effect="non-scaling-stroke"/>` +
         `<rect class="bk-neon-core" pathLength="600" x="2.5" y="2.5" width="995" height="195" rx="55" ry="55" vector-effect="non-scaling-stroke"/>` +
       `</svg>` +
-      `<img class="bk-trophy-img" src="assets/d27-trophy.png?v=2" alt="champion trophy" onerror="this.onerror=null;this.outerHTML='<span class=&quot;trophy&quot;>🏆</span>'">` +
+      `<img class="bk-trophy-img" src="assets/d27-trophy.png?v=3" alt="champion trophy" onerror="this.onerror=null;this.outerHTML='<span class=&quot;trophy&quot;>🏆</span>'">` +
       `<div class="ct">` +
         `<div class="tourn">${escTxt(t.name)}</div>` +
         `<div class="lbl">★ Tournament Champion ★</div>` +
         `<div class="team">${escTxt(outcome.champion)}</div>` +
-        `<div class="word">Champion</div>` +
       `</div>` +
     `</div>`;
   }
