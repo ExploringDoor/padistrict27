@@ -137,9 +137,9 @@
       var today=iso(now), tmrw=iso(new Date(now.getTime()+864e5));
       var n=0;
       (data.tournaments||[]).forEach(function(t){ (t.games||[]).forEach(function(g){
-        if(g.status==='ppd' && g.date && g.date>=today && g.date<=tmrw) n++;
+        if(g.status==='ppd' && g.date && g.date>=today) n++;
       }); });
-      if(n) renderAlert(n+' game'+(n>1?'s':'')+' postponed for weather.', 'live-schedule.html');
+      if(n) renderAlert(n+' game'+(n>1?'s':'')+' postponed — check the schedule.', 'live-schedule.html');
     }).catch(function(){});
   }
 

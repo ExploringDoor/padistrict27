@@ -843,7 +843,7 @@ function fillCloseFieldOpts() {
   if (!fSel || !dSel || !current) return;
   const fields = [...new Set((current.games || []).map(g => g.field).filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b)));
   const dates  = [...new Set((current.games || []).map(g => g.date).filter(Boolean))].sort();
-  fSel.innerHTML = fields.map(f => `<option value="${esc(f)}">${esc(f)}</option>`).join('') || '<option value="">— no fields —</option>';
+  fSel.innerHTML = '<option value="*">— All fields (whole day) —</option>' + fields.map(f => `<option value="${esc(f)}">${esc(f)}</option>`).join('');
   dSel.innerHTML = dates.map(d => `<option value="${esc(d)}">${esc(d)}</option>`).join('')  || '<option value="">— no dates —</option>';
 }
 function __cfApply(reopen) {
@@ -853,7 +853,8 @@ function __cfApply(reopen) {
   let n = 0;
   $('rows').querySelectorAll('tr').forEach(tr => {
     const fEl = tr.querySelector('[data-f="field"]'), dEl = tr.querySelector('[data-f="date"]');
-    if (!fEl || !dEl || fEl.value !== field || dEl.value !== date) return;
+    if (!dEl || dEl.value !== date) return;
+    if (field !== '*' && (!fEl || fEl.value !== field)) return;
     const sel = tr.querySelector('[data-f="status"]'), mk = tr.querySelector('[data-f="makeupDate"]');
     if (!sel) return;
     sel.value = reopen ? '' : ('ppd:' + reason);
