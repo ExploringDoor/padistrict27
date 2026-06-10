@@ -162,6 +162,8 @@
   .bk-side .sc { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--muted); min-width: 18px; text-align: center; }
   .bk-side.win .nm { color: #047857; }
   .bk-side.win .sc { color: #047857; }
+  .bk-side[data-team] { transition: background .12s ease; }
+  .bk-side.path-hi { background: #FFE873; }
 
   .bk-mfoot { height: 40px; box-sizing: border-box; padding: 3px 10px; font-size: 10px; color: var(--muted); border-top: 1px dashed var(--line); display: flex; flex-direction: column; justify-content: center; gap: 1px; }
   .bk-mfoot .fin { color: #047857; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
@@ -330,7 +332,7 @@ function cardHeight(g) { return CARD_H; }
 function matchHTML(t, g, cls, x, y) {
   const A = sideDisplay(t, g.away), H = sideDisplay(t, g.home);
   const played = isPlayed(g), aWin = played && g.as > g.hs, hWin = played && g.hs > g.as;
-  const side = (s, sc, win) => `<div class="bk-side${win ? ' win' : ''}${s.tbd ? ' tbd' : ''}${s.bye ? ' bye' : ''}">${(!s.tbd && !s.bye && window.D27logos) ? D27logos.html(s.name, 20) : ''}<span class="nm">${s.name}${s.via ? `<span class="via">via ${s.via}</span>` : ''}</span><span class="sc">${sc != null ? sc : ''}</span></div>`;
+  const side = (s, sc, win) => `<div class="bk-side${win ? ' win' : ''}${s.tbd ? ' tbd' : ''}${s.bye ? ' bye' : ''}"${(!s.tbd && !s.bye) ? ` data-team="${escTxt(s.name)}"` : ''}>${(!s.tbd && !s.bye && window.D27logos) ? D27logos.html(s.name, 20) : ''}<span class="nm">${s.name}${s.via ? `<span class="via">via ${s.via}</span>` : ''}</span><span class="sc">${sc != null ? sc : ''}</span></div>`;
   const tag = cls === 'f' ? '<span class="tag f">🏆 Final</span>' : cls === 'l' ? '<span class="tag l">Losers</span>' : '<span class="tag w">Winners</span>';
   const okStr = v => v && !/^(n\/?a|tbd|tba|none|-+)$/i.test(String(v).trim());
   const cd = okStr(g.date) ? new Date(g.date + 'T12:00:00') : null;
@@ -704,6 +706,19 @@ document.getElementById('output').addEventListener('click', e => {
   const card = e.target.closest('.bk-match[data-g]');
   if (card) D27gameModal.openByKey(card.dataset.tkey, card.dataset.g);
 });
+// hover a team → light up its whole path through the bracket (how far it's advanced)
+(function(){
+  const out = document.getElementById('output'); let cur = null;
+  const clearHi = () => out.querySelectorAll('.bk-side.path-hi').forEach(el => el.classList.remove('path-hi'));
+  out.addEventListener('mouseover', e => {
+    const side = e.target.closest ? e.target.closest('.bk-side[data-team]') : null;
+    const team = side ? side.getAttribute('data-team') : null;
+    if (team === cur) return;
+    cur = team; clearHi();
+    if (team) out.querySelectorAll('.bk-side[data-team]').forEach(el => { if (el.getAttribute('data-team') === team) el.classList.add('path-hi'); });
+  });
+  out.addEventListener('mouseleave', () => { cur = null; clearHi(); });
+})();
 </script>
 
 <script>
