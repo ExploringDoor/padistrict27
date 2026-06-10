@@ -19,6 +19,8 @@
   .ed-topbar .who { margin-left: auto; font-size: 13px; color: rgba(255,255,255,.8); }
   .ed-topbar .who b { color: var(--d27-gold); }
   .ed-topbar button { background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.25); padding: 6px 12px; border-radius: 5px; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .ed-topbar .ed-back { color: #fff; text-decoration: none; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25); padding: 6px 12px; border-radius: 5px; font-size: 12px; font-weight: 700; white-space: nowrap; transition: background .12s, border-color .12s; }
+  .ed-topbar .ed-back:hover { background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.45); }
 
   /* Login */
   .ed-login { max-width: 380px; margin: 60px auto; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 32px; box-shadow: 0 8px 28px rgba(0,0,0,.06); }
@@ -172,6 +174,7 @@
 <div class="ed-topbar">
   <div class="container">
     <span class="brand">D27 · Schedule Editor</span>
+    <a class="ed-back" href="index.html">← Back to main site</a>
     <span class="who" id="whoami"></span>
     <button id="signoutBtn" class="hidden" onclick="window.__signout()">Sign out</button>
   </div>
