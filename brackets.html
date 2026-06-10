@@ -618,7 +618,7 @@ function renderBracket(t) {
 
   let html = '';
   if (outcome.champion) {
-    html += `<div class="bk-champion">` +
+    html += `<div class="bk-champion" data-champ="${escTxt(outcome.champion)}" data-tourn="${escTxt(t.name)}">` +
       `<img class="bk-trophy-img" src="assets/d27-trophy.png?v=3" alt="champion trophy" onerror="this.onerror=null;this.outerHTML='<span class=&quot;trophy&quot;>🏆</span>'">` +
       `<div class="ct">` +
         `<div class="tourn">${escTxt(t.name)}</div>` +
@@ -704,6 +704,91 @@ document.getElementById('output').addEventListener('click', e => {
   const card = e.target.closest('.bk-match[data-g]');
   if (card) D27gameModal.openByKey(card.dataset.tkey, card.dataset.g);
 });
+</script>
+
+<script>
+/* Champion banner → "See the winner's photo" — shows once a photo is uploaded for that champion (Firestore `champions`). */
+(function () {
+  var FS_BASE = 'https://firestore.googleapis.com/v1/projects/d27-schedules/databases/(default)/documents';
+  var FS_KEY = 'AIzaSyBu_Qd5AUWVSUB6vHP39-zzZgTpbC7s0Fs';
+  var champMap = null;
+  function norm(s){ return String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); }
+
+  var st = document.createElement('style');
+  st.textContent =
+    '.bk-champ-photo-wrap{display:flex;justify-content:center;margin:-4px 0 16px}' +
+    '.bk-champ-photo{font-family:var(--font-display,sans-serif);font-weight:700;font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:var(--d27-navy,#002D72);border:none;border-radius:999px;padding:9px 18px;cursor:pointer;box-shadow:0 4px 14px rgba(0,45,114,.28);transition:transform .15s ease,box-shadow .15s ease;display:inline-flex;align-items:center;gap:8px}' +
+    '.bk-champ-photo:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(0,45,114,.42)}' +
+    '.champlb{position:fixed;inset:0;z-index:2000;background:rgba(8,15,30,.9);display:flex;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}' +
+    '.champlb figure{margin:0;max-width:min(92vw,820px);text-align:center}' +
+    '.champlb img{max-width:100%;max-height:82vh;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.5);background:#fff}' +
+    '.champlb figcaption{color:#fff;font-family:var(--font-display,sans-serif);margin-top:12px;font-size:15px;letter-spacing:.03em}' +
+    '.champlb-x{position:fixed;top:18px;right:22px;width:42px;height:42px;border-radius:50%;border:none;background:rgba(255,255,255,.16);color:#fff;font-size:20px;cursor:pointer}';
+  document.head.appendChild(st);
+
+  function load(){
+    var mask = ['year','team','title'].map(function(f){ return '&mask.fieldPaths=' + f; }).join('');
+    fetch(FS_BASE + '/champions?key=' + FS_KEY + '&pageSize=300' + mask)
+      .then(function(r){ return r.ok ? r.json() : {}; })
+      .then(function(data){
+        champMap = {};
+        (data.documents || []).forEach(function(d){
+          var f = d.fields || {}, gv = function(k){ return f[k] ? (f[k].stringValue != null ? f[k].stringValue : f[k].integerValue) : ''; };
+          var key = norm(gv('team'));
+          (champMap[key] = champMap[key] || []).push({ id: d.name.split('/').pop(), title: gv('title') });
+        });
+        decorate();
+      })
+      .catch(function(){ champMap = {}; });
+  }
+
+  function decorate(){
+    if (!champMap) return;
+    var ban = document.querySelector('.bk-champion');
+    if (!ban) return;
+    if (ban.nextElementSibling && ban.nextElementSibling.classList && ban.nextElementSibling.classList.contains('bk-champ-photo-wrap')) return;
+    var champ = ban.getAttribute('data-champ'), tourn = ban.getAttribute('data-tourn');
+    if (!champ) return;
+    var list = champMap[norm(champ)] || [], hit = null;
+    for (var i = 0; i < list.length; i++){ if (norm(list[i].title) === norm(tourn)){ hit = list[i]; break; } }
+    if (!hit) hit = list[0];
+    if (!hit) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'bk-champ-photo-wrap';
+    wrap.innerHTML = '<button type="button" class="bk-champ-photo" data-cid="' + hit.id + '">📸 See the winner’s photo</button>';
+    ban.insertAdjacentElement('afterend', wrap);
+  }
+
+  function champImg(id){
+    return fetch(FS_BASE + '/champions/' + id + '?key=' + FS_KEY + '&mask.fieldPaths=img')
+      .then(function(r){ return r.json(); })
+      .then(function(d){ return (d.fields && d.fields.img && d.fields.img.stringValue) || ''; })
+      .catch(function(){ return ''; });
+  }
+
+  function showPhoto(id, team){
+    var lb = document.createElement('div'); lb.className = 'champlb';
+    lb.innerHTML = '<button class="champlb-x" aria-label="Close">✕</button><figure><img alt="Champion photo"><figcaption>Loading…</figcaption></figure>';
+    document.body.appendChild(lb);
+    var img = lb.querySelector('img'), cap = lb.querySelector('figcaption');
+    champImg(id).then(function(src){ if (src){ img.src = src; cap.textContent = team ? team + ' — Champions' : ''; } else { cap.textContent = 'Photo not available yet.'; } });
+    function close(){ lb.remove(); document.removeEventListener('keydown', onKey); }
+    function onKey(e){ if (e.key === 'Escape') close(); }
+    lb.addEventListener('click', function(e){ if (e.target === lb || (e.target.closest && e.target.closest('.champlb-x'))) close(); });
+    document.addEventListener('keydown', onKey);
+  }
+
+  document.addEventListener('click', function(e){
+    var b = e.target.closest && e.target.closest('.bk-champ-photo');
+    if (b){ var ban = document.querySelector('.bk-champion'); showPhoto(b.getAttribute('data-cid'), ban ? ban.getAttribute('data-champ') : ''); }
+  });
+
+  if (window.MutationObserver){
+    var tmr, mo = new MutationObserver(function(){ clearTimeout(tmr); tmr = setTimeout(decorate, 150); });
+    mo.observe(document.body, { childList: true, subtree: true });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', load); else load();
+})();
 </script>
 
 </body>
