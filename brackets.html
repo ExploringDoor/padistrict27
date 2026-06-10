@@ -75,20 +75,12 @@
   .bk-champion .ct { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 7px; }
   .bk-champion .ct .lbl { font-family: var(--font-display); letter-spacing: .2em; font-size: 13px; font-weight: 700; text-transform: uppercase; opacity: .85; }
   .bk-champion .ct .team { font-family: var(--font-display); font-size: clamp(30px, 6vw, 58px); font-weight: 700; line-height: 1; letter-spacing: -.01em; }
-  .bk-champion .ct .word { font-family: var(--font-display); font-size: clamp(18px, 3vw, 26px); font-weight: 700; letter-spacing: .12em; }
 
-  /* Neon light traveling around the champion banner (SVG stroke-dashoffset comet) */
-  .bk-champion .bk-neon { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 14px; pointer-events: none; z-index: 1; overflow: visible; }
-  .bk-champion .trophy, .bk-champion .bk-trophy-img, .bk-champion .ct { z-index: 2; }
-  .bk-champion .bk-neon .bk-neon-rail { fill: none; stroke: rgba(0,45,114,.16); stroke-width: 1; }
-  .bk-champion .bk-neon .bk-neon-glow { fill: none; stroke: #1E5BC6; stroke-width: 3.4; stroke-linecap: round; stroke-dasharray: 60 540; filter: url(#bkNeonBlur); opacity: .9; animation: bkNeonTravel 4.4s linear infinite; }
-  .bk-champion .bk-neon .bk-neon-core { fill: none; stroke: #BCD9FF; stroke-width: 1.8; stroke-linecap: round; stroke-dasharray: 38 562; animation: bkNeonTravel 4.4s linear infinite; filter: drop-shadow(0 0 3px #4F9BFF) drop-shadow(0 0 7px rgba(0,45,114,.7)); }
-  @keyframes bkNeonTravel { to { stroke-dashoffset: -600; } }
+  .bk-champion .bk-trophy-img, .bk-champion .ct, .bk-champion .bk-tlogo { z-index: 2; }
   .bk-champion .bk-trophy-img { height: clamp(116px, 21vw, 168px); width: auto; object-fit: contain; display: block; position: relative; flex: none; filter: drop-shadow(0 3px 7px rgba(0,45,114,.45)); }
-  .bk-champion .bk-crest { height: clamp(76px, 14vw, 110px); aspect-ratio: 1; border-radius: 50%; object-fit: cover; flex: none; position: relative; z-index: 2; box-shadow: 0 2px 10px rgba(0,45,114,.4); }
   .bk-champion .bk-tlogo { flex: none; position: relative; z-index: 2; display: flex; align-items: center; }
   .bk-champion .bk-tlogo .d27-logo { height: clamp(76px, 14vw, 110px); width: auto; display: block; filter: drop-shadow(0 2px 6px rgba(0,45,114,.3)); }
-  @media (max-width: 560px) { .bk-champion .bk-crest, .bk-champion .bk-tlogo { display: none; } }
+  @media (max-width: 560px) { .bk-champion .bk-tlogo { display: none; } }
   .bk-champion .ct .tourn { font-family: var(--font-display); letter-spacing: .14em; font-size: 14px; font-weight: 700; text-transform: uppercase; opacity: .92; }
   /* Banner font: Saira Condensed (Adam's pick) */
   .bk-champion .ct .team { font-family: 'Saira Condensed', sans-serif; font-weight: 800; font-size: clamp(32px, 6.6vw, 62px); letter-spacing: .005em; }
