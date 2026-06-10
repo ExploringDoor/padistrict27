@@ -1300,6 +1300,18 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
 .d27-alert .x { flex: none; background: rgba(0,45,114,.12); border: none; color: var(--d27-navy); width: 26px; height: 26px; border-radius: 50%; cursor: pointer; font-size: 16px; line-height: 1; font-weight: 700; }
 .d27-alert .x:hover { background: rgba(0,45,114,.22); }
 @media (max-width: 600px) { .d27-alert { font-size: 12px; } .d27-alert-inner { padding: 8px 14px; gap: 9px; } }
+/* weather/postponement pop-up (must acknowledge) */
+.d27-wx { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; background: rgba(0,18,48,.66); padding: 20px; backdrop-filter: blur(2px); }
+.d27-wx-card { background: #fff; border-radius: 16px; max-width: 440px; width: 100%; padding: 32px 28px 24px; text-align: center; box-shadow: 0 30px 80px rgba(0,0,0,.45); border-top: 6px solid #F59E0B; animation: d27wxPop .22s ease-out; }
+@keyframes d27wxPop { from { transform: scale(.9) translateY(8px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+.d27-wx-ico { font-size: 50px; line-height: 1; }
+.d27-wx-card h2 { font-family: 'Oswald', sans-serif; color: var(--d27-navy, #002D72); font-size: 27px; margin: 10px 0 8px; }
+.d27-wx-card p { color: #4b5563; font-size: 16px; margin: 0 0 22px; line-height: 1.5; }
+.d27-wx-btns { display: flex; flex-direction: column; gap: 10px; }
+.d27-wx-go { background: #F59E0B; color: var(--d27-navy, #002D72); font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: .03em; text-transform: uppercase; text-decoration: none; padding: 14px; border-radius: 10px; transition: filter .12s ease; }
+.d27-wx-go:hover { filter: brightness(1.06); }
+.d27-wx-ok { background: none; border: none; color: #9aa3af; font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: .05em; text-transform: uppercase; cursor: pointer; padding: 8px; }
+.d27-wx-ok:hover { color: var(--d27-navy, #002D72); }
 .gm-body { padding: 20px 22px 18px; }
 .gm-foot { padding: 0 22px 22px; }
 .gm-bracket-btn { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; padding: 13px; background: var(--d27-navy, #002D72); color: #fff; border-radius: 10px; font-family: var(--font-display, 'Oswald'), sans-serif; font-size: 14px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; text-decoration: none; transition: filter .12s ease, transform .12s ease; }

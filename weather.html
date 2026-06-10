@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Game Status · PA District 27 Little League</title>
+<meta name="description" content="Live game status for PA District 27 Little League — rain-outs, field closures, postponed games, and makeup dates." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<script src="config.js"></script>
+<link rel="stylesheet" href="css/styles.css" />
+
+<style>
+  .hub-hero { background: linear-gradient(135deg, rgba(0,27,71,.95) 0%, rgba(245,158,11,.34) 100%), var(--d27-navy); color: var(--d27-white); padding: var(--space-7) 0 var(--space-6); }
+  .hub-hero .crumb { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-bottom: var(--space-3); }
+  .hub-hero .crumb a { color: rgba(255,255,255,.6); text-decoration: none; }
+  .hub-hero h1 { color: var(--d27-white); font-size: clamp(2.25rem, 4vw, var(--text-4xl)); margin-bottom: var(--space-3); }
+  .hub-hero p { color: rgba(255,255,255,.82); font-size: var(--text-lg); max-width: 60ch; }
+
+  .wx-updated { font-family: 'Oswald', sans-serif; font-size: var(--text-sm); text-transform: uppercase; letter-spacing: .06em; color: #B45309; margin-bottom: var(--space-4); font-weight: 600; }
+  .wx-clear { text-align: center; padding: 56px 24px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); color: var(--muted); font-size: var(--text-lg); }
+  .wx-clear .big { font-size: 46px; display: block; margin-bottom: 10px; }
+  .wx-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--space-4); }
+  .wx-card { background: var(--surface); border: 1px solid var(--line); border-left: 5px solid #F59E0B; border-radius: var(--radius); padding: 18px 20px; cursor: pointer; transition: box-shadow .15s ease, transform .12s ease; }
+  .wx-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+  .wx-badge { display: inline-block; background: #F59E0B; color: #fff; font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 3px 9px; border-radius: 5px; }
+  .wx-match { font-family: 'Oswald', sans-serif; font-size: 19px; font-weight: 600; color: var(--d27-navy); margin: 11px 0 4px; line-height: 1.15; }
+  .wx-meta { color: var(--muted); font-size: 14px; }
+  .wx-makeup { margin-top: 9px; font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 700; color: #047857; }
+  .wx-makeup.tbd { color: var(--muted); font-weight: 600; }
+  .wx-tn { margin-top: 9px; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .wx-cta { margin-top: 6px; font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; color: var(--d27-navy); }
+</style>
+</head>
+<body>
+
+<div id="d27-nav"></div>
+
+<header class="hub-hero">
+  <div class="container">
+    <div class="crumb"><a href="index.html">Home</a> &nbsp;/&nbsp; Game Status</div>
+    <h1>⛈️ Game Status</h1>
+    <p>Rain-outs, field closures, and postponed games — with makeup dates as they're set. When the weather clears, this page clears too.</p>
+  </div>
+</header>
+
+<main class="container section-tight">
+  <div class="wx-updated" id="wxUpdated"></div>
+  <div id="wxList"><div class="hub-loading">Loading game status…</div></div>
+</main>
+
+<div id="d27-footer"></div>
+
+<script src="js/d27-data.js"></script>
+<script src="js/d27-bracket.js"></script>
+<script src="js/d27-scores.js"></script>
+<script src="js/d27-logos.js"></script>
+<script src="js/d27-gamemodal.js"></script>
+<script src="js/d27-chrome.js"></script>
+<script>
+(function(){
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function clean(v){ if(v==null) return ''; var s=String(v).trim(); return /^(n\/?a|tbd|tba|none|-+)$/i.test(s)?'':s; }
+  var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var FDOW=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  function fmtDate(iso){ iso=clean(iso); if(!iso) return 'Date TBD'; var d=new Date(iso+'T12:00:00'); return isNaN(d)?'Date TBD':(FDOW[d.getDay()]+', '+MON[d.getMonth()]+' '+d.getDate()); }
+  function fmtTime(t){ t=clean(t); if(!t) return ''; var p=t.split(':'); var h=+p[0], m=p[1]||'00'; if(isNaN(h)) return ''; var ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+m+' '+ap; }
+
+  function card(g){
+    var A=D27scores.side(g,'away'), H=D27scores.side(g,'home');
+    var reason = g.ppdReason==='field' ? 'Field Closed' : 'Rain';
+    var mk = clean(g.makeupDate);
+    var mkHtml = mk ? '<div class="wx-makeup">📅 Makeup: '+fmtDate(g.makeupDate)+'</div>' : '<div class="wx-makeup tbd">Makeup date TBD</div>';
+    var meta = [fmtDate(g.date), fmtTime(g.time), clean(g.field)].filter(Boolean).join(' &middot; ');
+    return '<div class="wx-card" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'">'+
+      '<span class="wx-badge">⛈ POSTPONED &middot; '+reason+'</span>'+
+      '<div class="wx-match">'+esc(A.name)+' vs '+esc(H.name)+'</div>'+
+      '<div class="wx-meta">'+meta+'</div>'+
+      mkHtml+
+      '<div class="wx-tn">'+esc(g.tourneyName||g.tourneyKey)+'</div>'+
+      '<div class="wx-cta">Tap for details &rsaquo;</div>'+
+    '</div>';
+  }
+
+  D27loadSchedules().then(function(d){
+    D27gameModal.setData(d.tournaments);
+    var games = D27scores.allGames(d).filter(function(g){ return g.status==='ppd'; });
+    games.sort(function(a,b){ return (a.date||'').localeCompare(b.date||'') || String(a.time||'').localeCompare(String(b.time||'')); });
+    var out=document.getElementById('wxList');
+    if(!games.length){ out.innerHTML='<div class="wx-clear"><span class="big">☀️</span>All games are on as scheduled — no postponements right now.</div>'; return; }
+    document.getElementById('wxUpdated').textContent = '⛈ '+games.length+' game'+(games.length>1?'s':'')+' currently postponed';
+    out.innerHTML='<div class="wx-grid">'+games.map(card).join('')+'</div>';
+  }).catch(function(){ document.getElementById('wxList').innerHTML='<div class="wx-clear">Couldn’t load game status — try the <a href="live-schedule.html">schedule</a>.</div>'; });
+
+  document.getElementById('wxList').addEventListener('click', function(e){ var c=e.target.closest('.wx-card'); if(c) D27gameModal.openByKey(c.dataset.tkey, c.dataset.g); });
+})();
+</script>
+
+</body>
+</html>
