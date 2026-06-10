@@ -125,7 +125,14 @@
   .ed-tab.active { color: var(--d27-navy); border-bottom-color: var(--d27-navy); }
   /* de-emphasized Contacts tab — far right, muted/smaller, subtle divider */
   .ed-tab-muted { padding-left: 16px; font-size: 12px; font-weight: 500; color: #b0b6c0; opacity: .6; border-left: 1px solid var(--line); border-radius: 0; transition: opacity .15s, color .15s; }
-  .ed-tab-sec { margin-left: auto; }
+  .ed-more { position: relative; margin-left: auto; }
+  .ed-more-trigger { display: inline-flex; align-items: center; gap: 5px; }
+  .ed-more-caret { font-size: 10px; }
+  .ed-more-menu { position: absolute; right: 0; top: 100%; margin-top: 5px; background: #fff; border: 1px solid var(--line); border-radius: 9px; box-shadow: 0 12px 32px rgba(0,0,0,.16); min-width: 190px; z-index: 50; padding: 6px; display: flex; flex-direction: column; gap: 2px; }
+  .ed-more-menu.hidden { display: none; }
+  .ed-more-item { text-align: left; background: none; border: none; padding: 10px 12px; border-radius: 6px; font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; white-space: nowrap; }
+  .ed-more-item:hover { background: var(--d27-sub, #f4f6fb); color: var(--d27-navy); }
+  .ed-more-item.active { color: var(--d27-navy); background: rgba(0,45,114,.08); }
   .ed-tab-muted:hover { opacity: 1; }
   .ed-tab-muted.active { opacity: 1; color: var(--d27-navy); }
   /* rain-out / postpone */
@@ -253,9 +260,14 @@
         <button type="button" class="ed-tab" data-view="champions">🏆 Champions</button>
         <button type="button" class="ed-tab" data-view="codes">🔑 Team Codes</button>
         <button type="button" class="ed-tab" data-view="inbox">📥 Score Inbox</button>
-        <button type="button" class="ed-tab ed-tab-sec ed-tab-muted" data-view="create">➕ Create</button>
-        <button type="button" class="ed-tab" data-view="subscribers">🔔 Subscribers</button>
-        <button type="button" class="ed-tab ed-tab-muted" data-view="contacts">📇 Contacts</button>
+        <div class="ed-more">
+          <button type="button" class="ed-tab ed-more-trigger">⋯ More <span class="ed-more-caret">▾</span></button>
+          <div class="ed-more-menu hidden">
+            <button type="button" class="ed-more-item" data-view="create">➕ Create</button>
+            <button type="button" class="ed-more-item" data-view="subscribers">🔔 Subscribers</button>
+            <button type="button" class="ed-more-item" data-view="contacts">📇 Contacts</button>
+          </div>
+        </div>
       </div>
       <div id="view-schedule">
       <div class="ed-toolbar">
@@ -1168,6 +1180,9 @@ function impHandleFile(file){
 
   function tab(view){
     document.querySelectorAll('.ed-tab').forEach(t=>t.classList.toggle('active', t.dataset.view===view));
+    document.querySelectorAll('.ed-more-item').forEach(t=>t.classList.toggle('active', t.dataset.view===view));
+    var _mt=document.querySelector('.ed-more-trigger'); if(_mt) _mt.classList.toggle('active', ['create','subscribers','contacts'].indexOf(view)>=0);
+    var _mm=document.querySelector('.ed-more-menu'); if(_mm) _mm.classList.add('hidden');
     $('view-schedule').classList.toggle('hidden', view!=='schedule');
     $('view-contacts').classList.toggle('hidden', view!=='contacts');
     $('view-champions').classList.toggle('hidden', view!=='champions');
@@ -1182,7 +1197,13 @@ function impHandleFile(file){
     if(view==='codes' && window.__codesInit){ window.__codesInit(); }
     if(view==='inbox' && window.__inboxLoad){ window.__inboxLoad(); }
   }
-  document.querySelectorAll('.ed-tab').forEach(t=> t.addEventListener('click', ()=>tab(t.dataset.view)));
+  document.querySelectorAll('.ed-tab[data-view]').forEach(t=> t.addEventListener('click', ()=>tab(t.dataset.view)));
+  (function(){
+    var trig=document.querySelector('.ed-more-trigger'), menu=document.querySelector('.ed-more-menu');
+    if(trig&&menu){ trig.addEventListener('click', function(e){ e.stopPropagation(); menu.classList.toggle('hidden'); }); }
+    document.querySelectorAll('.ed-more-item').forEach(function(it){ it.addEventListener('click', function(){ tab(it.dataset.view); }); });
+    document.addEventListener('click', function(e){ if(menu && !(e.target.closest && e.target.closest('.ed-more'))) menu.classList.add('hidden'); });
+  })();
 
   function fillTourneyOptions(){
     const keys = new Set(Object.keys(TOURNEYS));
