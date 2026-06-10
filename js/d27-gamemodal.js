@@ -118,7 +118,9 @@
     if (isByeSlot(g.away) || isByeSlot(g.home)) {
       const adv = isByeSlot(g.away) ? g.home : g.away;
       const team = resolveSide(t, adv, new Set()) || sideDisplay(t, adv).name;
-      return `${team} drew a bye and advanced${next ? ` to Game ${next.g}` : ''}.`;
+      return next
+        ? `${team} drew a bye and advanced to Game ${next.g}.`
+        : `${team} drew a bye and is the ${t.name} champion.`;
     }
     if (isForfeit(g)) {
       const aWin = g.as > g.hs;
@@ -220,8 +222,9 @@
     const text = (g.recap && String(g.recap).trim()) ? g.recap : recapTemplate(t, g, cls);
     if (isByeSlot(g.away) || isByeSlot(g.home)) {
       const nm = sideDisplay(t, isByeSlot(g.away) ? g.home : g.away).name;
+      const byeMeta = nextGameOf(t, g.g) ? 'Advanced on a bye' : 'Champion';
       return `
-        <div class="gm-byewrap">${lg(nm, 104)}<div class="gm-team">${esc(nm)}</div><div class="gm-meta">Advanced on a bye</div></div>
+        <div class="gm-byewrap">${lg(nm, 104)}<div class="gm-team">${esc(nm)}</div><div class="gm-meta">${esc(byeMeta)}</div></div>
         <div class="gm-sec"><h4>Recap</h4><p class="gm-recap">${esc(text)}</p></div>`;
     }
     if (isForfeit(g)) {
