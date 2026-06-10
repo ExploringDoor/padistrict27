@@ -129,7 +129,8 @@
   <div class="container">
     <div class="ls-filter-top">
       <span class="ls-filter-title">Tournaments</span>
-      <input class="ls-search" id="searchBox" type="text" placeholder="Search team, field, date..." />
+      <input class="ls-search" id="searchBox" type="text" list="schedSearchList" autocomplete="off" placeholder="Search team, field, date..." />
+      <datalist id="schedSearchList"></datalist>
       <span class="ls-count" id="gameCount"></span>
     </div>
     <div class="ls-picker" id="tourneyPicker"></div>
@@ -147,7 +148,7 @@
 
 <script>
 let DATA = null;
-let filter = { sport: 'all', tourney: 'all', q: '' };
+let filter = { sport: 'all', tourneys: [], q: '' };
 
 const isPlaceholder = (t) => !t || /^(WG|LG)-\d+$/i.test(String(t).trim()) || /if necessary/i.test(String(t)) || /^(WG|LG)-/i.test(String(t).trim());
 
@@ -387,7 +388,7 @@ function render() {
     const tourneys = DATA.tournaments.filter(t =>
       t.category === cat &&
       (filter.sport === 'all' || t.sport === filter.sport) &&
-      (filter.tourney === 'all' || t.key === filter.tourney)
+      (!filter.tourneys.length || filter.tourneys.indexOf(t.key) >= 0)
     );
     if (!tourneys.length) continue;
 
@@ -418,11 +419,30 @@ function scrollToSched() {
   if (y > window.scrollY + 4) window.scrollTo({ top: y, behavior: 'smooth' });
 }
 function selectTourneyLS(key, scroll) {
-  filter.tourney = key;
-  document.querySelectorAll('.ls-chip').forEach(c => c.classList.toggle('active', c.dataset.key === key));
-  if (key !== 'all') location.hash = key;
+  if (key === 'all') { filter.tourneys = []; }
+  else { const i = filter.tourneys.indexOf(key); if (i >= 0) filter.tourneys.splice(i, 1); else filter.tourneys.push(key); }
+  syncChips();
+  // keep a deep-link hash only when exactly one is picked (so #BB-12 links still work)
+  if (filter.tourneys.length === 1) location.hash = filter.tourneys[0];
+  else history.replaceState(null, '', location.pathname + location.search);
   render();
   if (scroll) scrollToSched();
+}
+function syncChips() {
+  document.querySelectorAll('.ls-chip').forEach(c => {
+    const k = c.dataset.key;
+    c.classList.toggle('active', k === 'all' ? filter.tourneys.length === 0 : filter.tourneys.indexOf(k) >= 0);
+  });
+}
+function buildSearchList() {
+  const dl = document.getElementById('schedSearchList'); if (!dl) return;
+  const teams = {}, fields = {};
+  for (const t of DATA.tournaments) for (const g of (t.games || [])) {
+    ['away', 'home'].forEach(function (s) { const d = sideDisplay(t, g[s]); if (d && d.name && !d.tbd) teams[d.name] = 1; });
+    const f = clean(g.field); if (f) fields[f] = 1;
+  }
+  const vals = Object.keys(teams).sort().concat(Object.keys(fields).sort());
+  dl.innerHTML = vals.map(function (v) { return '<option value="' + escTxt(v) + '"></option>'; }).join('');
 }
 function initFilters() {
   const picker = document.getElementById('tourneyPicker');
@@ -439,11 +459,12 @@ function initFilters() {
   picker.innerHTML = html;
   picker.querySelectorAll('.ls-chip').forEach(function (c) { c.addEventListener('click', function () { selectTourneyLS(c.dataset.key, true); }); });
   document.getElementById('searchBox').addEventListener('input', e => { filter.q = e.target.value; render(); });
+  buildSearchList();
   // Deep-link: ?t=KEY or #KEY (from the Baseball/Softball hub) pre-selects a tournament
   const want = new URLSearchParams(location.search).get('t') || location.hash.replace('#', '');
   const deep = (want && DATA.tournaments.some(t => t.key === want)) ? want : null;
-  if (deep) filter.tourney = deep;
-  document.querySelectorAll('.ls-chip').forEach(c => c.classList.toggle('active', c.dataset.key === filter.tourney));
+  if (deep) filter.tourneys = [deep];
+  syncChips();
   return deep;
 }
 
