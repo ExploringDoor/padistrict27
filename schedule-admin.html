@@ -121,6 +121,10 @@
   .ed-tab { font-family: var(--font-display); font-size: 14px; font-weight: 600; letter-spacing: .03em; padding: 11px 20px; border: none; background: none; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; }
   .ed-tab:hover { color: var(--d27-navy); }
   .ed-tab.active { color: var(--d27-navy); border-bottom-color: var(--d27-navy); }
+  /* de-emphasized Contacts tab — far right, muted/smaller, subtle divider */
+  .ed-tab-muted { margin-left: auto; padding-left: 16px; font-size: 12px; font-weight: 500; color: #b0b6c0; opacity: .6; border-left: 1px solid var(--line); border-radius: 0; transition: opacity .15s, color .15s; }
+  .ed-tab-muted:hover { opacity: 1; }
+  .ed-tab-muted.active { opacity: 1; color: var(--d27-navy); }
 
   /* contacts roster */
   .ct-bar { display: flex; align-items: center; gap: 12px; margin: 20px 0 14px; }
@@ -227,11 +231,11 @@
     <div id="editorMain" class="hidden">
       <div class="ed-tabs">
         <button type="button" class="ed-tab active" data-view="schedule">📅 Schedule Editor</button>
-        <button type="button" class="ed-tab" data-view="contacts">📇 Contacts</button>
         <button type="button" class="ed-tab" data-view="champions">🏆 Champions</button>
         <button type="button" class="ed-tab" data-view="create">➕ Create</button>
         <button type="button" class="ed-tab" data-view="codes">🔑 Team Codes</button>
         <button type="button" class="ed-tab" data-view="inbox">📥 Score Inbox</button>
+        <button type="button" class="ed-tab ed-tab-muted" data-view="contacts">📇 Contacts</button>
       </div>
       <div id="view-schedule">
       <div class="ed-toolbar">

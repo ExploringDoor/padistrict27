@@ -39,6 +39,7 @@
   .champ-card .sport { position: absolute; top: 10px; right: 10px; font-family: 'Oswald', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; }
   .champ-card .sport.bb { background: rgba(0,45,114,.1); color: var(--d27-navy); }
   .champ-card .sport.sb { background: rgba(218,41,28,.1); color: var(--d27-red); }
+  .champ-card .sport.sp { background: var(--d27-red); color: #fff; }
 
   .champ-empty { padding: var(--space-5); border: 1px dashed var(--line); border-radius: var(--radius); color: var(--muted); text-align: center; }
   .champ-note-src { color: var(--muted); font-size: var(--text-xs); margin-top: var(--space-5); }
@@ -91,6 +92,14 @@
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function norm(s){ return String(s==null?'':s).toLowerCase().replace(/\s+/g,' ').trim(); }
   function sportOf(p){ return /SB-|Softball/.test(p.title || p.tournament || '') ? 'Softball' : 'Baseball'; }
+  // D27 "special games" tournaments → badge reads "Special Games" instead of the sport
+  var SPECIAL_RE = /bob\s*jones|john\s*klein|bennett|special\s*games|invitational|softball\s*major\s*champ|^bb-?9\b/i;
+  function isSpecial(c){
+    if (c && (c.special === true || c.category === 'D27 Special Games')) return true;
+    var tk = c && c.tkey;
+    if (tk && /bob_?jones|major_?champ|invitational|^bb-?9$/i.test(String(tk))) return true;
+    return SPECIAL_RE.test(String((c && (c.tournament || c.title)) || ''));
+  }
   var CURRENT_SEASON = (window.LEAGUE_CONFIG && LEAGUE_CONFIG.season && LEAGUE_CONFIG.season.year) || 2026;
 
   var FS_BASE = 'https://firestore.googleapis.com/v1/projects/d27-schedules/databases/(default)/documents';
@@ -100,11 +109,11 @@
   // is fetched on click (keeps the page light no matter how many accumulate).
   async function loadFsChampions(){
     try {
-      var mask = ['year','team','title','caption','sport'].map(function(f){ return '&mask.fieldPaths=' + f; }).join('');
+      var mask = ['year','team','title','caption','sport','tkey'].map(function(f){ return '&mask.fieldPaths=' + f; }).join('');
       var data = await fetch(FS_BASE + '/champions?key=' + FS_KEY + '&pageSize=300' + mask).then(function(r){ return r.ok ? r.json() : {}; });
       return (data.documents || []).map(function(d){
         var f = d.fields || {}, gv = function(k){ return f[k] ? (f[k].stringValue != null ? f[k].stringValue : f[k].integerValue) : ''; };
-        return { champId: d.name.split('/').pop(), year: gv('year'), team: gv('team'), title: gv('title'), caption: gv('caption'), sport: gv('sport') };
+        return { champId: d.name.split('/').pop(), year: gv('year'), team: gv('team'), title: gv('title'), caption: gv('caption'), sport: gv('sport'), tkey: gv('tkey') };
       });
     } catch (e) { return []; }
   }
@@ -125,7 +134,9 @@
         '<div class="team">' + esc(c.team) + '</div>' +
         (clickable ? '<div class="note cg-view">📷 Click to view photo</div>' : (c.note ? '<div class="note">' + esc(c.note) + '</div>' : '')) +
       '</div>';
-    var sport = '<span class="sport ' + (c.sport === 'Softball' ? 'sb' : 'bb') + '">' + esc(c.sport) + '</span>';
+    var sport = isSpecial(c)
+      ? '<span class="sport sp">Special Games</span>'
+      : '<span class="sport ' + (c.sport === 'Softball' ? 'sb' : 'bb') + '">' + esc(c.sport) + '</span>';
     if (clickable) {
       var ref = c.file ? 'data-src="' + esc(c.file) + '"' : 'data-champ-id="' + esc(c.champId) + '"';
       return '<button type="button" class="champ-card cg-card" ' + ref + ' data-cap="' + esc(c.caption || '') + '">' + logo + info + sport + '</button>';
@@ -156,7 +167,7 @@
       (data.tournaments || []).forEach(function(t){
         try {
           var champ = window.D27bracket.championOutcome(t, window.D27bracket.classify(t)).champion;
-          if (champ) live.push({ sport: t.sport, tournament: t.name, team: champ });
+          if (champ) live.push({ sport: t.sport, tournament: t.name, team: champ, special: (t.special === true || t.category === 'D27 Special Games') });
         } catch (e) {}
       });
       // attach this season's photo to its champion so the card opens the team photo
@@ -191,7 +202,7 @@
           ghtml += '<section class="champ-year"><div class="champ-year-head"><h2>' + y + '</h2>' +
             '<span class="tag">' + byYear[y].length + ' champion' + (byYear[y].length === 1 ? '' : 's') + '</span></div>' +
             '<div class="champ-grid">' +
-            byYear[y].map(function(p){ return card({ sport: sportOf(p), tournament: p.title, team: p.team || p.caption, file: p.file, champId: p.champId, caption: p.caption }); }).join('') +
+            byYear[y].map(function(p){ return card({ sport: sportOf(p), tournament: p.title, title: p.title, tkey: p.tkey, team: p.team || p.caption, file: p.file, champId: p.champId, caption: p.caption }); }).join('') +
             '</div></section>';
         });
         box.innerHTML = ghtml;
