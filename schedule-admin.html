@@ -133,6 +133,11 @@
   .ed-more-item { text-align: left; background: none; border: none; padding: 10px 12px; border-radius: 6px; font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; white-space: nowrap; }
   .ed-more-item:hover { background: var(--d27-sub, #f4f6fb); color: var(--d27-navy); }
   .ed-more-item.active { color: var(--d27-navy); background: rgba(0,45,114,.08); }
+  @media (max-width: 640px) {
+    .ed-tabs { flex-wrap: wrap; gap: 4px; margin-top: 16px; }
+    .ed-tab { font-size: 12px; padding: 9px 11px; }
+    .ed-more { margin-left: 0; }
+  }
   .ed-tab-muted:hover { opacity: 1; }
   .ed-tab-muted.active { opacity: 1; color: var(--d27-navy); }
   /* rain-out / postpone */
@@ -709,7 +714,7 @@ function selectTourney(key) {
 
 function renderRows() {
   const tb = $('rows'); tb.innerHTML = '';
-  current.games.slice().sort((a,b)=>a.g-b.g).forEach(g => tb.appendChild(rowEl(g)));
+  current.games.slice().sort((a,b)=>{ const da=a.date||'9999-99-99', db=b.date||'9999-99-99'; if(da!==db) return da<db?-1:1; const ta=a.time||'99:99', tb2=b.time||'99:99'; if(ta!==tb2) return ta<tb2?-1:1; return (a.g||0)-(b.g||0); }).forEach(g => tb.appendChild(rowEl(g)));
   applyResolved();
   runBracketCheck();
   fillCloseFieldOpts();
