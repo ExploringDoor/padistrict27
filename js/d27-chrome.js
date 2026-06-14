@@ -155,8 +155,19 @@
     }).catch(function(){});
   }
 
+  // Lightweight visit counter — increments once per browser session (≈ a visit, not every page-flip)
+  function bumpPageview(){
+    try { if(sessionStorage.getItem('d27_seen')) return; sessionStorage.setItem('d27_seen','1'); } catch(e){}
+    var n=new Date(), dk='d_'+n.getFullYear()+'_'+String(n.getMonth()+1).padStart(2,'0')+'_'+String(n.getDate()).padStart(2,'0');
+    fetch('https://firestore.googleapis.com/v1/projects/d27-schedules/databases/(default)/documents:commit?key=AIzaSyBu_Qd5AUWVSUB6vHP39-zzZgTpbC7s0Fs', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ writes:[{ transform:{ document:'projects/d27-schedules/databases/(default)/documents/stats/pageviews', fieldTransforms:[ {fieldPath:'total', increment:{integerValue:'1'}}, {fieldPath:'days.'+dk, increment:{integerValue:'1'}} ] }}] })
+    }).catch(function(){});
+  }
+
   function inject() {
     showWeatherBanner();
+    bumpPageview();
     var n = document.getElementById('d27-nav'); if (n) n.outerHTML = navHTML;
     var f = document.getElementById('d27-footer'); if (f) f.outerHTML = footHTML;
     var more = document.querySelector('.nav-more');

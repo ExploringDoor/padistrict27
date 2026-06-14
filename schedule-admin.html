@@ -133,6 +133,8 @@
   .ed-more-item { text-align: left; background: none; border: none; padding: 10px 12px; border-radius: 6px; font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; white-space: nowrap; }
   .ed-more-item:hover { background: var(--d27-sub, #f4f6fb); color: var(--d27-navy); }
   .ed-more-item.active { color: var(--d27-navy); background: rgba(0,45,114,.08); }
+  .ed-traffic { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin: 16px 0 0; padding: 11px 16px; background: var(--d27-sub, #f4f6fb); border: 1px solid var(--line); border-radius: 9px; font-family: var(--font-display); font-size: 13px; color: var(--muted); }
+  .ed-traffic .ed-tr-stat b { color: var(--d27-navy); font-size: 18px; margin-right: 4px; }
   @media (max-width: 640px) {
     .ed-tabs { flex-wrap: wrap; gap: 4px; margin-top: 16px; }
     .ed-tab { font-size: 12px; padding: 9px 11px; }
@@ -237,6 +239,25 @@
       <button onclick="window.__seed()">⤓ Import starter schedules</button>
       <span id="seedStatus" style="margin-left:12px; font-size:13px; color:var(--muted);"></span>
     </div>
+
+    <div class="ed-traffic" id="edTraffic" title="Approx. visits — counted once per browser session (not unique people). Full detail in Google Analytics.">
+      👀 <span class="ed-tr-stat"><b id="trTotal">—</b> total visits</span>
+      <span class="ed-tr-stat"><b id="trToday">—</b> today</span>
+      <span class="ed-tr-stat"><b id="trWeek">—</b> last 7 days</span>
+    </div>
+    <script>(function(){
+      var FS='https://firestore.googleapis.com/v1/projects/d27-schedules/databases/(default)/documents/stats/pageviews', KEY='AIzaSyBu_Qd5AUWVSUB6vHP39-zzZgTpbC7s0Fs';
+      function dk(d){ return 'd_'+d.getFullYear()+'_'+String(d.getMonth()+1).padStart(2,'0')+'_'+String(d.getDate()).padStart(2,'0'); }
+      fetch(FS+'?key='+KEY).then(function(r){return r.ok?r.json():null;}).then(function(d){
+        if(!d||!d.fields) return;
+        var f=d.fields, total=f.total&&f.total.integerValue?+f.total.integerValue:0;
+        var days=(f.days&&f.days.mapValue&&f.days.mapValue.fields)||{}, now=new Date();
+        var today=days[dk(now)]?+days[dk(now)].integerValue:0, week=0;
+        for(var i=0;i<7;i++){ var k=dk(new Date(now.getTime()-i*864e5)); if(days[k]) week+=+days[k].integerValue; }
+        var set=function(id,v){var e=document.getElementById(id); if(e) e.textContent=(v||0).toLocaleString();};
+        set('trTotal',total); set('trToday',today); set('trWeek',week);
+      }).catch(function(){});
+    })();</script>
 
     <div class="ed-import-bar">
       <button class="ed-import-btn" id="openImport">📥 Import a tournament from Excel</button>
