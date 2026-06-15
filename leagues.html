@@ -36,6 +36,7 @@
   .lg-field:first-of-type { border-top: none; }
   .lg-field .pin { color: var(--d27-red); flex-shrink: 0; }
   .lg-field .fn { font-weight: 600; color: var(--d27-ink); font-size: var(--text-sm); }
+  .lg-field .fuse { display: inline-block; font-family: 'Oswald', sans-serif; font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--d27-navy); background: rgba(0,45,114,.08); border: 1px solid rgba(0,45,114,.18); border-radius: 3px; padding: 1px 5px; vertical-align: middle; margin-left: 4px; }
   .lg-field .fa { color: var(--muted); font-size: var(--text-xs); }
   .lg-field a.map { color: var(--accent); text-decoration: none; }
   .lg-field a.map:hover { text-decoration: underline; }
@@ -68,7 +69,7 @@
   function fieldHTML(f){
     var maps = 'https://maps.google.com/?q=' + encodeURIComponent(f.address || f.name);
     return '<div class="lg-field"><span class="pin">📍</span><div>' +
-      '<div class="fn">' + esc(f.name) + '</div>' +
+      '<div class="fn">' + esc(f.name) + (f.note ? ' <span class="fuse">' + esc(f.note) + '</span>' : '') + '</div>' +
       (f.address ? '<div class="fa"><a class="map" href="' + maps + '" target="_blank" rel="noopener">' + esc(f.address) + '</a></div>' : '') +
     '</div></div>';
   }

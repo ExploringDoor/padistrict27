@@ -20,7 +20,7 @@
      "address": "1 1st Avenue, Malvern, PA"
     },
     {
-     "name": "Lower Field",
+     "name": "Mill Road Fields",
      "address": "128 Mill Road, Malvern, PA"
     },
     {
@@ -88,6 +88,16 @@
     {
      "name": "South Ardmore Park, Field B",
      "address": "1420 Sussex Rd., Wynnewood, PA 19096"
+    },
+    {
+     "name": "Rosemont College",
+     "address": "1400 Montgomery Ave, Bryn Mawr, PA 19010",
+     "note": "Softball Only"
+    },
+    {
+     "name": "Friends Central Lower School",
+     "address": "228 Old Gulph Rd, Penn Valley, PA",
+     "note": "Intermediate Baseball"
     }
    ]
   },
@@ -110,12 +120,20 @@
    "website": "https://clubs.bluesombrero.com/Default.aspx?tabid=1288670",
    "fields": [
     {
-     "name": "Pottstown Main Complex",
+     "name": "Novak Complex",
      "address": "451 Manatawny Street, Pottstown, PA 19464"
     },
     {
      "name": "Pottsgrove Teeball Fields",
      "address": "699 North Pleasantview Road, Pottstown, PA 19464"
+    },
+    {
+     "name": "Kulp (Pool) Field",
+     "address": "134 West Moyer Rd, Pottstown, PA"
+    },
+    {
+     "name": "Stowe Old Timer's Field",
+     "address": "980 Grosstown Road, Stowe, PA"
     }
    ]
   },
@@ -130,6 +148,11 @@
     {
      "name": "Tunnell Park",
      "address": "57 Garrett Ave, Bryn Mawr, PA 19010"
+    },
+    {
+     "name": "Odorisio Park",
+     "address": "205 Church Street, Wayne, PA 19087",
+     "note": "90' Baseball"
     }
    ]
   },
