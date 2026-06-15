@@ -28,6 +28,12 @@
     return !!s && todayISO() >= s;
   }
 
+  // Sport color-coding (per DA Jeff): Special Games = gray, else Baseball = blue / Softball = orange.
+  function sportClass(t) {
+    if (t && (t.category === 'D27 Special Games' || t.special === true)) return 'sport-sg';
+    if (t && t.sport === 'Softball') return 'sport-sb';
+    return 'sport-bb';
+  }
   function cardHTML(t, accent) {
     const B = global.D27bracket;
     const total = (t.games || []).length;
@@ -53,7 +59,7 @@
     // "Updated" intentionally lives inside the bracket view (green live-pill in the title band), not on the card.
 
     return `<div class="tcard">
-      <div class="tcard-banner ${accent || ''}">
+      <div class="tcard-banner ${sportClass(t)}">
         ${badge}
         <span class="tcard-kicker">${esc(t.category)}</span>
         <h3>${esc(t.name)}</h3>

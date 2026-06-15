@@ -32,6 +32,19 @@
   --d27-line:  #E5E7EB;
   --d27-sub:   #F1F3F6;
 
+  /* ── Sport color-coding (per DA Jeff) ──────────────────────────────
+     Baseball  = light blue   (the PA District 27 Intl baseball banner)
+     Softball  = light orange (softball teams / banners)
+     Special Games = gray
+     Used everywhere baseball / softball / special is differentiated:
+     home tiles, hub cards, sport badges, score/schedule boxes. */
+  --sport-bb:      #1565B3;  --sport-bb-bg: #E9F2FB;  --sport-bb-line: #B3D4EE;
+  --sport-bb-g1:   #1E74C0;  --sport-bb-g2: #0C4D8F;
+  --sport-sb:      #C4641A;  --sport-sb-bg: #FDEFE1;  --sport-sb-line: #F3C794;
+  --sport-sb-g1:   #E07C24;  --sport-sb-g2: #B3590F;
+  --sport-sg:      #586472;  --sport-sg-bg: #EEF1F4;  --sport-sg-line: #CBD4DD;
+  --sport-sg-g1:   #5E6B79;  --sport-sg-g2: #3A4552;
+
   /* Semantic */
   --bg:      var(--d27-paper);
   --surface: var(--d27-white);
@@ -1355,3 +1368,16 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
 [data-g][data-tkey]:hover .gm-cue.preview { background: rgba(0, 45, 114, .15); }
 [data-g][data-tkey]:hover .gm-cue.recap { filter: brightness(1.07); }
 @media (max-width: 480px) { .gm-card { max-width: 100%; } .gm-matchup .gm-team { font-size: 17px; } }
+
+/* ── Sport color-coding helpers (Baseball=blue, Softball=orange, Special=gray) ── */
+.sport-bb { background: var(--sport-bb-bg); border-color: var(--sport-bb-line); color: var(--sport-bb); }
+.sport-sb { background: var(--sport-sb-bg); border-color: var(--sport-sb-line); color: var(--sport-sb); }
+.sport-sg { background: var(--sport-sg-bg); border-color: var(--sport-sg-line); color: var(--sport-sg); }
+/* hub-card banners pick up the sport gradient automatically */
+.tcard-banner.sport-bb { background: linear-gradient(135deg, var(--sport-bb-g1) 0%, var(--sport-bb-g2) 100%); }
+.tcard-banner.sport-sb { background: linear-gradient(135deg, var(--sport-sb-g1) 0%, var(--sport-sb-g2) 100%); }
+.tcard-banner.sport-sg { background: linear-gradient(135deg, var(--sport-sg-g1) 0%, var(--sport-sg-g2) 100%); }
+/* score/schedule game cards: left accent by sport */
+.sv-card.sp-bb { border-left: 4px solid var(--sport-bb); }
+.sv-card.sp-sb { border-left: 4px solid var(--sport-sb); }
+.sv-card.sp-sg { border-left: 4px solid var(--sport-sg); }

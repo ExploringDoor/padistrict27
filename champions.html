@@ -37,9 +37,12 @@
   .champ-card .team { font-family: 'Oswald', sans-serif; font-size: var(--text-xl); font-weight: 600; color: var(--d27-navy); line-height: 1.1; margin-top: 2px; }
   .champ-card .note { font-size: var(--text-xs); color: var(--muted); margin-top: 3px; }
   .champ-card .sport { position: absolute; top: 10px; right: 10px; font-family: 'Oswald', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; }
-  .champ-card .sport.bb { background: rgba(0,45,114,.1); color: var(--d27-navy); }
-  .champ-card .sport.sb { background: rgba(218,41,28,.1); color: var(--d27-red); }
-  .champ-card .sport.sp { background: var(--d27-red); color: #fff; }
+  .champ-card.cc-bb { border-left-color: var(--sport-bb); }
+  .champ-card.cc-sb { border-left-color: var(--sport-sb); }
+  .champ-card.cc-sg { border-left-color: var(--sport-sg); }
+  .champ-card .sport.bb { background: var(--sport-bb-bg); color: var(--sport-bb); }
+  .champ-card .sport.sb { background: var(--sport-sb-bg); color: var(--sport-sb); }
+  .champ-card .sport.sp { background: var(--sport-sg-g1); color: #fff; }
 
   .champ-empty { padding: var(--space-5); border: 1px dashed var(--line); border-radius: var(--radius); color: var(--muted); text-align: center; }
   .champ-note-src { color: var(--muted); font-size: var(--text-xs); margin-top: var(--space-5); }
@@ -134,14 +137,15 @@
         '<div class="team">' + esc(c.team) + '</div>' +
         (clickable ? '<div class="note cg-view">📷 Click to view photo</div>' : (c.note ? '<div class="note">' + esc(c.note) + '</div>' : '')) +
       '</div>';
+    var scls = isSpecial(c) ? 'cc-sg' : (c.sport === 'Softball' ? 'cc-sb' : 'cc-bb');
     var sport = isSpecial(c)
       ? '<span class="sport sp">Special Games</span>'
       : '<span class="sport ' + (c.sport === 'Softball' ? 'sb' : 'bb') + '">' + esc(c.sport) + '</span>';
     if (clickable) {
       var ref = c.file ? 'data-src="' + esc(c.file) + '"' : 'data-champ-id="' + esc(c.champId) + '"';
-      return '<button type="button" class="champ-card cg-card" ' + ref + ' data-cap="' + esc(c.caption || '') + '">' + logo + info + sport + '</button>';
+      return '<button type="button" class="champ-card cg-card ' + scls + '" ' + ref + ' data-cap="' + esc(c.caption || '') + '">' + logo + info + sport + '</button>';
     }
-    return '<div class="champ-card">' + logo + info + sport + '</div>';
+    return '<div class="champ-card ' + scls + '">' + logo + info + sport + '</div>';
   }
   function yearSection(year, champs, current){
     var head = '<div class="champ-year-head"><h2>' + year + (current ? ' Season' : '') + '</h2>' +
