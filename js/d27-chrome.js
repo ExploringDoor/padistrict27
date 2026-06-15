@@ -55,8 +55,7 @@
     ['leagues.html', 'Leagues'],
   ];
   var MORE = [
-    ['weather.html', 'Game Status'],
-    ['alerts.html', 'Game Alerts'],
+    // Game Status (weather.html) + Game Alerts (alerts.html) hidden off-season — pages stay URL-accessible, re-link when active.
     ['brackets.html', 'Brackets'],
     ['champions.html', 'Champions'],
     ['rules.html', 'Rules'],
@@ -166,7 +165,7 @@
   }
 
   function inject() {
-    showWeatherBanner();
+    // showWeatherBanner();  // paused off-season alongside the hidden Game Status / Game Alerts pages
     bumpPageview();
     var n = document.getElementById('d27-nav'); if (n) n.outerHTML = navHTML;
     var f = document.getElementById('d27-footer'); if (f) f.outerHTML = footHTML;
