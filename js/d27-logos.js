@@ -16,7 +16,7 @@
     'chester valley': 'chester-valley',
     'coventry': 'coventry',
     'devon-strafford': 'devon-strafford', 'devon/strafford': 'devon-strafford', 'devon strafford': 'devon-strafford',
-    'gve': 'gve', 'great valley exton': 'gve', 'great valley': 'gve', 'greater valley': 'gve',
+    'gve': 'gve', 'great valley exton': 'gve', 'great valley': 'great-valley', 'greater valley': 'great-valley',
     'exton': 'exton',
     'lower merion': 'lower-merion',
     'lower perk': 'lower-perk', 'lower perkiomen': 'lower-perk',
@@ -26,7 +26,7 @@
   };
   var ABBR = {
     'berwyn-paoli': 'BP', 'chester-valley': 'CV', 'coventry': 'COV', 'devon-strafford': 'DS',
-    'exton': 'EX', 'gve': 'GVE', 'lower-merion': 'LM', 'lower-perk': 'LP', 'pgp': 'PGP',
+    'exton': 'EX', 'gve': 'GVE', 'great-valley': 'GV', 'lower-merion': 'LM', 'lower-perk': 'LP', 'pgp': 'PGP',
     'radnor-wayne': 'RW', 'upper-providence': 'UP',
   };
 
