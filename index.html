@@ -253,6 +253,7 @@
 <div class="cs-lb" id="csLightbox"><button class="cs-lb-close" aria-label="Close">✕</button><figure><img id="csLbImg" alt=""><figcaption id="csLbCap"></figcaption></figure></div>
 
 <script src="js/d27-data.js"></script>
+<script src="js/d27-order.js"></script>
 <script src="js/d27-bracket.js"></script>
 <script src="js/d27-scores.js"></script>
 <script src="js/d27-logos.js"></script>
@@ -356,9 +357,28 @@
       var data = await D27loadSchedules();
       if (window.D27gameModal) D27gameModal.setData(data.tournaments);
       (data.tournaments||[]).forEach(function(t){ HP_TMAP[t.key]=t.name; });
-      var recent = D27scores.recentResults(data, 60).filter(hpReal).slice(0,8);
-      var up = D27scores.upcoming(data, 60).filter(hpResolved).slice(0,8);
-      document.getElementById('hpUpcoming').innerHTML = up.length ? '<div class="sv-grid">'+up.map(function(g){return hpCard(g,'upcoming');}).join('')+'</div>' : '<div class="hp-empty">Schedule coming soon.</div>';
+      var allG = D27scores.allGames(data), today = D27scores.todayISO();
+      function isoOff(n){ var d=new Date(); d.setDate(d.getDate()+n); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+      function tcmp(a,b){ return window.D27order ? window.D27order.cmp(a,b) : 0; }
+      function isBye(g){ var A=D27scores.side(g,'away'),H=D27scores.side(g,'home'); return /^\s*bye\s*$/i.test(A.name)||/^\s*bye\s*$/i.test(H.name); }
+      // sort within a list: by date (dir), then canonical tournament order, then time/game
+      function ordSort(arr, dateDesc){ arr.sort(function(a,b){ if(a.date!==b.date) return (a.date<b.date? -1:1)*(dateDesc?-1:1); var c=tcmp(a,b); return c||String(a.time||'').localeCompare(String(b.time||''))||((a.g||0)-(b.g||0)); }); return arr; }
+
+      // RECENT SCORES — played games from today / yesterday / day-before; else the most recent date that has a score
+      var played = allG.filter(function(g){ return hpReal(g) && g.date && g.date <= today; });
+      var recWin = [today, isoOff(-1), isoOff(-2)];
+      var recent = played.filter(function(g){ return recWin.indexOf(g.date) >= 0; });
+      if (!recent.length && played.length){ var md = played.map(function(g){return g.date;}).sort().pop(); recent = played.filter(function(g){ return g.date === md; }); }
+      ordSort(recent, true);
+
+      // UPCOMING — scheduled (not-yet-played) games today / tomorrow / day-after; else the next future date with games
+      var future = allG.filter(function(g){ return !D27scores.played(g) && !isBye(g) && g.date && g.date >= today; });
+      var upWin = [today, isoOff(1), isoOff(2)];
+      var up = future.filter(function(g){ return upWin.indexOf(g.date) >= 0; });
+      if (!up.length && future.length){ var nd = future.map(function(g){return g.date;}).sort()[0]; up = future.filter(function(g){ return g.date === nd; }); }
+      ordSort(up, false);
+
+      document.getElementById('hpUpcoming').innerHTML = up.length ? '<div class="sv-grid">'+up.map(function(g){return hpCard(g,'upcoming');}).join('')+'</div>' : '<div class="hp-empty">No Games Scheduled</div>';
       document.getElementById('hpScores').innerHTML = recent.length ? '<div class="sv-grid">'+recent.map(function(g){return hpCard(g,'result');}).join('')+'</div>' : '<div class="hp-empty">No results yet — the season hasn\'t started.</div>';
       document.querySelector('.home-cards').addEventListener('click', function(e){
         var card = e.target.closest('.sv-card[data-g]');
