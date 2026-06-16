@@ -659,6 +659,7 @@
 
 <script src="js/d27-logos.js"></script>
 <script src="js/d27-bracket.js"></script>
+<script src="js/d27-order.js"></script>
 <script src="js/d27-tourney-gen.js"></script>
 <script type="module">
 import { isConfigured, db, auth } from './js/firebase-init.js';
@@ -719,7 +720,7 @@ function buildSelect() {
   for (const cat of cats) {
     if (!byCat[cat]) continue;
     const og = document.createElement('optgroup'); og.label = cat;
-    byCat[cat].sort((a,b)=>a.name.localeCompare(b.name)).forEach(t => { const o = document.createElement('option'); o.value = t.key; o.textContent = t.name; og.appendChild(o); });
+    byCat[cat].sort((a,b)=> window.D27order ? window.D27order.cmp(a,b) : a.name.localeCompare(b.name)).forEach(t => { const o = document.createElement('option'); o.value = t.key; o.textContent = t.name; og.appendChild(o); });
     sel.appendChild(og);
   }
   sel.onchange = () => selectTourney(sel.value);

@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/styles.css" />
 <script src="js/d27-data.js"></script>
+<script src="js/d27-order.js"></script>
 <script src="js/d27-bracket.js"></script>
 <script src="js/d27-scores.js"></script>
 <script src="js/d27-logos.js"></script>
@@ -151,7 +152,7 @@
   function fillTourneys(){
     var sel=document.getElementById('svTourney');
     var keys={}; D27scores.allGames(DATA).forEach(function(g){ if(realResult(g)) keys[g.tourneyKey]=1; });
-    var arr=Object.keys(keys).sort(function(a,b){ return (TMAP[a]||a).localeCompare(TMAP[b]||b); });
+    var arr=Object.keys(keys).sort(function(a,b){ return D27order.cmp(a,b); });
     sel.innerHTML='<option value="all">All tournaments</option>'+arr.map(function(k){ return '<option value="'+esc(k)+'">'+esc(TMAP[k]||k)+'</option>'; }).join('');
   }
 

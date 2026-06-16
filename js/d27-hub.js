@@ -91,7 +91,7 @@
     // each section: filter by s.match(t) if given, else by category s.cat
     const built = opts.sections.map(s => ({
       s,
-      list: mine.filter(s.match || (t => t.category === s.cat)).sort((a, b) => a.key.localeCompare(b.key)),
+      list: mine.filter(s.match || (t => t.category === s.cat)).sort(function (a, b) { return global.D27order ? global.D27order.cmp(a, b) : a.key.localeCompare(b.key); }),
     }));
 
     const statsEl = opts.statsId && document.getElementById(opts.statsId);

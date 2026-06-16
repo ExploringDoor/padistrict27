@@ -91,6 +91,7 @@
 <div id="d27-footer"></div>
 
 <script src="js/d27-data.js"></script>
+<script src="js/d27-order.js"></script>
 <script src="js/d27-bracket.js"></script>
 <script src="js/d27-logos.js"></script>
 <script src="js/d27-chrome.js"></script>
@@ -174,7 +175,7 @@
       (data.tournaments || []).forEach(function(t){
         try {
           var champ = window.D27bracket.championOutcome(t, window.D27bracket.classify(t)).champion;
-          if (champ) live.push({ sport: t.sport, tournament: t.name, team: champ, special: (t.special === true || t.category === 'D27 Special Games') });
+          if (champ) live.push({ sport: t.sport, tournament: t.name, team: champ, tkey: t.key, special: (t.special === true || t.category === 'D27 Special Games') });
         } catch (e) {}
       });
       // attach this season's photo to its champion so the card opens the team photo
@@ -182,6 +183,7 @@
         var p = photos.find(function(x){ return Number(x.year) === CURRENT_SEASON && norm(x.team) === norm(c.team); });
         if (p) { c.file = p.file; c.champId = p.champId; c.caption = p.caption; attached[pid(p)] = 1; }
       });
+      if (window.D27order) live.sort(window.D27order.cmp);
       out.innerHTML = live.length
         ? yearSection(CURRENT_SEASON, live, true)
         : '<section class="champ-year current"><div class="champ-year-head"><h2>' + CURRENT_SEASON + ' Season</h2>' +

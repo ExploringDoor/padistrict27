@@ -12,6 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/styles.css" />
 <script src="js/d27-data.js"></script>
+<script src="js/d27-order.js"></script>
 <script src="js/d27-logos.js"></script>
 <script src="js/d27-gamemodal.js"></script>
 <script src="js/d27-chrome.js"></script>
@@ -400,7 +401,7 @@ function render() {
       t.category === cat &&
       (filter.sport === 'all' || t.sport === filter.sport) &&
       (!filter.tourneys.length || filter.tourneys.indexOf(t.key) >= 0)
-    );
+    ).sort(window.D27order.cmp);
     if (!tourneys.length) continue;
 
     let body = '', catCount = 0, shownTourneys = 0;
@@ -464,7 +465,7 @@ function initFilters() {
   for (const cat of cats) {
     if (!byCat[cat]) continue;
     html += '<div class="ls-cat"><span class="ls-cat-label">' + escTxt(cat) + '</span><div class="ls-chips">';
-    for (const t of byCat[cat]) html += '<button type="button" class="ls-chip" data-key="' + escTxt(t.key) + '">' + escTxt(t.name) + '</button>';
+    for (const t of byCat[cat].slice().sort(window.D27order.cmp)) html += '<button type="button" class="ls-chip" data-key="' + escTxt(t.key) + '">' + escTxt(t.name) + '</button>';
     html += '</div></div>';
   }
   picker.innerHTML = html;
