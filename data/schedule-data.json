@@ -6,7 +6,7 @@
    "key": "BB-10",
    "special": false,
    "sport": "Baseball",
-   "name": "BB-10 (8-9-10)",
+   "name": "8-10 Int'l Baseball",
    "games": [
     {
      "g": 1,
@@ -288,7 +288,7 @@
    "key": "BB-11",
    "special": false,
    "sport": "Baseball",
-   "name": "BB-11 (9-10-11)",
+   "name": "9-11 Int'l Baseball",
    "games": [
     {
      "g": 1,
@@ -542,7 +542,7 @@
    "key": "BB-12",
    "special": false,
    "sport": "Baseball",
-   "name": "BB-12 (10-11-12)",
+   "name": "Little League Int'l Baseball",
    "games": [
     {
      "g": 1,
@@ -824,7 +824,7 @@
    "key": "BB-INT",
    "special": false,
    "sport": "Baseball",
-   "name": "Intermediate (50/70)",
+   "name": "Intermediate (50/70) Int'l Baseball",
    "games": [
     {
      "g": 1,
@@ -882,7 +882,7 @@
    "key": "BB-JR",
    "special": false,
    "sport": "Baseball",
-   "name": "Junior League Baseball",
+   "name": "Junior League Int'l Baseball",
    "games": [
     {
      "g": 1,
@@ -968,7 +968,7 @@
    "key": "BB-SR",
    "special": false,
    "sport": "Baseball",
-   "name": "Senior League Baseball",
+   "name": "Senior League Int'l Baseball",
    "games": [
     {
      "g": 1,
@@ -1026,7 +1026,7 @@
    "key": "SB-10",
    "special": false,
    "sport": "Softball",
-   "name": "SB-10 (8-9-10)",
+   "name": "8-10 Int'l Softball",
    "games": [
     {
      "g": 1,
@@ -1224,7 +1224,7 @@
    "key": "SB-11",
    "special": false,
    "sport": "Softball",
-   "name": "SB-11 (9-10-11)",
+   "name": "9-11 Int'l Softball",
    "games": [
     {
      "g": 1,
@@ -1366,7 +1366,7 @@
    "key": "SB-12",
    "special": false,
    "sport": "Softball",
-   "name": "SB-12 (10-11-12)",
+   "name": "Little League Int'l Softball",
    "games": [
     {
      "g": 1,
@@ -1536,7 +1536,7 @@
    "key": "SB-JR",
    "special": false,
    "sport": "Softball",
-   "name": "Junior League Softball",
+   "name": "Junior League Int'l Softball",
    "games": [
     {
      "g": 1,
@@ -1650,7 +1650,7 @@
    "key": "BB-9",
    "special": true,
    "sport": "Baseball",
-   "name": "9-Year-Old Invitational",
+   "name": "9-YO Baseball Invitational",
    "games": [
     {
      "g": 1,
@@ -2100,7 +2100,7 @@
    "key": "BB-Bob_Jones",
    "special": true,
    "sport": "Baseball",
-   "name": "Bob Jones Championship",
+   "name": "Bob Jones Major League Baseball Championship",
    "games": [
     {
      "g": 1,
@@ -2198,7 +2198,7 @@
    "key": "SB-Major_Champ",
    "special": true,
    "sport": "Softball",
-   "name": "Softball Major Championship",
+   "name": "Softball Major League Championship",
    "games": [
     {
      "g": 1,
