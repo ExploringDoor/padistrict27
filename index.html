@@ -68,9 +68,12 @@
   .cstrip { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: var(--space-3); }
   .cs { display: flex; align-items: center; gap: var(--space-3); background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--gold); border-radius: 10px; padding: var(--space-4); transition: transform .15s ease, box-shadow .15s ease; }
   .cs:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(0,23,60,.12); }
-  .cs.sp-bb { border-left-color: var(--sport-bb); }
-  .cs.sp-sb { border-left-color: var(--sport-sb); }
-  .cs.sp-sg { border-left-color: var(--sport-sg); }
+  .cs.sp-bb { border: 4px solid var(--trim-bb); }
+  .cs.sp-sb { border: 4px solid var(--trim-sb); }
+  .cs.sp-sg { border: 4px solid var(--trim-sg); }
+  .cs.sp-bb .tm { color: var(--trim-bb-tx); }
+  .cs.sp-sb .tm { color: var(--trim-sb-tx); }
+  .cs.sp-sg .tm { color: var(--trim-sg-tx); }
   .cs .tr { font-size: 1.7rem; line-height: 1; flex: none; }
   .cs .cs-logo { display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; flex: none; }
   .cs .cs-logo .d27-logo, .cs .cs-logo .d27-logo-fb { width: 48px !important; height: 48px !important; }

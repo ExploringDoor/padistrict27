@@ -37,9 +37,12 @@
   .champ-card .team { font-family: 'Oswald', sans-serif; font-size: var(--text-xl); font-weight: 600; color: var(--d27-navy); line-height: 1.1; margin-top: 2px; }
   .champ-card .note { font-size: var(--text-xs); color: var(--muted); margin-top: 3px; }
   .champ-card .sport { position: absolute; top: 10px; right: 10px; font-family: 'Oswald', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; }
-  .champ-card.cc-bb { border-left-color: var(--sport-bb); }
-  .champ-card.cc-sb { border-left-color: var(--sport-sb); }
-  .champ-card.cc-sg { border-left-color: var(--sport-sg); }
+  .champ-card.cc-bb { border: 4px solid var(--trim-bb); }
+  .champ-card.cc-sb { border: 4px solid var(--trim-sb); }
+  .champ-card.cc-sg { border: 4px solid var(--trim-sg); }
+  .champ-card.cc-bb .team { color: var(--trim-bb-tx); }
+  .champ-card.cc-sb .team { color: var(--trim-sb-tx); }
+  .champ-card.cc-sg .team { color: var(--trim-sg-tx); }
   .champ-card .sport.bb { background: var(--sport-bb-bg); color: var(--sport-bb); }
   .champ-card .sport.sb { background: var(--sport-sb-bg); color: var(--sport-sb); }
   .champ-card .sport.sp { background: var(--sport-sg-g1); color: #fff; }
