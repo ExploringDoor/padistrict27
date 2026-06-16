@@ -26,7 +26,7 @@
     },
     {
      "sport": "Softball",
-     "tournament": "Softball 12U — SB-12",
+     "tournament": "Softball SB-12",
      "team": "Lower Perk"
     },
     {
@@ -86,17 +86,17 @@
     },
     {
      "sport": "Softball",
-     "tournament": "Softball 10U — SB-10",
+     "tournament": "Softball SB-10",
      "team": "DSBP"
     },
     {
      "sport": "Softball",
-     "tournament": "Softball 11U — SB-11",
+     "tournament": "Softball SB-11",
      "team": "Radnor Wayne"
     },
     {
      "sport": "Softball",
-     "tournament": "Softball 12U — SB-12",
+     "tournament": "Softball SB-12",
      "team": "Radnor Wayne"
     }
    ]
@@ -151,12 +151,12 @@
     },
     {
      "sport": "Softball",
-     "tournament": "Softball 11U — SB-11",
+     "tournament": "Softball SB-11",
      "team": "Lower Merion"
     },
     {
      "sport": "Softball",
-     "tournament": "Softball 12U — SB-12",
+     "tournament": "Softball SB-12",
      "team": "Lower Perk"
     }
    ]
@@ -211,12 +211,12 @@
     },
     {
      "sport": "Softball",
-     "tournament": "Softball 10U — SB-10",
+     "tournament": "Softball SB-10",
      "team": "Lower Perk"
     },
     {
      "sport": "Softball",
-     "tournament": "Softball 11U — SB-11",
+     "tournament": "Softball SB-11",
      "team": "Lower Perk"
     }
    ]
@@ -291,12 +291,12 @@
     },
     {
      "sport": "Softball",
-     "tournament": "Softball 10U — SB-10",
+     "tournament": "Softball SB-10",
      "team": "Lower Perk"
     },
     {
      "sport": "Softball",
-     "tournament": "Softball 11U — SB-11",
+     "tournament": "Softball SB-11",
      "team": "DSBP"
     }
    ]
