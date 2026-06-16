@@ -1377,7 +1377,11 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
 .tcard-banner.sport-bb { background: linear-gradient(135deg, var(--sport-bb-g1) 0%, var(--sport-bb-g2) 100%); }
 .tcard-banner.sport-sb { background: linear-gradient(135deg, var(--sport-sb-g1) 0%, var(--sport-sb-g2) 100%); }
 .tcard-banner.sport-sg { background: linear-gradient(135deg, var(--sport-sg-g1) 0%, var(--sport-sg-g2) 100%); }
-/* score/schedule game cards: left accent by sport */
-.sv-card.sp-bb { border-left: 4px solid var(--sport-bb); }
-.sv-card.sp-sb { border-left: 4px solid var(--sport-sb); }
-.sv-card.sp-sg { border-left: 4px solid var(--sport-sg); }
+/* score/schedule game cards: full sport tint (whole box) */
+.sv-card.sp-bb { background: var(--sport-bb-bg); border-color: var(--sport-bb-line); }
+.sv-card.sp-sb { background: var(--sport-sb-bg); border-color: var(--sport-sb-line); }
+.sv-card.sp-sg { background: var(--sport-sg-bg); border-color: var(--sport-sg-line); }
+/* soften the inner head/foot separators so they read on the tint */
+.sv-card.sp-bb .sv-card-head, .sv-card.sp-bb .sv-card-foot,
+.sv-card.sp-sb .sv-card-head, .sv-card.sp-sb .sv-card-foot,
+.sv-card.sp-sg .sv-card-head, .sv-card.sp-sg .sv-card-foot { border-color: rgba(15,23,42,.08); }
