@@ -45,6 +45,12 @@
   --sport-sg:      #586472;  --sport-sg-bg: #EEF1F4;  --sport-sg-line: #CBD4DD;
   --sport-sg-g1:   #5E6B79;  --sport-sg-g2: #3A4552;
 
+  /* Score/schedule box "trim" treatment — colored frame + winner/footer text.
+     Baseball blue sampled from the District 27 intl banner trim. */
+  --trim-bb: #4A98D4;  --trim-bb-tx: #2E7CB8;  --trim-bb-ln: #CFE4F5;
+  --trim-sb: #DD8327;  --trim-sb-tx: #C4641A;  --trim-sb-ln: #F3D3AB;
+  --trim-sg: #7A8794;  --trim-sg-tx: #586472;  --trim-sg-ln: #D2D9E0;
+
   /* Semantic */
   --bg:      var(--d27-paper);
   --surface: var(--d27-white);
@@ -1377,11 +1383,14 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
 .tcard-banner.sport-bb { background: linear-gradient(135deg, var(--sport-bb-g1) 0%, var(--sport-bb-g2) 100%); }
 .tcard-banner.sport-sb { background: linear-gradient(135deg, var(--sport-sb-g1) 0%, var(--sport-sb-g2) 100%); }
 .tcard-banner.sport-sg { background: linear-gradient(135deg, var(--sport-sg-g1) 0%, var(--sport-sg-g2) 100%); }
-/* score/schedule game cards: full sport tint (whole box) */
-.sv-card.sp-bb { background: var(--sport-bb-bg); border-color: var(--sport-bb-line); }
-.sv-card.sp-sb { background: var(--sport-sb-bg); border-color: var(--sport-sb-line); }
-.sv-card.sp-sg { background: var(--sport-sg-bg); border-color: var(--sport-sg-line); }
-/* soften the inner head/foot separators so they read on the tint */
-.sv-card.sp-bb .sv-card-head, .sv-card.sp-bb .sv-card-foot,
-.sv-card.sp-sb .sv-card-head, .sv-card.sp-sb .sv-card-foot,
-.sv-card.sp-sg .sv-card-head, .sv-card.sp-sg .sv-card-foot { border-color: rgba(15,23,42,.08); }
+/* score/schedule game cards: colored frame + winner/footer text in the sport color, white box */
+.sv-card.sp-bb { background: #fff; border: 4px solid var(--trim-bb); }
+.sv-card.sp-sb { background: #fff; border: 4px solid var(--trim-sb); }
+.sv-card.sp-sg { background: #fff; border: 4px solid var(--trim-sg); }
+/* winner (team + score), result summary, and footer (tournament name + CTA) take the sport color; loser/TBD stay muted */
+.sv-card.sp-bb .sv-team.win, .sv-card.sp-bb .sv-score.win, .sv-card.sp-bb .sv-summary, .sv-card.sp-bb .sv-card-foot .sv-meta, .sv-card.sp-bb .sv-cta { color: var(--trim-bb-tx); }
+.sv-card.sp-sb .sv-team.win, .sv-card.sp-sb .sv-score.win, .sv-card.sp-sb .sv-summary, .sv-card.sp-sb .sv-card-foot .sv-meta, .sv-card.sp-sb .sv-cta { color: var(--trim-sb-tx); }
+.sv-card.sp-sg .sv-team.win, .sv-card.sp-sg .sv-score.win, .sv-card.sp-sg .sv-summary, .sv-card.sp-sg .sv-card-foot .sv-meta, .sv-card.sp-sg .sv-cta { color: var(--trim-sg-tx); }
+.sv-card.sp-bb .sv-card-foot { border-top-color: var(--trim-bb-ln); }
+.sv-card.sp-sb .sv-card-foot { border-top-color: var(--trim-sb-ln); }
+.sv-card.sp-sg .sv-card-foot { border-top-color: var(--trim-sg-ln); }

@@ -326,8 +326,8 @@
   function hpResolved(g){ var A=D27scores.side(g,'away'),H=D27scores.side(g,'home'); return !A.tbd&&!H.tbd&&!/^\s*bye\s*$/i.test(A.name)&&!/^\s*bye\s*$/i.test(H.name); }
   function hpRow(disp,score,win,played){
     var logo=(!disp.tbd&&window.D27logos)?D27logos.html(disp.name,24):'';
-    var sc=played?'<span class="sv-score'+(win?'':' lose')+'">'+score+'</span>':'';
-    return '<div class="sv-row">'+logo+'<span class="sv-team'+(disp.tbd?' tbd':'')+(played&&!win?' lose':'')+'">'+esc(disp.name)+'</span>'+sc+'</div>';
+    var sc=played?'<span class="sv-score'+(win?' win':' lose')+'">'+score+'</span>':'';
+    return '<div class="sv-row">'+logo+'<span class="sv-team'+(disp.tbd?' tbd':'')+(played&&win?' win':'')+(played&&!win?' lose':'')+'">'+esc(disp.name)+'</span>'+sc+'</div>';
   }
   function hpSportCls(g){ var t=g._t||{}; if(t.category==='D27 Special Games'||t.special===true) return 'sp-sg'; return g.sport==='Softball'?'sp-sb':'sp-bb'; }
   function hpCard(g, mode){

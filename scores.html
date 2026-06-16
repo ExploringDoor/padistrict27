@@ -192,7 +192,7 @@
   }
   function teamRow(disp, score, win){
     var logo=window.D27logos?D27logos.html(disp.name,30):'';
-    return '<div class="sv-row">'+logo+'<span class="sv-team'+(win?'':' lose')+'">'+esc(disp.name)+'</span><span class="sv-score'+(win?'':' lose')+'">'+score+'</span></div>';
+    return '<div class="sv-row">'+logo+'<span class="sv-team'+(win?' win':' lose')+'">'+esc(disp.name)+'</span><span class="sv-score'+(win?' win':' lose')+'">'+score+'</span></div>';
   }
   function sportCls(g){ var t=g._t||{}; if(t.category==='D27 Special Games'||t.special===true) return 'sp-sg'; return g.sport==='Softball'?'sp-sb':'sp-bb'; }
   function card(g){
