@@ -161,6 +161,19 @@
   .dv-foot { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
   .dv-counts { font-size: 13px; color: #475569; font-weight: 600; }
   .dv-save { background: var(--d27-navy, #002D72); color: #fff; border: none; border-radius: 8px; padding: 9px 16px; font: inherit; font-weight: 600; cursor: pointer; }
+  .dv-gen { background: #A32D2D; color: #fff; border: none; border-radius: 8px; padding: 9px 16px; font: inherit; font-weight: 600; cursor: pointer; }
+  .dv-preview { margin-top: 14px; border: 1px dashed #c7ccd4; border-radius: 10px; padding: 14px; background: #fafbfc; }
+  .dv-pv-h { font-weight: 700; margin-bottom: 8px; }
+  .dv-pv-warn { color: #92400e; font-size: 13px; margin-bottom: 8px; }
+  .dv-pv-card { background: #fff; border: 1px solid #eef1f5; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
+  .dv-pv-name { font-weight: 700; color: var(--d27-navy, #002D72); }
+  .dv-pv-name span { font-weight: 500; color: #64748b; font-size: 13px; }
+  .dv-pv-seeds { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+  .dv-pv-seed { font-size: 12px; background: #eef2f7; border-radius: 4px; padding: 2px 8px; }
+  .dv-pv-games { font-size: 13px; color: #334155; }
+  .dv-pv-games div { padding: 2px 0; }
+  .dv-pv-foot { display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+  .dv-cancel { background: #fff; border: 1px solid #d6dbe2; border-radius: 8px; padding: 9px 14px; font: inherit; cursor: pointer; }
   .cf-panel h3 { font-family: var(--font-display); margin: 0 0 4px; color: var(--d27-navy); font-size: 15px; }
   .cf-panel .cf-row { display: flex; gap: 10px; align-items: end; flex-wrap: wrap; margin-top: 8px; }
   .cf-panel label { display: block; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
@@ -340,8 +353,10 @@
         <div class="dv-foot">
           <span class="dv-counts" id="dvCounts"></span>
           <button type="button" class="dv-save" id="dvSave" onclick="window.__saveDivisions()">💾 Save Divisions</button>
+          <button type="button" class="dv-gen" id="dvGen" onclick="window.__genDivBrackets()">⚡ Generate Red + Blue brackets</button>
           <span class="cf-status" id="dvStatus"></span>
         </div>
+        <div class="dv-preview hidden" id="dvPreview"></div>
       </div>
 
       <div id="bracketCheck" class="bk-check"></div>
@@ -684,6 +699,7 @@
 <script src="js/d27-logos.js"></script>
 <script src="js/d27-bracket.js"></script>
 <script src="js/d27-order.js"></script>
+<script src="js/d27-standings.js"></script>
 <script src="js/d27-tourney-gen.js"></script>
 <script type="module">
 import { isConfigured, db, auth } from './js/firebase-init.js';
@@ -807,6 +823,61 @@ window.__saveDivisions = async function(){
     current.divisions = Object.assign({}, dvState);
     st.textContent='✓ Saved — live on the standings'; st.className='cf-status ok';
   }catch(e){ st.textContent='Save failed — '+(e.message||e); st.className='cf-status err'; }
+};
+
+// ── Generate the Red + Blue single-elim brackets from the saved divisions ──
+let dvPending = null;
+const DIV_BASE = { 'BB-Bennett':'Bennett 9-10', 'BB-Klein':'John Klein 11-12' };
+window.__genDivBrackets = function(){
+  const st=$('dvStatus'); st.className='cf-status';
+  if (!current || current.format!=='pool') return;
+  if (!window.D27gen){ st.textContent='Generator not loaded — refresh.'; return; }
+  if (!window.D27standings){ st.textContent='Standings not loaded — refresh.'; return; }
+  const div = dvState || {};   // use the current picker state (saved or in-progress)
+  const assigned = Object.keys(div).filter(k => { const v=String(div[k]||'').toLowerCase(); return v==='red'||v==='blue'; });
+  if (!assigned.length){ st.textContent='Assign teams to Red / Blue first.'; return; }
+  const standings = window.D27standings.compute(current);
+  const seedList = d => standings.filter(r => String(div[r.name]||'').toLowerCase()===d).map(r => ({ name:r.name, park:'' }));
+  const base = DIV_BASE[current.key] || current.name;
+  const dates=['2026-07-16','2026-07-18','2026-07-19'];
+  const times=[{value:'17:00',needsLights:false},{value:'19:00',needsLights:false}];
+  const fields=['Site TBD'];
+  const built=[], warns=[];
+  [['red','Red'],['blue','Blue']].forEach(([d,Lbl]) => {
+    const list=seedList(d);
+    if (list.length<2){ if (list.length) warns.push(Lbl+' has only '+list.length+' team'); return; }
+    const key=current.key+'-'+Lbl;
+    const out=window.D27gen.generateTournament({ key, format:'single', teams:list, dates, times, fields });
+    built.push({ key, name:base+' '+Lbl+' Championship', category:'D27 Special Games', sport:current.sport||'Baseball', special:true, format:'single', parent:current.key, division:d, games:out.games, teams:out.teams });
+  });
+  if (!built.length){ st.textContent='Need 2+ teams in a division to build a bracket.'; return; }
+  dvPending = built;
+  renderDivPreview(built, warns);
+};
+function renderDivPreview(built, warns){
+  const box=$('dvPreview'); box.classList.remove('hidden');
+  const realTeam = n => n && !/^WG-|^LG-/i.test(String(n));
+  let h='<div class="dv-pv-h">Bracket preview — seeded by pool standings. Review, then publish.</div>';
+  if (warns && warns.length) h+='<div class="dv-pv-warn">⚠ '+warns.join(' · ')+' — need 2+ to build that bracket</div>';
+  built.forEach(t => {
+    const r1=t.games.filter(g => realTeam(g.away) && realTeam(g.home));
+    h+='<div class="dv-pv-card"><div class="dv-pv-name">'+esc(t.name)+' <span>('+t.teams.length+' teams · '+t.games.length+' games)</span></div>';
+    h+='<div class="dv-pv-seeds">'+t.teams.map((tm,i)=>'<span class="dv-pv-seed">#'+(i+1)+' '+esc(tm.name)+'</span>').join('')+'</div>';
+    h+='<div class="dv-pv-games"><b>Opening round:</b>'+(r1.length?r1.map(g=>'<div>'+esc(g.away)+' vs '+esc(g.home)+(g.date?' · '+g.date:'')+'</div>').join(''):'<div>—</div>')+'</div></div>';
+  });
+  h+='<div class="dv-pv-foot"><button type="button" class="dv-save" onclick="window.__publishDivBrackets()">✅ Publish '+built.length+' bracket'+(built.length>1?'s':'')+'</button> <button type="button" class="dv-cancel" onclick="document.getElementById(\'dvPreview\').classList.add(\'hidden\')">Cancel</button> <span class="cf-status" id="dvPvStatus"></span></div>';
+  box.innerHTML=h;
+}
+window.__publishDivBrackets = async function(){
+  if (!dvPending || !dvPending.length) return;
+  const st=$('dvPvStatus'); if (st){ st.textContent='Publishing…'; st.className='cf-status'; }
+  try{
+    const parentKey=current.key;
+    for (const t of dvPending){ await setDoc(doc(db,'schedules',t.key), Object.assign({}, t, { updated: serverTimestamp() })); }
+    if (st){ st.textContent='✓ Published — live on Brackets + Special Games'; st.className='cf-status ok'; }
+    await loadAll();
+    if (TOURNEYS[parentKey]){ $('tourneySelect').value=parentKey; selectTourney(parentKey); }
+  }catch(e){ if (st){ st.textContent='Publish failed — '+(e.message||e); st.className='cf-status err'; } }
 };
 
 function renderRows() {

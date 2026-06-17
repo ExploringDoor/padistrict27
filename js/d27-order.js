@@ -12,7 +12,9 @@
     'SB-10', 'SB-11', 'SB-12', 'SB-JR', 'SB-SR',
     // D27 Special Games
     'SB-Major_Champ', 'BB-Bob_Jones', 'BB-9',
-    'BB-Bennett', 'BB-Klein'   // future — confirm keys when these tournaments are built
+    // Bennett 9/10 + John Klein 11/12: pool play, then Red/Blue single-elim brackets
+    'BB-Bennett', 'BB-Bennett-Red', 'BB-Bennett-Blue',
+    'BB-Klein', 'BB-Klein-Red', 'BB-Klein-Blue'
   ];
   var IDX = {}; ORDER.forEach(function (k, i) { IDX[k] = i; });
 
