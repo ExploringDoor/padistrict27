@@ -2284,6 +2284,798 @@
    ],
    "category": "D27 Special Games",
    "updated": "2026-06-04"
+  },
+  {
+   "key": "BB-Bennett",
+   "name": "Bennett 9/10 Invitational",
+   "category": "D27 Special Games",
+   "sport": "Baseball",
+   "special": true,
+   "games": [
+    {
+     "g": 1,
+     "id": "BB-Bennett-01",
+     "date": "2026-06-30",
+     "time": "19:00",
+     "away": "GVE",
+     "home": "Upper Prov (Batty)",
+     "field": "UP-MacFarlan Park",
+     "forfeit": false
+    },
+    {
+     "g": 2,
+     "id": "BB-Bennett-02",
+     "date": "2026-07-01",
+     "time": "18:00",
+     "away": "Chester Valley",
+     "home": "Devon/Strafford",
+     "field": "D/S-Clarke Field",
+     "forfeit": false
+    },
+    {
+     "g": 3,
+     "id": "BB-Bennett-03",
+     "date": "2026-07-01",
+     "time": "18:00",
+     "away": "Upper Prov (McCormick)",
+     "home": "Berwyn-Paoli",
+     "field": "BP-Field of Dreams",
+     "forfeit": false
+    },
+    {
+     "g": 4,
+     "id": "BB-Bennett-04",
+     "date": "2026-07-01",
+     "time": "18:00",
+     "away": "Lower Merion",
+     "home": "GVE",
+     "field": "GV-King Road",
+     "forfeit": false
+    },
+    {
+     "g": 5,
+     "id": "BB-Bennett-05",
+     "date": "2026-07-01",
+     "time": "19:00",
+     "away": "Lower Perk",
+     "home": "Radnor/Wayne",
+     "field": "R/W-Encke Park",
+     "forfeit": false
+    },
+    {
+     "g": 6,
+     "id": "BB-Bennett-06",
+     "date": "2026-07-05",
+     "time": "13:00",
+     "away": "Radnor/Wayne",
+     "home": "Lower Merion",
+     "field": "LM-Ashburn Field",
+     "forfeit": false
+    },
+    {
+     "g": 7,
+     "id": "BB-Bennett-07",
+     "date": "2026-07-05",
+     "time": "16:00",
+     "away": "Devon/Strafford",
+     "home": "Lower Perk",
+     "field": "LP-Palmer Park",
+     "forfeit": false
+    },
+    {
+     "g": 8,
+     "id": "BB-Bennett-08",
+     "date": "2026-07-05",
+     "time": "17:00",
+     "away": "Upper Prov (Batty)",
+     "home": "Upper Prov (McCormick)",
+     "field": "UP-MacFarlan Park",
+     "forfeit": false
+    },
+    {
+     "g": 9,
+     "id": "BB-Bennett-09",
+     "date": "2026-07-05",
+     "time": "17:00",
+     "away": "Berwyn-Paoli",
+     "home": "Chester Valley",
+     "field": "CV-Monument Park",
+     "forfeit": false
+    },
+    {
+     "g": 10,
+     "id": "BB-Bennett-10",
+     "date": "2026-07-06",
+     "time": "18:00",
+     "away": "Upper Prov (McCormick)",
+     "home": "Radnor/Wayne",
+     "field": "R/W-Encke Park",
+     "forfeit": false
+    },
+    {
+     "g": 11,
+     "id": "BB-Bennett-11",
+     "date": "2026-07-06",
+     "time": "18:00",
+     "away": "GVE",
+     "home": "Devon/Strafford",
+     "field": "GV-King Road",
+     "forfeit": false
+    },
+    {
+     "g": 12,
+     "id": "BB-Bennett-12",
+     "date": "2026-07-07",
+     "time": "18:00",
+     "away": "Chester Valley",
+     "home": "Lower Merion",
+     "field": "LM-Ashburn Field",
+     "forfeit": false
+    },
+    {
+     "g": 13,
+     "id": "BB-Bennett-13",
+     "date": "2026-07-07",
+     "time": "18:00",
+     "away": "Upper Prov (Batty)",
+     "home": "Berwyn-Paoli",
+     "field": "BP-Field of Dreams",
+     "forfeit": false
+    },
+    {
+     "g": 14,
+     "id": "BB-Bennett-14",
+     "date": "2026-07-08",
+     "time": "18:00",
+     "away": "Lower Perk",
+     "home": "Upper Prov (Batty)",
+     "field": "UP-MacFarlan Park",
+     "forfeit": false
+    },
+    {
+     "g": 15,
+     "id": "BB-Bennett-15",
+     "date": "2026-07-08",
+     "time": "18:00",
+     "away": "Berwyn-Paoli",
+     "home": "GVE",
+     "field": "GV-King Road",
+     "forfeit": false
+    },
+    {
+     "g": 16,
+     "id": "BB-Bennett-16",
+     "date": "2026-07-09",
+     "time": "18:00",
+     "away": "Devon/Strafford",
+     "home": "Upper Prov (McCormick)",
+     "field": "UP-MacFarlan Park",
+     "forfeit": false
+    },
+    {
+     "g": 17,
+     "id": "BB-Bennett-17",
+     "date": "2026-07-09",
+     "time": "18:00",
+     "away": "Radnor/Wayne",
+     "home": "Chester Valley",
+     "field": "CV-Monument Park",
+     "forfeit": false
+    },
+    {
+     "g": 18,
+     "id": "BB-Bennett-18",
+     "date": "2026-07-09",
+     "time": "18:00",
+     "away": "Lower Merion",
+     "home": "Lower Perk",
+     "field": "LP-Palmer Park",
+     "forfeit": false
+    },
+    {
+     "g": 19,
+     "id": "BB-Bennett-19",
+     "date": "2026-07-11",
+     "time": "10:00",
+     "away": "GVE",
+     "home": "Lower Perk",
+     "field": "LP-Palmer Park",
+     "forfeit": false
+    },
+    {
+     "g": 20,
+     "id": "BB-Bennett-20",
+     "date": "2026-07-11",
+     "time": "10:00",
+     "away": "Upper Prov (McCormick)",
+     "home": "Lower Merion",
+     "field": "LM-Ashburn Field",
+     "forfeit": false
+    },
+    {
+     "g": 21,
+     "id": "BB-Bennett-21",
+     "date": "2026-07-11",
+     "time": "10:00",
+     "away": "Upper Prov (Batty)",
+     "home": "Radnor/Wayne",
+     "field": "R/W-Encke Park",
+     "forfeit": false
+    },
+    {
+     "g": 22,
+     "id": "BB-Bennett-22",
+     "date": "2026-07-11",
+     "time": "10:00",
+     "away": "Berwyn-Paoli",
+     "home": "Devon/Strafford",
+     "field": "D/S-Clarke Field",
+     "forfeit": false
+    },
+    {
+     "g": 23,
+     "id": "BB-Bennett-23",
+     "date": "2026-07-12",
+     "time": "13:00",
+     "away": "Lower Perk",
+     "home": "Chester Valley",
+     "field": "CV-Monument Park",
+     "forfeit": false
+    },
+    {
+     "g": 24,
+     "id": "BB-Bennett-24",
+     "date": "2026-07-12",
+     "time": "14:00",
+     "away": "Radnor/Wayne",
+     "home": "GVE",
+     "field": "EX-Ship Park",
+     "forfeit": false
+    },
+    {
+     "g": 25,
+     "id": "BB-Bennett-25",
+     "date": "2026-07-13",
+     "time": "18:00",
+     "away": "Chester Valley",
+     "home": "Upper Prov (McCormick)",
+     "field": "UP-MacFarlan Park",
+     "forfeit": false
+    },
+    {
+     "g": 26,
+     "id": "BB-Bennett-26",
+     "date": "2026-07-13",
+     "time": "18:00",
+     "away": "Lower Merion",
+     "home": "Berwyn-Paoli",
+     "field": "BP-Field of Dreams",
+     "forfeit": false
+    },
+    {
+     "g": 27,
+     "id": "BB-Bennett-27",
+     "date": "2026-07-13",
+     "time": "20:00",
+     "away": "Devon/Strafford",
+     "home": "Upper Prov (Batty)",
+     "field": "UP-MacFarlan Park",
+     "forfeit": false
+    }
+   ],
+   "teams": [
+    {
+     "n": 1,
+     "name": "Berwyn-Paoli",
+     "park": "BP-Field of Dreams"
+    },
+    {
+     "n": 2,
+     "name": "Chester Valley",
+     "park": "CV-Monument Park"
+    },
+    {
+     "n": 3,
+     "name": "Devon/Strafford",
+     "park": "D/S-Clarke Field"
+    },
+    {
+     "n": 4,
+     "name": "GVE",
+     "park": "GV-King Road"
+    },
+    {
+     "n": 5,
+     "name": "Lower Merion",
+     "park": "LM-Ashburn Field"
+    },
+    {
+     "n": 6,
+     "name": "Lower Perk",
+     "park": "LP-Palmer Park"
+    },
+    {
+     "n": 7,
+     "name": "Radnor/Wayne",
+     "park": "R/W-Encke Park"
+    },
+    {
+     "n": 8,
+     "name": "Upper Prov (Batty)",
+     "park": "UP-MacFarlan Park"
+    },
+    {
+     "n": 9,
+     "name": "Upper Prov (McCormick)",
+     "park": "UP-MacFarlan Park"
+    }
+   ]
+  },
+  {
+   "key": "BB-Klein",
+   "name": "John Klein 11/12 Invitational",
+   "category": "D27 Special Games",
+   "sport": "Baseball",
+   "special": true,
+   "games": [
+    {
+     "g": 1,
+     "id": "BB-Klein-01",
+     "date": "2026-06-30",
+     "time": "18:00",
+     "away": "Lower Merion (Archawski)",
+     "home": "Berwyn-Paoli",
+     "field": "BP-Field of Dreams",
+     "forfeit": false
+    },
+    {
+     "g": 2,
+     "id": "BB-Klein-02",
+     "date": "2026-06-30",
+     "time": "18:00",
+     "away": "Chester Valley",
+     "home": "Lower Perk (Gatti)",
+     "field": "LP-Palmer Park",
+     "forfeit": false
+    },
+    {
+     "g": 3,
+     "id": "BB-Klein-03",
+     "date": "2026-06-30",
+     "time": "20:00",
+     "away": "GVE (Danley)",
+     "home": "Lower Perk (Hazzard)",
+     "field": "LP-Palmer Park",
+     "forfeit": false
+    },
+    {
+     "g": 4,
+     "id": "BB-Klein-04",
+     "date": "2026-07-01",
+     "time": "18:00",
+     "away": "Radnor/Wayne",
+     "home": "Upper Prov (Kurpiel)",
+     "field": "UP-MacFarlan Park",
+     "forfeit": false
+    },
+    {
+     "g": 5,
+     "id": "BB-Klein-05",
+     "date": "2026-07-01",
+     "time": "18:00",
+     "away": "GVE (Bennett)",
+     "home": "PGP",
+     "field": "PT-Novak Park",
+     "forfeit": false
+    },
+    {
+     "g": 6,
+     "id": "BB-Klein-06",
+     "date": "2026-07-01",
+     "time": "20:00",
+     "away": "Devon/Strafford",
+     "home": "Upper Prov (Sweeney)",
+     "field": "UP-MacFarlan Park",
+     "forfeit": false
+    },
+    {
+     "g": 7,
+     "id": "BB-Klein-07",
+     "date": "2026-07-02",
+     "time": "18:00",
+     "away": "Berwyn-Paoli",
+     "home": "Lower Merion (Berkman)",
+     "field": "LM-Ashburn Field",
+     "forfeit": false
+    },
+    {
+     "g": 8,
+     "id": "BB-Klein-08",
+     "date": "2026-07-05",
+     "time": "13:00",
+     "away": "Lower Perk (Hazzard)",
+     "home": "Devon/Strafford",
+     "field": "D/S-Clarke Field",
+     "forfeit": false
+    },
+    {
+     "g": 9,
+     "id": "BB-Klein-09",
+     "date": "2026-07-05",
+     "time": "15:00",
+     "away": "Radnor/Wayne",
+     "home": "GVE (Danley)",
+     "field": "EX-Ship Park",
+     "forfeit": false
+    },
+    {
+     "g": 10,
+     "id": "BB-Klein-10",
+     "date": "2026-07-05",
+     "time": "15:00",
+     "away": "Lower Perk (Gatti)",
+     "home": "Lower Merion (Berkman)",
+     "field": "LM-Ashburn Field",
+     "forfeit": false
+    },
+    {
+     "g": 11,
+     "id": "BB-Klein-11",
+     "date": "2026-07-05",
+     "time": "17:00",
+     "away": "Chester Valley",
+     "home": "GVE (Bennett)",
+     "field": "EX-Ship Park",
+     "forfeit": false
+    },
+    {
+     "g": 12,
+     "id": "BB-Klein-12",
+     "date": "2026-07-05",
+     "time": "17:00",
+     "away": "Upper Prov (Sweeney)",
+     "home": "Lower Merion (Archawski)",
+     "field": "LM-Ashburn Field",
+     "forfeit": false
+    },
+    {
+     "g": 13,
+     "id": "BB-Klein-13",
+     "date": "2026-07-05",
+     "time": "19:00",
+     "away": "PGP",
+     "home": "Upper Prov (Kurpiel)",
+     "field": "UP-MacFarlan Park",
+     "forfeit": false
+    },
+    {
+     "g": 14,
+     "id": "BB-Klein-14",
+     "date": "2026-07-06",
+     "time": "18:00",
+     "away": "Upper Prov (Kurpiel)",
+     "home": "Berwyn-Paoli",
+     "field": "BP-Field of Dreams",
+     "forfeit": false
+    },
+    {
+     "g": 15,
+     "id": "BB-Klein-15",
+     "date": "2026-07-06",
+     "time": "18:00",
+     "away": "Lower Perk (Hazzard)",
+     "home": "Chester Valley",
+     "field": "CV-Monument Park",
+     "forfeit": false
+    },
+    {
+     "g": 16,
+     "id": "BB-Klein-16",
+     "date": "2026-07-06",
+     "time": "18:00",
+     "away": "PGP",
+     "home": "Lower Merion (Archawski)",
+     "field": "LM-Ashburn Field",
+     "forfeit": false
+    },
+    {
+     "g": 17,
+     "id": "BB-Klein-17",
+     "date": "2026-07-06",
+     "time": "19:00",
+     "away": "Lower Merion (Berkman)",
+     "home": "Upper Prov (Sweeney)",
+     "field": "UP-MacFarlan Park",
+     "forfeit": false
+    },
+    {
+     "g": 18,
+     "id": "BB-Klein-18",
+     "date": "2026-07-06",
+     "time": "19:00",
+     "away": "Devon/Strafford",
+     "home": "Lower Perk (Gatti)",
+     "field": "LP-Palmer Park",
+     "forfeit": false
+    },
+    {
+     "g": 19,
+     "id": "BB-Klein-19",
+     "date": "2026-07-06",
+     "time": "20:00",
+     "away": "GVE (Bennett)",
+     "home": "Radnor/Wayne",
+     "field": "R/W-Encke Park",
+     "forfeit": false
+    },
+    {
+     "g": 20,
+     "id": "BB-Klein-20",
+     "date": "2026-07-08",
+     "time": "20:00",
+     "away": "GVE (Danley)",
+     "home": "Upper Prov (Sweeney)",
+     "field": "UP-MacFarlan Park",
+     "forfeit": false
+    },
+    {
+     "g": 21,
+     "id": "BB-Klein-21",
+     "date": "2026-07-09",
+     "time": "18:00",
+     "away": "Berwyn-Paoli",
+     "home": "GVE (Danley)",
+     "field": "EX-Ship Park",
+     "forfeit": false
+    },
+    {
+     "g": 22,
+     "id": "BB-Klein-22",
+     "date": "2026-07-09",
+     "time": "18:00",
+     "away": "Chester Valley",
+     "home": "Lower Merion (Berkman)",
+     "field": "LM-Ashburn Field",
+     "forfeit": false
+    },
+    {
+     "g": 23,
+     "id": "BB-Klein-23",
+     "date": "2026-07-09",
+     "time": "18:00",
+     "away": "Lower Merion (Archawski)",
+     "home": "Devon/Strafford",
+     "field": "D/S-Clarke Field",
+     "forfeit": false
+    },
+    {
+     "g": 24,
+     "id": "BB-Klein-24",
+     "date": "2026-07-09",
+     "time": "19:00",
+     "away": "Lower Perk (Gatti)",
+     "home": "Radnor/Wayne",
+     "field": "R/W-Encke Park",
+     "forfeit": false
+    },
+    {
+     "g": 25,
+     "id": "BB-Klein-25",
+     "date": "2026-07-09",
+     "time": "20:00",
+     "away": "GVE (Bennett)",
+     "home": "Upper Prov (Kurpiel)",
+     "field": "UP-MacFarlan Park",
+     "forfeit": false
+    },
+    {
+     "g": 26,
+     "id": "BB-Klein-26",
+     "date": "2026-07-09",
+     "time": "20:00",
+     "away": "PGP",
+     "home": "Lower Perk (Hazzard)",
+     "field": "LP-Palmer Park",
+     "forfeit": false
+    },
+    {
+     "g": 27,
+     "id": "BB-Klein-27",
+     "date": "2026-07-11",
+     "time": "09:00",
+     "away": "Lower Perk (Gatti)",
+     "home": "PGP",
+     "field": "PT-Novak Park",
+     "forfeit": false
+    },
+    {
+     "g": 28,
+     "id": "BB-Klein-28",
+     "date": "2026-07-11",
+     "time": "10:00",
+     "away": "Lower Perk (Hazzard)",
+     "home": "Berwyn-Paoli",
+     "field": "BP-Field of Dreams",
+     "forfeit": false
+    },
+    {
+     "g": 29,
+     "id": "BB-Klein-29",
+     "date": "2026-07-11",
+     "time": "10:00",
+     "away": "Lower Merion (Archawski)",
+     "home": "Chester Valley",
+     "field": "CV-Monument Park",
+     "forfeit": false
+    },
+    {
+     "g": 30,
+     "id": "BB-Klein-30",
+     "date": "2026-07-11",
+     "time": "12:00",
+     "away": "Upper Prov (Sweeney)",
+     "home": "Radnor/Wayne",
+     "field": "R/W-Encke Park",
+     "forfeit": false
+    },
+    {
+     "g": 31,
+     "id": "BB-Klein-31",
+     "date": "2026-07-11",
+     "time": "13:00",
+     "away": "Upper Prov (Kurpiel)",
+     "home": "GVE (Danley)",
+     "field": "EX-Ship Park",
+     "forfeit": false
+    },
+    {
+     "g": 32,
+     "id": "BB-Klein-32",
+     "date": "2026-07-11",
+     "time": "15:00",
+     "away": "Devon/Strafford",
+     "home": "GVE (Bennett)",
+     "field": "EX-Ship Park",
+     "forfeit": false
+    },
+    {
+     "g": 33,
+     "id": "BB-Klein-33",
+     "date": "2026-07-12",
+     "time": "12:00",
+     "away": "Lower Merion (Berkman)",
+     "home": "GVE (Bennett)",
+     "field": "EX-Ship Park",
+     "forfeit": false
+    },
+    {
+     "g": 34,
+     "id": "BB-Klein-34",
+     "date": "2026-07-13",
+     "time": "18:00",
+     "away": "Berwyn-Paoli",
+     "home": "Chester Valley",
+     "field": "CV-Monument Park",
+     "forfeit": false
+    },
+    {
+     "g": 35,
+     "id": "BB-Klein-35",
+     "date": "2026-07-13",
+     "time": "18:00",
+     "away": "Upper Prov (Sweeney)",
+     "home": "Lower Perk (Gatti)",
+     "field": "LP-Palmer Park",
+     "forfeit": false
+    },
+    {
+     "g": 36,
+     "id": "BB-Klein-36",
+     "date": "2026-07-13",
+     "time": "18:00",
+     "away": "Upper Prov (Kurpiel)",
+     "home": "Lower Merion (Archawski)",
+     "field": "LM-Ashburn Field",
+     "forfeit": false
+    },
+    {
+     "g": 37,
+     "id": "BB-Klein-37",
+     "date": "2026-07-13",
+     "time": "18:00",
+     "away": "Lower Merion (Berkman)",
+     "home": "Devon/Strafford",
+     "field": "D/S-Clarke Field",
+     "forfeit": false
+    },
+    {
+     "g": 38,
+     "id": "BB-Klein-38",
+     "date": "2026-07-13",
+     "time": "19:00",
+     "away": "GVE (Danley)",
+     "home": "PGP",
+     "field": "PT-Novak Park",
+     "forfeit": false
+    },
+    {
+     "g": 39,
+     "id": "BB-Klein-39",
+     "date": "2026-07-13",
+     "time": "20:00",
+     "away": "Radnor/Wayne",
+     "home": "Lower Perk (Hazzard)",
+     "field": "LP-Palmer Park",
+     "forfeit": false
+    }
+   ],
+   "teams": [
+    {
+     "n": 1,
+     "name": "Berwyn-Paoli",
+     "park": "BP-Field of Dreams"
+    },
+    {
+     "n": 2,
+     "name": "Chester Valley",
+     "park": "CV-Monument Park"
+    },
+    {
+     "n": 3,
+     "name": "Devon/Strafford",
+     "park": "D/S-Clarke Field"
+    },
+    {
+     "n": 4,
+     "name": "GVE (Bennett)",
+     "park": "EX-Ship Park"
+    },
+    {
+     "n": 5,
+     "name": "GVE (Danley)",
+     "park": "EX-Ship Park"
+    },
+    {
+     "n": 6,
+     "name": "Lower Merion (Archawski)",
+     "park": "LM-Ashburn Field"
+    },
+    {
+     "n": 7,
+     "name": "Lower Merion (Berkman)",
+     "park": "LM-Ashburn Field"
+    },
+    {
+     "n": 8,
+     "name": "Lower Perk (Gatti)",
+     "park": "LP-Palmer Park"
+    },
+    {
+     "n": 9,
+     "name": "Lower Perk (Hazzard)",
+     "park": "LP-Palmer Park"
+    },
+    {
+     "n": 10,
+     "name": "PGP",
+     "park": "PT-Novak Park"
+    },
+    {
+     "n": 11,
+     "name": "Radnor/Wayne",
+     "park": "R/W-Encke Park"
+    },
+    {
+     "n": 12,
+     "name": "Upper Prov (Kurpiel)",
+     "park": "UP-MacFarlan Park"
+    },
+    {
+     "n": 13,
+     "name": "Upper Prov (Sweeney)",
+     "park": "UP-MacFarlan Park"
+    }
+   ]
   }
  ],
  "categoryOrder": [
