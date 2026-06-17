@@ -13,6 +13,7 @@
 <script src="js/d27-data.js"></script>
 <script src="js/d27-order.js"></script>
 <script src="js/d27-logos.js"></script>
+<script src="js/d27-standings.js"></script>
 <script src="js/d27-gamemodal.js"></script>
 <script src="js/d27-chrome.js"></script>
 <style>
@@ -52,6 +53,24 @@
   .bk-legend .f { background: var(--d27-gold); }
   /* zoom + print controls */
   .bk-legend .bk-tools { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  /* Pool-play standings (round-robin tournaments) */
+  .bk-standings { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px 18px; max-width: 780px; }
+  .bk-standings .st-head { font-family: var(--font-display); font-size: 19px; font-weight: 700; color: var(--d27-navy); }
+  .bk-standings .st-note { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .st-scroll { overflow-x: auto; margin-top: 12px; }
+  .st-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .st-table th { font-family: var(--font-display); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); text-align: center; padding: 8px 8px; border-bottom: 2px solid var(--d27-navy); }
+  .st-table th.st-tm { text-align: left; }
+  .st-table td { padding: 9px 8px; text-align: center; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  .st-table td.st-rk { color: var(--muted); font-family: var(--font-display); width: 26px; }
+  .st-table td.st-tm { text-align: left; font-weight: 600; color: var(--d27-ink); white-space: nowrap; }
+  .st-table td.st-tm .d27-logo, .st-table td.st-tm .d27-logo-fb { vertical-align: middle; margin-right: 8px; }
+  .st-table td.st-w { font-weight: 700; color: var(--d27-navy); }
+  .st-table tr:last-child td { border-bottom: none; }
+  .bk-standings .st-legend { margin-top: 12px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .is-pool .bk-legend > span { display: none; }
+  .is-pool .bk-zoomctl, .is-pool #zoomFit, .is-pool #printBracket { display: none; }
+  .is-pool .bk-note { display: none; }
   .bk-zoomctl { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--surface); }
   .bk-zoomctl button { background: none; border: none; width: 30px; height: 30px; font-size: 18px; line-height: 1; color: var(--d27-navy); cursor: pointer; }
   .bk-zoomctl button:hover { background: var(--d27-sub); }
@@ -615,8 +634,17 @@ function printBracket() {
   wire('printBracket', printBracket);
 })();
 
+function isPool(t) { return !!(t && t.format === 'pool'); }
 function renderBracket(t) {
   const out = document.getElementById('output');
+  // Round-robin / pool-play tournaments have no bracket — show standings instead.
+  if (isPool(t)) {
+    out.innerHTML = teamsPanelHTML(t, false) + (window.D27standings ? D27standings.tableHTML(t) : '');
+    renderTitle(t);
+    document.body.classList.add('is-pool');
+    return;
+  }
+  document.body.classList.remove('is-pool');
   if (!t.games.length) { out.innerHTML = teamsPanelHTML(t, false) + '<div class="bk-empty">No games yet for this tournament.</div>'; renderTitle(t); return; }
   // wire bye games up to whatever they feed (a fresh copy — source untouched),
   // then classify + lay out from that. Title/teams panel still use the original.
@@ -648,7 +676,7 @@ function renderBracket(t) {
 
 function renderTitle(t) {
   const initials = t.key.replace(/[^A-Za-z0-9]/g, '').slice(0, 4).toUpperCase();
-  const elim = (t.games || []).some(g => /^LG-/i.test(String(g.away || '')) || /^LG-/i.test(String(g.home || ''))) ? 'Double-elimination' : 'Single-elimination';
+  const elim = isPool(t) ? 'Round robin' : ((t.games || []).some(g => /^LG-/i.test(String(g.away || '')) || /^LG-/i.test(String(g.home || ''))) ? 'Double-elimination' : 'Single-elimination');
   document.getElementById('titleband').innerHTML = `
     <div class="bk-title">
       <div class="crest-slot">${initials}</div>

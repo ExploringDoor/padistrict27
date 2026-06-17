@@ -2609,7 +2609,8 @@
      "name": "Upper Prov (McCormick)",
      "park": "UP-MacFarlan Park"
     }
-   ]
+   ],
+   "format": "pool"
   },
   {
    "key": "BB-Klein",
@@ -3075,7 +3076,8 @@
      "name": "Upper Prov (Sweeney)",
      "park": "UP-MacFarlan Park"
     }
-   ]
+   ],
+   "format": "pool"
   }
  ],
  "categoryOrder": [
