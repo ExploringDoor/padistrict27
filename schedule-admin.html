@@ -148,6 +148,19 @@
   .ed-table tr.ppd td { background: #FFF7ED; }
   .ed-table tr.ppd select.st { color: #9A3412; font-weight: 600; border-color: #FDBA74; }
   .cf-panel { background: linear-gradient(90deg, rgba(234,88,12,.06), rgba(0,45,114,.03)); border: 1px solid rgba(0,45,114,.14); border-left: 4px solid #EA580C; border-radius: 8px; padding: 14px 18px; margin: 14px 0 0; }
+  .dv-panel { background: #fff; border: 1px solid #e5e7eb; border-left: 4px solid #A32D2D; border-radius: 8px; padding: 14px 18px; margin: 14px 0 0; }
+  .dv-panel h3 { margin: 0 0 4px; font-size: 15px; }
+  .dv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 8px; margin: 12px 0; }
+  .dv-row { display: flex; align-items: center; gap: 8px; justify-content: space-between; border: 1px solid #eef1f5; border-radius: 8px; padding: 6px 10px; }
+  .dv-team { display: inline-flex; align-items: center; gap: 7px; font-weight: 600; font-size: 13px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dv-btns { display: inline-flex; gap: 3px; flex: none; }
+  .dv-btns button { border: 1px solid #d6dbe2; background: #fff; border-radius: 6px; font: inherit; font-size: 11px; font-weight: 600; padding: 4px 9px; cursor: pointer; color: #64748b; }
+  .dv-btns button.on[data-d="red"] { background: #A32D2D; border-color: #A32D2D; color: #fff; }
+  .dv-btns button.on[data-d="blue"] { background: #0C447C; border-color: #0C447C; color: #fff; }
+  .dv-btns button.on[data-d=""] { background: #64748b; border-color: #64748b; color: #fff; }
+  .dv-foot { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .dv-counts { font-size: 13px; color: #475569; font-weight: 600; }
+  .dv-save { background: var(--d27-navy, #002D72); color: #fff; border: none; border-radius: 8px; padding: 9px 16px; font: inherit; font-weight: 600; cursor: pointer; }
   .cf-panel h3 { font-family: var(--font-display); margin: 0 0 4px; color: var(--d27-navy); font-size: 15px; }
   .cf-panel .cf-row { display: flex; gap: 10px; align-items: end; flex-wrap: wrap; margin-top: 8px; }
   .cf-panel label { display: block; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
@@ -317,6 +330,17 @@
           <button type="button" class="cf-apply" onclick="window.__closeField()">Postpone all</button>
           <button type="button" class="cf-undo" onclick="window.__reopenField()">Un-close</button>
           <span class="cf-status" id="cfStatus"></span>
+        </div>
+      </div>
+
+      <div class="dv-panel hidden" id="divPanel">
+        <h3>🔴🔵 Red / Blue Divisions</h3>
+        <p class="ed-hint">Assign each team to <b>Red</b> or <b>Blue</b> for the playoff brackets. The District sets these by eye after pool play — they don't have to match the standings. The split shows on the public standings; <b>Save Divisions</b> to publish.</p>
+        <div class="dv-grid" id="dvGrid"></div>
+        <div class="dv-foot">
+          <span class="dv-counts" id="dvCounts"></span>
+          <button type="button" class="dv-save" id="dvSave" onclick="window.__saveDivisions()">💾 Save Divisions</button>
+          <span class="cf-status" id="dvStatus"></span>
         </div>
       </div>
 
@@ -732,8 +756,58 @@ function selectTourney(key) {
   $('schedLink').href = `live-schedule.html`;
   $('brkLink').href = `brackets.html?t=${key}`;
   renderRows();
+  renderDivisions();
   $('saveStatus').textContent = '';
 }
+
+// ── Red / Blue division picker (pool-play tournaments only) ──
+let dvState = {};
+function dvTeamNames(t){
+  let names = (t.teams||[]).map(x => x && x.name).filter(Boolean);
+  if (!names.length){ const seen={}; (t.games||[]).forEach(g => ['away','home'].forEach(s => { const n=g[s]; if (n && !/^(wg|lg)-|^(bye|tbd|tba)$|winner of|loser of/i.test(String(n).trim()) && !seen[n]){ seen[n]=1; names.push(n); } })); }
+  return names.sort((a,b)=>a.localeCompare(b));
+}
+function renderDivisions(){
+  const panel=$('divPanel');
+  if (!current || current.format!=='pool'){ panel.classList.add('hidden'); return; }
+  panel.classList.remove('hidden');
+  dvState = Object.assign({}, current.divisions||{});
+  const grid=$('dvGrid'); grid.innerHTML='';
+  dvTeamNames(current).forEach(name => {
+    const d=String(dvState[name]||'').toLowerCase();
+    const logo = window.D27logos ? D27logos.html(name,22) : '';
+    const row=document.createElement('div'); row.className='dv-row'; row.dataset.team=name;
+    row.innerHTML = '<span class="dv-team">'+logo+'<span>'+esc(name)+'</span></span>'+
+      '<span class="dv-btns">'+
+      '<button type="button" data-d="" class="'+(!d?'on':'')+'">—</button>'+
+      '<button type="button" data-d="red" class="'+(d==='red'?'on':'')+'">Red</button>'+
+      '<button type="button" data-d="blue" class="'+(d==='blue'?'on':'')+'">Blue</button>'+
+      '</span>';
+    grid.appendChild(row);
+  });
+  if (!grid.__wired){ grid.__wired=true; grid.addEventListener('click', e => {
+    const b=e.target.closest('button[data-d]'); if (!b) return;
+    const row=b.closest('.dv-row'); const name=row.dataset.team; const d=b.dataset.d;
+    if (d) dvState[name]=d; else delete dvState[name];
+    row.querySelectorAll('button[data-d]').forEach(x => x.classList.toggle('on', x===b));
+    updateDvCounts(); const st=$('dvStatus'); st.textContent='Unsaved changes'; st.className='cf-status';
+  }); }
+  updateDvCounts(); $('dvStatus').textContent='';
+}
+function updateDvCounts(){
+  let r=0, bl=0, un=0;
+  dvTeamNames(current).forEach(name => { const d=String(dvState[name]||'').toLowerCase(); if (d==='red') r++; else if (d==='blue') bl++; else un++; });
+  $('dvCounts').textContent='🔴 '+r+' Red · 🔵 '+bl+' Blue'+(un?' · '+un+' unassigned':'');
+}
+window.__saveDivisions = async function(){
+  if (!current) return;
+  const st=$('dvStatus'); st.textContent='Saving…'; st.className='cf-status';
+  try{
+    await setDoc(doc(db,'schedules',current.key), { divisions: dvState, updated: serverTimestamp() }, { merge:true });
+    current.divisions = Object.assign({}, dvState);
+    st.textContent='✓ Saved — live on the standings'; st.className='cf-status ok';
+  }catch(e){ st.textContent='Save failed — '+(e.message||e); st.className='cf-status err'; }
+};
 
 function renderRows() {
   const tb = $('rows'); tb.innerHTML = '';

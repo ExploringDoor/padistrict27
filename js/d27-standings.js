@@ -52,11 +52,7 @@
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function logo(name) { return global.D27logos ? D27logos.html(name, 26) : ''; }
 
-  function tableHTML(t) {
-    var rows = compute(t);
-    if (!rows.length) return '';
-    var anyTie = rows.some(function (r) { return r.ties > 0; });
-    var anyPlayed = rows.some(function (r) { return r.gp > 0; });
+  function tableBlock(rows, anyTie, anyPlayed) {
     var head = '<tr><th class="st-rk">#</th><th class="st-tm">Team</th><th>GP</th><th>W</th><th>L</th>' + (anyTie ? '<th>T</th>' : '') + '<th>RF</th><th>RA</th><th>Diff</th></tr>';
     var body = rows.map(function (r, i) {
       var d = (r.diff > 0 ? '+' : '') + r.diff;
@@ -65,10 +61,29 @@
         '<td>' + r.gp + '</td><td class="st-w">' + r.w + '</td><td>' + r.l + '</td>' + (anyTie ? '<td>' + r.ties + '</td>' : '') +
         '<td>' + r.rf + '</td><td>' + r.ra + '</td><td>' + (anyPlayed ? d : '—') + '</td></tr>';
     }).join('');
+    return '<div class="st-scroll"><table class="st-table">' + head + body + '</table></div>';
+  }
+  function divOf(t, name) { var d = (t.divisions || {})[name]; return String(d == null ? '' : d).toLowerCase(); }
+
+  function tableHTML(t) {
+    var rows = compute(t);
+    if (!rows.length) return '';
+    var anyTie = rows.some(function (r) { return r.ties > 0; });
+    var anyPlayed = rows.some(function (r) { return r.gp > 0; });
     var note = anyPlayed ? '' : '<div class="st-note">Standings fill in as pool-play scores are entered.</div>';
+    var legend = '<div class="st-legend">Ranked by wins, then head-to-head, then fewest runs allowed. Final Red / Blue bracket seeding is set by the District.</div>';
+    var hasDiv = rows.some(function (r) { return divOf(t, r.name) === 'red' || divOf(t, r.name) === 'blue'; });
+    if (!hasDiv) {
+      return '<div class="bk-standings"><div class="st-head">Pool Play Standings</div>' + note + tableBlock(rows, anyTie, anyPlayed) + legend + '</div>';
+    }
+    function grp(d) { return rows.filter(function (r) { return divOf(t, r.name) === d; }); }
+    function sec(label, cls, list) { return list.length ? '<div class="st-div ' + cls + '"><div class="st-div-h">' + label + '</div>' + tableBlock(list, anyTie, anyPlayed) + '</div>' : ''; }
+    var un = rows.filter(function (r) { var d = divOf(t, r.name); return d !== 'red' && d !== 'blue'; });
     return '<div class="bk-standings"><div class="st-head">Pool Play Standings</div>' + note +
-      '<div class="st-scroll"><table class="st-table">' + head + body + '</table></div>' +
-      '<div class="st-legend">Ranked by wins, then head-to-head, then fewest runs allowed. Final Red / Blue bracket seeding is set by the District.</div></div>';
+      sec('Red Division', 'st-red', grp('red')) +
+      sec('Blue Division', 'st-blue', grp('blue')) +
+      sec('Unassigned', 'st-un', un) +
+      legend + '</div>';
   }
 
   global.D27standings = { compute: compute, tableHTML: tableHTML };
