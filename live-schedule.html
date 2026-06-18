@@ -118,7 +118,8 @@
     <div class="sv-panel-head">
       <span class="sv-panel-title" id="svTitle">Loading…</span>
       <div class="sv-day-pills" id="svDays"></div>
-      <select class="sv-tourney-sel" id="svTourney"><option value="all">All tournaments</option></select>
+      <select class="sv-tourney-sel" id="svLeague"><option value="all">All leagues</option></select>
+      <select class="sv-tourney-sel" id="svTourney" style="margin-left:8px"><option value="all">All tournaments</option></select>
     </div>
     <div id="svGrid"><div class="sv-loading">Loading schedule…</div></div>
   </div>
@@ -142,7 +143,17 @@
   function ppdLabel(g){ return 'POSTPONED · ' + (g && g.ppdReason==='field' ? 'Field Closed' : 'Rain'); }
   function ppdMakeup(g){ var m=clean(g&&g.makeupDate); if(!m) return ''; var d=new Date(m+'T12:00:00'); return isNaN(d)?'':'Makeup '+d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
 
-  var DATA=null, TMAP={}, WEEKS=[], state={wk:0, day:null, tourney:'all'};
+  var DATA=null, TMAP={}, WEEKS=[], state={wk:0, day:null, tourney:'all', league:'all'};
+
+  // League filter — canonicalize each team to its league via the logo slug
+  // (unifies variants like GVE1 / Great Valley Exton, Coventry 1, Upper Prov / Upper Providence).
+  var LEAGUE_DISP = {};   // league key -> clean display name
+  function baseName(n){ return String(n==null?'':n).replace(/\s*\([^)]*\)\s*$/,'').trim(); }
+  function isRealTeam(n){ n=String(n==null?'':n).trim(); return !!n && !/^(wg|lg)-/i.test(n) && !/^(bye|tbd|tba)$/i.test(n); }
+  function leagueKey(name){ if(!isRealTeam(name)) return null; var s=window.D27logos?D27logos.slug(name):null; return s || baseName(name).toLowerCase(); }
+  function sideNames(g){ var out=[]; [D27scores.side(g,'away'),D27scores.side(g,'home')].forEach(function(S){ if(S && !S.tbd && isRealTeam(S.name)) out.push(S.name); }); return out; }
+  function gameLeagueKeys(g){ return sideNames(g).map(leagueKey).filter(Boolean); }
+  function gameMatchesLeague(g, key){ return gameLeagueKeys(g).indexOf(key)>=0; }
 
   function build(){
     var games=D27scores.allGames(DATA).filter(function(g){ return clean(g.date); });   // dated games only
@@ -172,6 +183,13 @@
     var arr=Object.keys(keys).sort(function(a,b){ return D27order.cmp(a,b); });
     sel.innerHTML='<option value="all">All tournaments</option>'+arr.map(function(k){ return '<option value="'+esc(k)+'">'+esc(TMAP[k]||k)+'</option>'; }).join('');
   }
+  function fillLeagues(){
+    var sel=document.getElementById('svLeague');
+    LEAGUE_DISP={};
+    D27scores.allGames(DATA).forEach(function(g){ sideNames(g).forEach(function(nm){ var k=leagueKey(nm); if(!k) return; var b=baseName(nm); if(!LEAGUE_DISP[k] || b.length<LEAGUE_DISP[k].length) LEAGUE_DISP[k]=b; }); });
+    var entries=Object.keys(LEAGUE_DISP).map(function(k){ return {key:k, name:LEAGUE_DISP[k]}; }).sort(function(a,b){ return a.name.localeCompare(b.name); });
+    sel.innerHTML='<option value="all">All leagues</option>'+entries.map(function(e){ return '<option value="'+esc(e.key)+'">'+esc(e.name)+'</option>'; }).join('');
+  }
 
   function renderWeeks(){
     var el=document.getElementById('svWeeks');
@@ -181,16 +199,26 @@
     var active=el.querySelector('.sv-wk.active'); if(active) active.scrollIntoView({block:'nearest',inline:'center'});
   }
 
+  function gameInFilter(g){ return (state.tourney==='all'||g.tourneyKey===state.tourney) && (state.league==='all'||gameMatchesLeague(g,state.league)); }
+  function weekHasMatch(w){ return w.games.some(gameInFilter); }
+  // when a filter changes, hop to the nearest week (today-forward, else latest) that actually has matching games
+  function ensureWeekWithGames(){
+    if(WEEKS[state.wk] && weekHasMatch(WEEKS[state.wk])) return;
+    var today=D27scores.todayISO(), fwd=null, any=null;
+    for(var i=0;i<WEEKS.length;i++){ if(weekHasMatch(WEEKS[i])){ any=i; if(fwd===null && WEEKS[i].start>=today) fwd=i; } }
+    state.wk = (fwd!==null)?fwd:(any!==null?any:state.wk); state.day=null; renderWeeks();
+  }
   function curGames(){
     var w=WEEKS[state.wk]; if(!w) return [];
     var gs = state.day ? (w.days[state.day]||[]) : w.games;
     if(state.tourney!=='all') gs=gs.filter(function(g){ return g.tourneyKey===state.tourney; });
+    if(state.league!=='all') gs=gs.filter(function(g){ return gameMatchesLeague(g, state.league); });
     return gs;
   }
 
   function renderPanel(){
     var w=WEEKS[state.wk]; if(!w) return;
-    var validDays=w.dayOrder.filter(function(d){ return state.tourney==='all' || (w.days[d]||[]).some(function(g){return g.tourneyKey===state.tourney;}); });
+    var validDays=w.dayOrder.filter(function(d){ return (w.days[d]||[]).some(function(g){ return (state.tourney==='all'||g.tourneyKey===state.tourney) && (state.league==='all'||gameMatchesLeague(g,state.league)); }); });
     if(state.day && validDays.indexOf(state.day)<0) state.day=null;
     if(!state.day && validDays.length){ var tdy=D27scores.todayISO(); state.day=validDays.filter(function(d){return d>=tdy;})[0]||validDays[validDays.length-1]; }
     document.getElementById('svDays').innerHTML=validDays.map(function(d){
@@ -228,13 +256,14 @@
   }
   function renderGrid(gs){
     var out=document.getElementById('svGrid');
-    if(!gs.length){ out.innerHTML='<div class="sv-empty">No games'+(state.tourney!=='all'?' for this tournament':'')+' this day.</div>'; return; }
+    if(!gs.length){ out.innerHTML='<div class="sv-empty">No games'+(state.league!=='all'?' for '+esc(LEAGUE_DISP[state.league]||state.league):'')+(state.tourney!=='all'?' in this tournament':'')+' this day.</div>'; return; }
     out.innerHTML='<div class="sv-grid">'+gs.map(card).join('')+'</div>';
   }
 
   document.getElementById('svWeeks').addEventListener('click',function(e){ var b=e.target.closest('.sv-wk'); if(!b) return; state.wk=+b.dataset.wk; state.day=null; renderWeeks(); renderPanel(); });
   document.getElementById('svDays').addEventListener('click',function(e){ var b=e.target.closest('.sv-pill'); if(!b) return; state.day=b.dataset.day; renderPanel(); });
-  document.getElementById('svTourney').addEventListener('change',function(e){ state.tourney=e.target.value; renderPanel(); });
+  document.getElementById('svTourney').addEventListener('change',function(e){ state.tourney=e.target.value; ensureWeekWithGames(); renderPanel(); });
+  document.getElementById('svLeague').addEventListener('change',function(e){ state.league=e.target.value; ensureWeekWithGames(); renderPanel(); });
   document.getElementById('svPrev').addEventListener('click',function(){ document.getElementById('svWeeks').scrollBy({left:-240,behavior:'smooth'}); });
   document.getElementById('svNext').addEventListener('click',function(){ document.getElementById('svWeeks').scrollBy({left:240,behavior:'smooth'}); });
   document.getElementById('svGrid').addEventListener('click',function(e){ var c=e.target.closest('.sv-card'); if(c) D27gameModal.openByKey(c.dataset.tkey, c.dataset.g); });
@@ -246,7 +275,7 @@
     (function(){ var ag=D27scores.allGames(DATA).filter(function(g){return clean(g.date);}); var gt={}; ag.forEach(function(g){ gt[g.tourneyKey]=1; }); var nT=Object.keys(gt).length; var hs=document.getElementById('svHeroStats'); if(hs) hs.innerHTML='<div class="hub-stat"><span class="n">'+ag.length+'</span><span class="l">Game'+(ag.length===1?'':'s')+'</span></div><div class="hub-stat"><span class="n">'+nT+'</span><span class="l">Tournament'+(nT===1?'':'s')+'</span></div>'; })();
     if(!WEEKS.length){ document.getElementById('svGrid').innerHTML='<div class="sv-empty">No scheduled games yet.</div>'; document.getElementById('svTitle').textContent=''; return; }
     state.wk=pickDefaultWeek();
-    fillTourneys(); renderWeeks(); renderPanel();
+    fillTourneys(); fillLeagues(); renderWeeks(); renderPanel();
   }).catch(function(e){ document.getElementById('svGrid').innerHTML='<div class="sv-empty">Could not load the schedule.</div>'; });
 })();
 </script>
