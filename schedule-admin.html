@@ -318,6 +318,7 @@
           <div class="ed-more-menu hidden">
             <button type="button" class="ed-more-item" data-view="create">➕ Create</button>
             <button type="button" class="ed-more-item" data-view="subscribers">🔔 Subscribers</button>
+            <button type="button" class="ed-more-item" data-view="calendar">📅 Calendar Links</button>
             <button type="button" class="ed-more-item" data-view="contacts">📇 Contacts</button>
           </div>
         </div>
@@ -583,6 +584,37 @@
         </div>
         <div class="ct-wrap" id="subTable"><div class="ct-loading">Loading subscribers…</div></div>
         <p class="ed-hint">🔒 Private — everyone who signed up at <b>Game Alerts</b>. Export the CSV to import into your email/text service later. (Sending isn't wired up yet — this is just the list.)</p>
+      </div>
+
+      <div id="view-calendar" class="hidden">
+        <style>
+          .cal-wrap { max-width: 760px; }
+          .cal-card { background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:16px 18px; margin:14px 0; }
+          .cal-lbl { font-family:var(--font-display,'Oswald'); font-weight:700; font-size:15px; color:var(--d27-navy,#002D72); margin-bottom:8px; }
+          .cal-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+          .cal-row code { flex:1; min-width:240px; background:#f1f3f6; border:1px solid #e5e7eb; border-radius:6px; padding:8px 10px; font-size:13px; color:#0f172a; overflow-x:auto; white-space:nowrap; }
+          .cal-copy { background:var(--d27-navy,#002D72); color:#fff; border:none; border-radius:6px; padding:8px 14px; font:inherit; font-weight:600; cursor:pointer; }
+          .cal-actions { margin-top:10px; font-size:13.5px; }
+          .cal-actions a { color:var(--d27-navy,#002D72); font-weight:600; text-decoration:none; }
+          .cal-actions a:hover { text-decoration:underline; }
+          .cal-card select { font:inherit; padding:8px 10px; border:1px solid #d6dbe2; border-radius:6px; margin-bottom:10px; max-width:100%; }
+        </style>
+        <div class="cal-wrap">
+          <h3>📅 Calendar Links</h3>
+          <p class="ed-hint">Live <b>.ics</b> feeds of the game schedule. Anyone who <b>subscribes</b> gets every game on their calendar and it <b>auto-updates</b> as you add games, enter scores, or postpone. Share these links or add them to your own calendar.</p>
+          <div class="cal-card">
+            <div class="cal-lbl">All games</div>
+            <div class="cal-row"><code id="calAllUrl"></code><button type="button" class="cal-copy" data-copy="calAllUrl">Copy</button></div>
+            <div class="cal-actions"><a id="calAllApple" href="#">Subscribe (Apple / Outlook)</a> &nbsp;·&nbsp; <a id="calAllGoogle" href="#" target="_blank" rel="noopener">Add to Google Calendar</a> &nbsp;·&nbsp; <a id="calAllDl" href="#">Download .ics</a></div>
+          </div>
+          <div class="cal-card">
+            <div class="cal-lbl">One tournament</div>
+            <select id="calTourSel"></select>
+            <div class="cal-row"><code id="calTourUrl"></code><button type="button" class="cal-copy" data-copy="calTourUrl">Copy</button></div>
+            <div class="cal-actions"><a id="calTourApple" href="#">Subscribe (Apple / Outlook)</a> &nbsp;·&nbsp; <a id="calTourGoogle" href="#" target="_blank" rel="noopener">Add to Google Calendar</a></div>
+          </div>
+          <p class="ed-hint">You can also filter by team or league — add <code>?team=Lower Perk</code> to any link.</p>
+        </div>
       </div>
 
       <div id="view-champions" class="hidden">
@@ -1354,7 +1386,7 @@ function impHandleFile(file){
   function tab(view){
     document.querySelectorAll('.ed-tab').forEach(t=>t.classList.toggle('active', t.dataset.view===view));
     document.querySelectorAll('.ed-more-item').forEach(t=>t.classList.toggle('active', t.dataset.view===view));
-    var _mt=document.querySelector('.ed-more-trigger'); if(_mt) _mt.classList.toggle('active', ['create','subscribers','contacts'].indexOf(view)>=0);
+    var _mt=document.querySelector('.ed-more-trigger'); if(_mt) _mt.classList.toggle('active', ['create','subscribers','contacts','calendar'].indexOf(view)>=0);
     var _mm=document.querySelector('.ed-more-menu'); if(_mm) _mm.classList.add('hidden');
     $('view-schedule').classList.toggle('hidden', view!=='schedule');
     $('view-contacts').classList.toggle('hidden', view!=='contacts');
@@ -1363,6 +1395,8 @@ function impHandleFile(file){
     $('view-codes').classList.toggle('hidden', view!=='codes');
     $('view-inbox').classList.toggle('hidden', view!=='inbox');
     $('view-subscribers').classList.toggle('hidden', view!=='subscribers');
+    $('view-calendar').classList.toggle('hidden', view!=='calendar');
+    if(view==='calendar' && window.__calInit){ window.__calInit(); }
     if(view==='contacts' && !loaded){ loaded=true; loadContacts(); }
     if(view==='subscribers' && !subLoaded){ subLoaded=true; loadSubscribers(); }
     if(view==='champions' && window.__champLoad){ window.__champLoad(); }
@@ -1377,6 +1411,33 @@ function impHandleFile(file){
     document.querySelectorAll('.ed-more-item').forEach(function(it){ it.addEventListener('click', function(){ tab(it.dataset.view); }); });
     document.addEventListener('click', function(e){ if(menu && !(e.target.closest && e.target.closest('.ed-more'))) menu.classList.add('hidden'); });
   })();
+
+  // ── Calendar Links view ──
+  window.__calInit = function(){
+    var D='padistrict27.vercel.app';
+    function set(prefix, qs){
+      var https='https://'+D+'/api/calendar'+qs, webcal='webcal://'+D+'/api/calendar'+qs;
+      var u=$(prefix+'Url'); if(u){ u.textContent=webcal; u.dataset.url=webcal; }
+      var a=$(prefix+'Apple'); if(a) a.href=webcal;
+      var g=$(prefix+'Google'); if(g) g.href='https://calendar.google.com/calendar/r?cid='+encodeURIComponent(webcal);
+      var d=$(prefix+'Dl'); if(d) d.href=https;
+    }
+    set('calAll','');
+    var sel=$('calTourSel');
+    if(sel && !sel.__filled){ sel.__filled=true;
+      var cats=['LL International — Baseball','LL International — Softball','D27 Special Games','Sectional','State','Other'];
+      var byCat={}; for(var k in TOURNEYS){ var t=TOURNEYS[k]; (byCat[t.category||'Other']=byCat[t.category||'Other']||[]).push(t); }
+      sel.innerHTML='';
+      cats.forEach(function(c){ if(!byCat[c])return; var og=document.createElement('optgroup'); og.label=c; byCat[c].sort(function(a,b){return window.D27order?window.D27order.cmp(a,b):a.name.localeCompare(b.name);}).forEach(function(t){ var o=document.createElement('option'); o.value=t.key; o.textContent=t.name; og.appendChild(o); }); sel.appendChild(og); });
+      sel.onchange=function(){ set('calTour', sel.value?'?tournament='+encodeURIComponent(sel.value):''); };
+    }
+    if(sel) set('calTour', sel.value?'?tournament='+encodeURIComponent(sel.value):'');
+  };
+  document.addEventListener('click', function(e){
+    var b=e.target.closest && e.target.closest('.cal-copy'); if(!b) return;
+    var el=$(b.dataset.copy), url=el?(el.dataset.url||el.textContent):'';
+    if(navigator.clipboard && url){ navigator.clipboard.writeText(url).then(function(){ b.textContent='✓ Copied'; setTimeout(function(){ b.textContent='Copy'; },1500); }); }
+  });
 
   function fillTourneyOptions(){
     const keys = new Set(Object.keys(TOURNEYS));
