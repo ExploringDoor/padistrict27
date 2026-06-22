@@ -58,7 +58,7 @@
     // Game Status (weather.html) + Game Alerts (alerts.html) hidden off-season — pages stay URL-accessible, re-link when active.
     ['brackets.html', 'Brackets'],
     ['champions.html', 'Champions'],
-    ['rules.html', 'Rules'],
+    ['rules.html', 'Other Forms & Documents'],
     ['history.html', 'History'],
     ['scholarship.html', 'Scholarship'],
     ['https://www.padistrict27.com/', 'Main D27 Site ↗'],

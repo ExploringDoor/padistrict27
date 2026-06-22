@@ -181,7 +181,12 @@
     var byWeek={};
     games.forEach(function(g){ var w=weekStart(g.date); (byWeek[w]=byWeek[w]||[]).push(g); });
     WEEKS=Object.keys(byWeek).sort().map(function(w,i){
-      var gs=byWeek[w].sort(function(a,b){ return (a.date+ (a.time||'')).localeCompare(b.date+(b.time||'')); });
+      var gs=byWeek[w].sort(function(a,b){
+        var dc=String(a.date||'').localeCompare(String(b.date||'')); if(dc) return dc;     // date first (day buckets rely on it)
+        var tc=(window.D27order?D27order.cmp(a,b):0); if(tc) return tc;                     // then canonical tournament order
+        var mc=String(a.time||'').localeCompare(String(b.time||'')); if(mc) return mc;      // then time
+        return (+a.g||0)-(+b.g||0);                                                          // then game #
+      });
       var dates=gs.map(function(g){return g.date;});
       var lo=dt(dates[0]), hi=dt(dates[dates.length-1]);
       var range = (MON[lo.getMonth()]+' '+lo.getDate()) + (dates[0]!==dates[dates.length-1] ? '–'+(hi.getMonth()!==lo.getMonth()?MON[hi.getMonth()]+' ':'')+hi.getDate() : '');
