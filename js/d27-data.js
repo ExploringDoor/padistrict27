@@ -43,7 +43,9 @@
   global.D27loadSchedules = async function () {
     const url = `https://firestore.googleapis.com/v1/projects/${PROJECT}/databases/(default)/documents/schedules?key=${KEY}&pageSize=100`;
     try {
-      const res = await fetch(url);
+      // no-store + cache-buster: always pull the live schedule, so score entries / bracket
+      // resolutions (e.g. "Winner G26" -> the actual team) show up immediately, never stale.
+      const res = await fetch(url + '&_=' + Date.now(), { cache: 'no-store' });
       if (!res.ok) throw new Error('firestore ' + res.status);
       const data = await res.json();
       if (!data.documents || !data.documents.length) throw new Error('empty');
