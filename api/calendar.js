@@ -117,12 +117,12 @@ module.exports = async function handler(req, res) {
   const ics = [
     'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//PA District 27//Schedule//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
     'X-WR-CALNAME:' + esc(calName), 'X-WR-TIMEZONE:America/New_York',
-    'REFRESH-INTERVAL;VALUE=DURATION:PT2H', 'X-PUBLISHED-TTL:PT2H',
+    'REFRESH-INTERVAL;VALUE=DURATION:PT30M', 'X-PUBLISHED-TTL:PT30M',
     VTZ, ...events, 'END:VCALENDAR',
   ].join('\r\n');
 
   res.setHeader('Content-Type', 'text/calendar; charset=utf-8');
   res.setHeader('Content-Disposition', 'inline; filename="d27-schedule.ics"');
-  res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=1800');
+  res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=0, must-revalidate');
   res.status(200).send(ics);
 };
