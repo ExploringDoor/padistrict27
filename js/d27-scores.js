@@ -6,7 +6,14 @@
   function allGames(data) {
     const out = [];
     (data.tournaments || []).forEach(function (t) {
+      // Double-elim "if necessary" reset games become moot once the winners-bracket
+      // team clinches the grand final. The engine flags them in championOutcome().hide —
+      // drop them so they vanish from the Schedule, Scores, and home cards (the bracket
+      // + per-tournament schedule pages already hide them).
+      let hide = null;
+      try { hide = global.D27bracket.championOutcome(t, global.D27bracket.classify(t)).hide; } catch (e) {}
       (t.games || []).forEach(function (g) {
+        if (hide && hide.has(g.g)) return;
         out.push(Object.assign({}, g, { _t: t, tourneyName: t.name, tourneyKey: t.key, sport: t.sport }));
       });
     });
