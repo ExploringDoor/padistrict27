@@ -36,7 +36,16 @@
   table.hm { width: 100%; border-collapse: collapse; min-width: 820px; font-size: var(--text-sm); }
   table.hm thead th { background: var(--d27-navy); color: #fff; font-family: 'Oswald', sans-serif; font-weight: 500; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .06em; text-align: left; padding: 11px 14px; white-space: nowrap; position: sticky; top: 0; }
   table.hm tbody td { padding: 11px 14px; border-top: 1px solid var(--line); vertical-align: top; }
-  table.hm tbody tr:hover { background: var(--sport-ss-bg); }
+  /* shade each game by sport/category: Baseball=blue, Softball=orange, Special Games=gray, Section/State=green */
+  table.hm tbody tr.sp-bb td { background: #D7E7F6; }
+  table.hm tbody tr.sp-sb td { background: #FBE0C6; }
+  table.hm tbody tr.sp-sg td { background: #E2E7ED; }
+  table.hm tbody tr.sp-ss td { background: #D5EDDF; }
+  table.hm tbody tr.sp-bb td:first-child { box-shadow: inset 6px 0 0 var(--sport-bb); }
+  table.hm tbody tr.sp-sb td:first-child { box-shadow: inset 6px 0 0 var(--sport-sb); }
+  table.hm tbody tr.sp-sg td:first-child { box-shadow: inset 6px 0 0 var(--sport-sg); }
+  table.hm tbody tr.sp-ss td:first-child { box-shadow: inset 6px 0 0 var(--sport-ss); }
+  table.hm tbody tr:hover td { background-image: linear-gradient(rgba(0,23,60,.07), rgba(0,23,60,.07)); }
   table.hm .c-day { font-family: 'Oswald', sans-serif; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; font-size: var(--text-xs); white-space: nowrap; }
   table.hm .c-date { white-space: nowrap; font-weight: 600; color: var(--d27-ink); }
   table.hm .c-time { white-space: nowrap; color: var(--muted); }
@@ -44,7 +53,7 @@
   table.hm .c-match .mt .tbd { color: var(--muted); font-weight: 500; }
   table.hm .c-match .tn { display: block; font-family: 'Oswald', sans-serif; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-top: 2px; }
   table.hm .c-host { white-space: nowrap; }
-  table.hm .host-pill { display: inline-block; background: var(--sport-ss-bg); color: var(--sport-ss); border: 1px solid var(--sport-ss-line); border-radius: 999px; padding: 3px 10px; font-weight: 600; font-size: 12px; white-space: nowrap; }
+  table.hm .host-pill { display: inline-block; background: rgba(255,255,255,.72); color: var(--d27-navy); border: 1px solid rgba(0,23,60,.18); border-radius: 999px; padding: 3px 10px; font-weight: 600; font-size: 12px; white-space: nowrap; }
   table.hm .c-field { color: var(--d27-ink); }
   table.hm .c-ump { white-space: nowrap; }
   table.hm .ump { font-size: 12px; font-weight: 600; }
@@ -124,6 +133,13 @@
     catch (e) { return raw ? esc(raw) : '<span class="tbd">TBD</span>'; }
   }
   function isBye(g) { return /^bye$/i.test(String(g.away||'')) || /^bye$/i.test(String(g.home||'')); }
+  // shade each game by sport/category (matches the rest of the site)
+  function sportCls(t) {
+    if (t && (t.category === 'Sectional' || t.category === 'State')) return 'sp-ss';
+    if (t && (t.category === 'D27 Special Games' || t.special === true)) return 'sp-sg';
+    if (t && t.sport === 'Softball') return 'sp-sb';
+    return 'sp-bb';
+  }
 
   var WD = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   function weekday(iso) { if(!iso) return ''; var d = new Date(iso + 'T12:00:00'); return WD[d.getDay()]; }
@@ -194,7 +210,7 @@
 
     var body = rows.map(function (r) {
       var t = r.t, g = r.g;
-      return '<tr>' +
+      return '<tr class="' + sportCls(t) + '">' +
         '<td class="c-day">' + weekday(r.iso) + '</td>' +
         '<td class="c-date">' + prettyDate(r.iso) + '</td>' +
         '<td class="c-time">' + (prettyTime(g.time) || '—') + '</td>' +
