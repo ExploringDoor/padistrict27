@@ -82,6 +82,7 @@
   .ls-tourney-head .sport-tag.bb { background: var(--sport-bb-bg); color: var(--sport-bb); }
   .ls-tourney-head .sport-tag.sb { background: var(--sport-sb-bg); color: var(--sport-sb); }
   .ls-tourney-head .sport-tag.sg { background: var(--sport-sg-bg); color: var(--sport-sg); }
+  .ls-tourney-head .sport-tag.ss { background: var(--sport-ss-bg); color: var(--sport-ss); }
   .ls-tourney-head .updated { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #047857; background: #ECFDF5; border: 1px solid rgba(4,120,87,.2); padding: 4px 10px; border-radius: 999px; font-weight: 600; }
   .ls-tourney-head .updated .dot { width: 7px; height: 7px; border-radius: 50%; background: #10B981; }
   .ls-tourney-head .meta { color: var(--muted); font-size: 13px; }
@@ -374,7 +375,7 @@ function tourneyHTML(t, q) {
   let html = `<section class="ls-tourney">
     <div class="ls-tourney-head">
       <h2>${t.name}</h2>
-      <span class="sport-tag ${(t.category === 'D27 Special Games' || t.special === true) ? 'sg' : (t.sport === 'Softball' ? 'sb' : 'bb')}">${t.sport}</span>
+      <span class="sport-tag ${(t.category === 'Sectional' || t.category === 'State') ? 'ss' : (t.category === 'D27 Special Games' || t.special === true) ? 'sg' : (t.sport === 'Softball' ? 'sb' : 'bb')}">${t.sport}</span>
       <span class="meta">${liveCount} games</span>
       <a class="bracket-link" href="brackets.html?t=${t.key}">🏆 Bracket view →</a>
       ${t.updated ? `<span class="updated"><span class="dot"></span>${updatedLabel(t.updated)}</span>` : ''}

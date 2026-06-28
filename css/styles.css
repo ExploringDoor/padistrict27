@@ -44,12 +44,16 @@
   --sport-sb-g1:   #E07C24;  --sport-sb-g2: #B3590F;
   --sport-sg:      #586472;  --sport-sg-bg: #EEF1F4;  --sport-sg-line: #CBD4DD;
   --sport-sg-g1:   #5E6B79;  --sport-sg-g2: #3A4552;
+  /* Section/State (Section 8 + PA State) = green — kept separate from District tournaments */
+  --sport-ss:      #2E8B57;  --sport-ss-bg: #E8F4EC;  --sport-ss-line: #B5DEC4;
+  --sport-ss-g1:   #3DA968;  --sport-ss-g2: #1E6E3C;
 
   /* Score/schedule box "trim" treatment — colored frame + winner/footer text.
      Baseball blue sampled from the District 27 intl banner trim. */
   --trim-bb: #4A98D4;  --trim-bb-tx: #2E7CB8;  --trim-bb-ln: #CFE4F5;
   --trim-sb: #DD8327;  --trim-sb-tx: #C4641A;  --trim-sb-ln: #F3D3AB;
   --trim-sg: #7A8794;  --trim-sg-tx: #586472;  --trim-sg-ln: #D2D9E0;
+  --trim-ss: #3DA968;  --trim-ss-tx: #2E8B57;  --trim-ss-ln: #C9E8D5;
 
   /* Semantic */
   --bg:      var(--d27-paper);
@@ -1394,3 +1398,9 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
 .sv-card.sp-bb .sv-card-foot { border-top-color: var(--trim-bb-ln); }
 .sv-card.sp-sb .sv-card-foot { border-top-color: var(--trim-sb-ln); }
 .sv-card.sp-sg .sv-card-foot { border-top-color: var(--trim-sg-ln); }
+/* Section/State (Section 8 + PA State) = green */
+.sport-ss { background: var(--sport-ss-bg); border-color: var(--sport-ss-line); color: var(--sport-ss); }
+.tcard-banner.sport-ss { background: linear-gradient(135deg, var(--sport-ss-g1) 0%, var(--sport-ss-g2) 100%); }
+.sv-card.sp-ss { background: #fff; border: 4px solid var(--trim-ss); }
+.sv-card.sp-ss .sv-team.win, .sv-card.sp-ss .sv-score.win, .sv-card.sp-ss .sv-summary, .sv-card.sp-ss .sv-card-foot .sv-meta, .sv-card.sp-ss .sv-cta { color: var(--trim-ss-tx); }
+.sv-card.sp-ss .sv-card-foot { border-top-color: var(--trim-ss-ln); }

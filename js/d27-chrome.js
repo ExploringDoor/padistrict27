@@ -52,11 +52,13 @@
     ['baseball.html', 'Baseball'],
     ['softball.html', 'Softball'],
     ['special-games.html', 'Special Games'],
+    ['section-state.html', 'Section/State'],
     ['leagues.html', 'Leagues'],
   ];
   var MORE = [
     // Game Status (weather.html) + Game Alerts (alerts.html) hidden off-season — pages stay URL-accessible, re-link when active.
     ['brackets.html', 'Brackets'],
+    ['hosting-manager.html', 'Hosting Manager'],
     ['champions.html', 'Champions'],
     ['rules.html', 'Other Forms & Documents'],
     ['history.html', 'History'],
@@ -101,6 +103,7 @@
       '<div><h5>Tournaments</h5><ul>' +
         '<li><a href="baseball.html">Baseball</a></li><li><a href="softball.html">Softball</a></li>' +
         '<li><a href="special-games.html">Special Games</a></li>' +
+        '<li><a href="section-state.html">Section/State</a></li>' +
         '<li><a href="live-schedule.html">Schedules</a></li><li><a href="brackets.html">Brackets</a></li>' +
         '<li><a href="champions.html">Champions</a></li></ul></div>' +
       '<div><h5>District</h5><ul>' +

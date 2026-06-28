@@ -45,6 +45,7 @@
   .ft-bb { background: linear-gradient(145deg, var(--sport-bb-g1) 0%, var(--sport-bb-g2) 100%); }
   .ft-sb { background: linear-gradient(145deg, var(--sport-sb-g1) 0%, var(--sport-sb-g2) 100%); }
   .ft-sp { background: linear-gradient(145deg, var(--sport-sg-g1) 0%, var(--sport-sg-g2) 100%); }
+  .ft-ss { background: linear-gradient(145deg, var(--sport-ss-g1) 0%, var(--sport-ss-g2) 100%); }
   .ft .ft-num { position: absolute; top: -22px; right: 8px; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 9rem; line-height: 1; color: rgba(255,255,255,.09); pointer-events: none; }
   .ft .ft-kick { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .16em; color: rgba(255,255,255,.72); }
   .ft h2 { color: #fff; margin: 4px 0 8px; font-size: clamp(1.9rem, 3.6vw, 2.7rem); line-height: 1; }
@@ -71,9 +72,11 @@
   .cs.sp-bb { border: 4px solid var(--trim-bb); }
   .cs.sp-sb { border: 4px solid var(--trim-sb); }
   .cs.sp-sg { border: 4px solid var(--trim-sg); }
+  .cs.sp-ss { border: 4px solid var(--trim-ss); }
   .cs.sp-bb .tm { color: var(--trim-bb-tx); }
   .cs.sp-sb .tm { color: var(--trim-sb-tx); }
   .cs.sp-sg .tm { color: var(--trim-sg-tx); }
+  .cs.sp-ss .tm { color: var(--trim-ss-tx); }
   .cs .tr { font-size: 1.7rem; line-height: 1; flex: none; }
   .cs .cs-logo { display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; flex: none; }
   .cs .cs-logo .d27-logo, .cs .cs-logo .d27-logo-fb { width: 48px !important; height: 48px !important; }
@@ -195,6 +198,13 @@
       <p>The Bob Jones, 9-Year-Old Invitational, Softball Majors &amp; more.</p>
       <span class="ft-go">View tournaments →</span>
     </a>
+    <a class="ft ft-ss" href="section-state.html">
+      <span class="ft-num">27</span>
+      <span class="ft-kick">Section 8 &amp; PA State</span>
+      <h2>Section/State</h2>
+      <p>The Section 8 and Pennsylvania State tournaments D27 is hosting.</p>
+      <span class="ft-go">View tournaments →</span>
+    </a>
   </div>
 
   <div class="quick">
@@ -263,7 +273,8 @@
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   var CS_SPECIAL_RE = /bob\s*jones|john\s*klein|bennett|special\s*games|invitational|softball\s*major\s*champ|9-?year/i;
   var CS_SPECIAL_KEYS = {'BB-Bob_Jones':1,'BB-BJ':1,'SB-Major_Champ':1,'SB-MAJ':1,'BB-9':1,'BB-Bennett':1,'BB-Klein':1};
-  function csSportCls(c){ if((c.tkey && CS_SPECIAL_KEYS[c.tkey]) || c.special===true || CS_SPECIAL_RE.test(c.tournament||'')) return 'sp-sg'; return c.sport==='Softball'?'sp-sb':'sp-bb'; }
+  var CS_SS_RE = /section\s*8|\bsectional\b|pa\s*state|state\s*tournament/i;
+  function csSportCls(c){ if((c.tkey && /^(S8|PA)-/.test(c.tkey)) || c.category==='Sectional' || c.category==='State' || CS_SS_RE.test(c.tournament||'')) return 'sp-ss'; if((c.tkey && CS_SPECIAL_KEYS[c.tkey]) || c.special===true || CS_SPECIAL_RE.test(c.tournament||'')) return 'sp-sg'; return c.sport==='Softball'?'sp-sb':'sp-bb'; }
   function csCard(yr, c, photo){
     var sc = csSportCls(c);
     var logo = window.D27logos ? '<span class="cs-logo">' + D27logos.html(c.team, 40) + '</span>' : '<span class="tr">🏆</span>';
@@ -335,7 +346,7 @@
     var sc=played?'<span class="sv-score'+(win?' win':' lose')+'">'+score+'</span>':'';
     return '<div class="sv-row">'+logo+'<span class="sv-team'+(disp.tbd?' tbd':'')+(played&&win?' win':'')+(played&&!win?' lose':'')+'">'+esc(disp.name)+'</span>'+sc+'</div>';
   }
-  function hpSportCls(g){ var t=g._t||{}; if(t.category==='D27 Special Games'||t.special===true) return 'sp-sg'; return g.sport==='Softball'?'sp-sb':'sp-bb'; }
+  function hpSportCls(g){ var t=g._t||{}; if(t.category==='Sectional'||t.category==='State') return 'sp-ss'; if(t.category==='D27 Special Games'||t.special===true) return 'sp-sg'; return g.sport==='Softball'?'sp-sb':'sp-bb'; }
   function hpCard(g, mode){
     var A=D27scores.side(g,'away'), H=D27scores.side(g,'home');
     var tag='<span class="sv-meta">'+esc(HP_TMAP[g.tourneyKey]||String(g.tourneyKey).replace(/_/g,' '))+'</span>';

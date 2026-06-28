@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Hosting Manager · PA District 27 Little League</title>
+<meta name="description" content="See every tournament game a D27 member league is hosting — day, date, time, matchup, field, and umpire responsibility. Pick one or more leagues." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<script src="config.js"></script>
+<link rel="stylesheet" href="css/styles.css" />
+
+<style>
+  .hub-hero { background: linear-gradient(135deg, rgba(0,27,71,.95) 0%, rgba(0,45,114,.88) 100%), var(--d27-navy); color: var(--d27-white); padding: var(--space-7) 0 var(--space-6); border-bottom: 5px solid var(--sport-ss); }
+  .hub-hero .crumb { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-bottom: var(--space-3); }
+  .hub-hero .crumb a { color: rgba(255,255,255,.6); text-decoration: none; }
+  .hub-hero h1 { color: var(--d27-white); font-size: clamp(2.25rem, 4vw, var(--text-4xl)); margin-bottom: var(--space-3); }
+  .hub-hero p { color: rgba(255,255,255,.85); font-size: var(--text-lg); max-width: 64ch; }
+
+  .hm-pickbar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: var(--space-3); }
+  .hm-pickbar .lbl { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-right: 4px; }
+  .hm-chip { font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: .02em; color: var(--d27-navy); background: #fff; border: 1.5px solid var(--line); border-radius: 999px; padding: 7px 15px; cursor: pointer; transition: all .12s ease; }
+  .hm-chip:hover { border-color: var(--sport-ss); }
+  .hm-chip.on { background: var(--sport-ss); border-color: var(--sport-ss); color: #fff; }
+  .hm-act { font-family: 'Oswald', sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--sport-ss); background: none; border: none; cursor: pointer; padding: 7px 8px; }
+  .hm-act:hover { text-decoration: underline; }
+
+  .hm-summary { font-size: var(--text-sm); color: var(--muted); margin: 0 0 var(--space-4); }
+  .hm-summary strong { color: var(--d27-navy); font-family: 'Oswald', sans-serif; }
+
+  .hm-tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+  table.hm { width: 100%; border-collapse: collapse; min-width: 820px; font-size: var(--text-sm); }
+  table.hm thead th { background: var(--d27-navy); color: #fff; font-family: 'Oswald', sans-serif; font-weight: 500; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .06em; text-align: left; padding: 11px 14px; white-space: nowrap; position: sticky; top: 0; }
+  table.hm tbody td { padding: 11px 14px; border-top: 1px solid var(--line); vertical-align: top; }
+  table.hm tbody tr:hover { background: var(--sport-ss-bg); }
+  table.hm .c-day { font-family: 'Oswald', sans-serif; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; font-size: var(--text-xs); white-space: nowrap; }
+  table.hm .c-date { white-space: nowrap; font-weight: 600; color: var(--d27-ink); }
+  table.hm .c-time { white-space: nowrap; color: var(--muted); }
+  table.hm .c-match .mt { font-weight: 600; color: var(--d27-ink); }
+  table.hm .c-match .mt .tbd { color: var(--muted); font-weight: 500; }
+  table.hm .c-match .tn { display: block; font-family: 'Oswald', sans-serif; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-top: 2px; }
+  table.hm .c-host { white-space: nowrap; }
+  table.hm .host-pill { display: inline-block; background: var(--sport-ss-bg); color: var(--sport-ss); border: 1px solid var(--sport-ss-line); border-radius: 999px; padding: 3px 10px; font-weight: 600; font-size: 12px; white-space: nowrap; }
+  table.hm .c-field { color: var(--d27-ink); }
+  table.hm .c-ump { white-space: nowrap; }
+  table.hm .ump { font-size: 12px; font-weight: 600; }
+  table.hm .ump.local { color: #2E8B57; }
+  table.hm .ump.d27 { color: #2E7CB8; }
+  table.hm .ump.tbd { color: var(--muted); font-weight: 500; }
+
+  .hm-empty { padding: var(--space-6); text-align: center; color: var(--muted); }
+  .hm-loading { padding: var(--space-6); text-align: center; color: var(--muted); font-family: 'Oswald', sans-serif; letter-spacing: .04em; }
+  .hm-legend { font-size: var(--text-xs); color: var(--muted); margin-top: var(--space-3); }
+</style>
+</head>
+<body>
+
+<div id="d27-nav"></div>
+
+<header class="hub-hero">
+  <div class="container">
+    <div class="crumb"><a href="index.html">Home</a> &nbsp;/&nbsp; Hosting Manager</div>
+    <h1>Hosting Manager</h1>
+    <p>Every tournament game your league is hosting — so you know exactly what to prepare for. Pick one or more leagues to see their hosted games. The list updates automatically as brackets advance.</p>
+  </div>
+</header>
+
+<main class="container section-tight">
+  <div class="hm-pickbar" id="hmChips"><span class="lbl">Leagues:</span></div>
+  <p class="hm-summary" id="hmSummary"></p>
+  <div id="hmOut"><div class="hm-loading">Loading hosted games…</div></div>
+  <p class="hm-legend">Host league is determined by the field. Umpire responsibility shows once the District sets it. “Team” names resolve automatically as brackets advance (e.g. “Winner G3” becomes the real team).</p>
+</main>
+
+<div id="d27-footer"></div>
+
+<script src="js/d27-data.js"></script>
+<script src="js/d27-order.js"></script>
+<script src="js/d27-bracket.js"></script>
+<script src="js/d27-chrome.js"></script>
+<script>
+(function () {
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  // D27's 11 member leagues + the field prefixes that map to each.
+  var LEAGUES = [
+    { name: 'Berwyn/Paoli',        pre: ['BP'] },
+    { name: 'Chester Valley',      pre: ['CV'] },
+    { name: 'Coventry',            pre: ['COV'] },
+    { name: 'Devon-Strafford',     pre: ['DS','D-S','DSBP'] },
+    { name: 'Exton',               pre: ['EX'] },
+    { name: 'Great Valley',        pre: ['GV','GVE'] },
+    { name: 'Lower Merion',        pre: ['LM'] },
+    { name: 'Lower Perkiomen',     pre: ['LP'] },
+    { name: 'Pottsgrove-Pottstown',pre: ['PGP','PG','PT'] },
+    { name: 'Radnor-Wayne',        pre: ['RW','R/W'] },
+    { name: 'Upper Providence',    pre: ['UP'] },
+  ];
+  var PRE2NAME = {};
+  LEAGUES.forEach(function (L) { L.pre.forEach(function (p) { PRE2NAME[p.toUpperCase()] = L.name; }); });
+
+  function fieldPrefix(field) {
+    if (!field) return '';
+    return String(field).split('-')[0].trim().toUpperCase();
+  }
+  function hostLeague(g) {
+    if (g.host) return g.host;                         // explicit host wins if ever set
+    return PRE2NAME[fieldPrefix(g.field)] || '';
+  }
+  // umpire responsibility: read from the game if/when the District sets it, else TBD
+  function umpireCell(g) {
+    var u = g.umpire || g.umpires || g.ump || '';
+    if (!u) return '<span class="ump tbd">TBD</span>';
+    var cls = /local/i.test(u) ? 'local' : 'd27';
+    return '<span class="ump ' + cls + '">' + esc(u) + '</span>';
+  }
+  function teamName(t, raw) {
+    try { var r = window.D27bracket.sideDisplay(t, raw); return r && r.name ? esc(r.name) : '<span class="tbd">TBD</span>'; }
+    catch (e) { return raw ? esc(raw) : '<span class="tbd">TBD</span>'; }
+  }
+  function isBye(g) { return /^bye$/i.test(String(g.away||'')) || /^bye$/i.test(String(g.home||'')); }
+
+  var WD = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  function weekday(iso) { if(!iso) return ''; var d = new Date(iso + 'T12:00:00'); return WD[d.getDay()]; }
+  function prettyDate(iso) { if(!iso) return ''; var d = new Date(iso + 'T12:00:00'); return d.toLocaleDateString('en-US', { month:'short', day:'numeric' }); }
+  function prettyTime(t) {
+    if (!t || !/^\d{1,2}:\d{2}/.test(t)) return '';
+    var p = t.split(':'), h = +p[0], m = p[1]; var ap = h>=12?'PM':'AM'; var hh = h%12; if(hh===0)hh=12;
+    return hh + ':' + m + ' ' + ap;
+  }
+
+  // selection state — all leagues on by default
+  var selected = {}; LEAGUES.forEach(function (L) { selected[L.name] = true; });
+  var ALL_GAMES = [];   // {t, g, host, iso, time}
+
+  function buildChips() {
+    var bar = document.getElementById('hmChips');
+    LEAGUES.forEach(function (L) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'hm-chip on'; b.textContent = L.name;
+      b.addEventListener('click', function () {
+        selected[L.name] = !selected[L.name];
+        b.classList.toggle('on', selected[L.name]);
+        render();
+      });
+      L._btn = b; bar.appendChild(b);
+    });
+    var all = document.createElement('button'); all.type='button'; all.className='hm-act'; all.textContent='All';
+    all.addEventListener('click', function(){ LEAGUES.forEach(function(L){ selected[L.name]=true; L._btn.classList.add('on'); }); render(); });
+    var none = document.createElement('button'); none.type='button'; none.className='hm-act'; none.textContent='Clear';
+    none.addEventListener('click', function(){ LEAGUES.forEach(function(L){ selected[L.name]=false; L._btn.classList.remove('on'); }); render(); });
+    bar.appendChild(all); bar.appendChild(none);
+  }
+
+  function render() {
+    var rows = ALL_GAMES.filter(function (r) { return selected[r.host]; });
+    rows.sort(function (a, b) {
+      if (a.iso !== b.iso) return a.iso < b.iso ? -1 : 1;
+      var c = window.D27order ? window.D27order.cmp(a.t, b.t) : 0; if (c) return c;
+      return String(a.time).localeCompare(String(b.time));
+    });
+
+    var nLeagues = LEAGUES.filter(function (L) { return selected[L.name]; }).length;
+    document.getElementById('hmSummary').innerHTML =
+      '<strong>' + rows.length + '</strong> game' + (rows.length===1?'':'s') +
+      ' hosted by <strong>' + nLeagues + '</strong> of 11 league' + (nLeagues===1?'':'s') + '.';
+
+    var out = document.getElementById('hmOut');
+    if (!nLeagues) { out.innerHTML = '<div class="hm-empty">Select at least one league above to see its hosted games.</div>'; return; }
+    if (!rows.length) { out.innerHTML = '<div class="hm-empty">No hosted games found for the selected league' + (nLeagues===1?'':'s') + ' yet.</div>'; return; }
+
+    var body = rows.map(function (r) {
+      var t = r.t, g = r.g;
+      return '<tr>' +
+        '<td class="c-day">' + weekday(r.iso) + '</td>' +
+        '<td class="c-date">' + prettyDate(r.iso) + '</td>' +
+        '<td class="c-time">' + (prettyTime(g.time) || '—') + '</td>' +
+        '<td class="c-match"><span class="mt">' + teamName(t, g.away) + ' <span style="color:var(--muted);font-weight:500">vs</span> ' + teamName(t, g.home) + '</span><span class="tn">' + esc(t.name || t.key) + '</span></td>' +
+        '<td class="c-host"><span class="host-pill">' + esc(r.host) + '</span></td>' +
+        '<td class="c-field">' + (g.field ? esc(g.field) : '—') + '</td>' +
+        '<td class="c-ump">' + umpireCell(g) + '</td>' +
+      '</tr>';
+    }).join('');
+
+    out.innerHTML =
+      '<div class="hm-tablewrap"><table class="hm"><thead><tr>' +
+        '<th>Day</th><th>Date</th><th>Time</th><th>Matchup</th><th>Host League</th><th>Field</th><th>Umpire</th>' +
+      '</tr></thead><tbody>' + body + '</tbody></table></div>';
+  }
+
+  D27loadSchedules().then(function (data) {
+    (data.tournaments || []).forEach(function (t) {
+      var hide = null;
+      try { hide = window.D27bracket.championOutcome(t, window.D27bracket.classify(t)).hide; } catch (e) {}
+      (t.games || []).forEach(function (g) {
+        if (hide && hide.has(g.g)) return;          // moot "if necessary" reset game
+        if (!g.date || isBye(g)) return;          // need a date; skip byes
+        var host = hostLeague(g);
+        if (!host) return;                          // can't determine host → skip
+        ALL_GAMES.push({ t: t, g: g, host: host, iso: g.date, time: g.time || '' });
+      });
+    });
+    buildChips();
+    render();
+  }).catch(function () {
+    document.getElementById('hmOut').innerHTML = '<div class="hm-empty">Could not load the schedule. Please refresh.</div>';
+  });
+})();
+</script>
+
+</body>
+</html>

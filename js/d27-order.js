@@ -14,11 +14,13 @@
     'SB-Major_Champ', 'BB-Bob_Jones', 'BB-9',
     // Bennett 9/10 + John Klein 11/12: pool play, then Red/Blue single-elim brackets
     'BB-Bennett', 'BB-Bennett-Red', 'BB-Bennett-Blue',
-    'BB-Klein', 'BB-Klein-Red', 'BB-Klein-Blue'
+    'BB-Klein', 'BB-Klein-Red', 'BB-Klein-Blue',
+    // Section/State (Section 8 + PA State) — hosted by D27 leagues, kept separate from District
+    'S8-BB-12', 'S8-BB-JR', 'S8-SB-12', 'PA-BB-10'
   ];
   var IDX = {}; ORDER.forEach(function (k, i) { IDX[k] = i; });
 
-  var CAT_ORDER = ['LL International — Baseball', 'LL International — Softball', 'D27 Special Games'];
+  var CAT_ORDER = ['LL International — Baseball', 'LL International — Softball', 'D27 Special Games', 'Sectional', 'State'];
   var CATIDX = {}; CAT_ORDER.forEach(function (c, i) { CATIDX[c] = i; });
 
   function keyOf(t) { return (typeof t === 'string') ? t : (t && (t.key || t.tourneyKey || t.tkey)) || ''; }

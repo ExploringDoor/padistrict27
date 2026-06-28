@@ -6,7 +6,7 @@
    "key": "BB-10",
    "special": false,
    "sport": "Baseball",
-   "name": "8-10 Int'l Baseball",
+   "name": "BB-10 (8-9-10) Int'l Baseball",
    "games": [
     {
      "g": 1,
@@ -288,7 +288,7 @@
    "key": "BB-11",
    "special": false,
    "sport": "Baseball",
-   "name": "9-11 Int'l Baseball",
+   "name": "BB-11 (9-10-11) Int'l Baseball",
    "games": [
     {
      "g": 1,
@@ -542,7 +542,7 @@
    "key": "BB-12",
    "special": false,
    "sport": "Baseball",
-   "name": "Little League Int'l Baseball",
+   "name": "BB-12 (10-11-12) Int'l Baseball",
    "games": [
     {
      "g": 1,
@@ -824,7 +824,7 @@
    "key": "BB-INT",
    "special": false,
    "sport": "Baseball",
-   "name": "Intermediate (50/70) Int'l Baseball",
+   "name": "BB-INT (50-70) Int'l Baseball",
    "games": [
     {
      "g": 1,
@@ -882,7 +882,7 @@
    "key": "BB-JR",
    "special": false,
    "sport": "Baseball",
-   "name": "Junior League Int'l Baseball",
+   "name": "BB-JR Int'l Baseball",
    "games": [
     {
      "g": 1,
@@ -968,7 +968,7 @@
    "key": "BB-SR",
    "special": false,
    "sport": "Baseball",
-   "name": "Senior League Int'l Baseball",
+   "name": "BB-SR Int'l Baseball",
    "games": [
     {
      "g": 1,
@@ -1026,7 +1026,7 @@
    "key": "SB-10",
    "special": false,
    "sport": "Softball",
-   "name": "8-10 Int'l Softball",
+   "name": "SB-10 (8-9-10) Int'l Softball",
    "games": [
     {
      "g": 1,
@@ -1224,7 +1224,7 @@
    "key": "SB-11",
    "special": false,
    "sport": "Softball",
-   "name": "9-11 Int'l Softball",
+   "name": "SB-11 (9-10-11) Int'l Softball",
    "games": [
     {
      "g": 1,
@@ -1366,7 +1366,7 @@
    "key": "SB-12",
    "special": false,
    "sport": "Softball",
-   "name": "Little League Int'l Softball",
+   "name": "SB-12 (10-11-12) Int'l Softball",
    "games": [
     {
      "g": 1,
@@ -1536,7 +1536,7 @@
    "key": "SB-JR",
    "special": false,
    "sport": "Softball",
-   "name": "Junior League Int'l Softball",
+   "name": "SB-JR Int'l Softball",
    "games": [
     {
      "g": 1,
@@ -2100,7 +2100,7 @@
    "key": "BB-Bob_Jones",
    "special": true,
    "sport": "Baseball",
-   "name": "Bob Jones Major League Baseball Championship",
+   "name": "Bob Jones Major League Championship (Baseball)",
    "games": [
     {
      "g": 1,
@@ -2198,7 +2198,7 @@
    "key": "SB-Major_Champ",
    "special": true,
    "sport": "Softball",
-   "name": "Softball Major League Championship",
+   "name": "Major League Championship (Softball)",
    "games": [
     {
      "g": 1,
@@ -2287,7 +2287,7 @@
   },
   {
    "key": "BB-Bennett",
-   "name": "Bennett 9/10 Invitational",
+   "name": "Bennett 9-10 Baseball Invitational",
    "category": "D27 Special Games",
    "sport": "Baseball",
    "special": true,
@@ -2579,7 +2579,7 @@
   },
   {
    "key": "BB-Klein",
-   "name": "John Klein 11/12 Invitational",
+   "name": "John Klein 11-12 Baseball Invitational",
    "category": "D27 Special Games",
    "sport": "Baseball",
    "special": true,
@@ -3006,6 +3006,183 @@
      "n": 12,
      "name": "Upper Prov (Sweeney)",
      "park": "UP-MacFarlan Park"
+    }
+   ]
+  },
+  {
+   "key": "S8-BB-12",
+   "name": "Section 8 · Little League Baseball (BB-12)",
+   "sport": "Baseball",
+   "category": "Sectional",
+   "games": [
+    {
+     "g": 1,
+     "date": "2026-07-18",
+     "time": "19:00",
+     "away": "PA District 27",
+     "home": "PA District 30",
+     "field": "LP-Palmer Park",
+     "umpire": "D27 District Umpires"
+    },
+    {
+     "g": 2,
+     "date": "2026-07-18",
+     "time": "17:00",
+     "away": "PA District 22",
+     "home": "PA District 19",
+     "field": "LP-Palmer Park",
+     "umpire": "D27 District Umpires"
+    },
+    {
+     "g": 3,
+     "date": "2026-07-19",
+     "time": "19:00",
+     "away": "WG-1",
+     "home": "WG-2",
+     "field": "LP-Palmer Park",
+     "umpire": "D27 District Umpires"
+    },
+    {
+     "g": 4,
+     "date": "2026-07-19",
+     "time": "17:00",
+     "away": "LG-1",
+     "home": "LG-2",
+     "field": "LP-Palmer Park",
+     "umpire": "D27 District Umpires"
+    },
+    {
+     "g": 5,
+     "date": "2026-07-20",
+     "time": "19:00",
+     "away": "WG-4",
+     "home": "LG-3",
+     "field": "LP-Palmer Park",
+     "umpire": "D27 District Umpires"
+    },
+    {
+     "g": 6,
+     "date": "2026-07-21",
+     "time": "19:00",
+     "away": "WG-3",
+     "home": "WG-5",
+     "field": "LP-Palmer Park",
+     "umpire": "D27 District Umpires"
+    },
+    {
+     "g": 7,
+     "date": "2026-07-22",
+     "time": "19:00",
+     "away": "WG-6",
+     "home": "If Necessary",
+     "field": "LP-Palmer Park",
+     "umpire": "D27 District Umpires"
+    }
+   ]
+  },
+  {
+   "key": "S8-BB-JR",
+   "name": "Section 8 · Junior League Baseball (BB-JR)",
+   "sport": "Baseball",
+   "category": "Sectional",
+   "games": [
+    {
+     "g": 1,
+     "date": "2026-07-07",
+     "time": "17:30",
+     "away": "PA District 22",
+     "home": "PA District 27",
+     "field": "GV-King Road",
+     "umpire": "D27 District Umpires"
+    },
+    {
+     "g": 2,
+     "date": "2026-07-08",
+     "time": "17:30",
+     "away": "WG-1",
+     "home": "LG-1",
+     "field": "GV-King Road",
+     "umpire": "D27 District Umpires"
+    },
+    {
+     "g": 3,
+     "date": "2026-07-09",
+     "time": "17:30",
+     "away": "WG-2",
+     "home": "If Necessary",
+     "field": "GV-King Road",
+     "umpire": "D27 District Umpires"
+    }
+   ]
+  },
+  {
+   "key": "S8-SB-12",
+   "name": "Section 8 · Little League Softball (SB-12)",
+   "sport": "Softball",
+   "category": "Sectional",
+   "games": [
+    {
+     "g": 1,
+     "date": "2026-06-30",
+     "time": "18:00",
+     "away": "PA District 27",
+     "home": "PA District 30",
+     "field": "LP-Palmer Park - Field 6",
+     "umpire": "D27 District Umpires"
+    },
+    {
+     "g": 2,
+     "date": "2026-06-30",
+     "time": "18:00",
+     "away": "PA District 22",
+     "home": "PA District 19",
+     "field": "LP-Palmer Park - Field 5",
+     "umpire": "D27 District Umpires"
+    },
+    {
+     "g": 3,
+     "date": "2026-07-01",
+     "time": "18:00",
+     "away": "WG-1",
+     "home": "WG-2",
+     "field": "LP-Palmer Park - Field 6",
+     "umpire": "D27 District Umpires"
+    },
+    {
+     "g": 4,
+     "date": "2026-07-01",
+     "time": "18:00",
+     "away": "LG-1",
+     "home": "LG-2",
+     "field": "LP-Palmer Park - Field 5",
+     "umpire": "D27 District Umpires"
+    },
+    {
+     "g": 5,
+     "date": "2026-07-02",
+     "time": "18:00",
+     "away": "WG-4",
+     "home": "LG-3",
+     "field": "LP-Palmer Park - Field 6",
+     "umpire": "D27 District Umpires"
+    },
+    {
+     "g": 6,
+     "date": "2026-07-03",
+     "time": "15:00",
+     "away": "WG-3",
+     "home": "WG-5",
+     "field": "LP-Palmer Park - Field 6",
+     "umpire": "D27 District Umpires"
+    },
+    {
+     "g": 7,
+     "date": "2026-07-03",
+     "time": "17:00",
+     "away": "WG-6",
+     "home": "If Necessary",
+     "field": "LP-Palmer Park - Field 6",
+     "umpire": "D27 District Umpires"
     }
    ]
   }

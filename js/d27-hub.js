@@ -30,6 +30,7 @@
 
   // Sport color-coding (per DA Jeff): Special Games = gray, else Baseball = blue / Softball = orange.
   function sportClass(t) {
+    if (t && (t.category === 'Sectional' || t.category === 'State')) return 'sport-ss';
     if (t && (t.category === 'D27 Special Games' || t.special === true)) return 'sport-sg';
     if (t && t.sport === 'Softball') return 'sport-sb';
     return 'sport-bb';

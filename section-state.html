@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002D72" />
+<title>Section/State Tournaments · PA District 27 Little League</title>
+<meta name="description" content="The Section 8 and Pennsylvania State Little League tournaments hosted by PA District 27 — live brackets, schedules, packets, and official links." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<script src="config.js"></script>
+<link rel="stylesheet" href="css/styles.css" />
+
+<style>
+  .hub-hero { background: linear-gradient(135deg, rgba(0,27,71,.95) 0%, rgba(0,45,114,.88) 100%), var(--d27-navy); color: var(--d27-white); padding: var(--space-7) 0 var(--space-6); border-bottom: 5px solid var(--sport-ss); }
+  .hub-hero .crumb { font-family: 'Oswald', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-bottom: var(--space-3); }
+  .hub-hero .crumb a { color: rgba(255,255,255,.6); text-decoration: none; }
+  .hub-hero h1 { color: var(--d27-white); font-size: clamp(2.25rem, 4vw, var(--text-4xl)); margin-bottom: var(--space-3); }
+  .hub-hero p { color: rgba(255,255,255,.85); font-size: var(--text-lg); max-width: 64ch; margin-bottom: var(--space-5); }
+  .hub-stats { display: flex; gap: var(--space-6); flex-wrap: wrap; }
+  .hub-stat .n { font-family: 'Oswald', sans-serif; font-size: var(--text-3xl); font-weight: 600; color: var(--sport-ss-g1); display: block; line-height: 1; }
+  .hub-stat .l { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,.7); }
+
+  /* green callout + external link cards + packets (Section/State specific) */
+  .ss-note { background: var(--sport-ss-bg); border: 1px solid var(--sport-ss-line); border-left: 4px solid var(--sport-ss); border-radius: 0 8px 8px 0; padding: var(--space-4); margin-bottom: var(--space-5); color: var(--d27-ink); }
+  .ss-note strong { color: var(--sport-ss); }
+  .ss-links { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-bottom: var(--space-7); }
+  .ss-link { flex: 1 1 300px; display: flex; align-items: center; gap: var(--space-3); background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--sport-ss); border-radius: 10px; padding: var(--space-4); text-decoration: none; color: var(--fg); transition: border-color .12s ease, box-shadow .15s ease, transform .12s ease; }
+  .ss-link:hover { border-color: var(--sport-ss); box-shadow: var(--shadow); transform: translateY(-2px); text-decoration: none; }
+  .ss-link.ss-soon { opacity: .6; pointer-events: none; border-left-color: var(--line); }
+  .ss-link .ico { font-size: 1.55rem; flex: none; }
+  .ss-link .tx { flex: 1; min-width: 0; }
+  .ss-link .tt { display: block; font-weight: 600; color: var(--d27-navy); line-height: 1.2; }
+  .ss-link .sub { display: block; font-size: var(--text-xs); color: var(--muted); font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: .05em; margin-top: 2px; }
+  .ss-link .arw { color: var(--sport-ss); flex: none; }
+  .ss-subhead { color: var(--d27-navy); font-size: var(--text-xl); margin: var(--space-7) 0 var(--space-3); padding-bottom: var(--space-2); border-bottom: 2px solid var(--sport-ss); }
+
+  /* hub cards (same engine as the Baseball / Softball / Special Games pages) */
+  .tcards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--space-4); }
+  .tcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; text-decoration: none; color: var(--fg); display: flex; flex-direction: column; transition: transform .12s ease, box-shadow .15s ease, border-color .15s ease; position: relative; }
+  .tcard:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: var(--d27-navy); text-decoration: none; }
+  .tcard-banner { padding: var(--space-4); background: linear-gradient(135deg, var(--d27-navy) 0%, var(--d27-navy-dark) 100%); color: var(--d27-white); position: relative; }
+  .tcard-kicker { font-family: 'Oswald', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,.72); display: block; margin-bottom: 4px; }
+  .tcard h3 { color: var(--d27-white); margin: 0; font-size: var(--text-xl); line-height: 1.1; }
+  .tcard-body { padding: var(--space-4); flex: 1; display: flex; flex-direction: column; gap: var(--space-3); }
+  .tcard-row { display: flex; justify-content: space-between; align-items: center; font-size: var(--text-sm); }
+  .tcard-row .k { color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-size: var(--text-xs); font-family: 'Oswald', sans-serif; }
+  .tcard-row .v { color: var(--fg); font-weight: 500; text-align: right; }
+  .tcard-row .v strong { color: var(--d27-navy); font-family: 'Oswald', sans-serif; font-size: var(--text-base); }
+  .tstatus { position: absolute; top: var(--space-4); right: var(--space-4); font-family: 'Oswald', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; background: rgba(255,255,255,.18); color: var(--d27-white); backdrop-filter: blur(4px); }
+  .tstatus.live { background: #FF3B30; animation: livepulse 1.8s infinite; }
+  .tstatus.upcoming { background: rgba(201,162,39,.9); color: var(--d27-ink); }
+  .tstatus.complete { background: rgba(22,163,74,.85); }
+  .tcard-actions { display: flex; gap: var(--space-2); padding: var(--space-3) var(--space-4); background: var(--d27-sub); border-top: 1px solid var(--line); }
+  .tbtn { flex: 1; text-align: center; padding: 9px 10px; border-radius: 6px; font-family: 'Oswald', sans-serif; font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; border: 1.5px solid var(--sport-ss); color: var(--sport-ss); background: var(--surface); transition: all .12s ease; }
+  .tbtn:hover { background: var(--sport-ss); color: var(--d27-white); text-decoration: none; }
+  .tbtn.primary { background: var(--sport-ss); color: var(--d27-white); }
+  .tbtn.primary:hover { filter: brightness(1.08); }
+  .tcard-empty { flex-direction: row; align-items: center; gap: var(--space-3); padding: var(--space-5); border-style: dashed; }
+  .tcard-empty:hover { transform: none; box-shadow: none; border-color: var(--line); }
+  .tcard-empty .ce-ico { font-size: 2rem; opacity: .5; }
+  .tcard-empty h3 { color: var(--fg); margin: 0 0 2px; font-size: var(--text-lg); }
+  .tcard-empty p { margin: 0; font-size: var(--text-sm); color: var(--muted); }
+  .hub-loading { padding: var(--space-6); text-align: center; color: var(--muted); font-family: 'Oswald', sans-serif; letter-spacing: .04em; }
+  .type-group { margin-bottom: var(--space-7); }
+  .type-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-4); padding-bottom: var(--space-3); border-bottom: 2px solid var(--sport-ss); }
+  .type-head h2 { margin: 0; }
+  .type-head .eyebrow { display: block; font-family: 'Oswald', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.12em; color: var(--sport-ss); margin-bottom: 2px; }
+  .type-head .count { font-family: 'Oswald', sans-serif; font-size: var(--text-sm); color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+</style>
+</head>
+<body>
+
+<div id="d27-nav"></div>
+
+<header class="hub-hero">
+  <div class="container">
+    <div class="crumb"><a href="index.html">Home</a> &nbsp;/&nbsp; Section/State</div>
+    <h1>2026 Section&nbsp;8 &amp; PA&nbsp;State Tournaments</h1>
+    <p>The Section 8 and Pennsylvania State Little League tournaments that PA District 27 is hosting this summer — with live brackets and schedules. These run above the District level, kept separate here from the District tournaments.</p>
+    <div class="hub-stats" id="hubStats"></div>
+  </div>
+</header>
+
+<main class="container section-tight">
+
+  <div class="ss-note">
+    <strong>Hosting D27.</strong> Each tournament below is hosted by one of our member leagues. The brackets are live — they advance automatically as scores are entered.
+  </div>
+
+  <div class="ss-links">
+    <a class="ss-link" href="https://www.pastatell.org" target="_blank" rel="noopener">
+      <span class="ico">🏛️</span>
+      <span class="tx"><span class="tt">PA State Little League</span><span class="sub">pastatell.org</span></span>
+      <span class="arw">↗</span>
+    </a>
+    <a class="ss-link" href="https://www.allprosoftware.net/PASection8Tournament2026/" target="_blank" rel="noopener">
+      <span class="ico">📊</span>
+      <span class="tx"><span class="tt">Section 8 Tournament Site</span><span class="sub">allprosoftware.net</span></span>
+      <span class="arw">↗</span>
+    </a>
+  </div>
+
+  <!-- live tournament cards (Section 8 = Sectional, PA State = State) -->
+  <div id="hub"><div class="hub-loading">Loading tournaments…</div></div>
+
+  <!-- downloadable packets — held pending the OK to publish (packets contain personal contacts) -->
+  <h2 class="ss-subhead">Tournament Packets</h2>
+  <div class="ss-links" id="ssPackets">
+    <span class="ss-link ss-soon">
+      <span class="ico">📋</span>
+      <span class="tx"><span class="tt">Section 8 · BB-12 — LL Baseball</span><span class="sub">Packet · coming soon</span></span>
+    </span>
+    <span class="ss-link ss-soon">
+      <span class="ico">📋</span>
+      <span class="tx"><span class="tt">Section 8 · BB-JR — Junior Baseball</span><span class="sub">Packet · coming soon</span></span>
+    </span>
+    <span class="ss-link ss-soon">
+      <span class="ico">📋</span>
+      <span class="tx"><span class="tt">Section 8 · SB-12 — LL Softball</span><span class="sub">Packet · coming soon</span></span>
+    </span>
+  </div>
+
+  <p style="color: var(--muted); font-size: var(--text-xs); margin-top: var(--space-5);">Section and State tournament information is provided by Little League International and the PA State Little League. Brackets update as teams advance.</p>
+
+</main>
+
+<div id="d27-footer"></div>
+
+<script src="js/d27-data.js"></script>
+<script src="js/d27-order.js"></script>
+<script src="js/d27-bracket.js"></script>
+<script src="js/d27-hub.js"></script>
+<script src="js/d27-chrome.js"></script>
+<script>
+  D27renderHub({
+    hubId: 'hub',
+    statsId: 'hubStats',
+    sections: [
+      { eyebrow: 'Section 8', title: 'Section 8 Tournaments', accent: 'section',
+        match: function (t) { return t.category === 'Sectional'; },
+        soon: 'Section 8 brackets will appear here once posted.' },
+      { eyebrow: 'Pennsylvania', title: 'PA State Tournament', accent: 'section',
+        match: function (t) { return t.category === 'State'; },
+        soon: 'The PA State 8-10 Baseball bracket (BB-10) will be posted once teams advance out of Section 8.' },
+    ],
+  });
+</script>
+
+</body>
+</html>

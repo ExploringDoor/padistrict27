@@ -242,7 +242,7 @@
     var sc = played ? '<span class="sv-score'+(win?' win':' lose')+'">'+score+'</span>' : '';
     return '<div class="sv-row">'+logo+'<span class="sv-team'+(disp.tbd?' tbd':'')+(played&&win?' win':'')+(played&&!win?' lose':'')+'">'+esc(disp.name)+'</span>'+sc+'</div>';
   }
-  function sportCls(g){ var t=g._t||{}; if(t.category==='D27 Special Games'||t.special===true) return 'sp-sg'; return g.sport==='Softball'?'sp-sb':'sp-bb'; }
+  function sportCls(g){ var t=g._t||{}; if(t.category==='Sectional'||t.category==='State') return 'sp-ss'; if(t.category==='D27 Special Games'||t.special===true) return 'sp-sg'; return g.sport==='Softball'?'sp-sb':'sp-bb'; }
   function card(g){
     var ppd=isPpd(g);
     var d=dt(g.date), played=!ppd&&D27scores.played(g), ff=!ppd&&isForfeit(g);
