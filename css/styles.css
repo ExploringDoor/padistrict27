@@ -1404,3 +1404,5 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--space-6) 0; }
 .sv-card.sp-ss { background: #fff; border: 4px solid var(--trim-ss); }
 .sv-card.sp-ss .sv-team.win, .sv-card.sp-ss .sv-score.win, .sv-card.sp-ss .sv-summary, .sv-card.sp-ss .sv-card-foot .sv-meta, .sv-card.sp-ss .sv-cta { color: var(--trim-ss-tx); }
 .sv-card.sp-ss .sv-card-foot { border-top-color: var(--trim-ss-ln); }
+/* championship game badge — a gold trophy strip at the top of the card */
+.sv-card .sv-champ { display: flex; align-items: center; justify-content: center; gap: 5px; background: linear-gradient(135deg, #F4D572 0%, #C9A227 100%); color: var(--d27-navy); font-family: var(--font-display, 'Oswald'), sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 4px 8px; border-radius: 6px; margin-bottom: 9px; }

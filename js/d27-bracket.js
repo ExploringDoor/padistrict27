@@ -106,5 +106,25 @@
     return { name: (ref.kind === 'WG' ? 'Winner G' : 'Loser G') + ref.g, tbd: true };
   }
 
-  global.D27bracket = { parseRef, isPlayed, classify, championOutcome, playedCount, sideDisplay, resolveSide };
+  // The "championship game" = the grand final (lowest-numbered final game). Pool-play
+  // tournaments (no bracket yet) have none. Used to badge the championship game with a trophy.
+  var _champCache = {};
+  function championshipGameNum(t) {
+    var k = t && (t.key || t.tkey);
+    if (k && k in _champCache) return _champCache[k];
+    var num = null;
+    try {
+      if (t && t.format !== 'pool') {
+        var cls = classify(t), fin = [];
+        for (var gn in cls) if (cls[gn] === 'f') fin.push(+gn);
+        fin.sort(function (a, b) { return a - b; });
+        num = fin.length ? fin[0] : null;
+      }
+    } catch (e) {}
+    if (k) _champCache[k] = num;
+    return num;
+  }
+  function isChampionshipGame(t, gameNum) { var n = championshipGameNum(t); return n != null && n === Number(gameNum); }
+
+  global.D27bracket = { parseRef, isPlayed, classify, championOutcome, playedCount, sideDisplay, resolveSide, isChampionshipGame, championshipGameNum };
 })(window);
