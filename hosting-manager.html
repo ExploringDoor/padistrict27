@@ -71,6 +71,7 @@
 
 <main class="container section-tight">
   <div class="hm-pickbar" id="hmChips"><span class="lbl">Leagues:</span></div>
+  <div class="hm-pickbar" id="hmScope"><span class="lbl">Show:</span></div>
   <p class="hm-summary" id="hmSummary"></p>
   <div id="hmOut"><div class="hm-loading">Loading hosted games…</div></div>
   <p class="hm-legend">Host league is determined by the field. Umpire responsibility shows once the District sets it. “Team” names resolve automatically as brackets advance (e.g. “Winner G3” becomes the real team).</p>
@@ -136,6 +137,23 @@
   // selection state — all leagues on by default
   var selected = {}; LEAGUES.forEach(function (L) { selected[L.name] = true; });
   var ALL_GAMES = [];   // {t, g, host, iso, time}
+  var scope = 'upcoming';   // 'upcoming' (today onward) by default, or 'all'
+  function todayISO() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+
+  function buildScope() {
+    var bar = document.getElementById('hmScope');
+    [['upcoming','Upcoming'], ['all','All games']].forEach(function (opt) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'hm-chip' + (scope === opt[0] ? ' on' : ''); b.textContent = opt[1];
+      b.addEventListener('click', function () {
+        scope = opt[0];
+        bar.querySelectorAll('.hm-chip').forEach(function (x) { x.classList.remove('on'); });
+        b.classList.add('on');
+        render();
+      });
+      bar.appendChild(b);
+    });
+  }
 
   function buildChips() {
     var bar = document.getElementById('hmChips');
@@ -157,21 +175,22 @@
   }
 
   function render() {
-    var rows = ALL_GAMES.filter(function (r) { return selected[r.host]; });
+    var today = todayISO();
+    var rows = ALL_GAMES.filter(function (r) { return selected[r.host] && (scope === 'all' || r.iso >= today); });
     rows.sort(function (a, b) {
-      if (a.iso !== b.iso) return a.iso < b.iso ? -1 : 1;
+      if (a.iso !== b.iso) return a.iso < b.iso ? -1 : 1;   // soonest first
       var c = window.D27order ? window.D27order.cmp(a.t, b.t) : 0; if (c) return c;
       return String(a.time).localeCompare(String(b.time));
     });
 
     var nLeagues = LEAGUES.filter(function (L) { return selected[L.name]; }).length;
     document.getElementById('hmSummary').innerHTML =
-      '<strong>' + rows.length + '</strong> game' + (rows.length===1?'':'s') +
+      '<strong>' + rows.length + '</strong> ' + (scope === 'upcoming' ? 'upcoming ' : '') + 'game' + (rows.length===1?'':'s') +
       ' hosted by <strong>' + nLeagues + '</strong> of 11 league' + (nLeagues===1?'':'s') + '.';
 
     var out = document.getElementById('hmOut');
     if (!nLeagues) { out.innerHTML = '<div class="hm-empty">Select at least one league above to see its hosted games.</div>'; return; }
-    if (!rows.length) { out.innerHTML = '<div class="hm-empty">No hosted games found for the selected league' + (nLeagues===1?'':'s') + ' yet.</div>'; return; }
+    if (!rows.length) { out.innerHTML = '<div class="hm-empty">No ' + (scope==='upcoming'?'upcoming ':'') + 'games for the selected league' + (nLeagues===1?'':'s') + (scope==='upcoming'?' — switch to <b>All games</b> to see past ones.':'.') + '</div>'; return; }
 
     var body = rows.map(function (r) {
       var t = r.t, g = r.g;
@@ -205,6 +224,7 @@
       });
     });
     buildChips();
+    buildScope();
     render();
   }).catch(function () {
     document.getElementById('hmOut').innerHTML = '<div class="hm-empty">Could not load the schedule. Please refresh.</div>';
