@@ -144,6 +144,12 @@
   .ed-tab-muted.active { opacity: 1; color: var(--d27-navy); }
   /* rain-out / postpone */
   .ed-table select.st { width: 124px; padding: 6px; border: 1px solid var(--line); border-radius: 5px; font: inherit; font-size: 12px; background: var(--surface); box-sizing: border-box; }
+  .ed-table select.ump { width: 188px; padding: 6px; border: 1px solid var(--line); border-radius: 5px; font: inherit; font-size: 12px; background: var(--surface); box-sizing: border-box; }
+  .ed-umpbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0 0 10px; padding: 9px 12px; background: var(--d27-sub); border: 1px solid var(--line); border-radius: 8px; font-size: 13px; }
+  .ed-umpbar label { display: flex; align-items: center; gap: 7px; font-weight: 600; color: var(--d27-navy); }
+  .ed-umpbar select { padding: 6px 8px; border: 1px solid var(--line); border-radius: 5px; font: inherit; font-size: 13px; background: var(--surface); }
+  .ed-umpbar .ed-umpall-btn { padding: 7px 13px; border: 1.5px solid var(--d27-navy); background: var(--surface); color: var(--d27-navy); border-radius: 6px; font-family: var(--font-display); font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+  .ed-umpbar .ed-umpall-btn:hover { background: var(--d27-navy); color: #fff; }
   .ed-table input.mk { width: 124px; margin-top: 4px; font-size: 11px; padding: 5px 6px; }
   .ed-table tr.ppd td { background: #FFF7ED; }
   .ed-table tr.ppd select.st { color: #9A3412; font-weight: 600; border-color: #FDBA74; }
@@ -362,9 +368,22 @@
 
       <div id="bracketCheck" class="bk-check"></div>
 
+      <div class="ed-umpbar">
+        <label>👨‍⚖️ Set umpire for all games:
+          <select id="umpAll">
+            <option value="">— choose —</option>
+            <option>Local Umpires</option>
+            <option>D27 - Assigned by Gary Hall</option>
+            <option>D27 - Assigned by Scott Bennett</option>
+          </select>
+        </label>
+        <button type="button" class="ed-umpall-btn" onclick="window.__setAllUmps()">Apply to all rows</button>
+        <span class="ed-hint" style="margin:0">or set them one row at a time — then 💾 Save Changes to publish.</span>
+      </div>
+
       <div class="ed-table-wrap">
         <table class="ed-table">
-          <thead><tr><th>G#</th><th>Date</th><th>Time</th><th>Away team</th><th></th><th>Home team</th><th></th><th>Field</th><th>Status</th><th>Forfeit</th><th></th></tr></thead>
+          <thead><tr><th>G#</th><th>Date</th><th>Time</th><th>Away team</th><th></th><th>Home team</th><th></th><th>Field</th><th>Umpire</th><th>Status</th><th>Forfeit</th><th></th></tr></thead>
           <tbody id="rows"></tbody>
         </table>
       </div>
@@ -1035,6 +1054,15 @@ function looksForfeit(g) {
   const bye = /^\s*bye\s*$/i.test(String(g.away)) || /^\s*bye\s*$/i.test(String(g.home));
   return !bye && !dateOk;
 }
+// Umpire responsibility dropdown — Jeff's standard options, plus any value already
+// on the game (e.g. "D27 District Umpires" imported from a Section 8 sheet) so nothing is lost.
+const UMP_OPTS = ['', 'Local Umpires', 'D27 - Assigned by Gary Hall', 'D27 - Assigned by Scott Bennett'];
+function umpOptionsHTML(cur) {
+  cur = cur == null ? '' : String(cur);
+  const opts = UMP_OPTS.slice();
+  if (cur && opts.indexOf(cur) === -1) opts.push(cur);
+  return opts.map(o => `<option value="${esc(o)}"${o === cur ? ' selected' : ''}>${o === '' ? '— (TBD)' : esc(o)}</option>`).join('');
+}
 function rowEl(g) {
   const tr = document.createElement('tr');
   if (g.status === 'ppd') tr.classList.add('ppd');
@@ -1052,6 +1080,7 @@ function rowEl(g) {
     <td><input type="text" value="${esc(g.home)}" data-f="home" data-ref="${esc(g.home)}" placeholder="Team or LG-3"></td>
     <td><input class="sc" type="number" min="0" value="${hsV}" data-f="hs"></td>
     <td><input type="text" value="${esc(g.field)}" data-f="field" placeholder="Field"></td>
+    <td><select class="ump" data-f="umpire" title="Umpire responsibility">${umpOptionsHTML(g.umpire)}</select></td>
     <td>
       <select class="st" data-f="status" title="Game status">
         <option value=""${stV===''?' selected':''}>Scheduled</option>
@@ -1118,6 +1147,17 @@ window.__addRow = () => {
   runBracketCheck();
 };
 
+// set every row's umpire dropdown at once (Jeff usually assigns a whole tournament the same way)
+window.__setAllUmps = () => {
+  const v = ($('umpAll') || {}).value || '';
+  $('rows').querySelectorAll('select.ump').forEach(sel => {
+    if (v && !Array.from(sel.options).some(o => o.value === v)) {
+      const opt = document.createElement('option'); opt.value = v; opt.textContent = v; sel.appendChild(opt);
+    }
+    sel.value = v;
+  });
+};
+
 function collectGames() {
   const games = [];
   $('rows').querySelectorAll('tr').forEach(tr => {
@@ -1132,6 +1172,7 @@ function collectGames() {
       away: ref('away') || null, as: num(get('as')),   // ref() keeps WG-3 etc.
       home: ref('home') || null, hs: num(get('hs')),
       field: get('field') || null,
+      umpire: get('umpire') || null,
       forfeit: !!(tr.querySelector('[data-f="forfeit"]') || {}).checked,
       ...(function(){ const r=(tr.querySelector('[data-f="status"]')||{}).value||''; const p=r.indexOf('ppd:')===0; return p ? { status:'ppd', ppdReason:r.split(':')[1], makeupDate:(get('makeupDate')||null) } : {}; })(),
     });
@@ -1693,15 +1734,24 @@ function impHandleFile(file){
   }
   function crownedChampions(){
     const B = window.D27bracket; if (!B) return [];
-    const out = [];
+    const byKey = {};
     Object.keys(TOURNEYS).forEach(function(k){
       const t = TOURNEYS[k];
+      if (t.format === 'pool') return;            // pool play has no bracket champion yet (e.g. Bennett / Klein)
       try {
         const champ = B.championOutcome(t, B.classify(t)).champion;
-        if (champ) out.push({ key: k, team: champ, tournament: t.name || k, sport: t.sport || (/SB|Softball/i.test(t.name || '') ? 'Softball' : 'Baseball'), year: seasonOf(t) });
+        if (champ) byKey[k] = { key: k, team: champ, tournament: t.name || k, sport: t.sport || (/SB|Softball/i.test(t.name || '') ? 'Softball' : 'Baseball'), year: seasonOf(t) };
       } catch (e) {}
     });
-    return out;
+    // An admin-uploaded champion record is itself a declared winner — include it even if its
+    // in-site bracket hasn't resolved (e.g. BB-SR), so the count + list match what's uploaded.
+    (all || []).forEach(function(p){
+      if (!p.tkey || byKey[p.tkey] || !TOURNEYS[p.tkey]) return;
+      const t = TOURNEYS[p.tkey];
+      byKey[p.tkey] = { key: p.tkey, team: p.team, tournament: t.name || p.title || p.tkey,
+        sport: p.sport || t.sport || 'Baseball', year: seasonOf(t) };
+    });
+    return Object.keys(byKey).map(function(k){ return byKey[k]; });
   }
   function existingKeys(){
     const keys = {};

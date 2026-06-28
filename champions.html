@@ -40,12 +40,15 @@
   .champ-card.cc-bb { border: 4px solid var(--trim-bb); }
   .champ-card.cc-sb { border: 4px solid var(--trim-sb); }
   .champ-card.cc-sg { border: 4px solid var(--trim-sg); }
+  .champ-card.cc-ss { border: 4px solid var(--trim-ss); }
   .champ-card.cc-bb .team { color: var(--trim-bb-tx); }
   .champ-card.cc-sb .team { color: var(--trim-sb-tx); }
   .champ-card.cc-sg .team { color: var(--trim-sg-tx); }
+  .champ-card.cc-ss .team { color: var(--trim-ss-tx); }
   .champ-card .sport.bb { background: var(--sport-bb-bg); color: var(--sport-bb); }
   .champ-card .sport.sb { background: var(--sport-sb-bg); color: var(--sport-sb); }
   .champ-card .sport.sp { background: var(--sport-sg-g1); color: #fff; }
+  .champ-card .sport.ss { background: var(--sport-ss-bg); color: var(--sport-ss); }
 
   .champ-empty { padding: var(--space-5); border: 1px dashed var(--line); border-radius: var(--radius); color: var(--muted); text-align: center; }
   .champ-note-src { color: var(--muted); font-size: var(--text-xs); margin-top: var(--space-5); }
@@ -107,6 +110,14 @@
     if (tk && /bob_?jones|major_?champ|invitational|^bb-?9$/i.test(String(tk))) return true;
     return SPECIAL_RE.test(String((c && (c.tournament || c.title)) || ''));
   }
+  // Section 8 / PA State champions → green badge reads "Section/State"
+  var SS_RE = /section\s*8|\bsectional\b|pa\s*state|state\s*tournament/i;
+  function isSectionState(c){
+    if (c && (c.category === 'Sectional' || c.category === 'State')) return true;
+    var tk = c && c.tkey;
+    if (tk && /^(S8|PA)-/i.test(String(tk))) return true;
+    return SS_RE.test(String((c && (c.tournament || c.title)) || ''));
+  }
   var CURRENT_SEASON = (window.LEAGUE_CONFIG && LEAGUE_CONFIG.season && LEAGUE_CONFIG.season.year) || 2026;
 
   var FS_BASE = 'https://firestore.googleapis.com/v1/projects/d27-schedules/databases/(default)/documents';
@@ -141,8 +152,10 @@
         '<div class="team">' + esc(c.team) + '</div>' +
         (clickable ? '<div class="note cg-view">📷 Click to view photo</div>' : (c.note ? '<div class="note">' + esc(c.note) + '</div>' : '')) +
       '</div>';
-    var scls = isSpecial(c) ? 'cc-sg' : (c.sport === 'Softball' ? 'cc-sb' : 'cc-bb');
-    var sport = isSpecial(c)
+    var scls = isSectionState(c) ? 'cc-ss' : (isSpecial(c) ? 'cc-sg' : (c.sport === 'Softball' ? 'cc-sb' : 'cc-bb'));
+    var sport = isSectionState(c)
+      ? '<span class="sport ss">Section/State</span>'
+      : isSpecial(c)
       ? '<span class="sport sp">Special Games</span>'
       : '<span class="sport ' + (c.sport === 'Softball' ? 'sb' : 'bb') + '">' + esc(c.sport) + '</span>';
     if (clickable) {
@@ -171,18 +184,33 @@
     var attached = {};
     try {
       var data = await window.D27loadSchedules();
-      var live = [];
+      var byKey = {};
+      // 1) computed bracket champions — skip pool-play (no bracket champion until the bracket is played)
       (data.tournaments || []).forEach(function(t){
+        if (t.format === 'pool') return;
         try {
           var champ = window.D27bracket.championOutcome(t, window.D27bracket.classify(t)).champion;
-          if (champ) live.push({ sport: t.sport, tournament: t.name, team: champ, tkey: t.key, special: (t.special === true || t.category === 'D27 Special Games') });
+          if (champ) byKey[t.key] = { sport: t.sport, tournament: t.name, team: champ, tkey: t.key,
+            special: (t.special === true || t.category === 'D27 Special Games'), category: t.category };
         } catch (e) {}
       });
-      // attach this season's photo to its champion so the card opens the team photo
-      live.forEach(function(c){
-        var p = photos.find(function(x){ return Number(x.year) === CURRENT_SEASON && norm(x.team) === norm(c.team); });
+      // 2) admin-uploaded champion records this season are explicit declarations — merge by tkey
+      //    (so a winner Jeff uploaded shows even before its in-site bracket resolves, e.g. BB-SR).
+      photos.forEach(function(p){
+        if (Number(p.year) !== CURRENT_SEASON || !p.tkey) return;
+        var ex = byKey[p.tkey] || {};
+        byKey[p.tkey] = { sport: p.sport || ex.sport || sportOf(p), tournament: ex.tournament || p.title,
+          team: p.team || ex.team, tkey: p.tkey, special: ex.special, category: ex.category,
+          file: p.file, champId: p.champId, caption: p.caption };
+        attached[pid(p)] = 1;
+      });
+      // 3) computed champions still without a photo — match by tkey (exact), else team (legacy static photos)
+      Object.keys(byKey).forEach(function(k){
+        var c = byKey[k]; if (c.file || c.champId) return;
+        var p = photos.find(function(x){ return Number(x.year) === CURRENT_SEASON && (x.tkey ? x.tkey === c.tkey : norm(x.team) === norm(c.team)); });
         if (p) { c.file = p.file; c.champId = p.champId; c.caption = p.caption; attached[pid(p)] = 1; }
       });
+      var live = Object.keys(byKey).map(function(k){ return byKey[k]; });
       if (window.D27order) live.sort(window.D27order.cmp);
       out.innerHTML = live.length
         ? yearSection(CURRENT_SEASON, live, true)
@@ -199,6 +227,7 @@
       var byYear = {}, seen = {};
       photos.forEach(function(p){
         if (attached[pid(p)]) return;                        // already shown in the current-season section
+        if (Number(p.year) === CURRENT_SEASON) return;       // current season lives up top, never in the "through the years" archive
         var k = p.year + '|' + p.team + '|' + p.title;       // collapse alternate shots of one win
         if (seen[k]) return; seen[k] = 1;
         (byYear[p.year] = byYear[p.year] || []).push(p);
