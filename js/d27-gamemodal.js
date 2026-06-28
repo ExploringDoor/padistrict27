@@ -256,7 +256,7 @@
       <button class="gm-close" aria-label="Close">✕</button>
       <div class="gm-head"><div class="gm-crumb"></div><span class="gm-badge"></span></div>
       <div class="gm-body"></div>
-      <div class="gm-foot"><a class="gm-bracket-btn" href="brackets.html">🏆 View full bracket →</a></div></div>`;
+      <div class="gm-foot"><a class="gm-photo-btn" href="champions.html" style="display:none">🏆 See the winner&rsquo;s photo →</a><a class="gm-bracket-btn" href="brackets.html">🏆 View full bracket →</a></div></div>`;
     document.body.appendChild(overlay);
     overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
     overlay.querySelector('.gm-close').addEventListener('click', close);
@@ -277,6 +277,14 @@
       + (ppd ? '<div class="gm-ppd-note">' + esc(ppdLabel(gg)) + (function(){ var m=cleanVal(gg.makeupDate); if(!m) return ''; var d=new Date(m+'T12:00:00'); return isNaN(d)?'':' — makeup '+d.toLocaleDateString('en-US',{month:'long',day:'numeric'}); })() + '</div>' : '');
     const bb = overlay.querySelector('.gm-bracket-btn');
     bb.href = 'brackets.html?t=' + encodeURIComponent(tn.key);
+    // the championship-decider game (whose winner is the tournament champion) gets a "see the winner's photo" link
+    const pb = overlay.querySelector('.gm-photo-btn');
+    if (pb) {
+      let champ = null;
+      try { champ = window.D27bracket && window.D27bracket.championOutcome(tn, window.D27bracket.classify(tn)).champion; } catch (e) {}
+      const thisWinner = (played && gg.as !== gg.hs) ? (resolveSide(tn, gg.as > gg.hs ? gg.away : gg.home, new Set()) || sideDisplay(tn, gg.as > gg.hs ? gg.away : gg.home).name) : null;
+      pb.style.display = (cls[gg.g] === 'f' && champ && thisWinner && thisWinner === champ) ? '' : 'none';
+    }
     overlay.querySelector('.gm-foot').style.display = location.pathname.indexOf('brackets') >= 0 ? 'none' : '';
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
