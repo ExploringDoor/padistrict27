@@ -283,16 +283,54 @@
       let champ = null;
       try { champ = window.D27bracket && window.D27bracket.championOutcome(tn, window.D27bracket.classify(tn)).champion; } catch (e) {}
       const thisWinner = (played && gg.as !== gg.hs) ? (resolveSide(tn, gg.as > gg.hs ? gg.away : gg.home, new Set()) || sideDisplay(tn, gg.as > gg.hs ? gg.away : gg.home).name) : null;
-      pb.style.display = (cls[gg.g] === 'f' && champ && thisWinner && thisWinner === champ) ? '' : 'none';
+      const isDecider = cls[gg.g] === 'f' && champ && thisWinner && thisWinner === champ;
+      const photo = isDecider && champIdx && champIdx[tn.key];   // only when the winner's photo actually exists
+      pb.style.display = photo ? '' : 'none';
+      pb.onclick = photo ? function (e) { e.preventDefault(); openPhoto(photo.champId, photo.caption || (champ + ' — ' + (tn.name || tn.key))); } : null;
     }
     overlay.querySelector('.gm-foot').style.display = location.pathname.indexOf('brackets') >= 0 ? 'none' : '';
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
 
+  // ── champion photo: pop the winner's team photo right in a lightbox (no page change) ──
+  const FS_CH = 'https://firestore.googleapis.com/v1/projects/d27-schedules/databases/(default)/documents/champions';
+  const FS_KEY = 'AIzaSyBu_Qd5AUWVSUB6vHP39-zzZgTpbC7s0Fs';
+  const CURRENT_YR = (global.LEAGUE_CONFIG && global.LEAGUE_CONFIG.season && global.LEAGUE_CONFIG.season.year) || new Date().getFullYear();
+  let champIdx = null;   // tkey -> { champId, caption } for the current season's uploaded champion photos
+  function loadChampIdx() {
+    if (champIdx !== null) return; champIdx = {};
+    const mask = ['year', 'team', 'tkey', 'caption', 'title'].map(f => '&mask.fieldPaths=' + f).join('');
+    fetch(FS_CH + '?key=' + FS_KEY + '&pageSize=300' + mask).then(r => r.ok ? r.json() : {}).then(d => {
+      (d.documents || []).forEach(doc => {
+        const f = doc.fields || {}, gv = k => f[k] ? (f[k].stringValue != null ? f[k].stringValue : f[k].integerValue) : '';
+        const tkey = gv('tkey'); if (!tkey || String(gv('year')) !== String(CURRENT_YR)) return;
+        champIdx[tkey] = { champId: doc.name.split('/').pop(), caption: gv('caption') || gv('title') || gv('team') };
+      });
+    }).catch(() => {});
+  }
+  function champImgSrc(id) {
+    return fetch(FS_CH + '/' + id + '?key=' + FS_KEY + '&mask.fieldPaths=img').then(r => r.json())
+      .then(d => (d.fields && d.fields.img && d.fields.img.stringValue) || '').catch(() => '');
+  }
+  let photoLb = null;
+  function openPhoto(champId, caption) {
+    if (!photoLb) {
+      photoLb = document.createElement('div'); photoLb.className = 'gm-photo-lb';
+      photoLb.innerHTML = '<button class="gm-photo-lb-x" aria-label="Close">✕</button><figure><img alt="Champion team photo"><figcaption></figcaption></figure>';
+      document.body.appendChild(photoLb);
+      photoLb.addEventListener('click', e => { if (e.target === photoLb || e.target.closest('.gm-photo-lb-x')) photoLb.classList.remove('open'); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') photoLb.classList.remove('open'); });
+    }
+    const img = photoLb.querySelector('img'), cap = photoLb.querySelector('figcaption');
+    img.removeAttribute('src'); cap.textContent = caption || '';
+    photoLb.classList.add('open');
+    champImgSrc(champId).then(src => { if (src) img.src = src; else cap.textContent = (caption ? caption + ' — ' : '') + 'photo unavailable'; });
+  }
+
   // ── lookup by key + click delegation ──
   let TS = {};
-  function setData(list) { TS = {}; (list || []).forEach(t => { if (t && t.key) TS[t.key] = t; }); }
+  function setData(list) { TS = {}; (list || []).forEach(t => { if (t && t.key) TS[t.key] = t; }); loadChampIdx(); }
   function openByKey(key, gameNo) { const t = TS[key]; if (!t) return; const g = (t.games || []).find(x => x.g === +gameNo); if (g) open(t, g); }
 
   // auto-wire any element with [data-game] (set data-tkey + data-g) once per page
