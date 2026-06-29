@@ -100,7 +100,14 @@
     const ref = parseRef(raw);
     if (ref.kind === 'team') return { name: ref.name };
     if (ref.kind === 'bye')  return { name: 'BYE', tbd: true };
-    if (ref.kind === 'tbd')  return { name: ref.label || 'TBD', tbd: true };
+    if (ref.kind === 'tbd') {
+      // an "If Necessary" reset slot is the loser of the grand final — fill it in once that game is played
+      if (/if necessary/i.test(ref.label || '')) {
+        const gf = championshipGameNum(t);
+        if (gf != null) { const loser = resolveSide(t, { kind: 'LG', g: gf }, new Set()); if (loser) return { name: loser }; }
+      }
+      return { name: ref.label || 'TBD', tbd: true };
+    }
     const resolved = resolveSide(t, ref, new Set());
     if (resolved) return { name: resolved };
     return { name: (ref.kind === 'WG' ? 'Winner G' : 'Loser G') + ref.g, tbd: true };
@@ -124,7 +131,21 @@
     if (k) _champCache[k] = num;
     return num;
   }
-  function isChampionshipGame(t, gameNum) { var n = championshipGameNum(t); return n != null && n === Number(gameNum); }
+  // A game is a "championship game" (gets the trophy) if it's a non-moot final: the grand
+  // final always counts, and the if-necessary reset counts once the grand final is played
+  // (so it's flagged the moment a losers-bracket team forces it).
+  function isChampionshipGame(t, gameNum) {
+    if (!t || t.format === 'pool') return false;
+    try {
+      var cls = classify(t);
+      if (cls[gameNum] !== 'f') return false;
+      if (championOutcome(t, cls).hide.has(Number(gameNum))) return false;   // moot reset → no trophy
+      var gf = championshipGameNum(t);
+      if (Number(gameNum) === gf) return true;                               // the grand final
+      var gfGame = gameByNum(t, gf);                                         // the if-necessary game,
+      return !!(gfGame && isPlayed(gfGame));                                 // once the grand final is decided
+    } catch (e) { return false; }
+  }
 
   global.D27bracket = { parseRef, isPlayed, classify, championOutcome, playedCount, sideDisplay, resolveSide, isChampionshipGame, championshipGameNum };
 })(window);
