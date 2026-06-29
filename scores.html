@@ -207,7 +207,7 @@
     var aWin=g.as>g.hs, hWin=g.hs>g.as;
     var head='Final · '+(DOW[d.getDay()]+' '+MON[d.getMonth()]+' '+d.getDate()).toUpperCase();
     return '<div class="sv-card '+sportCls(g)+'" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'">'+
-      ((window.D27bracket&&window.D27bracket.isChampionshipGame(g._t,g.g))?'<div class="sv-champ">🏆 Championship</div>':'')+
+      (function(){var cl=window.D27bracket&&window.D27bracket.championLabel(g._t,g.g);return cl?'<div class="sv-champ">🏆 '+cl+'</div>':'';})()+
       '<div class="sv-card-head"><span class="sv-meta">'+esc(head)+'</span>'+summary(g)+'</div>'+
       '<div class="sv-rows">'+teamRow(A,g.as,aWin)+teamRow(H,g.hs,hWin)+'</div>'+
       '<div class="sv-card-foot"><span class="sv-meta">'+esc(TMAP[g.tourneyKey]||g.tourneyKey)+'</span> &nbsp;·&nbsp; <span class="sv-cta">'+(ff?'Forfeit':'Recap')+' ›</span></div></div>';

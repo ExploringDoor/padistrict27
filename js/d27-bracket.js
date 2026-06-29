@@ -131,21 +131,19 @@
     if (k) _champCache[k] = num;
     return num;
   }
-  // A game is a "championship game" (gets the trophy) if it's a non-moot final: the grand
-  // final always counts, and the if-necessary reset counts once the grand final is played
-  // (so it's flagged the moment a losers-bracket team forces it).
-  function isChampionshipGame(t, gameNum) {
-    if (!t || t.format === 'pool') return false;
+  // Trophy label for a game: '' (not a title game), 'Championship' (the grand final),
+  // or 'If Necessary' (the double-elim reset). Both the grand final and a still-possible
+  // reset are flagged; a moot reset (winners-bracket sweep) returns '' (and is hidden).
+  function championLabel(t, gameNum) {
+    if (!t || t.format === 'pool') return '';
     try {
       var cls = classify(t);
-      if (cls[gameNum] !== 'f') return false;
-      if (championOutcome(t, cls).hide.has(Number(gameNum))) return false;   // moot reset → no trophy
-      var gf = championshipGameNum(t);
-      if (Number(gameNum) === gf) return true;                               // the grand final
-      var gfGame = gameByNum(t, gf);                                         // the if-necessary game,
-      return !!(gfGame && isPlayed(gfGame));                                 // once the grand final is decided
-    } catch (e) { return false; }
+      if (cls[gameNum] !== 'f') return '';
+      if (championOutcome(t, cls).hide.has(Number(gameNum))) return '';      // moot reset
+      return Number(gameNum) === championshipGameNum(t) ? 'Championship' : 'If Necessary';
+    } catch (e) { return ''; }
   }
+  function isChampionshipGame(t, gameNum) { return championLabel(t, gameNum) !== ''; }
 
-  global.D27bracket = { parseRef, isPlayed, classify, championOutcome, playedCount, sideDisplay, resolveSide, isChampionshipGame, championshipGameNum };
+  global.D27bracket = { parseRef, isPlayed, classify, championOutcome, playedCount, sideDisplay, resolveSide, isChampionshipGame, championLabel, championshipGameNum };
 })(window);

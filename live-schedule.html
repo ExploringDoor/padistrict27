@@ -255,7 +255,7 @@
     var status = ppd ? '<span class="sv-status ppd">'+esc(ppdLabel(g))+(ppdMakeup(g)?'<span class="sv-makeup">'+esc(ppdMakeup(g))+'</span>':'')+'</span>'
       : (ff ? '<span class="sv-status ff">Forfeit</span>' : (played ? '<span class="sv-status'+(margin>=10?' big':'')+'">'+(margin>=10?'Wins Big':'Final')+'</span>' : ''));
     return '<div class="sv-card '+sportCls(g)+(ppd?' ppd':'')+'" data-tkey="'+esc(g.tourneyKey)+'" data-g="'+g.g+'">'+
-      ((window.D27bracket&&window.D27bracket.isChampionshipGame(g._t,g.g))?'<div class="sv-champ">🏆 Championship</div>':'')+
+      (function(){var cl=window.D27bracket&&window.D27bracket.championLabel(g._t,g.g);return cl?'<div class="sv-champ">🏆 '+cl+'</div>':'';})()+
       '<div class="sv-card-head"><span class="sv-meta">'+head+'</span>'+status+'</div>'+
       '<div class="sv-rows">'+teamRow(A,g.as,aWin,played)+teamRow(H,g.hs,hWin,played)+'</div>'+
       '<div class="sv-card-foot">'+tag+' &nbsp;·&nbsp; '+cta+'</div></div>';
