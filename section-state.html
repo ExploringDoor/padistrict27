@@ -24,6 +24,13 @@
   .hub-stat .n { font-family: 'Oswald', sans-serif; font-size: var(--text-3xl); font-weight: 600; color: var(--sport-ss-g1); display: block; line-height: 1; }
   .hub-stat .l { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,.7); }
 
+  /* Section 8 header — full-bleed banner, navy top/bottom cropped so it's a wide short band */
+  .ss-hero { padding-top: 0; }
+  .ss-banner-full { width: 100%; line-height: 0; background: var(--d27-navy); }
+  .ss-banner-full img { display: block; width: 100%; height: clamp(160px, 24vw, 460px); object-fit: cover; object-position: center 56%; }
+  .ss-hero-text { padding-top: var(--space-5); }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
   /* green callout + external link cards + packets (Section/State specific) */
   .ss-note { background: var(--sport-ss-bg); border: 1px solid var(--sport-ss-line); border-left: 4px solid var(--sport-ss); border-radius: 0 8px 8px 0; padding: var(--space-4); margin-bottom: var(--space-5); color: var(--d27-ink); }
   .ss-note strong { color: var(--sport-ss); }
@@ -76,11 +83,13 @@
 
 <div id="d27-nav"></div>
 
-<header class="hub-hero">
-  <div class="container">
+<header class="hub-hero ss-hero">
+  <div class="ss-banner-full">
+    <img src="assets/section8-hero.png" alt="2026 Section 8 &amp; PA State Tournaments — Pennsylvania Section 8 Little League, hosted by PA District 27">
+  </div>
+  <div class="container ss-hero-text">
     <div class="crumb"><a href="index.html">Home</a> &nbsp;/&nbsp; Section/State</div>
-    <h1>2026 Section&nbsp;8 &amp; PA&nbsp;State Tournaments</h1>
-    <p>The Section 8 and Pennsylvania State Little League tournaments that PA District 27 is hosting this summer — with live brackets and schedules. These run above the District level, kept separate here from the District tournaments.</p>
+    <h1 class="sr-only">2026 Section 8 &amp; Pennsylvania State Tournaments</h1>
     <div class="hub-stats" id="hubStats"></div>
   </div>
 </header>
