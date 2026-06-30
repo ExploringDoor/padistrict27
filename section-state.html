@@ -25,10 +25,16 @@
   .hub-stat .l { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,.7); }
 
   /* Section 8 header — full-bleed banner, navy top/bottom cropped so it's a wide short band */
-  .ss-hero { padding-top: 0; }
-  .ss-banner-full { width: 100%; line-height: 0; background: var(--d27-navy); }
+  .ss-hero { padding: 0; }
+  .ss-banner-full { position: relative; width: 100%; line-height: 0; background: var(--d27-navy); }
   .ss-banner-full img { display: block; width: 100%; height: clamp(160px, 24vw, 460px); object-fit: cover; object-position: center 56%; }
-  .ss-hero-text { padding-top: var(--space-5); }
+  /* live counts overlaid on the bottom-right of the banner */
+  .ss-banner-full .hub-stats { position: absolute; right: clamp(14px, 3vw, 46px); bottom: clamp(10px, 2.2vw, 26px); z-index: 2; line-height: normal; flex-wrap: nowrap; gap: clamp(16px, 2.4vw, 38px); }
+  .ss-banner-full .hub-stat { text-align: center; opacity: 1 !important; transform: none !important; }
+  .ss-banner-full .hub-stat .n { font-size: clamp(1.3rem, 3.4vw, var(--text-3xl)); text-shadow: 0 2px 7px rgba(0,0,0,.6); }
+  .ss-banner-full .hub-stat .l { text-shadow: 0 1px 5px rgba(0,0,0,.75); }
+  /* no room to overlay the stats on the small banner — hide them on phones */
+  @media (max-width: 760px) { .ss-banner-full .hub-stats { display: none; } }
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
   /* green callout + external link cards + packets (Section/State specific) */
@@ -86,9 +92,6 @@
 <header class="hub-hero ss-hero">
   <div class="ss-banner-full">
     <img src="assets/section8-hero.png" alt="2026 Section 8 &amp; PA State Tournaments — Pennsylvania Section 8 Little League, hosted by PA District 27">
-  </div>
-  <div class="container ss-hero-text">
-    <div class="crumb"><a href="index.html">Home</a> &nbsp;/&nbsp; Section/State</div>
     <h1 class="sr-only">2026 Section 8 &amp; Pennsylvania State Tournaments</h1>
     <div class="hub-stats" id="hubStats"></div>
   </div>
